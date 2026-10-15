@@ -1,0 +1,69 @@
+protocol: cowswap
+name: CoW Swap (pre-signed orders via the CowswapOrderSigner)
+chain_id: 1
+status: draft
+reviewed: false
+defi_kit: "cowswap/swap sell=[…] buy=[…] (receiver pinned to the avatar, feeAmountBP capped)"
+sources:
+  - "karpatkey/defi-kit sdk/eth-sdk/config.ts (contracts.mainnet.cowSwap)"
+  - "karpatkey/defi-kit sdk/src/protocols/cowSwap/actions.ts"
+  - "karpatkey/defi-kit sdk/eth-sdk/abis/mainnet/cowSwap/orderSigner.json (signatures)"
+
+contracts:
+  order_signer:
+    address: "0x23dA9AdE38E4477b23770DeD512fD37b12381FAB"
+    kind: library_delegatecall
+    aliases: [cow order signer, cowswap signer]
+    note: "called with DELEGATECALL from the Avatar so the Avatar pre-signs the order"
+  gpv2_vault_relayer:
+    address: "0xC92E8bdf79f0507f65a392b0ab4667716BFE0110"
+    kind: spender
+    aliases: [cow relayer, GPv2VaultRelayer]
+  composable_cow:
+    address: "0xfdaFc9d1902f4e0b84f65F49f244b32b31013b74"
+    kind: twap
+    note: "TWAP orders only; not used by the plain swap action"
+  sell_token:
+    address: $book.sell_token
+    kind: erc20
+    note: "example sell token for checks; set cowswap.sell_token in book_vars (e.g. the WETH address)"
+
+ui_routes_to_avoid:
+  - ui: "CoW Swap web app"
+    via: "EOA / Safe-app signature flow"
+    why: "the Operator cannot sign for the Vault there; orders go through order_signer.signOrder"
+
+actions:
+  swap:
+    summary: "sell token -> buy token via a pre-signed CoW order, proceeds to the Avatar"
+    calls:
+      - target: sell_token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: gpv2_vault_relayer, amount: $amount }
+        note: "repeat for each sell token"
+      - target: order_signer
+        operation: delegatecall
+        sig: "signOrder((address sellToken, address buyToken, address receiver, uint256 sellAmount, uint256 buyAmount, uint32 validTo, bytes32 appData, uint256 feeAmount, bytes32 kind, bool partiallyFillable, bytes32 sellTokenBalance, bytes32 buyTokenBalance) order, uint32 validDuration, uint256 feeAmountBP)"
+        args:
+          order:
+            sellToken: $sell_token
+            buyToken: $buy_token
+            receiver: $AVATAR
+            sellAmount: $amount
+            buyAmount: $min_out
+          validDuration: 1800
+          feeAmountBP: 0
+  cancel:
+    summary: "withdraw a pre-signed order"
+    calls:
+      - target: order_signer
+        operation: delegatecall
+        sig: "unsignOrder((address sellToken, address buyToken, address receiver, uint256 sellAmount, uint256 buyAmount, uint32 validTo, bytes32 appData, uint256 feeAmount, bytes32 kind, bool partiallyFillable, bytes32 sellTokenBalance, bytes32 buyTokenBalance) order)"
+        args:
+          order: { sellToken: $sell_token, buyToken: $buy_token, receiver: $AVATAR }
+
+notes: >
+  This is the one place a delegatecall is expected: the role must give
+  order_signer the DelegateCall execution option and nothing else should have it.
+  Scope sellToken/buyToken to the vault's token list, pin receiver to the Avatar,
+  and cap feeAmountBP (defi-kit defaults to 0).

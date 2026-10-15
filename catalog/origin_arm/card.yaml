@@ -1,0 +1,141 @@
+protocol: origin_arm
+name: Origin ARM (Automated Redemption Managers)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "selectors confirmed against public Roles permission batches (github.com/scytherxyz/permissions)"
+  - "Origin ARM docs / verified source (to be re-checked at review)"
+
+contracts:
+  LidoARM:
+    address: "0x85B78AcA6Deae198fBF201c82DAF6Ca21942acc6"
+    kind: arm_lp_vault
+    aliases: [lido arm, origin lido arm, ARM-WETH-stETH]
+    note: "proxy; the ARM contract is also the LP token"
+  EtherFiARM:
+    address: "0xfB0A3CF9B019BFd8827443d131b235B3E0FC58d2"
+    kind: arm_lp_vault
+    aliases: [etherfi arm, origin etherfi arm, ARM-WETH-eETH]
+  MultiAssetARM:
+    address: "0x68025A4615407993A680102b08a23A61D11C657C"
+    kind: arm_lp_vault
+    aliases: [multi asset arm, origin multi-asset arm]
+  WETH: { ref: weth.WETH }
+
+reads:
+  - id: lido_arm_shares
+    target: LidoARM
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: etherfi_arm_shares
+    target: EtherFiARM
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: multi_asset_arm_shares
+    target: MultiAssetARM
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: lido_arm_share_price
+    target: LidoARM
+    sig: "convertToAssets(uint256 shares) returns (uint256)"
+    args: ["1000000000000000000"]
+    decimals: 18
+    verified_sig: false
+
+actions:
+  lp_lido_arm:
+    summary: "WETH -> LidoARM LP shares"
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: LidoARM, amount: $amount }
+      - target: LidoARM
+        sig: "deposit(uint256 assets)"
+        args: { assets: $amount }
+        note: "shares minted to msg.sender (the Avatar)"
+      - target: LidoARM
+        alt: true
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  exit_lido_arm:
+    summary: "LidoARM shares -> WETH, two steps (request, then claim after the claim delay)"
+    calls:
+      - target: LidoARM
+        sig: "requestRedeem(uint256 shares)"
+        args: { shares: $shares }
+      - target: LidoARM
+        sig: "claimRedeem(uint256 requestId)"
+        args: { requestId: $request_id }
+        note: "pays the request's withdrawer (the Avatar that requested)"
+  lp_etherfi_arm:
+    summary: "WETH -> EtherFiARM LP shares"
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: EtherFiARM, amount: $amount }
+      - target: EtherFiARM
+        sig: "deposit(uint256 assets)"
+        args: { assets: $amount }
+      - target: EtherFiARM
+        alt: true
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  exit_etherfi_arm:
+    summary: "EtherFiARM shares -> WETH (request, then claim)"
+    calls:
+      - target: EtherFiARM
+        sig: "requestRedeem(uint256 shares)"
+        args: { shares: $shares }
+      - target: EtherFiARM
+        sig: "claimRedeem(uint256 requestId)"
+        args: { requestId: $request_id }
+  lp_multi_asset_arm:
+    summary: "WETH -> MultiAssetARM LP shares"
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: MultiAssetARM, amount: $amount }
+      - target: MultiAssetARM
+        sig: "deposit(uint256 assets)"
+        args: { assets: $amount }
+  exit_multi_asset_arm:
+    summary: "MultiAssetARM shares -> WETH (request, then claim)"
+    calls:
+      - target: MultiAssetARM
+        sig: "requestRedeem(uint256 shares)"
+        args: { shares: $shares }
+      - target: MultiAssetARM
+        sig: "claimRedeem(uint256 requestId)"
+        args: { requestId: $request_id }
+
+dead_permissions:
+  # ARM operator / maintenance functions. Expected to be restricted to the ARM's
+  # owner/operator (to be confirmed at review); a depositor vault does not need them.
+  - target: LidoARM
+    sig: "requestLidoWithdrawals(uint256[] amounts)"
+    why: "ARM operator function (moves the ARM's stETH into Lido's queue), not a depositor action"
+  - target: LidoARM
+    sig: "claimLidoWithdrawals(uint256[] requestIds, uint256[] hintIds)"
+    why: "ARM operator/keeper function, not a depositor action"
+  - target: LidoARM
+    sig: "registerLidoWithdrawalRequests()"
+    why: "one-off ARM migration/maintenance function"
+  - target: EtherFiARM
+    sig: "requestEtherFiWithdrawal(uint256 amount)"
+    why: "ARM operator function, not a depositor action"
+  - target: EtherFiARM
+    sig: "claimEtherFiWithdrawals(uint256[] requestIds)"
+    why: "ARM operator/keeper function, not a depositor action"
+  - target: LidoARM
+    sig: "collectFees()"
+    why: "sends fees to the ARM fee collector; harmless but useless for a depositor"
+  - target: EtherFiARM
+    sig: "collectFees()"
+    why: "sends fees to the ARM fee collector; harmless but useless for a depositor"
+  - target: MultiAssetARM
+    sig: "collectFees()"
+    why: "sends fees to the ARM fee collector; harmless but useless for a depositor"

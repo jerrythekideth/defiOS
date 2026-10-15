@@ -1,0 +1,26 @@
+# defios.yaml — lives in YOUR agent repo (not in DeFi_os). Copy this file there,
+# rename it to defios.yaml and replace every placeholder address.
+# Secrets never go here: RPC_URL, ETHERSCAN_API_KEY, SAFE_API_KEY and
+# PROPOSER_PRIVATE_KEY come from the environment (.env, see .env.example).
+
+chain: eth                 # eth | gno | arb1 | base | oeth  (or chain_id: 1)
+# catalog: ../DeFi_os/catalog   # optional; defaults to the catalog shipped with defios
+# books_dir: books               # optional; where `defios sync` writes books/<vault>/
+
+vaults:
+  myvault:                                   # any name; used as books/<name>/ and --vault <name>
+    avatar: "0x0000000000000000000000000000000000000001"          # the Vault Safe (Roles avatar)
+    roles_modifier: "0x0000000000000000000000000000000000000002"  # Zodiac Roles modifier on the Vault
+    roles_version: auto                      # auto | v2 | v3 (auto = `defios doctor` style detection)
+    roles_from_block: 0                      # block the modifier was deployed (speeds up RPC log replay)
+    role_key: MANAGER_ROLE                   # string label (utf8, right-padded) or 0x… bytes32
+    operator: "0x0000000000000000000000000000000000000003"        # Operator Safe, member of the role
+    proposer: "0x0000000000000000000000000000000000000004"        # agent key's address; delegate on the Operator
+    # protocols: [lido, gearbox_v3]          # optional; default = detected from the role's targets
+    book_vars:                               # per-vault instances that cards refer to as $book.<name>
+      # gearbox_v3.credit_account: "0x…"
+      # morpho_vaults.vault: "0x…"
+      # morpho_vaults.asset: "0x…"
+      # cowswap.sell_token: weth.WETH       # sample tokens used when checking the CoW action
+      # cowswap.buy_token: weth.WETH
+    limits: {}                               # M2: max size per tx, allowed protocols

@@ -1,0 +1,63 @@
+protocol: morpho_vaults
+name: Morpho Vaults (MetaMorpho v1 / Vault v2, ERC-4626)
+chain_id: 1
+status: draft
+reviewed: false
+defi_kit: "morpho_vaults/deposit targets=[<vault address | name | symbol>]"
+sources:
+  - "karpatkey/defi-kit sdk/src/protocols/morpho/vaults (deposit bundle, _ethInfo.ts vault list)"
+  - "karpatkey/defi-kit sdk/eth-sdk/abis/mainnet/morpho/vault.json (signatures)"
+
+contracts:
+  vault:
+    address: $book.vault
+    kind: erc4626
+    aliases: [morpho vault, metamorpho]
+    note: >
+      Which vault is a per-vault choice: set `morpho_vaults.vault` (and
+      `morpho_vaults.asset`) in defios.yaml book_vars. Pick it from defi-kit's
+      morpho/vaults/_ethInfo.ts list so a reviewed bundle exists for it.
+  asset:
+    address: $book.asset
+    kind: erc20
+  morpho_blue:
+    address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
+    kind: core
+    note: "Morpho Blue singleton; vaults allocate into it. Not called directly by a depositor."
+
+ui_routes_to_avoid:
+  - ui: "Morpho app deposit"
+    via: "Morpho bundler (multicall) contracts"
+    why: "bundler calls take arbitrary bytes[]; call vault.deposit directly"
+
+reads:
+  - id: vault_shares
+    target: vault
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+  - id: vault_share_price
+    target: vault
+    sig: "convertToAssets(uint256 shares) returns (uint256)"
+    args: ["1000000000000000000"]
+
+actions:
+  deposit:
+    summary: "asset -> vault shares"
+    calls:
+      - target: asset
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: vault, amount: $amount }
+      - target: vault
+        sig: "deposit(uint256 assets, address onBehalf)"
+        args: { assets: $amount, onBehalf: $AVATAR }
+        note: "named `receiver` in MetaMorpho v1; same selector"
+  withdraw:
+    summary: "vault shares -> asset"
+    calls:
+      - target: vault
+        sig: "redeem(uint256 shares, address receiver, address onBehalf)"
+        args: { shares: $shares, receiver: $AVATAR, onBehalf: $AVATAR }
+      - target: vault
+        alt: true
+        sig: "withdraw(uint256 assets, address receiver, address onBehalf)"
+        args: { assets: $amount, receiver: $AVATAR, onBehalf: $AVATAR }

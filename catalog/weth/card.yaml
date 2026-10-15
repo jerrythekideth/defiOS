@@ -1,0 +1,39 @@
+protocol: weth
+name: Wrapped Ether (WETH9)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "karpatkey/defi-kit sdk/eth-sdk/config.ts (contracts.mainnet.weth)"
+
+contracts:
+  WETH:
+    address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    kind: erc20
+    aliases: [weth, wrapped ether, wrapped eth]
+
+reads:
+  - id: weth_balance
+    target: WETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+
+actions:
+  wrap:
+    summary: "ETH -> WETH"
+    calls:
+      - target: WETH
+        sig: "deposit()"
+        send: true
+  unwrap:
+    summary: "WETH -> ETH (ETH lands on the caller, i.e. the Avatar)"
+    calls:
+      - target: WETH
+        sig: "withdraw(uint256 wad)"
+        args: { wad: $amount }
+
+notes: >
+  WETH approvals are not an action of this card: each protocol card lists the
+  exact `WETH.approve(spender=…)` it needs, so the spender is always pinned to a
+  catalogued contract. A role that lets WETH.approve take any spender is unsafe.

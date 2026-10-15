@@ -1,0 +1,106 @@
+protocol: lido
+name: Lido (stETH, wstETH, withdrawal queue)
+chain_id: 1
+status: draft
+reviewed: false
+defi_kit: "lido/deposit"
+sources:
+  - "karpatkey/defi-kit sdk/eth-sdk/config.ts (contracts.mainnet.lido)"
+  - "karpatkey/defi-kit sdk/src/protocols/lido/index.ts (deposit bundle)"
+  - "karpatkey/defi-kit sdk/eth-sdk/abis/mainnet/lido/*.json (signatures)"
+
+contracts:
+  stETH:
+    address: "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+    kind: erc20_rebasing
+    aliases: [steth, lido steth, staked ether]
+  wstETH:
+    address: "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"
+    kind: erc20
+    aliases: [wsteth, wrapped steth]
+  unstETH:
+    address: "0x889edC2eDab5f40e902b864aD4d7AdE8E412F9B1"
+    kind: erc721_queue
+    aliases: [lido withdrawal queue, unsteth, withdrawal nft]
+
+ui_routes_to_avoid:
+  - ui: "aggregator 'stake ETH' buttons (1inch, Enso, wallets' swap tabs)"
+    via: "router contracts"
+    why: "not in the role; call stETH.submit / wstETH.wrap directly"
+
+reads:
+  - id: steth_balance
+    target: stETH
+    sig: "balanceOf(address _account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: wsteth_balance
+    target: wstETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: wsteth_rate
+    target: wstETH
+    sig: "getStETHByWstETH(uint256 _wstETHAmount) returns (uint256)"
+    args: ["1000000000000000000"]
+    decimals: 18
+  - id: withdrawal_requests
+    target: unstETH
+    sig: "getWithdrawalRequests(address _owner) returns (uint256[])"
+    args: [$AVATAR]
+
+actions:
+  stake:
+    summary: "ETH -> stETH"
+    calls:
+      - target: stETH
+        sig: "submit(address _referral)"
+        args: { _referral: $referral }
+        send: true
+        note: "referral is a tag only; stETH is minted to msg.sender (the Avatar)"
+  wrap:
+    summary: "stETH -> wstETH"
+    calls:
+      - target: stETH
+        sig: "approve(address _spender, uint256 _amount)"
+        args: { _spender: wstETH, _amount: $amount }
+      - target: wstETH
+        sig: "wrap(uint256 _stETHAmount)"
+        args: { _stETHAmount: $amount }
+  unwrap:
+    summary: "wstETH -> stETH"
+    calls:
+      - target: wstETH
+        sig: "unwrap(uint256 _wstETHAmount)"
+        args: { _wstETHAmount: $amount }
+  request_withdrawal:
+    summary: "stETH -> withdrawal NFT (claim ETH after finalization)"
+    calls:
+      - target: stETH
+        sig: "approve(address _spender, uint256 _amount)"
+        args: { _spender: unstETH, _amount: $amount }
+      - target: unstETH
+        sig: "requestWithdrawals(uint256[] _amounts, address _owner)"
+        args: { _amounts: [$amount], _owner: $AVATAR }
+  request_withdrawal_wsteth:
+    summary: "wstETH -> withdrawal NFT"
+    calls:
+      - target: wstETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: unstETH, amount: $amount }
+      - target: unstETH
+        sig: "requestWithdrawalsWstETH(uint256[] _amounts, address _owner)"
+        args: { _amounts: [$amount], _owner: $AVATAR }
+  claim_withdrawal:
+    summary: "finalized withdrawal NFT -> ETH (paid to the NFT owner)"
+    calls:
+      - target: unstETH
+        sig: "claimWithdrawal(uint256 _requestId)"
+        args: { _requestId: $request_id }
+      - target: unstETH
+        alt: true
+        sig: "claimWithdrawals(uint256[] _requestIds, uint256[] _hints)"
+        args: { _requestIds: [$request_id], _hints: [$hint] }
+
+not_needed:
+  - "approving stETH to wstETH is needed for wrap; approving wstETH to unstETH only for request_withdrawal_wsteth"

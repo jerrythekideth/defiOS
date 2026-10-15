@@ -1,0 +1,107 @@
+protocol: gearbox_v3
+name: Gearbox v3 (lending pool + credit accounts)
+chain_id: 1
+status: draft
+reviewed: false
+defi_kit: "gearbox/deposit targets=[0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64]"
+sources:
+  - "karpatkey/defi-kit sdk/src/protocols/gearbox/_ethInfo.ts (pool list, kpkwstETH)"
+  - "karpatkey/defi-kit sdk/eth-sdk/abis/mainnet/gearbox/vault.json (pool signatures)"
+  - "operator review draft, 2026-10-14 (facade, credit manager)"
+
+contracts:
+  kpkwstETH_pool:
+    address: "0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64"
+    kind: erc4626
+    asset: lido.wstETH
+    aliases: [gearbox pool, gearbox wstETH pool, kpk gearbox, kpkwstETH, wstETH v3]
+    defi_kit: "gearbox/deposit targets=[0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64]"
+  credit_facade:
+    address: "0x9515AB9BB73A9642F1a93Ba7C2790e9d08227f9a"
+    kind: gearbox_credit_facade_v3_10
+    aliases: [gearbox credit account, gearbox leverage, CA, credit facade]
+  credit_manager:
+    address: "0x79C6C1ce5B12abCC3E407ce8C160eE1160250921"
+    kind: gearbox_credit_manager_v3
+    note: "spender for collateral approvals; not called directly"
+  wstETH: { ref: lido.wstETH }
+  WETH: { ref: weth.WETH }
+
+ui_routes_to_avoid:
+  - ui: "Gearbox app, lend wstETH"
+    via: "depositWithReferral on a contract other than the pool (address not yet recorded)"
+    why: "not in the role; call the pool directly"
+
+reads:
+  - id: pool_shares
+    target: kpkwstETH_pool
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: pool_max_redeem
+    target: kpkwstETH_pool
+    sig: "maxRedeem(address owner) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: pool_share_price
+    target: kpkwstETH_pool
+    sig: "convertToAssets(uint256 shares) returns (uint256)"
+    args: ["1000000000000000000"]
+    decimals: 18
+
+actions:
+  lend:
+    summary: "wstETH -> kpkwstETH pool shares"
+    calls:
+      - target: wstETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: kpkwstETH_pool, amount: $amount }
+      - target: kpkwstETH_pool
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+      - target: kpkwstETH_pool
+        alt: true
+        sig: "depositWithReferral(uint256 assets, address receiver, uint256 referralCode)"
+        args: { assets: $amount, receiver: $AVATAR, referralCode: 0 }
+  withdraw:
+    summary: "kpkwstETH shares -> wstETH"
+    calls:
+      - target: kpkwstETH_pool
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+      - target: kpkwstETH_pool
+        alt: true
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  open_credit_account:
+    summary: "open a credit account owned by the Avatar, with an initial multicall"
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: credit_manager, amount: $amount }
+        note: "one approval per collateral token; WETH shown, weETH is the same call on etherfi.weETH"
+      - target: credit_facade
+        sig: "openCreditAccount(address onBehalfOf, (address target, bytes callData)[] calls, uint256 referralCode)"
+        args: { onBehalfOf: $AVATAR, calls: [], referralCode: 0 }
+        calls_params: [calls]
+  credit_account_multicall:
+    summary: "adjust an existing credit account (add/withdraw collateral, borrow, repay, adapter swaps)"
+    calls:
+      - target: credit_facade
+        sig: "multicall(address creditAccount, (address target, bytes callData)[] calls)"
+        args: { creditAccount: $book.credit_account, calls: [] }
+        calls_params: [calls]
+  close_credit_account:
+    summary: "repay and close a credit account; remaining collateral goes back to the owner"
+    calls:
+      - target: credit_facade
+        sig: "closeCreditAccount(address creditAccount, (address target, bytes callData)[] calls)"
+        args: { creditAccount: $book.credit_account, calls: [] }
+        calls_params: [calls]
+
+notes: >
+  `calls` is an array of inner calls executed by the facade. Pinning only
+  `creditAccount` leaves `calls` free: a member could pass
+  facade.withdrawCollateral(token, amount, to=ANY) or setBotPermissions. The
+  role must scope `calls` element by element (withdrawCollateral `to` == Avatar,
+  no setBotPermissions, only listed adapters). See NOTES.md.

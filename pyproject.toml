@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "defios"
+version = "0.1.0"
+description = "Agent-agnostic toolkit to operate a Safe through a Zodiac Roles modifier: protocol cards, on-chain role state, permission checks."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = [
+  "web3>=6",
+  "eth-abi>=4",
+  "pyyaml>=6",
+  "requests>=2.28",
+  "click>=8",
+]
+
+[project.optional-dependencies]
+mcp = ["mcp>=1.2"]
+dev = ["pytest>=7"]
+
+[project.scripts]
+defios = "defios.cli:main"
+
+[tool.setuptools]
+packages = ["defios", "defios.roles"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

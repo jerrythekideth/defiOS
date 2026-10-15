@@ -1,0 +1,127 @@
+protocol: avant
+name: Avant (avETH / savETH)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "verified source on Blockscout: AvantCoin, StakedAvantCoinV2, AvantMintingV2 (checked 2026-10-14)"
+  - "operator review draft, 2026-10-14 (vault-specific parts removed)"
+
+contracts:
+  avETH:
+    address: "0x9469470C9878bf3d6d0604831d9A3A366156f7EE"
+    kind: erc20
+    aliases: [avETH, avant eth]
+    note: "AvantCoin; burnFrom spends allowance"
+  savETH:
+    address: "0xDA06eE2dACF9245Aa80072a4407deBDea0D7e341"
+    kind: erc4626_with_cooldown
+    asset: avETH
+    aliases: [savETH, staked avETH, avant staking]
+  minting:
+    address: "0x09becF6E5e297825D19aA14eD6081A03524532D7"
+    kind: rfq_minting
+    aliases: [avant minting, avant mint]
+    note: "AvantMintingV2; mint/redeem only callable by Avant (MINTER_ROLE / REDEEMER_ROLE)"
+  silo:
+    address: { read: "savETH.silo()" }
+    note: "escrow that holds avETH during cooldown"
+  WETH: { ref: weth.WETH }
+
+ui_routes_to_avoid:
+  - ui: "Avant app, stake avETH"
+    via: "Enso router 0xF75584eF6673aD213a685a1B58Cc0330B8eA22Cf routeSingle"
+    why: "runs arbitrary bytecode, cannot be scoped by Roles; use savETH.deposit directly"
+
+reads:
+  - id: aveth_balance
+    target: avETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: saveth_shares
+    target: savETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: saveth_share_price
+    target: savETH
+    sig: "convertToAssets(uint256 shares) returns (uint256)"
+    args: ["1000000000000000000"]
+    decimals: 18
+  - id: cooldown
+    target: savETH
+    sig: "cooldowns(address account) returns (uint104 cooldownEnd, uint152 underlyingAmount)"
+    args: [$AVATAR]
+    verified_sig: false
+  - id: cooldown_duration
+    target: savETH
+    sig: "cooldownDuration() returns (uint24)"
+    note: "seconds; Avant toggles it (86400 since 2026-10-14, 60s at times). 0 enables instant redeem"
+    verified_sig: false
+
+actions:
+  stake:
+    summary: "avETH -> savETH"
+    calls:
+      - target: avETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: savETH, amount: $amount }
+      - target: savETH
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  cooldown:
+    summary: "exit step 1 (needs cooldownDuration > 0): burn shares, escrow avETH in the silo"
+    calls:
+      - target: savETH
+        sig: "cooldownShares(uint256 shares)"
+        args: { shares: $shares }
+        note: "no receiver: burns the caller's own shares and escrows for the caller"
+      - target: savETH
+        optional: true
+        sig: "cooldownAssets(uint256 assets)"
+        args: { assets: $amount }
+  unstake:
+    summary: "exit step 2, after cooldownEnd: silo pays avETH to receiver"
+    calls:
+      - target: savETH
+        sig: "unstake(address receiver)"
+        args: { receiver: $AVATAR }
+  instant_exit:
+    summary: "only works when Avant sets cooldownDuration == 0"
+    calls:
+      - target: savETH
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+  mint:
+    kind: signed_order
+    summary: "WETH -> avETH via Avant RFQ"
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: minting, amount: $amount }
+      - sign: "EIP-712 Order{order_type: MINT, benefactor: $AVATAR, beneficiary: $AVATAR, collateral_asset: WETH, ...}"
+        signer: "Vault owners until Roles v3 can scope typed-message signing"
+      - external: "Avant relayer calls minting.mint(order, route, signature)"
+  redeem:
+    kind: signed_order
+    summary: "avETH -> WETH via Avant RFQ"
+    calls:
+      - target: avETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: minting, amount: $amount }
+        note: "redeem burns with burnFrom, which spends this allowance"
+      - sign: "EIP-712 Order{order_type: REDEEM, benefactor: $AVATAR, beneficiary: $AVATAR, collateral_asset: WETH, ...}"
+        signer: "Vault owners until Roles v3 can scope typed-message signing"
+      - external: "Avant relayer calls minting.redeem(order, signature)"
+
+dead_permissions:
+  - target: minting
+    sig: "TODO: AvantMintingV2.mint signature not recorded yet"
+    why: "mint is onlyRole(MINTER_ROLE): a vault's own call can never succeed"
+  - target: minting
+    sig: "TODO: AvantMintingV2.redeem signature not recorded yet"
+    why: "redeem is onlyRole(REDEEMER_ROLE)"
+
+not_needed:
+  - "savETH.approve(...) for unstaking: cooldownShares burns the caller's own shares and unstake pays out from the silo"

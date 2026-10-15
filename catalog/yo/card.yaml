@@ -1,0 +1,50 @@
+protocol: yo
+name: Yo (yoETH)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "selectors confirmed against public Roles permission batches (github.com/scytherxyz/permissions)"
+
+contracts:
+  yoETH:
+    address: "0x3A43AEC53490CB9Fa922847385D82fe25d0E9De7"
+    kind: erc4626_async_redeem
+    aliases: [yoETH, yo eth, yo vault]
+  gateway:
+    address: "0xF1EeE0957267b1A474323Ff9CfF7719E964969FA"
+    kind: router
+    aliases: [YoGateway, yo gateway]
+    note: "Yo's own deposit entry point; every vault/receiver param must be pinned"
+  WETH: { ref: weth.WETH }
+
+reads:
+  - id: yoeth_shares
+    target: yoETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: yoeth_share_price
+    target: yoETH
+    sig: "convertToAssets(uint256 shares) returns (uint256)"
+    args: ["1000000000000000000"]
+    decimals: 18
+
+actions:
+  deposit:
+    summary: "WETH -> yoETH via the Yo gateway"
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: gateway, amount: $amount }
+      - target: gateway
+        sig: "deposit(address yoVault, uint256 assets, uint256 minSharesOut, address receiver, uint32 partnerId)"
+        args: { yoVault: yoETH, assets: $amount, minSharesOut: $min_out, receiver: $AVATAR, partnerId: 0 }
+        note: "param names inferred; selector 0x82b78ba7 matches the live permission"
+  request_redeem:
+    summary: "yoETH -> WETH, asynchronous; paid out to the receiver when fulfilled"
+    calls:
+      - target: yoETH
+        sig: "requestRedeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+        note: "param order/names inferred (ERC-7540 style); selector 0x7d41c86e matches the live permission. Both addresses must be the Avatar"

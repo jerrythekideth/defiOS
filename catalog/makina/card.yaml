@@ -1,0 +1,33 @@
+protocol: makina
+name: Makina (Dialectic DETH)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "DETH address from a public CoW Swap Roles permission (github.com/scytherxyz/permissions), listed as a sell/buy token next to WETH and weETH; re-verify at review"
+
+contracts:
+  DETH:
+    address: "0x871aB8E36CaE9AF35c6A3488B049965233DeB7ed"
+    kind: erc20
+    aliases: [DETH, dialectic eth, makina deth]
+  machine_depositor:
+    address: TODO   # Makina machine / depositor contract for DETH not recorded yet; do not guess
+    kind: depositor
+
+reads:
+  - id: deth_balance
+    target: DETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+
+actions:
+  buy_or_sell:
+    summary: "DETH is reached through CoW Swap today (see the cowswap card); direct mint/redeem needs the machine depositor address"
+    calls:
+      - external: "use cowswap.swap with sellToken/buyToken = DETH"
+
+notes: >
+  Direct deposit/redeem against the Makina machine is out of scope until the
+  depositor contract and its signatures are verified (status TODO above).

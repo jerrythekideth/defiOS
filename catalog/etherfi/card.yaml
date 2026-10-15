@@ -1,0 +1,136 @@
+protocol: etherfi
+name: ether.fi (weETH) + Veda Liquid ETH
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "selectors confirmed against public Roles permission batches (github.com/scytherxyz/permissions)"
+  - "WithdrawRequestNFT implementation ABI (Blockscout, 0x41617D01362770ebAAC10311aB899FBc8a4E4A7E, read 2026-10-15)"
+  - "BoringOnChainQueue verified ABI (Blockscout, read 2026-10-15)"
+  - "weETH address: karpatkey/defi-kit aave/aura pool info"
+
+contracts:
+  weETH:
+    address: "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee"
+    kind: erc20
+    aliases: [weETH, wrapped eETH, ether.fi weeth]
+  deposit_adapter:
+    address: "0xcfC6d9Bd7411962Bfe7145451A7EF71A24b6A7A2"
+    kind: adapter
+    aliases: [ether.fi deposit adapter]
+  weeth_withdraw_adapter:
+    address: "0xFbfe6b9cEe0E555Bad7e2E7309EFFC75200cBE38"
+    kind: adapter
+    aliases: [ether.fi weETH withdraw adapter]
+  withdraw_request_nft:
+    address: "0x7d5706f6ef3F89B3951E23e557CDFBC3239D4E2c"
+    kind: erc721_queue
+    aliases: [ether.fi withdraw request nft, WithdrawRequestNFT]
+  liquid_eth:
+    address: "0xf0bb20865277aBd641a307eCe5Ee04E79073416C"
+    kind: boring_vault
+    aliases: [liquid eth, veda liquid eth, liquidETH, ether.fi liquid]
+    note: "Veda BoringVault; also the share token and the spender for deposit approvals"
+  liquid_eth_teller:
+    address: "0x9AA79C84b79816ab920bBcE20f8f74557B514734"
+    kind: teller
+    aliases: [liquid eth teller, layerzero teller]
+  liquid_eth_queue:
+    address: "0x0D2dF071207E18Ca8638b4f04E98c53155eC2cE0"
+    kind: queue
+    aliases: [BoringOnChainQueue, liquid eth withdraw queue]
+  WETH: { ref: weth.WETH }
+
+ui_routes_to_avoid:
+  - ui: "ether.fi app, Liquid deposit"
+    via: "app-specific deposit helpers / zaps"
+    why: "call the teller directly with a catalogued asset"
+
+reads:
+  - id: weeth_balance
+    target: weETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: weeth_rate
+    target: weETH
+    sig: "getRate() returns (uint256)"
+    decimals: 18
+    verified_sig: false
+  - id: withdraw_nfts
+    target: withdraw_request_nft
+    sig: "balanceOf(address owner) returns (uint256)"
+    args: [$AVATAR]
+  - id: liquid_eth_shares
+    target: liquid_eth
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+
+actions:
+  mint_weeth:
+    summary: "WETH -> weETH through the ether.fi deposit adapter"
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: deposit_adapter, amount: $amount }
+      - target: deposit_adapter
+        sig: "depositWETHForWeETH(uint256 _amount, address _referral)"
+        args: { _amount: $amount, _referral: $AVATAR }
+        note: >
+          weETH is minted to msg.sender. The second param is the referral per
+          the adapter source; pinning it to the Avatar is harmless. Verify at review.
+        verified_sig: false
+  request_unstake_weeth:
+    summary: "weETH -> withdraw request NFT (claim ETH after finalization)"
+    calls:
+      - target: weETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: weeth_withdraw_adapter, amount: $amount }
+      - target: weeth_withdraw_adapter
+        sig: "requestWithdraw(uint256 weETHAmount, address recipient)"
+        args: { weETHAmount: $amount, recipient: $AVATAR }
+  claim_unstake:
+    summary: "finalized request NFT -> ETH to the NFT owner"
+    calls:
+      - target: withdraw_request_nft
+        sig: "claimWithdraw(uint256 tokenId)"
+        args: { tokenId: $token_id }
+      - target: withdraw_request_nft
+        alt: true
+        sig: "batchClaimWithdraw(uint256[] tokenIds)"
+        args: { tokenIds: [$token_id] }
+  deposit_liquid_eth:
+    summary: "WETH or weETH -> Liquid ETH shares (minted to msg.sender)"
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: liquid_eth, amount: $amount }
+        note: "the BoringVault pulls the asset, so the spender is liquid_eth, not the teller"
+      - target: liquid_eth_teller
+        sig: "deposit(address depositAsset, uint256 depositAmount, uint256 minimumMint)"
+        args: { depositAsset: { one_of: [weth.WETH, weETH] }, depositAmount: $amount, minimumMint: $min_out }
+  withdraw_liquid_eth:
+    summary: "Liquid ETH shares -> asset via the on-chain queue (solved by Veda; paid to the requester)"
+    calls:
+      - target: liquid_eth
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: liquid_eth_queue, amount: $shares }
+      - target: liquid_eth_queue
+        sig: "requestOnChainWithdraw(address assetOut, uint128 amountOfShares, uint16 discount, uint24 secondsToDeadline)"
+        args: { assetOut: { one_of: [weth.WETH, weETH] }, amountOfShares: $shares, discount: $discount_bps, secondsToDeadline: $deadline }
+      - target: liquid_eth_queue
+        optional: true
+        sig: "cancelOnChainWithdraw((uint96 nonce, address user, address assetOut, uint128 amountOfShares, uint128 amountOfAssets, uint40 creationTime, uint24 secondsToMaturity, uint24 secondsToDeadline) request)"
+        args: { request: { user: $AVATAR } }
+
+dead_permissions:
+  - target: liquid_eth_queue
+    sig: "rescueTokens(address token, uint256 amount, address to, (uint96 nonce, address user, address assetOut, uint128 amountOfShares, uint128 amountOfAssets, uint40 creationTime, uint24 secondsToMaturity, uint24 secondsToDeadline)[] activeRequests)"
+    why: "requires the queue's auth (Veda admin); a vault can never call it"
+  - target: withdraw_request_nft
+    sig: "finalizeRequests(uint256 requestId)"
+    why: "ether.fi admin function"
+  - target: withdraw_request_nft
+    sig: "invalidateRequest(uint256 requestId)"
+    why: "ether.fi admin function"
