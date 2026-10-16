@@ -58,7 +58,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
    enough to read state and spot gaps; mention it when you rely on one for a
    transaction.
 
-## Commands (M1, read-only)
+## Commands (M1 read-only, plus M2 `propose`)
 
 | command | use it when |
 |---|---|
@@ -68,6 +68,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
 | `defios check [--protocol X]` | "is lend permitted?", "what's missing?", "is this role safe?" |
 | `defios decode batch.json` | someone hands you a permission batch: decode it before the human proposes it |
 | `defios catalog` | list cards and validate them |
+| `defios propose --file calls.json` | M2: dry run of an Operator proposal (see "Proposing"); `--send` only after the human said yes |
 
 All commands print JSON on stdout and a short summary on stderr
 (`--format text` for the summary only). Run them from your agent repo, or pass
@@ -109,6 +110,34 @@ report them in your summary. `known_dead` and `uncatalogued` are clean-up items.
   JSON into the human's permissions folder, summarize. The human proposes it.
 * **After anything executes:** `sync` again; note in your journal what changed
   (`role.changes_since_last_sync` in the book).
+
+## Proposing (M2, first part)
+
+`defios propose --file calls.json` turns inner calls into one Operator Safe
+transaction: a single call goes straight into
+`Roles.execTransactionWithRole(to, value, data, operation, roleKey, shouldRevert=true)`;
+several calls are packed into Safe's MultiSendCallOnly 1.4.1 first (the role
+then needs the MultiSend unwrapper; `--batch operator` batches on the Operator
+side instead). It picks the Operator nonce as max(on-chain nonce, highest queued
+nonce + 1) so it never lands on top of a transaction the humans have not signed
+yet, computes the SafeTxHash and signs it with `PROPOSER_PRIVATE_KEY` **as a
+delegate**.
+
+1. **Dry run first, always.** Without `--send` nothing is posted. Show the
+   human the summary: each call (card contract + function), value, batch mode,
+   nonce and why, SafeTxHash, warnings and problems.
+2. **Only then `--send`**, and only if `problems` is empty (the CLI refuses
+   otherwise: uncatalogued target, Roles pre-flight failed, key is an owner,
+   key is not a delegate, service unreachable).
+3. **Hand over the link** (`links.tx`) and the nonce. The humans review and sign
+   in the Safe app. You never confirm, never execute, never sign with an owner key.
+4. After it executes: `defios sync`.
+
+`calls.json` (`{"description", "chain_id", "calls": [{to, value, data, operation}]}`)
+is **produced by the engine from card actions** (planned M2 `defios tx --action
+<card>.<action> --param …`). Until that lands, do not write calldata into it by
+hand (rule 2): if no engine command builds the call, say so and stop. `propose`
+also refuses to send to any address that is not in a card or `defios.yaml`.
 
 ## None-type Pass nodes (known Roles v2 pitfall)
 

@@ -125,6 +125,11 @@ def sync(cfg: Config, vault: VaultConfig, catalog: Catalog, rpc: Rpc | None = No
     check = run_check(catalog, state, adapter, vault, protocols, rpc if (probe and rpc) else None)
     reads = run_reads(catalog, protocols, vault, None if logs_file else rpc, block=state.block)
     queues = fetch_queues(vault, rpc) if (with_queues and not logs_file) else {"skipped": "offline"}
+    if rpc is not None and not logs_file:
+        from .balances import vault_balances
+        balances: dict[str, Any] = vault_balances(catalog, protocols, vault, rpc, block=state.block)
+    else:
+        balances = {"skipped": "no RPC_URL" if rpc is None else "offline (--logs-file)"}
 
     book_dir = cfg.books_dir / vault.name
     lock_path = book_dir / "role.lock.json"
@@ -176,6 +181,7 @@ def sync(cfg: Config, vault: VaultConfig, catalog: Catalog, rpc: Rpc | None = No
             "changes_since_last_sync": changes,
         },
         "uses": uses,
+        "balances": balances,
         "permissions": permissions,
         "lints": [{k: l[k] for k in ("severity", "code", "message", "target_name", "target", "function", "selector")
                    if k in l} for l in check["lints"] if l["severity"] in ("high", "medium", "low")],

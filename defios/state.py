@@ -17,6 +17,12 @@ def plain_state(book: dict) -> str:
              f"(synced {book['synced_at']['time']}, roles {book['roles_version']})"]
     lines.append("Holds:")
     any_hold = False
+    bal = book.get("balances") or {}
+    if "tokens" in bal:
+        from .balances import plain_balances
+        bl = plain_balances(bal)
+        lines.extend(bl)
+        any_hold = bool(bl)
     for proto, u in (book.get("uses") or {}).items():
         for rid, v in (u.get("reads") or {}).items():
             if isinstance(v, dict) and ("value" in v or "raw" in v):

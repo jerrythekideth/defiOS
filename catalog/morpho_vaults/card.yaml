@@ -3,7 +3,7 @@ name: Morpho Vaults (MetaMorpho v1 / Vault v2, ERC-4626)
 chain_id: 1
 status: draft
 reviewed: false
-defi_kit: "morpho_vaults/deposit targets=[<vault address | name | symbol>]"
+defi_kit: "morphoVaults/deposit targets=[<vault address | name | symbol>]"
 sources:
   - "karpatkey/defi-kit sdk/src/protocols/morpho/vaults (deposit bundle, _ethInfo.ts vault list)"
   - "karpatkey/defi-kit sdk/eth-sdk/abis/mainnet/morpho/vault.json (signatures)"
