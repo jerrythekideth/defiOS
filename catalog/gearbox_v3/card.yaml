@@ -14,6 +14,7 @@ contracts:
     address: "0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64"
     kind: erc4626
     asset: lido.wstETH
+    decimals: 18           # Gearbox v3 pool shares use the underlying's decimals
     aliases: [gearbox pool, gearbox wstETH pool, kpk gearbox, kpkwstETH, wstETH v3]
     defi_kit: "gearbox/deposit targets=[0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64]"
   credit_facade:
@@ -52,6 +53,7 @@ reads:
 actions:
   lend:
     summary: "wstETH -> kpkwstETH pool shares"
+    input: wstETH
     calls:
       - target: wstETH
         sig: "approve(address spender, uint256 amount)"
@@ -65,6 +67,7 @@ actions:
         args: { assets: $amount, receiver: $AVATAR, referralCode: 0 }
   withdraw:
     summary: "kpkwstETH shares -> wstETH"
+    input: kpkwstETH_pool
     calls:
       - target: kpkwstETH_pool
         sig: "redeem(uint256 shares, address receiver, address owner)"

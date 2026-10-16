@@ -39,9 +39,12 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
    directly. Never route through a UI router, aggregator, zap or referral
    contract (see each card's `ui_routes_to_avoid`). Never use contracts that run
    opaque bytecode (e.g. the Enso router).
-4. **Check, then simulate, then propose.** Run `defios check` for the action
-   first. If it says `missing` or `unsafe`, stop and explain. (M2: `simulate`
-   must pass and balance deltas must match the plan before `propose`.)
+4. **Plan, then propose.** Every transaction starts with `defios plan`: it
+   builds the calls from the card and checks each one against the role. If it
+   refuses (`missing` / `unsafe`), stop and explain its `why` lines. Show the
+   human the plan summary, then `propose` (dry run), then `--send` only after
+   the human says yes. (Later in M2: `simulate` must also pass and balance
+   deltas must match the plan.)
 5. **Receivers are the Vault.** Every receiver / recipient / owner /
    onBehalfOf / to parameter is the Vault. No exceptions without the human's
    explicit, written OK in the conversation.
@@ -58,7 +61,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
    enough to read state and spot gaps; mention it when you rely on one for a
    transaction.
 
-## Commands (M1 read-only, plus M2 `propose`)
+## Commands (M1 read-only, plus M2 `plan` and `propose`)
 
 | command | use it when |
 |---|---|
@@ -68,6 +71,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
 | `defios check [--protocol X]` | "is lend permitted?", "what's missing?", "is this role safe?" |
 | `defios decode batch.json` | someone hands you a permission batch: decode it before the human proposes it |
 | `defios catalog` | list cards and validate them |
+| `defios plan <card>.<action>=<amount> …` | M2: turn an intent into engine-built, role-checked calls; writes `calls.json` (see "Planning") |
 | `defios propose --file calls.json` | M2: dry run of an Operator proposal (see "Proposing"); `--send` only after the human said yes |
 
 All commands print JSON on stdout and a short summary on stderr
@@ -100,18 +104,53 @@ report them in your summary. `known_dead` and `uncatalogued` are clean-up items.
 
 ## Flows
 
-* **"Lend 1 wstETH on gearbox"** (M2 for the proposing part): `sync` →
-  resolve "gearbox" to a card contract via aliases → `check --protocol gearbox_v3`
-  → if `allowed`: plan → tx → simulate → propose, then tell the human the
-  Operator queue link and nonce. If `unsafe`/`missing`: stop, explain, offer a
-  permission batch.
+* **"Lend 1 wstETH on gearbox"**: `sync` → `defios plan "gearbox pool.lend"
+  --amount 1 --token wstETH` → show the human the plan summary (one line per
+  call) → `defios propose --file calls.json` (dry run) → show nonce, SafeTxHash,
+  warnings → only after the human's yes, `propose --file calls.json --send` →
+  give the Operator queue link and nonce. If `plan` refuses: stop, explain,
+  offer a permission batch.
 * **"Add permission for X"** (M3): build the batch (defi-kit bundle or
   `kit/` module), diff it against the live role, lint it, write the Tx Builder
   JSON into the human's permissions folder, summarize. The human proposes it.
 * **After anything executes:** `sync` again; note in your journal what changed
   (`role.changes_since_last_sync` in the book).
 
-## Proposing (M2, first part)
+## Planning (M2)
+
+The flow is **plan → (human reads the summary) → propose dry run → propose
+`--send` after the human agrees**. You choose the intent; the engine writes
+every byte.
+
+```bash
+defios plan gearbox_v3.lend --amount 1 --token wstETH
+defios plan weth.unwrap=1 lido.stake=1 lido.wrap=0.999 kpkwstETH.lend=0.8   # one plan, steps in order
+defios plan --intent '{"steps": [{"action": "gearbox_v3.lend", "amount": "1", "token": "wstETH"}]}'
+```
+
+* Steps are `<card>.<action>` or `<alias>.<action>` (`kpkwstETH.lend`,
+  `"gearbox pool.lend"`), with `=<amount>` or `--amount` in the action's input
+  token (`input:` in the card; `--token` must match it). Amounts are exact
+  human numbers; there is no "max".
+* The engine fills `$AVATAR` (the Vault) and `$book.*` (defios.yaml), converts
+  amounts with the token's `decimals`, adds the approves the card lists, and
+  refuses any other free variable you did not give with `--param name=value`.
+* Every call is checked against the role (live replay, `--logs-file`, or
+  `books/<vault>/role.lock.json` when no log source is available — the plan
+  then warns that it used a snapshot) and, with `RPC_URL`, an `eth_call` probe.
+  Any `missing` / `unsafe` call refuses the **whole** plan: exit code 3,
+  nothing written, a plain `why` per refused call.
+* Output: the plan JSON (steps, each call with to/value/data/operation, its
+  check, and a plain-language `line`), the Operator Safe tx preview
+  (execTransactionWithRole, MultiSend when several calls), and `calls.json`
+  (`--out`, default `calls.json` in the agent repo; `--out -` writes nothing).
+* There is no separate `defios tx`: `plan` is the only producer of
+  `calls.json`; `propose` picks the nonce, hashes and signs.
+* Multi-step plans use fixed amounts and are not simulated yet: if a step
+  yields less than the next spends (stETH rounds 1-2 wei down; wstETH < stETH),
+  the transaction reverts. Leave a margin and tell the human.
+
+## Proposing (M2)
 
 `defios propose --file calls.json` turns inner calls into one Operator Safe
 transaction: a single call goes straight into
@@ -134,10 +173,9 @@ delegate**.
 4. After it executes: `defios sync`.
 
 `calls.json` (`{"description", "chain_id", "calls": [{to, value, data, operation}]}`)
-is **produced by the engine from card actions** (planned M2 `defios tx --action
-<card>.<action> --param …`). Until that lands, do not write calldata into it by
-hand (rule 2): if no engine command builds the call, say so and stop. `propose`
-also refuses to send to any address that is not in a card or `defios.yaml`.
+is **produced by `defios plan`** from card actions. Never write or edit calldata
+in it by hand (rule 2): if `plan` cannot build the call, say so and stop.
+`propose` also refuses to send to any address that is not in a card or `defios.yaml`.
 
 ## None-type Pass nodes (known Roles v2 pitfall)
 

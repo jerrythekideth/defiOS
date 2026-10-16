@@ -236,7 +236,7 @@ def build_operator_tx(calls: list[Call], roles_modifier: str, role_key: str, cha
 # ------------------------------------------------------------------------------ calls.json
 def load_calls_file(path: str | Path) -> tuple[list[Call], dict]:
     """calls.json: {"description": "...", "chain_id": 1, "vault": "name", "calls": [{to, value, data, operation}]}.
-    Produced by the engine/cards (M2 `defios tx`), not written by hand. A bare list of calls is accepted too."""
+    Produced by `defios plan`, not written by hand. A bare list of calls is accepted too."""
     raw = json.loads(Path(path).read_text())
     meta: dict = {}
     if isinstance(raw, dict):

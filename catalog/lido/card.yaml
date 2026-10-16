@@ -13,10 +13,12 @@ contracts:
   stETH:
     address: "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
     kind: erc20_rebasing
+    decimals: 18
     aliases: [steth, lido steth, staked ether]
   wstETH:
     address: "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"
     kind: erc20
+    decimals: 18
     aliases: [wsteth, wrapped steth]
   unstETH:
     address: "0x889edC2eDab5f40e902b864aD4d7AdE8E412F9B1"
@@ -52,6 +54,8 @@ reads:
 actions:
   stake:
     summary: "ETH -> stETH"
+    input: ETH
+    defaults: { referral: "0x0000000000000000000000000000000000000000" }
     calls:
       - target: stETH
         sig: "submit(address _referral)"
@@ -60,6 +64,7 @@ actions:
         note: "referral is a tag only; stETH is minted to msg.sender (the Avatar)"
   wrap:
     summary: "stETH -> wstETH"
+    input: stETH
     calls:
       - target: stETH
         sig: "approve(address _spender, uint256 _amount)"
@@ -69,12 +74,14 @@ actions:
         args: { _stETHAmount: $amount }
   unwrap:
     summary: "wstETH -> stETH"
+    input: wstETH
     calls:
       - target: wstETH
         sig: "unwrap(uint256 _wstETHAmount)"
         args: { _wstETHAmount: $amount }
   request_withdrawal:
     summary: "stETH -> withdrawal NFT (claim ETH after finalization)"
+    input: stETH
     calls:
       - target: stETH
         sig: "approve(address _spender, uint256 _amount)"
@@ -84,6 +91,7 @@ actions:
         args: { _amounts: [$amount], _owner: $AVATAR }
   request_withdrawal_wsteth:
     summary: "wstETH -> withdrawal NFT"
+    input: wstETH
     calls:
       - target: wstETH
         sig: "approve(address spender, uint256 amount)"

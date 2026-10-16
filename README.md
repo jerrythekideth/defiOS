@@ -11,14 +11,18 @@ modifier, safely:
 * **find** missing and unsafe permissions: every card action is encoded by the
   engine, evaluated against the decoded role, and attacked with hostile
   variants (receiver = someone else, arbitrary inner call);
-* later milestones: plan, encode, simulate and propose transactions to the
-  Operator Safe, and produce permission batches for humans to propose.
+* **plan** transactions: an intent (`gearbox_v3.lend --amount 1`) becomes
+  engine-built calls, each checked against the role; refused if anything is
+  missing or unsafe;
+* **propose** them to the Operator Safe for humans to sign; later milestones:
+  simulate, and produce permission batches for humans to propose.
 
 The LLM chooses intents and parameters. The engine writes every address and
 every byte. Humans sign.
 
 > Status: **M1 read-only** (`doctor`, `sync`, `state`, `check`, `decode`) plus the
-> **start of M2**: `propose` (dry run by default) and balance reads.
+> **M2 so far**: `plan` (intent → role-checked calls.json), `propose` (dry run by
+> default) and balance reads.
 > All cards are `status: draft`, `reviewed: false`.
 >
 > What defi-kit covers and which card maps to it: [`catalog/DEFI_KIT.md`](catalog/DEFI_KIT.md).
@@ -51,7 +55,8 @@ DeFi_os/                    public · this repo · no user data
 ├── skills/defios/          AgentSkills-format skill (OpenClaw, Claude Code)
 ├── catalog/<protocol>/     card.yaml (+ NOTES.md): public protocol facts
 ├── defios/                 Python engine: roles/ (v2 adapter, v3 slot), sync, check, doctor, cli, mcp,
-│                           tx (MultiSend + execTransactionWithRole), propose (Safe queue), balances
+│                           plan (intent -> calls.json), tx (MultiSend + execTransactionWithRole),
+│                           propose (Safe queue), balances
 ├── scripts/defikit_map.py  regenerates catalog/DEFI_KIT.md + defi_kit.json from a defi-kit clone
 └── tests/                  offline tests (anonymized Roles v2 event fixture)
 
@@ -94,6 +99,7 @@ your-permissions/           public or private audit trail of permission batches
 | `defios state` | sync, then a plain summary of holdings and allowed / missing / unsafe actions |
 | `defios check` | per-action `allowed` / `missing` / `unsafe` / `needs_signature` plus role lints |
 | `defios decode <batch.json>` | decodes a Tx Builder batch of Roles changes, conditions as a tree |
+| `defios plan <card>.<action>[=amount] … [--token T] [--intent json]` | M2: resolves card/alias, converts amounts with token decimals, builds every call (approves included, receivers = Vault), checks each against the role (+ eth_call probe with RPC); refuses missing/unsafe (exit 3), else writes `calls.json` and prints the Operator Safe tx preview. Flow: plan → human reads → propose dry run → `--send` |
 | `defios propose --file calls.json [--send]` | M2: wraps engine-built calls in `execTransactionWithRole` (MultiSend when several), picks a non-colliding Operator nonce, computes the SafeTxHash, signs as a delegate; prints everything (dry run) unless `--send` posts it to the Safe Transaction Service. Never signs as an owner, never executes |
 | `defios catalog` | lists and validates cards |
 
