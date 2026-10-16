@@ -58,6 +58,7 @@ def main(ctx, root, config, vault, fmt, logs_file, offline):
     defios sync     rebuild books/<vault>/ (role.lock.json, book.yaml) from chain
     defios state    sync, then say what the vault holds and can do
     defios check    allowed / missing / unsafe per card action, plus role lints
+    defios propose  dry-run (default) or --send an Operator Safe tx for humans to sign
     """
     ctx.ensure_object(dict)
     ctx.obj.update(root=root, config=config, vault=vault, format=fmt, logs_file=logs_file, offline=offline)
@@ -148,6 +149,39 @@ def catalog_cmd(ctx, directory):
         lines.append(f"{proto:14} {card.raw.get('status')}/{'reviewed' if card.raw.get('reviewed') else 'unreviewed'}"
                      f"  {len(card.actions)} actions{'  ERRORS: ' + str(len(errs)) if errs else ''}")
     _emit(ctx, data, "\n".join(lines))
+
+
+@main.command()
+@click.option("--file", "calls_file", required=True, type=click.Path(exists=True, dir_okay=False),
+              help="calls.json: inner calls {to, value, data, operation} produced by the engine/cards.")
+@click.option("--send", is_flag=True, help="Actually POST to the Safe Transaction Service (default: dry run).")
+@click.option("--nonce", type=int, default=None,
+              help="Explicit Operator nonce (only to deliberately replace a queued tx). Default: max(on-chain, queued+1).")
+@click.option("--batch", type=click.Choice(["roles", "operator"]), default="roles", show_default=True,
+              help="Several calls: MultiSend inside execTransactionWithRole (needs the role's MultiSend unwrapper) "
+                   "or one execTransactionWithRole per call batched by the Operator.")
+@click.pass_context
+def propose(ctx, calls_file, send, nonce, batch):
+    """Build, hash and sign (as a delegate) an Operator Safe tx; with --send, queue it for humans to sign.
+
+    \b
+    Dry run by default: prints the decoded calls, nonce, SafeTxHash and signer.
+    Never signs as an owner, never confirms, never executes.
+    """
+    def go():
+        from .propose import ProposeError, propose as run, summarize
+        from .tx import TxError, load_calls_file
+        cfg, vault, catalog, rpc = _setup(ctx)
+        try:
+            calls, meta = load_calls_file(calls_file)
+            if meta.get("chain_id") and int(meta["chain_id"]) != vault.chain_id:
+                raise TxError(f"calls.json is for chain {meta['chain_id']}, vault {vault.name} is on {vault.chain_id}")
+            res = run(vault, calls, send=send, nonce=nonce, batch=batch, catalog=catalog, rpc=rpc,
+                      books_dir=cfg.books_dir, description=meta.get("description"))
+        except (ProposeError, TxError) as e:
+            raise ConfigError(str(e)) from e
+        _emit(ctx, res, summarize(res))
+    _run(go)
 
 
 @main.command()

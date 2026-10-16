@@ -44,16 +44,36 @@ class TxService:
         self.timeout = timeout
 
     def _get(self, path: str, params: dict | None = None) -> Any:
-        headers = {"Accept": "application/json"}
-        if self.api_key:
-            headers["Authorization"] = f"Bearer {self.api_key}"
         try:
-            r = requests.get(self.base + path, params=params or {}, headers=headers, timeout=self.timeout)
+            r = requests.get(self.base + path, params=params or {}, headers=self._headers(), timeout=self.timeout)
         except requests.RequestException as e:
             raise ChainError(f"safe tx service: {e}") from e
         if r.status_code >= 400:
             raise ChainError(f"safe tx service {r.status_code}: {r.text[:200]}")
         return r.json()
+
+    def _headers(self) -> dict:
+        h = {"Accept": "application/json"}
+        if self.api_key:
+            h["Authorization"] = f"Bearer {self.api_key}"
+        return h
+
+    def safe(self, safe: str) -> dict:
+        """Service view of a Safe: nonce (next unused on-chain nonce), owners, threshold, version."""
+        d = self._get(f"/v1/safes/{to_checksum_address(safe)}/")
+        return {"nonce": int(d["nonce"]), "owners": [to_checksum_address(o) for o in d.get("owners", [])],
+                "threshold": d.get("threshold"), "version": d.get("version")}
+
+    def propose(self, safe: str, payload: dict) -> dict:
+        """POST a multisig transaction proposal (signed by an owner or a delegate of `safe`)."""
+        try:
+            r = requests.post(f"{self.base}/v1/safes/{to_checksum_address(safe)}/multisig-transactions/",
+                              json=payload, headers=self._headers(), timeout=self.timeout)
+        except requests.RequestException as e:
+            raise ChainError(f"safe tx service: {e}") from e
+        if r.status_code not in (200, 201):
+            raise ChainError(f"safe tx service {r.status_code}: {r.text[:300]}")
+        return {"status": r.status_code}
 
     def pending(self, safe: str, current_nonce: int) -> list[dict]:
         d = self._get(f"/v1/safes/{to_checksum_address(safe)}/multisig-transactions/",

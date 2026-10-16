@@ -20,7 +20,7 @@ defios doctor             # run from the agent repo that holds defios.yaml and .
 
 The agent repo (yours, private) holds `defios.yaml` (vault, roles modifier,
 role key, operator, proposer), `.env` (RPC_URL, ETHERSCAN_API_KEY,
-SAFE_API_KEY) and `books/` (generated). DeFi_os itself holds no user data.
+SAFE_API_KEY, PROPOSER_PRIVATE_KEY for a delegate key) and `books/` (generated). DeFi_os itself holds no user data.
 
 ## Answering questions
 
@@ -31,6 +31,8 @@ SAFE_API_KEY) and `books/` (generated). DeFi_os itself holds no user data.
 | which pool / which contract is X | read `catalog/<card>/card.yaml` aliases | give the address from the card only |
 | review this permission .json | `defios decode file.json` | list each change in plain words; flag `PASS[NONE]`, unpinned receivers, delegatecall |
 | something is broken | `defios doctor` | report failing checks |
+| queue this transaction | `defios propose --file calls.json` (dry run) | show calls, nonce, SafeTxHash, warnings/problems; wait for the human's yes |
+| (after the human's yes) | `defios propose --file calls.json --send` | give the Safe app link + nonce; humans sign there |
 
 Use `--vault <name>` if `defios.yaml` lists several vaults. Add `--format json`
 when you need to parse the output.
@@ -43,3 +45,5 @@ when you need to parse the output.
 4. Receivers are always the Vault.
 5. Permission changes = Tx Builder JSON for the human to propose on the Vault.
 6. End every answer with a short plain-language summary.
+7. Proposing: dry run first, `--send` only after the human agrees, never sign as
+   an owner, never execute. `calls.json` comes from the engine, not from you.

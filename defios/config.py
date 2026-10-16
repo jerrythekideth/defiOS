@@ -47,6 +47,8 @@ class VaultConfig:
     protocols: list[str] | None = None
     book_vars: dict[str, str] = field(default_factory=dict)
     limits: dict = field(default_factory=dict)
+    tokens: list[str] = field(default_factory=list)     # extra balance reads: card refs or addresses
+    multisend: str | None = None                         # MultiSendCallOnly override (defaults per chain in tx.py)
 
 
 @dataclass
@@ -113,6 +115,8 @@ def load_config(root: str | Path = ".", path: str | Path | None = None) -> Confi
             protocols=v.get("protocols"),
             book_vars={str(k): str(x) for k, x in (v.get("book_vars") or {}).items()},
             limits=v.get("limits") or {},
+            tokens=[str(t) for t in (v.get("tokens") or [])],
+            multisend=_addr(v.get("multisend"), f"vaults.{name}.multisend", required=False),
         )
         if not vaults[name].role_key:
             raise ConfigError(f"vaults.{name}.role_key is required")

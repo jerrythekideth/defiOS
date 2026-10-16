@@ -76,6 +76,10 @@ class Rpc:
         b = hex(block) if isinstance(block, int) else block
         return bytes.fromhex(self.request("eth_getCode", [address, b])[2:])
 
+    def get_balance(self, address: str, block: str | int = "latest") -> int:
+        b = hex(block) if isinstance(block, int) else block
+        return int(self.request("eth_getBalance", [address, b]), 16)
+
     def get_storage_at(self, address: str, slot: str, block: str | int = "latest") -> bytes:
         b = hex(block) if isinstance(block, int) else block
         return bytes.fromhex(self.request("eth_getStorageAt", [address, slot, b])[2:])

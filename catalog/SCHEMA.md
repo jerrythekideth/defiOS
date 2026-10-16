@@ -23,7 +23,7 @@ sources (protocol docs, verified source on a block explorer, defi-kit).
 | `status` | yes | `draft` → `reviewed` → `deprecated` |
 | `reviewed` | yes | `false` until a human signs off |
 | `sources` | no | where the facts come from (docs, explorer, defi-kit paths, payload files) |
-| `defi_kit` | no | defi-kit permission bundle(s) covering this protocol, e.g. `lido/deposit` |
+| `defi_kit` | no | defi-kit permission bundle covering this protocol: `<defi-kit protocol key>/<action> [param=[v,…]] (note)`, e.g. `lido/deposit`, `morphoVaults/deposit targets=[…]`. Keys and parameter names are exactly defi-kit's (see `catalog/DEFI_KIT.md`); `scripts/defikit_map.py --check` and the tests verify them, and concrete values (addresses) must be in defi-kit's option list |
 | `contracts` | yes | map of contract name → contract (see below) |
 | `ui_routes_to_avoid` | no | list of `{ui, via, why}`: routes the official UI uses that the agent must not |
 | `reads` | no | list of reads (see below) |

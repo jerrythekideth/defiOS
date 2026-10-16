@@ -23,4 +23,6 @@ vaults:
       # morpho_vaults.asset: "0x…"
       # cowswap.sell_token: weth.WETH       # sample tokens used when checking the CoW action
       # cowswap.buy_token: weth.WETH
+    # tokens: [weth.WETH, lido.wstETH]       # extra balance reads (card refs or addresses); cards' tokens are read anyway
+    # multisend: "0x…"                       # MultiSendCallOnly override (default: Safe 1.4.1 canonical on mainnet)
     limits: {}                               # M2: max size per tx, allowed protocols

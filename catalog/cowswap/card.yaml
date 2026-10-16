@@ -3,7 +3,7 @@ name: CoW Swap (pre-signed orders via the CowswapOrderSigner)
 chain_id: 1
 status: draft
 reviewed: false
-defi_kit: "cowswap/swap sell=[…] buy=[…] (receiver pinned to the avatar, feeAmountBP capped)"
+defi_kit: "cowswap/swap sell=[…] buy=[…] feeAmountBp=0 appData=[…] (receiver pinned to the avatar; feeAmountBp caps signOrder feeAmountBP, default 0)"
 sources:
   - "karpatkey/defi-kit sdk/eth-sdk/config.ts (contracts.mainnet.cowSwap)"
   - "karpatkey/defi-kit sdk/src/protocols/cowSwap/actions.ts"
