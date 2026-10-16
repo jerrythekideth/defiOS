@@ -33,6 +33,16 @@ def load_dotenv(path: Path) -> None:
         os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
 
 
+# Names other agent setups already use (e.g. an OpenClaw .env), read when ours are unset.
+ENV_ALIASES = {"RPC_URL": "ETH_RPC_URL", "PROPOSER_PRIVATE_KEY": "ETH_PRIVATE_KEY"}
+
+
+def apply_env_aliases() -> None:
+    for name, alias in ENV_ALIASES.items():
+        if not os.environ.get(name) and os.environ.get(alias):
+            os.environ[name] = os.environ[alias]
+
+
 @dataclass
 class VaultConfig:
     name: str
@@ -89,6 +99,7 @@ def default_catalog_dir() -> Path:
 def load_config(root: str | Path = ".", path: str | Path | None = None) -> Config:
     root = Path(root).resolve()
     load_dotenv(root / ".env")
+    apply_env_aliases()
     cfg_path = Path(path) if path else root / "defios.yaml"
     if not cfg_path.exists():
         raise ConfigError(f"{cfg_path} not found (copy defios.example.yaml from DeFi_os)")
