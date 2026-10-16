@@ -13,6 +13,7 @@ contracts:
   weETH:
     address: "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee"
     kind: erc20
+    decimals: 18
     aliases: [weETH, wrapped eETH, ether.fi weeth]
   deposit_adapter:
     address: "0xcfC6d9Bd7411962Bfe7145451A7EF71A24b6A7A2"

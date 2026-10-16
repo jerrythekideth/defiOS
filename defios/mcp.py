@@ -3,8 +3,8 @@
     pip install "defios[mcp]"
     DEFIOS_ROOT=/path/to/your-agent-repo python -m defios.mcp
 
-Tools return the same JSON the CLI prints. Read-only in M1: nothing here signs
-or proposes anything.
+Tools return the same JSON the CLI prints. Nothing here signs or proposes anything
+(`defios_plan` may write calls.json when asked to).
 """
 from __future__ import annotations
 
@@ -55,11 +55,31 @@ def tool_check(vault: str | None = None, protocols: list[str] | None = None) -> 
     return run_check(cat, st, adapter, v, protocols, rpc)
 
 
+def tool_plan(steps: list[dict], vault: str | None = None, out: str | None = None) -> dict[str, Any]:
+    """steps: [{action: "gearbox_v3.lend", amount: "1", token: "wstETH", params: {}}]. Writes calls.json
+    (relative to DEFIOS_ROOT) only when `out` is given and the plan is not refused."""
+    import json
+    from pathlib import Path
+
+    from .plan import calls_file, load_intent, plan, role_for_plan
+
+    cfg, v, cat, rpc = _ctx(vault)
+    st_list, desc = load_intent(json.dumps({"steps": steps}))
+    state, adapter, source = role_for_plan(cfg, v, None, rpc)
+    res = plan(cat, state, adapter, v, st_list, rpc=rpc, description=desc, role_source=source)
+    if out and res["ok"]:
+        path = Path(out) if Path(out).is_absolute() else cfg.root / out
+        path.write_text(json.dumps(calls_file(res), indent=2) + "\n")
+        res["written"] = str(path)
+    return res
+
+
 TOOLS = {
     "defios_doctor": (tool_doctor, "Check Vault / Roles / Operator / proposer wiring."),
     "defios_sync": (tool_sync, "Rebuild the vault book from chain (role.lock.json, book.yaml)."),
     "defios_state": (tool_state, "Sync, then summarize holdings and allowed/missing/unsafe actions."),
     "defios_check": (tool_check, "Mark every card action allowed/missing/unsafe and lint the role."),
+    "defios_plan": (tool_plan, "Plan card actions into engine-built, role-checked calls (refuses missing/unsafe)."),
 }
 
 

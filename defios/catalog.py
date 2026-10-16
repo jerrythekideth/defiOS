@@ -543,8 +543,36 @@ def validate_card(catalog: Catalog, card: Card) -> list[str]:
             errs.append(f"{card.protocol}.{name}: bad address {a!r}")
         elif isinstance(a, str) and is_address(a) and a != to_checksum_address(a):
             errs.append(f"{card.protocol}.{name}: address not checksummed")
+        d = c.get("decimals")
+        if d is not None and (not isinstance(d, int) or isinstance(d, bool) or not 0 <= d <= 77):
+            errs.append(f"{card.protocol}.{name}: decimals must be an integer 0..77, got {d!r}")
     for aname, action in card.actions.items():
-        for i, call in enumerate((action or {}).get("calls") or []):
+        action = action or {}
+        inp = action.get("input")
+        if inp is not None and inp != "ETH":
+            try:
+                if not catalog.is_contract_ref(str(inp), card.protocol):
+                    errs.append(f"{card.protocol}.{aname}: input {inp!r} is not a contract of a card (or ETH)")
+            except CardError as e:
+                errs.append(f"{card.protocol}.{aname}: {e}")
+        used_vars: set[str] = set()
+
+        def _vars(spec):
+            if isinstance(spec, str) and spec.startswith("$") and spec != AVATAR and not spec.startswith("$book."):
+                used_vars.add(spec[1:])
+            elif isinstance(spec, dict):
+                for v in spec.values():
+                    _vars(v)
+            elif isinstance(spec, list):
+                for v in spec:
+                    _vars(v)
+
+        for call in action.get("calls") or []:
+            _vars(call.get("args") or {})
+        for k in action.get("defaults") or {}:
+            if k not in used_vars:
+                errs.append(f"{card.protocol}.{aname}: default {k!r} is not a $variable of the action's calls")
+        for i, call in enumerate(action.get("calls") or []):
             if "sig" not in call:
                 if not any(k in call for k in ("sign", "external", "note")):
                     errs.append(f"{card.protocol}.{aname}[{i}]: call needs sig/target or sign/external")

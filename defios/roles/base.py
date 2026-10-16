@@ -10,7 +10,18 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
 
-from .conditions import Clearance, Condition, ExecutionOptions, Status, flat_to_json, options_name
+from eth_utils import to_checksum_address as to_checksum
+
+from .conditions import (
+    Clearance,
+    Condition,
+    ExecutionOptions,
+    Status,
+    flat_to_json,
+    normalize_flat,
+    options_name,
+    unflatten,
+)
 
 
 @dataclass
@@ -129,6 +140,48 @@ class RoleState:
             "roles_seen": sorted(self.roles_seen),
             "warnings": self.warnings,
         }
+
+    @classmethod
+    def from_lock_json(cls, lock: dict) -> "RoleState":
+        """Rebuild a RoleState from `role.lock.json` (inverse of to_lock_json) for offline evaluation.
+        A lock is a snapshot at `lock["block"]`: callers must say so to the human (AGENTS.md rule 1)."""
+        if lock.get("schema") != "defios.role.lock/1":
+            raise ValueError(f"not a defios role lock (schema {lock.get('schema')!r})")
+
+        def enum(e, v):
+            if isinstance(v, int) or (isinstance(v, str) and v.isdigit()):
+                return int(v)
+            return int(e[v])
+
+        def fstate(target: str, sel: str, d: dict) -> FunctionState:
+            flat = normalize_flat(d.get("conditions_flat") or [])
+            tree = None
+            if not d.get("wildcarded") and flat:
+                try:
+                    tree = unflatten(flat)
+                except ValueError:
+                    tree = None
+            return FunctionState(to_checksum(target), sel.lower(), bool(d.get("wildcarded")),
+                                 enum(ExecutionOptions, d.get("options", 0)), flat=flat, condition=tree,
+                                 changed_at=d.get("changed_at"))
+
+        st = cls(version=str(lock.get("roles_version") or "v2"), chain_id=int(lock.get("chain_id") or 1),
+                 roles_modifier=lock.get("roles_modifier") or "", role_key=lock.get("role_key") or "",
+                 block=int(lock.get("block") or 0), log_source=f"role.lock.json ({lock.get('log_source')})",
+                 members=list(lock.get("members") or []), allowances=dict(lock.get("allowances") or {}),
+                 unwrappers={k.lower(): v for k, v in (lock.get("unwrappers") or {}).items()},
+                 default_roles=dict(lock.get("default_roles") or {}), module=dict(lock.get("module") or {}),
+                 roles_seen=list(lock.get("roles_seen") or []), events_replayed=int(lock.get("events_replayed") or 0),
+                 last_change=lock.get("last_change"), warnings=list(lock.get("warnings") or []))
+        for addr, t in (lock.get("targets") or {}).items():
+            a = addr.lower()
+            st.targets[a] = TargetState(to_checksum(addr), enum(Clearance, t.get("clearance", 0)),
+                                        enum(ExecutionOptions, t.get("options", 0)), t.get("changed_at"))
+            for sel, fd in (t.get("functions") or {}).items():
+                st.functions[(a, sel.lower())] = fstate(addr, sel, fd)
+        for d in lock.get("dormant_functions") or []:
+            st.functions[(d["target"].lower(), d["selector"].lower())] = fstate(d["target"], d["selector"], d)
+        return st
 
 
 @dataclass

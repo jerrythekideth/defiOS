@@ -1,6 +1,6 @@
 ---
 name: defios
-description: Operate a Safe vault through a Zodiac Roles modifier with the defios CLI. Use when asked what a vault holds, which DeFi actions its role allows, whether a permission is missing or unsafe, which contract "the pool" is, or to review a Roles permission batch. Reads state from chain; never writes calldata or addresses by hand.
+description: Operate a Safe vault through a Zodiac Roles modifier with the defios CLI. Use when asked what a vault holds, which DeFi actions its role allows, whether a permission is missing or unsafe, which contract "the pool" is, to plan and queue a transaction (lend, stake, wrap, unwrap) for humans to sign, or to review a Roles permission batch. Reads state from chain; never writes calldata or addresses by hand.
 ---
 
 # defios skill
@@ -31,6 +31,7 @@ SAFE_API_KEY, PROPOSER_PRIVATE_KEY for a delegate key) and `books/` (generated).
 | which pool / which contract is X | read `catalog/<card>/card.yaml` aliases | give the address from the card only |
 | review this permission .json | `defios decode file.json` | list each change in plain words; flag `PASS[NONE]`, unpinned receivers, delegatecall |
 | something is broken | `defios doctor` | report failing checks |
+| do X (lend, stake, wrap, …) | `defios plan <card or alias>.<action>=<amount> [more steps] [--token T]` | show each call's `line`, the warnings; if REFUSED, explain each `why` and stop |
 | queue this transaction | `defios propose --file calls.json` (dry run) | show calls, nonce, SafeTxHash, warnings/problems; wait for the human's yes |
 | (after the human's yes) | `defios propose --file calls.json --send` | give the Safe app link + nonce; humans sign there |
 
@@ -45,5 +46,7 @@ when you need to parse the output.
 4. Receivers are always the Vault.
 5. Permission changes = Tx Builder JSON for the human to propose on the Vault.
 6. End every answer with a short plain-language summary.
-7. Proposing: dry run first, `--send` only after the human agrees, never sign as
-   an owner, never execute. `calls.json` comes from the engine, not from you.
+7. Transactions: `plan` → human reads the summary → `propose` dry run →
+   `propose --send` only after the human agrees. Never sign as an owner, never
+   execute. `calls.json` comes from `defios plan`, never from you; if `plan`
+   refuses, do not work around it.

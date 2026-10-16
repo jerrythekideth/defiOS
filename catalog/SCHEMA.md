@@ -39,6 +39,7 @@ contracts:
   pool:
     address: "0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64"  # checksummed
     kind: erc4626            # erc20 | erc4626 | erc721 | router | adapter | queue | facade | ...
+    decimals: 18             # tokens: used by `defios plan` to turn "1.5" into raw units (checked over RPC when set)
     aliases: [gearbox pool, kpkwstETH]
     defi_kit: "gearbox/deposit targets=[0xA9d1…]"
   wstETH: { ref: lido.wstETH }          # reuse another card's contract
@@ -97,6 +98,18 @@ Call keys:
 | `free` | receiver-like params deliberately left free, each with a reason (rare; needs human OK) |
 | `verified_sig` | `false` when the signature is not yet confirmed from verified source or a live permission |
 | `note` | free text |
+
+Action keys used by `defios plan` (all optional):
+
+| key | meaning |
+|---|---|
+| `input` | contract (in this card, or `card.contract`) or `ETH` that `--amount` is denominated in; its `decimals` convert the human amount. `$amount` / `$shares` get the raw value; for `send:` calls the ETH value is the amount |
+| `defaults` | plan-time values for free `$vars` (e.g. `referral: "0x0…0"`). Any other free `$var` must be given with `--param`: plan never fills one with a check sample |
+
+`plan` emits each required call (approves included) or, if the role rejects
+it, the first `alt` with the same free variables that the role allows;
+`optional` calls are skipped; an action with a `sign:` / `external:` step cannot
+be planned.
 
 Non-call steps (signed orders, things a third party does) use `sign:` or
 `external:` instead of `sig:`; the engine reports them but does not check them.

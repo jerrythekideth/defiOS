@@ -58,6 +58,7 @@ def main(ctx, root, config, vault, fmt, logs_file, offline):
     defios sync     rebuild books/<vault>/ (role.lock.json, book.yaml) from chain
     defios state    sync, then say what the vault holds and can do
     defios check    allowed / missing / unsafe per card action, plus role lints
+    defios plan     intent -> engine-built, role-checked calls -> calls.json
     defios propose  dry-run (default) or --send an Operator Safe tx for humans to sign
     """
     ctx.ensure_object(dict)
@@ -181,6 +182,69 @@ def propose(ctx, calls_file, send, nonce, batch):
         except (ProposeError, TxError) as e:
             raise ConfigError(str(e)) from e
         _emit(ctx, res, summarize(res))
+    _run(go)
+
+
+@main.command()
+@click.argument("steps", nargs=-1)
+@click.option("--intent", default=None, help="JSON intent (inline or a file): {description, steps: [{action, amount, "
+              "token, params}]}. Instead of / in addition to STEPS.")
+@click.option("--amount", default=None, help="Human amount for steps without `=amount` (in the action's input token).")
+@click.option("--token", default=None, help="Token for steps without one (name, alias, card.contract or ETH); must "
+              "match the action's input token.")
+@click.option("--param", "params", multiple=True, help="Extra card variable, name=value (number or card contract).")
+@click.option("--out", default="calls.json", show_default=True,
+              help="Where to write calls.json for `defios propose --file` (relative to --root); '-' = do not write.")
+@click.option("--batch", type=click.Choice(["roles", "operator"]), default="roles", show_default=True,
+              help="Batch mode for the Operator tx preview (same meaning as in propose).")
+@click.option("--no-probe", is_flag=True, help="Offline evaluation only, even when RPC_URL is set.")
+@click.pass_context
+def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe):
+    """Turn an intent into engine-built calls, check them against the role, write calls.json.
+
+    \b
+    STEPS are <card>.<action>[=<amount>] or <alias>.<action>[=<amount>], run in order:
+      defios plan gearbox_v3.lend --amount 1 --token wstETH
+      defios plan weth.unwrap=1 lido.stake=1 lido.wrap=0.999 kpkwstETH.lend=0.8
+    Refuses (exit 3, nothing written) if any call is missing / unsafe in the role.
+    There is no separate `defios tx`: plan writes calls.json and prints the Operator Safe tx preview;
+    `defios propose --file calls.json` picks the nonce, hashes and signs.
+    """
+    def go():
+        from .catalog import CardError
+        from .plan import PlanError, calls_file, load_intent, parse_step, plan as run, role_for_plan, summarize
+        cfg, vault, catalog, rpc = _setup(ctx)
+        try:
+            all_steps, desc = [], None
+            if intent:
+                all_steps, desc = load_intent(intent)
+            all_steps += [parse_step(s) for s in steps]
+            extra = {}
+            for kv in params:
+                k, eq, v = kv.partition("=")
+                if not eq or not k.strip():
+                    raise PlanError(f"--param {kv!r}: expected name=value")
+                extra[k.strip()] = v.strip()
+            for st in all_steps:
+                if st.amount is None and amount is not None:
+                    st.amount = amount
+                if st.token is None and token is not None:
+                    st.token = token
+                st.params = {**extra, **st.params}
+            state, adapter, source = role_for_plan(cfg, vault, ctx.obj["logs_file"], rpc)
+            res = run(catalog, state, adapter, vault, all_steps, rpc=rpc, probe=not no_probe, batch=batch,
+                      description=desc, role_source=source)
+        except (PlanError, CardError) as e:
+            raise ConfigError(str(e)) from e
+        if res["ok"] and out != "-":
+            path = Path(out)
+            if not path.is_absolute():
+                path = cfg.root / path
+            path.write_text(json.dumps(calls_file(res), indent=2) + "\n")
+            res["written"] = str(path)
+        _emit(ctx, res, summarize(res))
+        if not res["ok"]:
+            sys.exit(3)
     _run(go)
 
 
