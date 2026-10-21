@@ -36,6 +36,7 @@ ui_routes_to_avoid:
 actions:
   swap:
     summary: "sell token -> buy token via a pre-signed CoW order, proceeds to the Avatar"
+    approvals: keep   # the vault relayer pulls at settlement, after this tx; revoke once filled or expired
     calls:
       - target: sell_token
         sig: "approve(address spender, uint256 amount)"

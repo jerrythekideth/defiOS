@@ -103,7 +103,8 @@ def test_e2e_unwrap_stake_wrap_lend_from_lock(agent_dir):
     p = json.loads(r.output)
     assert p["ok"] and not p["refused"]
     assert p["role"]["source"].startswith("role.lock.json") and p["role"]["block"] == 123
-    assert [s["action"] for s in p["steps"]] == ["weth.unwrap", "lido.stake", "lido.wrap", "gearbox_v3.lend"]
+    assert [s["action"] for s in p["steps"]] == ["weth.unwrap", "lido.stake", "lido.wrap", "gearbox_v3.lend",
+                                                 "revoke_approvals"]
     assert p["steps"][3]["resolved_from"] == "kpkwstETH.lend"
     assert any("role.lock.json snapshot" in w for w in p["warnings"])
     assert not any("unwrapper" in w for w in p["warnings"])
@@ -118,6 +119,8 @@ def test_e2e_unwrap_stake_wrap_lend_from_lock(agent_dir):
         (WSTETH, "0xea598cb0", 0, 0),      # wstETH.wrap(amount)
         (WSTETH, "0x095ea7b3", 0, 0),      # wstETH.approve(pool, amount)
         (POOL, "0x6e553f65", 0, 0),        # pool.deposit(assets, receiver)
+        (STETH, "0x095ea7b3", 0, 0),       # stETH.approve(wstETH, 0): no allowance left open
+        (WSTETH, "0x095ea7b3", 0, 0),      # wstETH.approve(pool, 0)
     ]
     args = lambda c, types: abi_decode(types, c.data[4:])
     assert args(calls[0], ["uint256"]) == (E18,)
@@ -126,12 +129,14 @@ def test_e2e_unwrap_stake_wrap_lend_from_lock(agent_dir):
     assert args(calls[3], ["uint256"]) == (999 * 10**15,)
     assert args(calls[4], ["address", "uint256"]) == (POOL.lower(), 8 * 10**17)
     assert args(calls[5], ["uint256", "address"]) == (8 * 10**17, AVATAR)
+    assert args(calls[6], ["address", "uint256"]) == (WSTETH.lower(), 0)
+    assert args(calls[7], ["address", "uint256"]) == (POOL.lower(), 0)
 
-    lines = [c["line"] for s in p["steps"] for c in s["calls"]]
+    lines = [c["line"] for s in p["steps"][:-1] for c in s["calls"]]
     assert lines[-1] == "gearbox_v3.kpkwstETH_pool.deposit(assets=0.8 wstETH, receiver=the Vault)"
     assert lines[1].endswith("sending 1 ETH")
 
-    # the Operator tx preview is execTransactionWithRole(MultiSend(all six calls))
+    # the Operator tx preview is execTransactionWithRole(MultiSend(all eight calls))
     assert p["operator_tx"]["batch"] == "roles" and p["operator_tx"]["to"] == ROLES
     assert p["operator_tx"]["data"].startswith("0xc6fe8747")
 
@@ -203,7 +208,33 @@ def test_token_must_match_input(catalog, vault):
     with pytest.raises(PlanError, match="takes lido.wstETH, not weth.WETH"):
         plan(catalog, good_role(), adapter, vault, [Step("gearbox_v3.lend", "1", "WETH")])
     p = plan(catalog, good_role(), adapter, vault, [Step("gearbox_v3.lend", "1", "wstETH")])
-    assert p["ok"] and len(p["calls"]) == 2
+    assert p["ok"] and len(p["calls"]) == 3
+
+
+def test_approvals_are_revoked_in_the_same_tx(catalog, vault):
+    """approve exact -> action -> approve(spender, 0); one revoke per token + spender; opt-out and keep."""
+    adapter = RolesV2(ROLES)
+    p = plan(catalog, good_role(), adapter, vault, [Step("gearbox_v3.lend", "1", "wstETH")])
+    sel = [c["data"][:10] for c in p["calls"]]
+    assert sel == ["0x095ea7b3", "0x6e553f65", "0x095ea7b3"]
+    assert abi_decode(["address", "uint256"], bytes.fromhex(p["calls"][2]["data"][10:])) == (POOL.lower(), 0)
+    assert p["steps"][-1]["action"] == "revoke_approvals"
+    # two lends to the same pool -> still one revoke
+    p2 = plan(catalog, good_role(), adapter, vault, [Step("gearbox_v3.lend", "1", "wstETH"),
+                                                     Step("gearbox_v3.lend", "2", "wstETH")])
+    assert [c["data"][:10] for c in p2["calls"]].count("0x095ea7b3") == 3
+    # opt-out
+    p3 = plan(catalog, good_role(), adapter, vault, [Step("gearbox_v3.lend", "1", "wstETH")], keep_approvals=True)
+    assert len(p3["calls"]) == 2 and any("--keep-approvals" in w for w in p3["warnings"])
+    # a role that only allows approve(pool, exact) cannot revoke -> refuse the plan
+    st = good_role()
+    st.functions[(WSTETH.lower(), "0x095ea7b3")] = _scoped(
+        WSTETH, "0x095ea7b3", [Condition(AbiType.STATIC, Operator.EQUAL_TO, _word(POOL)),
+                               Condition(AbiType.STATIC, Operator.GREATER_THAN, (0).to_bytes(32, "big"))])
+    p4 = plan(catalog, st, adapter, vault, [Step("gearbox_v3.lend", "1", "wstETH")])
+    assert not p4["ok"] and p4["refused"][0]["action"] == "revoke after gearbox_v3.lend"
+    # cards that are pulled later keep their approval
+    assert catalog.cards["cowswap"].actions["swap"]["approvals"] == "keep"
 
 
 def test_free_vars_are_never_sampled(catalog, vault):
@@ -290,4 +321,4 @@ def test_mcp_plan_tool(agent_dir, monkeypatch):
     write_lock(agent_dir, good_role())
     monkeypatch.setenv("DEFIOS_ROOT", str(agent_dir))
     res = tool_plan([{"action": "gearbox pool.lend", "amount": "1"}], out="calls.json")
-    assert res["ok"] and res["written"] and len(load_calls_file(agent_dir / "calls.json")[0]) == 2
+    assert res["ok"] and res["written"] and len(load_calls_file(agent_dir / "calls.json")[0]) == 3

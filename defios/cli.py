@@ -198,8 +198,10 @@ def propose(ctx, calls_file, send, nonce, batch):
 @click.option("--batch", type=click.Choice(["roles", "operator"]), default="roles", show_default=True,
               help="Batch mode for the Operator tx preview (same meaning as in propose).")
 @click.option("--no-probe", is_flag=True, help="Offline evaluation only, even when RPC_URL is set.")
+@click.option("--keep-approvals", is_flag=True,
+              help="Do not append approve(spender, 0) after the steps (by default no allowance stays open).")
 @click.pass_context
-def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe):
+def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe, keep_approvals):
     """Turn an intent into engine-built calls, check them against the role, write calls.json.
 
     \b
@@ -207,6 +209,8 @@ def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe):
       defios plan gearbox_v3.lend --amount 1 --token wstETH
       defios plan weth.unwrap=1 lido.stake=1 lido.wrap=0.999 kpkwstETH.lend=0.8
     Refuses (exit 3, nothing written) if any call is missing / unsafe in the role.
+    Every approval the plan makes is set back to 0 at the end of the same transaction
+    (unless the card says the spender pulls later, or --keep-approvals).
     There is no separate `defios tx`: plan writes calls.json and prints the Operator Safe tx preview;
     `defios propose --file calls.json` picks the nonce, hashes and signs.
     """
@@ -233,7 +237,7 @@ def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe):
                 st.params = {**extra, **st.params}
             state, adapter, source = role_for_plan(cfg, vault, ctx.obj["logs_file"], rpc)
             res = run(catalog, state, adapter, vault, all_steps, rpc=rpc, probe=not no_probe, batch=batch,
-                      description=desc, role_source=source)
+                      description=desc, role_source=source, keep_approvals=keep_approvals)
         except (PlanError, CardError) as e:
             raise ConfigError(str(e)) from e
         if res["ok"] and out != "-":

@@ -50,3 +50,6 @@ when you need to parse the output.
    `propose --send` only after the human agrees. Never sign as an owner, never
    execute. `calls.json` comes from `defios plan`, never from you; if `plan`
    refuses, do not work around it.
+8. No open approvals: `plan` approves the exact amount and sets it back to 0
+   in the same transaction. Don't use `--keep-approvals` without the human's
+   OK; for orders filled later (CoW, Avant), revoke once filled.
