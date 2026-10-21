@@ -60,6 +60,12 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
 9. **Unreviewed cards are drafts.** Cards marked `reviewed: false` are good
    enough to read state and spot gaps; mention it when you rely on one for a
    transaction.
+10. **No open approvals.** Approve the exact amount, act, and set the allowance
+    back to 0 in the same transaction. `defios plan` does this by itself; never
+    pass `--keep-approvals` without the human's OK. When the spender pulls later
+    (a CoW order, a relayer filling a signed order), the approval stays open
+    until the fill: tell the human, and revoke it once the order is filled or
+    expired.
 
 ## Commands (M1 read-only, plus M2 `plan` and `propose`)
 
@@ -135,6 +141,11 @@ defios plan --intent '{"steps": [{"action": "gearbox_v3.lend", "amount": "1", "t
 * The engine fills `$AVATAR` (the Vault) and `$book.*` (defios.yaml), converts
   amounts with the token's `decimals`, adds the approves the card lists, and
   refuses any other free variable you did not give with `--param name=value`.
+* After the last step the plan sets every allowance it made back to 0
+  (`approve(spender, 0)`, one per token + spender, checked against the role
+  like every other call). Actions whose card says `approvals: keep` are
+  skipped and the plan warns; `--keep-approvals` turns revokes off. If the
+  role cannot revoke (its approve scope pins the amount), the plan refuses.
 * Every call is checked against the role (live replay, `--logs-file`, or
   `books/<vault>/role.lock.json` when no log source is available — the plan
   then warns that it used a snapshot) and, with `RPC_URL`, an `eth_call` probe.

@@ -18,7 +18,11 @@ The engine then
 4. checks every call against the role (chain replay, `--logs-file`, or `books/<vault>/role.lock.json`
    when no log source is available) and, with RPC_URL and an Operator, an eth_call probe of
    execTransactionWithRole. A call that is `missing` or `unsafe` refuses the whole plan;
-5. returns the plan (steps, calls with plain-language lines, Operator Safe tx preview built by tx.py)
+5. appends `approve(spender, 0)` for every approval the plan made, after the last step, so the
+   transaction leaves no open allowance (one revoke per token + spender, checked against the role
+   like any other call). Actions whose spender pulls later (a CoW order, a relayer) set
+   `approvals: keep` in their card and get no revoke; `keep_approvals=True` turns revokes off;
+6. returns the plan (steps, calls with plain-language lines, Operator Safe tx preview built by tx.py)
    and the calls in the `calls.json` format that `defios propose --file` reads.
 
 Nothing here signs, posts or simulates balances.
@@ -26,12 +30,13 @@ Nothing here signs, posts or simulates balances.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
 
 from eth_abi import decode as abi_decode
+from eth_abi import encode as abi_encode
 from eth_utils import is_address, to_checksum_address
 
 from .catalog import AVATAR, BuiltCall, CallBuilder, CardError, Catalog
@@ -42,6 +47,10 @@ from .tx import MULTISEND_SELECTOR, Call, TxError, build_operator_tx, multisend_
 
 NATIVE = "ETH"
 NATIVE_DECIMALS = 18
+
+
+APPROVE_SIG = "approve(address,uint256)"
+APPROVE_SELECTOR = "0x095ea7b3"
 
 
 class PlanError(ValueError):
@@ -311,7 +320,7 @@ def _plain_refusal(c: dict, line: str) -> str:
 # ------------------------------------------------------------------------------ planning
 def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: VaultConfig, steps: list[Step], *,
          rpc=None, probe: bool = True, batch: str = "roles", description: str | None = None,
-         role_source: str | None = None) -> dict:
+         role_source: str | None = None, keep_approvals: bool = False) -> dict:
     """Build and check every call of every step. Returns the plan; `refused` is non-empty when any call is
     missing / unsafe / unresolved (then `calls` must not be proposed)."""
     if not steps:
@@ -320,6 +329,8 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
     names = _names(catalog, vault)
     probe_rpc = rpc if probe else None
     out_steps, refused, warnings, all_calls = [], [], [], []
+    revokes: dict[tuple[str, str], tuple[BuiltCall, str]] = {}  # (token, spender) -> (approve call, action)
+    kept: list[str] = []
 
     for si, step in enumerate(steps):
         proto, aname, via = resolve_action(catalog, step.ref, vault.book_vars)
@@ -425,6 +436,12 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
                 entry["alt"] = True
             step_calls.append(entry)
             all_calls.append(call)
+            if bc.sig.canonical == APPROVE_SIG and bc.data:
+                spender = to_checksum_address(abi_decode(["address", "uint256"], bc.data[4:])[0])
+                if action.get("approvals") == "keep":
+                    kept.append(f"{line} (pulled later by {names.get(spender.lower(), spender)})")
+                elif not keep_approvals:
+                    revokes[(bc.target.lower(), spender.lower())] = (bc, f"{proto}.{aname}")
         s_out = {"step": si + 1, "action": f"{proto}.{aname}", "summary": action.get("summary"),
                  "card_reviewed": bool(catalog.cards[proto].raw.get("reviewed")), "calls": step_calls}
         if via:
@@ -436,8 +453,35 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
             s_out["skipped"] = skipped
         out_steps.append(s_out)
 
+    # revoke every approval at the end of the batch, so no allowance stays open
+    revoke_calls = []
+    for (_tok, _sp), (bc, act) in revokes.items():
+        spender = to_checksum_address(abi_decode(["address", "uint256"], bc.data[4:])[0])
+        rbc = replace(bc, data=bytes.fromhex(APPROVE_SELECTOR[2:]) + abi_encode(["address", "uint256"], [spender, 0]),
+                      value=0)
+        res = check_call(adapter, state, vault, rbc, probe_rpc)
+        line = describe_call(rbc, names, {})[0]
+        if res["status"] != "allowed":
+            refused.append({"step": None, "action": f"revoke after {act}", "call": res.get("call", rbc.label),
+                            "status": res["status"], "why": _plain_refusal(res, line)})
+            continue
+        call = Call(to=rbc.target, value=0, data=rbc.data, operation=rbc.operation, label=f"revoke {act} approve")
+        revoke_calls.append({**call.to_json(), "contract": names.get(rbc.target.lower()), "function": APPROVE_SIG,
+                             "args": {"spender": spender, "amount": "0"}, "line": line,
+                             "check": {k: res[k] for k in ("status", "source", "reason", "notes", "loose") if k in res}})
+        all_calls.append(call)
+    if revoke_calls:
+        out_steps.append({"step": len(out_steps) + 1, "action": "revoke_approvals",
+                          "summary": "set every allowance this transaction made back to 0", "card_reviewed": True,
+                          "calls": revoke_calls})
+    if kept:
+        warnings.append("approval left open on purpose (the spender pulls later, so it can't be revoked in the "
+                        "same transaction): " + "; ".join(kept) + ". Revoke it once the order is filled")
+    if keep_approvals and any(c.get("function") == APPROVE_SIG for s in out_steps for c in s["calls"]):
+        warnings.append("--keep-approvals: allowances made here stay open after the transaction")
+
     # plain-language warnings
-    if len(out_steps) > 1:
+    if sum(1 for s in out_steps if s["action"] != "revoke_approvals") > 1:
         warnings.append("steps run in order in one transaction with fixed amounts: if a step produces less than the "
                         "next one spends (stETH rounds down 1-2 wei; wrap gives fewer wstETH than stETH), the whole "
                         "transaction reverts. Not simulated: check balances before proposing")

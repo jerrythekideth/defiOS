@@ -96,6 +96,7 @@ actions:
   mint:
     kind: signed_order
     summary: "WETH -> avETH via Avant RFQ"
+    approvals: keep   # Avant's relayer pulls when it fills the signed order
     calls:
       - target: WETH
         sig: "approve(address spender, uint256 amount)"
@@ -106,6 +107,7 @@ actions:
   redeem:
     kind: signed_order
     summary: "avETH -> WETH via Avant RFQ"
+    approvals: keep   # Avant's relayer pulls when it fills the signed order
     calls:
       - target: avETH
         sig: "approve(address spender, uint256 amount)"
