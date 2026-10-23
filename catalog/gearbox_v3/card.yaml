@@ -34,6 +34,17 @@ contracts:
     note: "spender for collateral approvals; not called directly"
     proofs:
       - { read: "creditFacade() returns (address)", expect: credit_facade }
+  kpkWETH_pool:
+    address: "0x9396DCbf78fc526bb003665337C5E73b699571EF"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: [kpkWETH, gearbox weth pool, WETH Market]
+    note: "the pool the credit manager borrows WETH from (credit_manager.pool()); not called by any action"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { from: credit_manager, read: "pool() returns (address)", expect: $self }
+      - { read: "asset() returns (address)", expect: weth.WETH }
   wstETH: { ref: lido.wstETH }
   WETH: { ref: weth.WETH }
 

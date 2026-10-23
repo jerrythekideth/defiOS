@@ -97,6 +97,7 @@ class Record:
     edges: dict
     status_set: str | None  # `status:` written in the card (conflict / retired)
     note: str = ""
+    eoa: bool = False  # a key-held account (keeper, multisig signer): code is a conflict, not its absence
 
     @property
     def key(self) -> str:
@@ -190,7 +191,8 @@ class Registry:
                         errors.append(f"{where}: edge {k!r} is not one of {sorted(EDGE_KEYS)}")
                 records.append(Record(int(c.get("chain_id") or card_chain), addr, proto, name, cat, c.get("kind"),
                                       [str(a) for a in c.get("aliases") or []], sources,
-                                      list(c.get("proofs") or []), edges, st, str(c.get("note") or "")))
+                                      list(c.get("proofs") or []), edges, st, str(c.get("note") or ""),
+                                      bool(c.get("eoa"))))
         reg = cls(catalog, records, errors)
         for r in records:
             for k, refs in r.edges.items():
@@ -279,8 +281,10 @@ class Registry:
         if others:
             why.append(f"also claimed by {', '.join(others)}")
         res = results.get(rec.key) or {}
-        if res.get("code") is False:
+        if res.get("code") is False and not rec.eoa:
             why.append(f"no contract code at this address on chain {rec.chain_id}")
+        elif res.get("code") is True and rec.eoa:
+            why.append(f"marked eoa but has contract code on chain {rec.chain_id}")
         proofs = self._proofs_or_none(rec)
         ran = {p["id"]: p for p in res.get("proofs") or []}
         for p in proofs:
@@ -332,7 +336,7 @@ class Registry:
         d = {
             "chain_id": rec.chain_id, "address": rec.address, "protocol": rec.protocol,
             "protocol_name": card.get("name"), "name": rec.name, "ref": rec.ref,
-            "category": rec.category, "kind": rec.kind, "aliases": rec.aliases,
+            "category": rec.category, "kind": rec.kind, "eoa": rec.eoa, "aliases": rec.aliases,
             "status": st.status, "why": st.why,
             "card_reviewed": bool(card.get("reviewed")),
             "sources": [f"{k}: {v}" for k, v in rec.sources],

@@ -2,11 +2,7 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26256728,
-   "checked": "2026-10-23"
-  },
-  "999": {
-   "block": 49327489,
+   "block": 26256926,
    "checked": "2026-10-23"
   }
  },
@@ -200,8 +196,7 @@
    "status": "draft",
    "reviewed": false,
    "chains": [
-    1,
-    999
+    1
    ],
    "actions": [
     "deposit",
@@ -373,6 +368,7 @@
     "ref": "yo.yoUSD",
     "category": "vault",
     "kind": "erc4626_async_redeem",
+    "eoa": false,
     "aliases": [
      "yoUSD",
      "yo usd"
@@ -408,6 +404,7 @@
     "ref": "threejane.USD3",
     "category": "vault",
     "kind": "erc4626",
+    "eoa": false,
     "aliases": [
      "usd3",
      "3jane usd3"
@@ -442,6 +439,7 @@
     "ref": "etherfi.liquid_usd",
     "category": "vault",
     "kind": "boring_vault",
+    "eoa": false,
     "aliases": [
      "liquid usd",
      "veda liquid usd",
@@ -470,6 +468,7 @@
     "ref": "avant.minting",
     "category": "minter",
     "kind": "rfq_minting",
+    "eoa": false,
     "aliases": [
      "avant minting",
      "avant mint"
@@ -497,6 +496,7 @@
     "ref": "etherfi.liquid_eth_queue",
     "category": "queue",
     "kind": "queue",
+    "eoa": false,
     "aliases": [
      "BoringOnChainQueue",
      "liquid eth withdraw queue"
@@ -528,6 +528,7 @@
     "ref": "noon.withdrawal_handler",
     "category": "queue",
     "kind": "queue",
+    "eoa": false,
     "aliases": [
      "noon withdrawal handler"
     ],
@@ -553,6 +554,7 @@
     "ref": "dialectic.DUSD",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "dusd"
     ],
@@ -578,6 +580,7 @@
     "ref": "flying_tulip.ssftUSD",
     "category": "staking",
     "kind": "erc4626",
+    "eoa": false,
     "aliases": [
      "ssftusd",
      "stable staked ftusd"
@@ -611,6 +614,7 @@
     "ref": "cowswap.order_signer",
     "category": "adapter",
     "kind": "library_delegatecall",
+    "eoa": false,
     "aliases": [
      "cow order signer",
      "cowswap signer"
@@ -638,6 +642,7 @@
     "ref": "cctp.token_messenger",
     "category": "bridge",
     "kind": "bridge",
+    "eoa": false,
     "aliases": [
      "cctp",
      "token messenger",
@@ -659,6 +664,39 @@
     "note": "burns USDC pulled from msg.sender: approve the messenger"
    }
   ],
+  "1:0x28da642f406bb5234a779ee0143c317d4d55fa27": [
+   {
+    "chain_id": 1,
+    "address": "0x28dA642f406bB5234A779Ee0143c317D4d55Fa27",
+    "protocol": "liminal",
+    "protocol_name": "Liminal (limUSD on HyperEVM, mainnet spoke)",
+    "name": "keeper",
+    "ref": "liminal.keeper",
+    "category": "keeper",
+    "kind": "keeper",
+    "eoa": true,
+    "aliases": [
+     "liminal keeper",
+     "hyperevm_hub"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: spoke.keeper() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/liminal/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "spoke.keeper() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "note": "Liminal's keeper EOA (the spoke's keeper()). Deposits are CCTP-minted to it on HyperEVM (domain 19); Liminal's backend then deposits into the vault and sends shares to the beneficiary named in hookData. Deposits trust this key until the shares arrive. The same key receives the ETH fee on mainnet"
+   }
+  ],
   "1:0x2a66f992bf227d2e50ef19edd21503c3c4f3f682": [
    {
     "chain_id": 1,
@@ -669,6 +707,7 @@
     "ref": "threejane.helper",
     "category": "router",
     "kind": "router",
+    "eoa": false,
     "aliases": [
      "3jane helper",
      "threejane helper"
@@ -705,6 +744,7 @@
     "ref": "aave_v3.addresses_provider",
     "category": "config",
     "kind": "registry",
+    "eoa": false,
     "aliases": [
      "aave v3 addresses provider",
      "PoolAddressesProvider"
@@ -738,6 +778,7 @@
     "ref": "threejane.JANE",
     "category": "reward",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "jane"
     ],
@@ -764,6 +805,7 @@
     "ref": "etherfi.liquid_usd_queue",
     "category": "queue",
     "kind": "queue",
+    "eoa": false,
     "aliases": [
      "liquid usd withdraw queue"
     ],
@@ -794,6 +836,7 @@
     "ref": "tokemak.router",
     "category": "router",
     "kind": "router",
+    "eoa": false,
     "aliases": [
      "tokemak router",
      "autopilot router",
@@ -827,6 +870,7 @@
     "ref": "yo.yoETH",
     "category": "vault",
     "kind": "erc4626_async_redeem",
+    "eoa": false,
     "aliases": [
      "yoETH",
      "yo eth",
@@ -862,6 +906,7 @@
     "ref": "strata.srUSDe",
     "category": "vault",
     "kind": "tranche",
+    "eoa": false,
     "aliases": [
      "srusde",
      "strata senior usde"
@@ -896,6 +941,7 @@
     "ref": "infinifi.gateway",
     "category": "router",
     "kind": "router",
+    "eoa": false,
     "aliases": [
      "infinifi gateway",
      "infinifi"
@@ -926,6 +972,7 @@
     "ref": "stablecoins.GHO",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "gho"
     ],
@@ -956,6 +1003,7 @@
     "ref": "re.icl",
     "category": "vault",
     "kind": "vault",
+    "eoa": false,
     "aliases": [
      "re icl",
      "insurance capital layer"
@@ -985,6 +1033,7 @@
     "ref": "infinifi.iUSD",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "iusd"
     ],
@@ -1010,6 +1059,7 @@
     "ref": "ethena.USDe",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "usde",
      "ethena usd"
@@ -1041,6 +1091,7 @@
     "ref": "etherfi.liquid_usd_teller",
     "category": "router",
     "kind": "teller",
+    "eoa": false,
     "aliases": [
      "liquid usd teller"
     ],
@@ -1071,6 +1122,7 @@
     "ref": "re.reUSD",
     "category": "receipt",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "reusd"
     ],
@@ -1098,6 +1150,7 @@
     "ref": "flying_tulip.FT",
     "category": "governance",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "ft",
      "flying tulip"
@@ -1124,6 +1177,7 @@
     "ref": "strata.srNUSD",
     "category": "vault",
     "kind": "tranche",
+    "eoa": false,
     "aliases": [
      "srnusd",
      "strata senior nusd"
@@ -1154,6 +1208,7 @@
     "ref": "origin_arm.MultiAssetARM",
     "category": "vault",
     "kind": "arm_lp_vault",
+    "eoa": false,
     "aliases": [
      "multi asset arm",
      "origin multi-asset arm"
@@ -1183,6 +1238,7 @@
     "ref": "flying_tulip.curve_ft_ftusd",
     "category": "market",
     "kind": "curve_pool",
+    "eoa": false,
     "aliases": [
      "curve ft pool",
      "ft/ftusd pool"
@@ -1218,6 +1274,7 @@
     "ref": "stablecoins.DAI",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "dai"
     ],
@@ -1248,6 +1305,7 @@
     "ref": "stablecoins.PYUSD",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "pyusd",
      "paypal usd"
@@ -1279,6 +1337,7 @@
     "ref": "strata.depositor_nusd",
     "category": "router",
     "kind": "router",
+    "eoa": false,
     "aliases": [],
     "status": "unverified",
     "why": [
@@ -1306,6 +1365,7 @@
     "ref": "gearbox_v3.credit_manager",
     "category": "spender",
     "kind": "gearbox_credit_manager_v3",
+    "eoa": false,
     "aliases": [],
     "status": "verified",
     "why": [
@@ -1335,6 +1395,7 @@
     "ref": "strata.depositor_usde",
     "category": "router",
     "kind": "router",
+    "eoa": false,
     "aliases": [
      "strata depositor",
      "strata usde depositor",
@@ -1366,6 +1427,7 @@
     "ref": "etherfi.withdraw_request_nft",
     "category": "queue",
     "kind": "erc721_queue",
+    "eoa": false,
     "aliases": [
      "ether.fi withdraw request nft",
      "WithdrawRequestNFT"
@@ -1394,6 +1456,7 @@
     "ref": "lido.wstETH",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "wsteth",
      "wrapped steth"
@@ -1429,6 +1492,7 @@
     "ref": "origin_arm.LidoARM",
     "category": "vault",
     "kind": "arm_lp_vault",
+    "eoa": false,
     "aliases": [
      "lido arm",
      "origin lido arm",
@@ -1469,6 +1533,7 @@
     "ref": "makina.DETH",
     "category": "receipt",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "DETH",
      "dialectic eth",
@@ -1496,6 +1561,7 @@
     "ref": "aave_v3.pool",
     "category": "market",
     "kind": "lending_pool",
+    "eoa": false,
     "aliases": [
      "aave pool",
      "aave v3",
@@ -1533,6 +1599,7 @@
     "ref": "flying_tulip.session_manager",
     "category": "router",
     "kind": "session_manager",
+    "eoa": false,
     "aliases": [],
     "status": "unverified",
     "why": [
@@ -1557,6 +1624,7 @@
     "ref": "lido.unstETH",
     "category": "queue",
     "kind": "erc721_queue",
+    "eoa": false,
     "aliases": [
      "lido withdrawal queue",
      "unsteth",
@@ -1596,6 +1664,7 @@
     "ref": "re.redemption_gateway",
     "category": "router",
     "kind": "router",
+    "eoa": false,
     "aliases": [
      "re redemption gateway"
     ],
@@ -1621,6 +1690,7 @@
     "ref": "etherfi.liquid_usd_solver",
     "category": "keeper",
     "kind": "solver",
+    "eoa": false,
     "aliases": [],
     "status": "unverified",
     "why": [
@@ -1635,6 +1705,44 @@
     "note": "BoringSolver; boringRedeemSolve / boringRedeemSelfSolve are not needed (Veda solves the queue)"
    }
   ],
+  "1:0x9396dcbf78fc526bb003665337c5e73b699571ef": [
+   {
+    "chain_id": 1,
+    "address": "0x9396DCbf78fc526bb003665337C5E73b699571EF",
+    "protocol": "gearbox_v3",
+    "protocol_name": "Gearbox v3 (lending pool + credit accounts)",
+    "name": "kpkWETH_pool",
+    "ref": "gearbox_v3.kpkWETH_pool",
+    "category": "vault",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "kpkWETH",
+     "gearbox weth pool",
+     "WETH Market"
+    ],
+    "status": "verified",
+    "why": [
+     "source defi-kit + onchain proof: credit_manager.pool() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "defi-kit: catalog/gearbox_v3/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "credit_manager.pool() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.asset() == weth.WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "note": "the pool the credit manager borrows WETH from (credit_manager.pool()); not called by any action"
+   }
+  ],
   "1:0x9469470c9878bf3d6d0604831d9a3a366156f7ee": [
    {
     "chain_id": 1,
@@ -1645,6 +1753,7 @@
     "ref": "avant.avETH",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "avETH",
      "avant eth"
@@ -1672,6 +1781,7 @@
     "ref": "aave_v4.spoke",
     "category": "market",
     "kind": "lending_spoke",
+    "eoa": false,
     "aliases": [
      "aave v4",
      "aave v4 spoke",
@@ -1703,6 +1813,7 @@
     "ref": "gearbox_v3.credit_facade",
     "category": "market",
     "kind": "gearbox_credit_facade_v3_10",
+    "eoa": false,
     "aliases": [
      "gearbox credit account",
      "gearbox leverage",
@@ -1736,6 +1847,7 @@
     "ref": "etherfi.liquid_eth_teller",
     "category": "router",
     "kind": "teller",
+    "eoa": false,
     "aliases": [
      "liquid eth teller",
      "layerzero teller"
@@ -1767,6 +1879,7 @@
     "ref": "liminal.limUSD",
     "category": "receipt",
     "kind": "oft",
+    "eoa": false,
     "aliases": [
      "limusd",
      "liminal usd"
@@ -1796,6 +1909,7 @@
     "ref": "ethena.sUSDe",
     "category": "staking",
     "kind": "erc4626_cooldown",
+    "eoa": false,
     "aliases": [
      "susde",
      "staked usde"
@@ -1832,6 +1946,7 @@
     "ref": "stablecoins.USDC",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "usdc",
      "usd coin"
@@ -1863,6 +1978,7 @@
     "ref": "re.instant_redemption",
     "category": "router",
     "kind": "redemption_module",
+    "eoa": false,
     "aliases": [
      "re instant redemption"
     ],
@@ -1889,6 +2005,7 @@
     "ref": "tokemak.autoUSD",
     "category": "vault",
     "kind": "erc4626",
+    "eoa": false,
     "aliases": [
      "autousd",
      "tokemak autousd",
@@ -1924,6 +2041,7 @@
     "ref": "gearbox_v3.kpkwstETH_pool",
     "category": "vault",
     "kind": "erc4626",
+    "eoa": false,
     "aliases": [
      "gearbox pool",
      "gearbox wstETH pool",
@@ -1958,6 +2076,7 @@
     "ref": "flying_tulip.mint_and_redeem",
     "category": "minter",
     "kind": "router",
+    "eoa": false,
     "aliases": [
      "flying tulip mint",
      "MintAndRedeem"
@@ -1987,6 +2106,7 @@
     "ref": "upshift.router",
     "category": "router",
     "kind": "router",
+    "eoa": false,
     "aliases": [
      "upshift router",
      "upshift swaprouter"
@@ -2014,6 +2134,7 @@
     "ref": "lido.stETH",
     "category": "token",
     "kind": "erc20_rebasing",
+    "eoa": false,
     "aliases": [
      "steth",
      "lido steth",
@@ -2041,19 +2162,25 @@
     "ref": "liminal.spoke",
     "category": "bridge",
     "kind": "bridge",
+    "eoa": false,
     "aliases": [
      "liminal spoke",
      "liminal"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.burnToken() == USDC"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/liminal/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.burnToken() == USDC",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0xeC0D8f0023ED5A9DA4A82E8C833c85903Ec4ea4F",
      "admin": "0x849Fe95bC68b1a8Fc9d498C9b7f0259141C7c994"
@@ -2070,6 +2197,7 @@
     "ref": "dialectic.smDUSD",
     "category": "staking",
     "kind": "security_module",
+    "eoa": false,
     "aliases": [
      "smdusd",
      "dialectic security module"
@@ -2099,6 +2227,7 @@
     "ref": "morpho_vaults.morpho_blue",
     "category": "market",
     "kind": "core",
+    "eoa": false,
     "aliases": [],
     "status": "unverified",
     "why": [
@@ -2123,6 +2252,7 @@
     "ref": "weth.WETH",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "weth",
      "wrapped ether",
@@ -2155,6 +2285,7 @@
     "ref": "strata.jrUSDe",
     "category": "vault",
     "kind": "tranche",
+    "eoa": false,
     "aliases": [
      "jrusde",
      "strata junior usde"
@@ -2189,6 +2320,7 @@
     "ref": "cowswap.gpv2_vault_relayer",
     "category": "spender",
     "kind": "spender",
+    "eoa": false,
     "aliases": [
      "cow relayer",
      "GPv2VaultRelayer"
@@ -2215,6 +2347,7 @@
     "ref": "etherfi.weETH",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "weETH",
      "wrapped eETH",
@@ -2249,6 +2382,7 @@
     "ref": "etherfi.deposit_adapter",
     "category": "adapter",
     "kind": "adapter",
+    "eoa": false,
     "aliases": [
      "ether.fi deposit adapter"
     ],
@@ -2276,6 +2410,7 @@
     "ref": "avant.savETH",
     "category": "staking",
     "kind": "erc4626_with_cooldown",
+    "eoa": false,
     "aliases": [
      "savETH",
      "staked avETH",
@@ -2308,6 +2443,7 @@
     "ref": "noon.USN",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "usn",
      "noon usd"
@@ -2337,6 +2473,7 @@
     "ref": "stablecoins.USDT",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "usdt",
      "tether"
@@ -2369,6 +2506,7 @@
     "ref": "infinifi.siUSD",
     "category": "staking",
     "kind": "erc4626",
+    "eoa": false,
     "aliases": [
      "siusd",
      "staked iusd"
@@ -2400,6 +2538,7 @@
     "ref": "stablecoins.USDS",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "usds",
      "sky dollar"
@@ -2433,6 +2572,7 @@
     "ref": "noon.sUSN",
     "category": "staking",
     "kind": "erc4626",
+    "eoa": false,
     "aliases": [
      "susn",
      "staked usn"
@@ -2467,6 +2607,7 @@
     "ref": "upshift.coreUSDC",
     "category": "vault",
     "kind": "tokenized_account",
+    "eoa": false,
     "aliases": [
      "coreusdc",
      "upshift core usdc"
@@ -2502,6 +2643,7 @@
     "ref": "flying_tulip.sftUSD",
     "category": "staking",
     "kind": "erc4626",
+    "eoa": false,
     "aliases": [
      "sftusd",
      "staked ftusd"
@@ -2535,6 +2677,7 @@
     "ref": "etherfi.liquid_eth",
     "category": "vault",
     "kind": "boring_vault",
+    "eoa": false,
     "aliases": [
      "liquid eth",
      "veda liquid eth",
@@ -2564,6 +2707,7 @@
     "ref": "yo.gateway",
     "category": "router",
     "kind": "router",
+    "eoa": false,
     "aliases": [
      "YoGateway",
      "yo gateway"
@@ -2594,6 +2738,7 @@
     "ref": "threejane.sUSD3",
     "category": "staking",
     "kind": "erc4626_cooldown",
+    "eoa": false,
     "aliases": [
      "susd3"
     ],
@@ -2628,6 +2773,7 @@
     "ref": "flying_tulip.ftUSD",
     "category": "token",
     "kind": "erc20",
+    "eoa": false,
     "aliases": [
      "ftusd",
      "flying tulip usd"
@@ -2656,6 +2802,7 @@
     "ref": "origin_arm.EtherFiARM",
     "category": "vault",
     "kind": "arm_lp_vault",
+    "eoa": false,
     "aliases": [
      "etherfi arm",
      "origin etherfi arm",
@@ -2691,6 +2838,7 @@
     "ref": "etherfi.weeth_withdraw_adapter",
     "category": "adapter",
     "kind": "adapter",
+    "eoa": false,
     "aliases": [
      "ether.fi weETH withdraw adapter"
     ],
@@ -2718,6 +2866,7 @@
     "ref": "strata.jrNUSD",
     "category": "vault",
     "kind": "tranche",
+    "eoa": false,
     "aliases": [
      "jrnusd",
      "strata junior nusd"
@@ -2748,6 +2897,7 @@
     "ref": "cowswap.composable_cow",
     "category": "adapter",
     "kind": "twap",
+    "eoa": false,
     "aliases": [],
     "status": "unverified",
     "why": [
@@ -2760,30 +2910,6 @@
     "proofs": [],
     "proxy": {},
     "note": "TWAP orders only; not used by the plain swap action"
-   }
-  ],
-  "999:0x28da642f406bb5234a779ee0143c317d4d55fa27": [
-   {
-    "chain_id": 999,
-    "address": "0x28dA642f406bB5234A779Ee0143c317D4d55Fa27",
-    "protocol": "liminal",
-    "protocol_name": "Liminal (limUSD on HyperEVM, mainnet spoke)",
-    "name": "hyperevm_hub",
-    "ref": "liminal.hyperevm_hub",
-    "category": "vault",
-    "kind": "remote",
-    "aliases": [],
-    "status": "conflict",
-    "why": [
-     "no contract code at this address on chain 999"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/liminal/card.yaml"
-    ],
-    "proofs": [],
-    "proxy": {},
-    "note": "the Liminal hub on HyperEVM (chain 999), not a mainnet contract; it is the CCTP mintRecipient of deposits"
    }
   ]
  },
@@ -2889,9 +3015,9 @@
   {
    "from": "1:0xaeec321a209964aabfff539807ae882917e7b4db",
    "relation": "bridges_to",
-   "to": "999:0x28da642f406bb5234a779ee0143c317d4d55fa27",
+   "to": "1:0x28da642f406bb5234a779ee0143c317d4d55fa27",
    "from_ref": "liminal.spoke",
-   "to_ref": "liminal.hyperevm_hub"
+   "to_ref": "liminal.keeper"
   },
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -2906,6 +3032,13 @@
    "to": "1:0x85b78aca6deae198fbf201c82daf6ca21942acc6",
    "from_ref": "weth.WETH",
    "to_ref": "origin_arm.LidoARM"
+  },
+  {
+   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+   "relation": "underlying_of",
+   "to": "1:0x9396dcbf78fc526bb003665337c5e73b699571ef",
+   "from_ref": "weth.WETH",
+   "to_ref": "gearbox_v3.kpkWETH_pool"
   },
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",

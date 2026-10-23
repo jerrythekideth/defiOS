@@ -27,6 +27,7 @@ contracts:
       - { read: "asset() returns (address)", expect: USDe }
       - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
     status: retired              # only `retired` or `conflict` may be written; the rest is computed
+    eoa: true                    # a key-held account (a keeper): no code is expected, code is a conflict
 ```
 
 Records with `address: TODO`, `$book.*` or a read-time address are not

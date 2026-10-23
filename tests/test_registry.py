@@ -44,7 +44,7 @@ def test_edges_use_design_relations(reg):
     edges = {(e["from_ref"], e["relation"], e["to_ref"]) for e in reg.edges()}
     assert ("ethena.USDe", "underlying_of", "ethena.sUSDe") in edges
     assert ("etherfi.liquid_eth", "receipt_of", "etherfi.liquid_eth_teller") in edges
-    assert ("liminal.spoke", "bridges_to", "liminal.hyperevm_hub") in edges
+    assert ("liminal.spoke", "bridges_to", "liminal.keeper") in edges
 
 
 def test_status_rules(reg):
@@ -145,11 +145,12 @@ def test_whois_cli_known_and_unknown():
     assert "unknown" in r.output and "Do not act" in r.output
 
 
-def test_whois_reports_the_liminal_hub_conflict():
-    data = json.loads(run(["--format", "json", "whois", "0x28dA642f406bB5234A779Ee0143c317D4d55Fa27",
-                           "--chain", "999"]).output)
-    assert data["matches"][0]["status"] == "conflict"
-    assert data["verdict"].startswith("conflict")
+def test_eoa_records_expect_no_code(reg):
+    keeper = reg.by_ref["liminal.keeper"]
+    assert keeper.eoa and keeper.category == "keeper"
+    assert reg.status(keeper, {keeper.key: {"code": False}}).status != "conflict"
+    st = reg.status(keeper, {keeper.key: {"code": True}})
+    assert st.status == "conflict" and "marked eoa" in st.why[0]
 
 
 def test_registry_export_stdout():
