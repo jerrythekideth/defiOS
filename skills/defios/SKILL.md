@@ -33,6 +33,7 @@ SAFE_API_KEY, PROPOSER_PRIVATE_KEY for a delegate key) and `books/` (generated).
 | something is broken | `defios doctor` | report failing checks |
 | do X (lend, stake, wrap, …) | `defios plan <card or alias>.<action>=<amount> [more steps] [--token T]` | show each call's `line`, the warnings; if REFUSED, explain each `why` and stop |
 | add the permission to do X | `defios permit <card>.<action> [--token T]` | show each `+` change with its condition and why; the JSON goes to the human for the Vault queue (never propose it); if REFUSED, explain each line and stop |
+| will this work? / simulate it | `defios simulate --calls calls.json` (or `--batch file.json`, both to try a permission batch then a plan) | report each revert in plain words, the Vault's token deltas and any allowance left open; never propose something that reverted |
 | queue this transaction | `defios propose --file calls.json` (dry run) | show calls, nonce, SafeTxHash, warnings/problems; wait for the human's yes |
 | (after the human's yes) | `defios propose --file calls.json --send` | give the Safe app link + nonce; humans sign there |
 

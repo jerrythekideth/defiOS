@@ -60,6 +60,7 @@ def main(ctx, root, config, vault, fmt, logs_file, offline):
     defios check    allowed / missing / unsafe per card action, plus role lints
     defios plan     intent -> engine-built, role-checked calls -> calls.json
     defios permit   card actions -> Roles permission batch for the Vault (Safe Tx Builder JSON)
+    defios simulate run a permission batch and/or calls.json on a local anvil fork
     defios propose  dry-run (default) or --send an Operator Safe tx for humans to sign
     """
     ctx.ensure_object(dict)
@@ -73,6 +74,35 @@ def _run(fn):
         click.echo(json.dumps({"error": str(e)}), err=False)
         click.echo(f"error: {e}", err=True)
         sys.exit(2)
+
+
+def _auto_simulate(ctx, vault, catalog, res: dict, *, batch: dict | None = None, calls: list | None = None,
+                   mode: str = "roles", skip: bool = False) -> None:
+    """Run the result on an anvil fork when RPC_URL and anvil are available; a revert turns ok off."""
+    import shutil
+
+    from .chain import env
+    if skip:
+        res.setdefault("warnings", []).append("not simulated (--no-simulate)")
+        return
+    url = env("RPC_URL")
+    if ctx.obj["offline"] or not url or not shutil.which("anvil"):
+        why = "offline" if ctx.obj["offline"] else ("RPC_URL not set" if not url else "anvil not installed")
+        res.setdefault("warnings", []).append(f"not simulated ({why}); run `defios simulate` before anyone signs")
+        return
+    from .simulate import Fork, SimulateError, simulate, summarize
+    from .tx import Call
+    try:
+        with Fork(url) as fork:
+            sim = simulate(vault, fork, batch=batch, calls=[Call.from_json(c) for c in calls] if calls else None,
+                           catalog=catalog, batch_mode=mode, multisend=getattr(vault, "multisend", None))
+    except SimulateError as e:
+        res.setdefault("warnings", []).append(f"simulation could not run: {e}")
+        return
+    res["simulation"] = sim
+    res["simulation_summary"] = summarize(sim)
+    if not sim["ok"]:
+        res["ok"] = False
 
 
 @main.command()
@@ -201,8 +231,10 @@ def propose(ctx, calls_file, send, nonce, batch):
 @click.option("--no-probe", is_flag=True, help="Offline evaluation only, even when RPC_URL is set.")
 @click.option("--keep-approvals", is_flag=True,
               help="Do not append approve(spender, 0) after the steps (by default no allowance stays open).")
+@click.option("--no-simulate", is_flag=True, help="Skip the anvil fork run (done by default when RPC_URL and anvil "
+              "are available).")
 @click.pass_context
-def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe, keep_approvals):
+def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe, keep_approvals, no_simulate):
     """Turn an intent into engine-built calls, check them against the role, write calls.json.
 
     \b
@@ -241,13 +273,15 @@ def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe, keep_a
                       description=desc, role_source=source, keep_approvals=keep_approvals)
         except (PlanError, CardError) as e:
             raise ConfigError(str(e)) from e
+        if res["ok"]:
+            _auto_simulate(ctx, vault, catalog, res, calls=res["calls"], mode=batch, skip=no_simulate)
         if res["ok"] and out != "-":
             path = Path(out)
             if not path.is_absolute():
                 path = cfg.root / path
             path.write_text(json.dumps(calls_file(res), indent=2) + "\n")
             res["written"] = str(path)
-        _emit(ctx, res, summarize(res))
+        _emit(ctx, res, summarize(res) + ("\n" + res["simulation_summary"] if res.get("simulation_summary") else ""))
         if not res["ok"]:
             sys.exit(3)
     _run(go)
@@ -263,8 +297,10 @@ def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe, keep_a
 @click.option("--description", default=None, help="Batch description shown in the Safe Transaction Builder.")
 @click.option("--out", default=None, help="Where to write the Safe Tx Builder JSON (relative to --root). Default "
               "permissions_<vault>_<YYYYMMDD>.json; '-' = do not write.")
+@click.option("--no-simulate", is_flag=True, help="Skip the anvil fork run (done by default when RPC_URL and anvil "
+              "are available).")
 @click.pass_context
-def permit(ctx, actions, tokens, with_optional, replace, description, out):
+def permit(ctx, actions, tokens, with_optional, replace, description, out, no_simulate):
     """Build the Roles permission batch that lets the Operator run card ACTIONS.
 
     \b
@@ -289,13 +325,59 @@ def permit(ctx, actions, tokens, with_optional, replace, description, out):
                       with_optional=with_optional, replace=replace, description=description, role_source=source)
         except (PermitError, PlanError, CardError) as e:
             raise ConfigError(str(e)) from e
+        if res["ok"] and res.get("batch"):
+            _auto_simulate(ctx, vault, catalog, res, batch=res["batch"], skip=no_simulate)
         if res["ok"] and res.get("batch") and out != "-":
             path = Path(out or f"permissions_{vault.name}_{date.today():%Y%m%d}.json")
             if not path.is_absolute():
                 path = cfg.root / path
             path.write_text(json.dumps(res["batch"], indent=2) + "\n")
             res["written"] = str(path)
-        _emit(ctx, res, summarize(res) + (f"\n  wrote {res['written']}" if res.get("written") else ""))
+        _emit(ctx, res, summarize(res) + ("\n" + res["simulation_summary"] if res.get("simulation_summary") else "")
+              + (f"\n  wrote {res['written']}" if res.get("written") else ""))
+        if not res["ok"]:
+            sys.exit(3)
+    _run(go)
+
+
+@main.command()
+@click.option("--calls", "calls_file", default=None, type=click.Path(exists=True, dir_okay=False),
+              help="calls.json from `defios plan`: run as the Operator would.")
+@click.option("--batch", "batch_file", default=None, type=click.Path(exists=True, dir_okay=False),
+              help="Safe Tx Builder JSON of Roles changes (e.g. from `defios permit`): run as the Roles owner would, "
+                   "before --calls.")
+@click.option("--fork-url", default=None, help="RPC to fork (default RPC_URL).")
+@click.option("--block", type=int, default=None, help="Fork at this block (default latest).")
+@click.option("--anvil", "anvil_path", default=None, help="Path to anvil (default: on PATH).")
+@click.option("--batch-mode", type=click.Choice(["roles", "operator"]), default="roles", show_default=True,
+              help="How several calls are batched (same meaning as in propose).")
+@click.option("--no-fork", is_flag=True, hidden=True, help="Plain local anvil (tests).")
+@click.pass_context
+def simulate(ctx, calls_file, batch_file, fork_url, block, anvil_path, batch_mode, no_fork):
+    """Run a permission batch and/or a plan on a local anvil fork; report reverts, Vault deltas, open allowances.
+
+    \b
+      defios simulate --calls calls.json
+      defios simulate --batch permissions_<vault>_<date>.json --calls calls.json
+    Nothing leaves the fork. Exit 3 if any transaction reverts.
+    """
+    def go():
+        from .chain import env
+        from .simulate import Fork, SimulateError, load_batch, simulate as run, summarize
+        from .tx import TxError, load_calls_file
+        cfg, vault, catalog, _rpc = _setup(ctx)
+        try:
+            url = None if no_fork else (fork_url or env("RPC_URL"))
+            if not no_fork and not url:
+                raise SimulateError("no RPC to fork: set RPC_URL or pass --fork-url")
+            calls = load_calls_file(calls_file)[0] if calls_file else None
+            batch = load_batch(batch_file) if batch_file else None
+            with Fork(url, block, anvil_path, chain_id=vault.chain_id if no_fork else None) as fork:
+                res = run(vault, fork, batch=batch, calls=calls, catalog=catalog, batch_mode=batch_mode,
+                          multisend=getattr(vault, "multisend", None))
+        except (SimulateError, TxError) as e:
+            raise ConfigError(str(e)) from e
+        _emit(ctx, res, summarize(res))
         if not res["ok"]:
             sys.exit(3)
     _run(go)

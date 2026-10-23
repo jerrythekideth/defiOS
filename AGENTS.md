@@ -43,8 +43,11 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
    builds the calls from the card and checks each one against the role. If it
    refuses (`missing` / `unsafe`), stop and explain its `why` lines. Show the
    human the plan summary, then `propose` (dry run), then `--send` only after
-   the human says yes. (Later in M2: `simulate` must also pass and balance
-   deltas must match the plan.)
+   the human says yes. With `RPC_URL` set and Foundry's `anvil` installed,
+   `plan` and `permit` also run the result on a local fork and refuse if
+   anything reverts; show the human the Vault deltas and any open allowance.
+   If the summary says "not simulated", run `defios simulate` before anyone
+   signs, or say plainly that it was not simulated.
 5. **Receivers are the Vault.** Every receiver / recipient / owner /
    onBehalfOf / to parameter is the Vault. No exceptions without the human's
    explicit, written OK in the conversation.
@@ -79,6 +82,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
 | `defios catalog` | list cards and validate them |
 | `defios plan <card>.<action>=<amount> …` | M2: turn an intent into engine-built, role-checked calls; writes `calls.json` (see "Planning") |
 | `defios permit <card>.<action> … [--token T]` | "add the permission to do X": builds the Roles batch from the card, merged with the live role and verified; writes a Tx Builder JSON for the Vault queue (see "Permissions") |
+| `defios simulate [--batch b.json] [--calls calls.json]` | run a permission batch and/or a plan on an anvil fork: per-tx success or decoded revert, gas, Vault token deltas, allowances left open |
 | `defios propose --file calls.json` | M2: dry run of an Operator proposal (see "Proposing"); `--send` only after the human said yes |
 
 All commands print JSON on stdout and a short summary on stderr
@@ -183,7 +187,8 @@ defios plan --intent '{"steps": [{"action": "gearbox_v3.lend", "amount": "1", "t
   (`--out`, default `calls.json` in the agent repo; `--out -` writes nothing).
 * There is no separate `defios tx`: `plan` is the only producer of
   `calls.json`; `propose` picks the nonce, hashes and signs.
-* Multi-step plans use fixed amounts and are not simulated yet: if a step
+* Multi-step plans use fixed amounts; the fork run catches a step that comes
+  up short, but only at the fork's block: if a step
   yields less than the next spends (stETH rounds 1-2 wei down; wstETH < stETH),
   the transaction reverts. Leave a margin and tell the human.
 
