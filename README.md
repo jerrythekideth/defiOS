@@ -32,6 +32,8 @@ every byte. Humans sign.
 ```bash
 git clone <this repo> DeFi_os
 pip install -e DeFi_os            # Python >= 3.10
+# optional, for fork simulation: Foundry's anvil on PATH (https://getfoundry.sh, or the
+# foundry_stable_linux_amd64.tar.gz release binary; only `anvil` is needed)
 
 # in YOUR agent repo (private), not in DeFi_os:
 cp ../DeFi_os/defios.example.yaml defios.yaml   # fill in your addresses
@@ -100,6 +102,8 @@ your-permissions/           public or private audit trail of permission batches
 | `defios check` | per-action `allowed` / `missing` / `unsafe` / `needs_signature` plus role lints |
 | `defios decode <batch.json>` | decodes a Tx Builder batch of Roles changes, conditions as a tree |
 | `defios plan <card>.<action>[=amount] … [--token T] [--intent json]` | M2: resolves card/alias, converts amounts with token decimals, builds every call (approves included, receivers = Vault), checks each against the role (+ eth_call probe with RPC); refuses missing/unsafe (exit 3), else writes `calls.json` and prints the Operator Safe tx preview. Flow: plan → human reads → propose dry run → `--send` |
+| `defios permit <card>.<action> … [--token T] [--replace]` | builds the Roles permission batch for card actions: conditions from the card, merged with the live role (existing approve spenders kept), verified on a copy (calls allowed, hostile variants rejected, nothing that works today broken, no new high lint); writes a Safe Tx Builder JSON for the Vault queue, or refuses (exit 3) |
+| `defios simulate [--batch b.json] [--calls calls.json] [--block N]` | starts `anvil --fork-url $RPC_URL`, impersonates the Roles owner (batch) and the Operator (calls), sends exactly what those Safes would send; reports per-tx success or the decoded revert (Roles `ConditionViolation` names the check), gas, the Vault's token deltas from Transfer logs and every allowance still open. `plan` and `permit` do this by themselves when `RPC_URL` and `anvil` are available (`--no-simulate` skips) |
 | `defios propose --file calls.json [--send]` | M2: wraps engine-built calls in `execTransactionWithRole` (MultiSend when several), picks a non-colliding Operator nonce, computes the SafeTxHash, signs as a delegate; prints everything (dry run) unless `--send` posts it to the Safe Transaction Service. Never signs as an owner, never executes |
 | `defios catalog` | lists and validates cards |
 
