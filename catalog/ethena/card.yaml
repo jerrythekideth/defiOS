@@ -1,0 +1,60 @@
+protocol: ethena
+name: Ethena (USDe, sUSDe staking with cooldown)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "Ethena docs (contract addresses); StakedUSDeV2 verified source on Etherscan"
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (sUSDe deposit 0x6e553f65, cooldownShares 0x9343d9e1, unstake 0xf2888dbb)"
+
+contracts:
+  USDe:
+    address: "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3"
+    kind: erc20
+    decimals: 18
+    aliases: [usde, ethena usd]
+  sUSDe:
+    address: "0x9D39A5DE30e57443BfF2A8307A4256c8797A3497"
+    kind: erc4626_cooldown
+    decimals: 18
+    aliases: [susde, staked usde]
+    note: "ERC-4626 with a cooldown: redeem/withdraw are disabled while cooldownDuration > 0; use cooldownShares then unstake"
+
+ui_routes_to_avoid:
+  - ui: "Ethena app swap / buy USDe"
+    via: "aggregator routers"
+    why: "not in the role; buy USDe on CoW, stake with sUSDe.deposit"
+
+reads:
+  - { id: usde_balance, target: USDe, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR], decimals: 18 }
+  - { id: susde_balance, target: sUSDe, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR], decimals: 18 }
+  - id: susde_cooldown
+    target: sUSDe
+    sig: "cooldowns(address account) returns (uint104 cooldownEnd, uint152 underlyingAmount)"
+    args: [$AVATAR]
+
+actions:
+  stake:
+    summary: "USDe -> sUSDe"
+    input: USDe
+    calls:
+      - target: USDe
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: sUSDe, amount: $amount }
+      - target: sUSDe
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  cooldown:
+    summary: "start the sUSDe cooldown (shares move to the silo; USDe claimable after cooldownEnd)"
+    input: sUSDe
+    calls:
+      - target: sUSDe
+        sig: "cooldownShares(uint256 shares)"
+        args: { shares: $shares }
+        note: "acts on msg.sender's shares; the cooldown is recorded for the Vault"
+  unstake:
+    summary: "after the cooldown: claim USDe to the Vault"
+    calls:
+      - target: sUSDe
+        sig: "unstake(address receiver)"
+        args: { receiver: $AVATAR }

@@ -1,0 +1,58 @@
+protocol: dialectic
+name: Dialectic (DUSD, smDUSD security module)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "smDUSD beacon proxy -> SecurityModule 0x539FABBBdf220BF43De23BA18B1a795E662FeAC1 verified source (lock, startCooldown, cancelCooldown, redeem), read 2026-10-23"
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (0xcf27cfc4, 0xf963edab, 0xaccb5a1d, 0x7cbc2373)"
+
+contracts:
+  DUSD:
+    address: "0x1e33E98aF620F1D563fcD3cfd3C75acE841204ef"
+    kind: erc20
+    aliases: [dusd]
+  smDUSD:
+    address: "0xb8431779dd9d5753b5a7F66afa3C65ABFD8c3fe1"
+    kind: security_module
+    aliases: [smdusd, dialectic security module]
+    note: "startCooldown mints a cooldown receipt NFT to `receiver`; redeem pays the receipt's current owner and requires msg.sender to own it"
+
+reads:
+  - { id: dusd_balance, target: DUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+  - { id: smdusd_shares, target: smDUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+
+actions:
+  lock:
+    summary: "DUSD -> smDUSD shares for the Vault"
+    input: DUSD
+    calls:
+      - target: DUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: smDUSD, amount: $amount }
+      - target: smDUSD
+        sig: "lock(uint256 assets, address receiver, uint256 minShares)"
+        args: { assets: $amount, receiver: $AVATAR, minShares: $min_shares }
+  start_cooldown:
+    summary: "smDUSD shares -> cooldown receipt (NFT minted to the Vault)"
+    input: smDUSD
+    calls:
+      - target: smDUSD
+        sig: "startCooldown(uint256 shares, address receiver)"
+        args: { shares: $shares, receiver: $AVATAR }
+  cancel_cooldown:
+    summary: "cancel cooldown `cooldown_id` (shares back to the receipt owner)"
+    calls:
+      - target: smDUSD
+        sig: "cancelCooldown(uint256 cooldownId)"
+        args: { cooldownId: $cooldown_id }
+  redeem:
+    summary: "after the cooldown: receipt `cooldown_id` -> DUSD to the receipt owner (the Vault)"
+    calls:
+      - target: smDUSD
+        sig: "redeem(uint256 cooldownId, uint256 minAssets)"
+        args: { cooldownId: $cooldown_id, minAssets: $min_out }
+
+notes: >
+  Keep the receipt NFT in the Vault: redeem pays whoever owns it. Never allow
+  transferring the receipt.

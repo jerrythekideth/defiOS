@@ -1,0 +1,52 @@
+protocol: noon
+name: Noon (USN, sUSN with a withdrawal handler)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "sUSN implementation 0xeF2eA425… verified source: non-whitelisted callers must withdraw to the WithdrawalHandler; the request is recorded for msg.sender"
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (deposit 0x6e553f65, withdraw 0xb460af94, claimWithdrawal 0xf8444436)"
+
+contracts:
+  USN:
+    address: "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+    kind: erc20
+    aliases: [usn, noon usd]
+  sUSN:
+    address: "0xE24a3DC889621612422A64E6388927901608B91D"
+    kind: erc4626
+    aliases: [susn, staked usn]
+  withdrawal_handler:
+    address: "0x0DaBc0D9B270c9B0C4C77AaCeAa712b56D0F9178"
+    kind: queue
+    aliases: [noon withdrawal handler]
+
+reads:
+  - { id: usn_balance, target: USN, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+  - { id: susn_shares, target: sUSN, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+
+actions:
+  stake:
+    summary: "USN -> sUSN for the Vault"
+    input: USN
+    calls:
+      - target: USN
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: sUSN, amount: $amount }
+      - target: sUSN
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  request_withdraw:
+    summary: "sUSN -> withdrawal request (USN sent to the handler, claimable by the Vault later)"
+    calls:
+      - target: sUSN
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: withdrawal_handler, owner: $AVATAR }
+        note: "assets are USN amounts; receiver must be the handler for non-whitelisted callers"
+  claim:
+    summary: "claim a matured withdrawal request (USN to the requester)"
+    calls:
+      - target: withdrawal_handler
+        sig: "claimWithdrawal(uint256 requestId)"
+        args: { requestId: $request_id }
+        note: "recipient inferred to be the requester (msg.sender), not read from source"

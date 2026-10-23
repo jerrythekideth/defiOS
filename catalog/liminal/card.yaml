@@ -1,0 +1,59 @@
+protocol: liminal
+name: Liminal (limUSD on HyperEVM, mainnet spoke)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "SpokeCCTPProxy impl 0xeC0D8f00… verified source: deposit forwards USDC over CCTP to the HyperEVM hub; redeem pulls the share token with safeTransferFrom and pays the LayerZero fee from msg.value"
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (deposit 0xac06a012, redeem 0x2ccef165)"
+
+contracts:
+  spoke:
+    address: "0xaeEC321A209964aAbffF539807AE882917E7b4Db"
+    kind: bridge
+    aliases: [liminal spoke, liminal]
+  limUSD:
+    address: "0x9B74D3BD96f54dE689CfFDeb27EE34f68dFf086d"
+    kind: oft
+    aliases: [limusd, liminal usd]
+  hyperevm_hub:
+    address: "0x28dA642f406bB5234A779Ee0143c317D4d55Fa27"
+    kind: remote
+    note: "the Liminal hub on HyperEVM (chain 999), not a mainnet contract; it is the CCTP mintRecipient of deposits"
+  USDC: { ref: stablecoins.USDC }
+
+actions:
+  deposit:
+    summary: "USDC -> limUSD on HyperEVM (credited by the Liminal backend from hookData)"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: spoke, amount: $amount }
+      - target: spoke
+        sig: "deposit(uint256 amount, bytes32 mintRecipient, bytes32 destinationCaller, uint256 maxFee, uint32 minFinalityThreshold, bytes32 referral, bytes hookData)"
+        args:
+          amount: $amount
+          mintRecipient: hyperevm_hub
+          destinationCaller: "0x0000000000000000000000000000000000000000000000000000000000000000"
+          maxFee: $max_fee
+          minFinalityThreshold: $finality
+          referral: "0x0000000000000000000000000000000000000000000000000000000000000000"
+          hookData: $hook_data
+        note: "hookData names the HyperEVM beneficiary and comes from Liminal's backend; it cannot be pinned by the role today (known gap)"
+  redeem:
+    summary: "limUSD -> USDC back to mainnet (needs an ETH LayerZero fee)"
+    input: limUSD
+    calls:
+      - target: limUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: spoke, amount: $amount }
+      - target: spoke
+        sig: "redeem(uint256 shares, uint256 minAssets, bytes options, bytes hookData)"
+        args: { shares: $amount, minAssets: $min_out, options: $lz_options, hookData: $hook_data }
+        send: true
+        note: "param names inferred; a scope with options 0 (no ETH) cannot pay the fee"
+
+notes: >
+  The vault uses Liminal on HyperEVM; this card only covers the mainnet spoke.
+  Its HyperEVM-side permissions live in another Roles modifier on chain 999.

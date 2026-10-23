@@ -1,5 +1,5 @@
 protocol: etherfi
-name: ether.fi (weETH) + Veda Liquid ETH
+name: ether.fi (weETH) + Veda Liquid ETH / Liquid USD
 chain_id: 1
 status: draft
 reviewed: false
@@ -41,6 +41,24 @@ contracts:
     kind: queue
     aliases: [BoringOnChainQueue, liquid eth withdraw queue]
   WETH: { ref: weth.WETH }
+  liquid_usd:
+    address: "0x08c6F91e2B681FaF5e17227F2a44C307b3C1364C"
+    kind: boring_vault
+    aliases: [liquid usd, veda liquid usd, liquidUSD]
+    note: "Veda BoringVault; share token and deposit spender (it pulls the asset)"
+  liquid_usd_teller:
+    address: "0x4DE413a26fC24c3FC27Cc983be70aA9c5C299387"
+    kind: teller
+    aliases: [liquid usd teller]
+  liquid_usd_queue:
+    address: "0x38FC1BA73b7ED289955a07d9F11A85b6E388064A"
+    kind: queue
+    aliases: [liquid usd withdraw queue]
+  liquid_usd_solver:
+    address: "0x92b10e02825986bAc2375BdACaFA3e89E3f612aA"
+    kind: solver
+    note: "BoringSolver; boringRedeemSolve / boringRedeemSelfSolve are not needed (Veda solves the queue)"
+  USDC: { ref: stablecoins.USDC }
 
 ui_routes_to_avoid:
   - ui: "ether.fi app, Liquid deposit"
@@ -124,8 +142,34 @@ actions:
         optional: true
         sig: "cancelOnChainWithdraw((uint96 nonce, address user, address assetOut, uint128 amountOfShares, uint128 amountOfAssets, uint40 creationTime, uint24 secondsToMaturity, uint24 secondsToDeadline) request)"
         args: { request: { user: $AVATAR } }
+  deposit_liquid_usd:
+    summary: "USDC -> Liquid USD shares (minted to msg.sender)"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: liquid_usd, amount: $amount }
+      - target: liquid_usd_teller
+        sig: "deposit(address depositAsset, uint256 depositAmount, uint256 minimumMint)"
+        args: { depositAsset: USDC, depositAmount: $amount, minimumMint: $min_out }
+  withdraw_liquid_usd:
+    summary: "Liquid USD shares -> USDC via the on-chain queue (solved by Veda; paid to the requester)"
+    calls:
+      - target: liquid_usd
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: liquid_usd_queue, amount: $shares }
+      - target: liquid_usd_queue
+        sig: "requestOnChainWithdraw(address assetOut, uint128 amountOfShares, uint16 discount, uint24 secondsToDeadline)"
+        args: { assetOut: USDC, amountOfShares: $shares, discount: $discount_bps, secondsToDeadline: $deadline }
+      - target: liquid_usd_queue
+        optional: true
+        sig: "cancelOnChainWithdraw((uint96 nonce, address user, address assetOut, uint128 amountOfShares, uint128 amountOfAssets, uint40 creationTime, uint24 secondsToMaturity, uint24 secondsToDeadline) request)"
+        args: { request: { user: $AVATAR } }
 
 dead_permissions:
+  - target: liquid_usd_queue
+    sig: "rescueTokens(address token, uint256 amount, address to, (uint96 nonce, address user, address assetOut, uint128 amountOfShares, uint128 amountOfAssets, uint40 creationTime, uint24 secondsToMaturity, uint24 secondsToDeadline)[] activeRequests)"
+    why: "requires the queue's auth (Veda admin); a vault can never call it"
   - target: liquid_eth_queue
     sig: "rescueTokens(address token, uint256 amount, address to, (uint96 nonce, address user, address assetOut, uint128 amountOfShares, uint128 amountOfAssets, uint40 creationTime, uint24 secondsToMaturity, uint24 secondsToDeadline)[] activeRequests)"
     why: "requires the queue's auth (Veda admin); a vault can never call it"

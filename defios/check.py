@@ -131,6 +131,16 @@ def _aggregate(calls: list[dict]) -> str:
     return "allowed" if st else "n/a"
 
 
+def _token_name(catalog: Catalog, proto: str, action: dict, addr: str, book_vars: dict) -> str:
+    for ref in action.get("tokens") or []:
+        try:
+            if (catalog.resolve_contract(ref, proto, book_vars) or "").lower() == addr.lower():
+                return str(ref).split(".")[-1]
+        except CardError:
+            continue
+    return addr
+
+
 def check_actions(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: VaultConfig,
                   protocols: list[str], rpc=None) -> dict:
     builder = CallBuilder(catalog, vault.avatar, vault.book_vars)
@@ -142,15 +152,37 @@ def check_actions(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vau
             continue
         pres: dict[str, Any] = {}
         for aname, action in card.actions.items():
+            action = action or {}
             calls_out = []
             steps = []
-            for i, call in enumerate((action or {}).get("calls") or []):
-                if "sig" not in call:
-                    steps.append({k: call[k] for k in ("sign", "external", "signer", "note") if k in call})
-                    continue
-                bc = builder.build(proto, aname, i, call)
-                calls_out.append(check_call(adapter, state, vault, bc, rpc))
-            entry: dict[str, Any] = {"status": _aggregate(calls_out), "calls": calls_out}
+            # an action with a `tokens:` list is checked once per token ($token = that token)
+            tokens = catalog.action_tokens(proto, action, vault.book_vars) if action.get("tokens") else [None]
+            per_token: dict[str, str] = {}
+            for tok in tokens:
+                vars_ = {"token": tok, "_tokens": tokens} if tok else {}
+                tok_calls = []
+                for i, call in enumerate(action.get("calls") or []):
+                    if "sig" not in call:
+                        if tok == tokens[0]:
+                            steps.append({k: call[k] for k in ("sign", "external", "signer", "note") if k in call})
+                        continue
+                    bc = builder.build(proto, aname, i, call, vars_)
+                    c = check_call(adapter, state, vault, bc, rpc)
+                    if tok:
+                        c["token"] = _token_name(catalog, proto, action, tok, vault.book_vars)
+                    tok_calls.append(c)
+                if tok:
+                    per_token[_token_name(catalog, proto, action, tok, vault.book_vars)] = _aggregate(tok_calls)
+                calls_out += tok_calls
+            if per_token:
+                sts = set(per_token.values())
+                status = ("unsafe" if "unsafe" in sts else sts.pop() if len(sts) == 1
+                          else "partial" if "allowed" in sts else "missing")
+            else:
+                status = _aggregate(calls_out)
+            entry: dict[str, Any] = {"status": status, "calls": calls_out}
+            if per_token:
+                entry["tokens"] = per_token
             if any(c.get("loose") for c in calls_out):
                 entry["loose"] = True
             if steps:

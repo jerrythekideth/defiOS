@@ -1,0 +1,63 @@
+protocol: re
+name: Re (reUSD, insurance capital layer)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "InsuranceCapitalLayer proxy 0x4691… -> 0x06d4ACC104b974cD99bF22e4572f48A051E59670 verified source: deposit(token, amount, minShares) mints the share token to msg.sender (KYC-gated), read 2026-10-23"
+  - "RedemptionGateway 0x8aEb… verified source: redeemInstant(shares, minPayout) calls instantRedemption.redeemFor(msg.sender, …)"
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (deposit 0x0efe6a8b, redeemInstant 0xfbc3b807)"
+
+contracts:
+  icl:
+    address: "0x4691C475bE804Fa85f91c2D6D0aDf03114de3093"
+    kind: vault
+    aliases: [re icl, insurance capital layer]
+    note: "pulls the deposit token from msg.sender; KYC-gated (the Vault must be whitelisted)"
+  reUSD:
+    address: "0x5086bf358635B81D8C47C66d1C8b9E567Db70c72"
+    kind: erc20
+    aliases: [reusd]
+  redemption_gateway:
+    address: "0x8aEb9453EF22Cb38abC7a3Af9c208F65C1BfE31e"
+    kind: router
+    aliases: [re redemption gateway]
+  instant_redemption:
+    address: "0xa31deEbb3680A3007120e74bCbDf4df36F042A40"
+    kind: redemption_module
+    aliases: [re instant redemption]
+    note: "pulls reUSD from the user: the reUSD approve spender for redeemInstant"
+  USDC: { ref: stablecoins.USDC }
+
+reads:
+  - { id: reusd_balance, target: reUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+
+actions:
+  deposit:
+    summary: "USDC -> reUSD (minted to the Vault)"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: icl, amount: $amount }
+      - target: icl
+        sig: "deposit(address token, uint256 amount, uint256 minShares)"
+        args: { token: USDC, amount: $amount, minShares: $min_shares }
+  redeem_instant:
+    summary: "reUSD -> payout token to the Vault (instant redemption)"
+    input: reUSD
+    calls:
+      - target: reUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: instant_redemption, amount: $shares }
+      - target: redemption_gateway
+        sig: "redeemInstant(uint256 shares, uint256 minPayout)"
+        args: { shares: $shares, minPayout: $min_out }
+
+dead_permissions:
+  - target: instant_redemption
+    selector: "0xb426b825"
+    why: "redeemFor(address,uint256,uint256) is gateway-only"
+  - target: icl
+    selector: "0x8795feb8"
+    why: "claimDepositFees is a Re admin function"

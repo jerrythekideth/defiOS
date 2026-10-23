@@ -1,0 +1,142 @@
+protocol: flying_tulip
+name: Flying Tulip (ftUSD, sftUSD, ssftUSD, FT)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "MintAndRedeem proxy 0xAa48… -> 0x8852B132B72613a16f1E3960978a3d45c0A7c3C6 verified source (mint/redeem/redeemExact), read 2026-10-23"
+  - "ssftUSD: ERC-4626 StableEpochRewardsVault on ftUSD, synchronous withdraw"
+  - "Curve FT/ftUSD pool: CurveTwocryptoOptimized, coins [0] FT, [1] ftUSD"
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026)"
+
+contracts:
+  mint_and_redeem:
+    address: "0xAa48EcBC843cF7E9A29155D112b8Cb27902bD23C"
+    kind: router
+    aliases: [flying tulip mint, MintAndRedeem]
+    note: "pulls USDC on mint and ftUSD on redeem (safeTransferFrom); redeem may queue part of it (returns queueId)"
+  ftUSD:
+    address: "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
+    kind: erc20
+    aliases: [ftusd, flying tulip usd]
+  sftUSD:
+    address: "0xeb48218a4c35C814C7678cBcae88C6Ee037F7625"
+    kind: erc4626
+    aliases: [sftusd, staked ftusd]
+  ssftUSD:
+    address: "0x232128844e5aF56fD4B3f8BF97e08aB477282Ab5"
+    kind: erc4626
+    aliases: [ssftusd, stable staked ftusd]
+  FT:
+    address: "0x5DD1A7A369e8273371d2DBf9d83356057088082c"
+    kind: erc20
+    decimals: 18
+    aliases: [ft, flying tulip]
+  curve_ft_ftusd:
+    address: "0x68102ff5406475881462880a8dA3C9Bc9181aD6c"
+    kind: curve_pool
+    aliases: [curve ft pool, ft/ftusd pool]
+  session_manager:
+    address: "0x880A371CE2C5Dbb2EB47EC0023b358e8aE80071b"
+    kind: session_manager
+    note: "createSession takes free token lists; not allowed for a Roles-operated vault"
+  USDC: { ref: stablecoins.USDC }
+
+reads:
+  - { id: ftusd_balance, target: ftUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+  - { id: sftusd_shares, target: sftUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+  - { id: ssftusd_shares, target: ssftUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+  - { id: ft_balance, target: FT, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR], decimals: 18 }
+
+actions:
+  mint:
+    summary: "USDC -> ftUSD (minted to msg.sender)"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: mint_and_redeem, amount: $amount }
+      - target: mint_and_redeem
+        sig: "mint(address collateralToken, uint256 collateralAmount, uint256 txDeadline, uint256 minFtUSDOut)"
+        args: { collateralToken: USDC, collateralAmount: $amount, txDeadline: $deadline, minFtUSDOut: $min_out }
+  redeem:
+    summary: "ftUSD -> USDC (paid to msg.sender; part may be queued)"
+    input: ftUSD
+    calls:
+      - target: ftUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: mint_and_redeem, amount: $amount }
+      - target: mint_and_redeem
+        sig: "redeem(address collateralToken, uint256 ftUSDAmount, uint256 txDeadline, uint256 minCollateralOut)"
+        args: { collateralToken: USDC, ftUSDAmount: $amount, txDeadline: $deadline, minCollateralOut: $min_out }
+  redeem_exact:
+    summary: "ftUSD -> an exact USDC amount (paid to msg.sender; part may be queued)"
+    calls:
+      - target: ftUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: mint_and_redeem, amount: $max_in }
+      - target: mint_and_redeem
+        sig: "redeemExact(address collateralToken, uint256 collateralAmount, uint256 txDeadline, uint256 maxFtUSDIn)"
+        args: { collateralToken: USDC, collateralAmount: $usdc_amount, txDeadline: $deadline, maxFtUSDIn: $max_in }
+  stake:
+    summary: "ftUSD -> sftUSD for the Vault"
+    input: ftUSD
+    calls:
+      - target: ftUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: sftUSD, amount: $amount }
+      - target: sftUSD
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  unstake:
+    summary: "sftUSD -> ftUSD to the Vault (synchronous)"
+    calls:
+      - target: sftUSD
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  claim_rewards:
+    summary: "claim FT rewards accrued on sftUSD for the Vault"
+    calls:
+      - target: sftUSD
+        sig: "claim(address account)"
+        args: { account: $AVATAR }
+  stake_stable:
+    summary: "ftUSD -> ssftUSD for the Vault"
+    input: ftUSD
+    calls:
+      - target: ftUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: ssftUSD, amount: $amount }
+      - target: ssftUSD
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  unstake_stable:
+    summary: "ssftUSD -> ftUSD to the Vault (synchronous)"
+    input: ssftUSD
+    calls:
+      - target: ssftUSD
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+      - target: ssftUSD
+        alt: true
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  sell_ft_curve:
+    summary: "FT -> ftUSD on the Curve FT/ftUSD pool, to the Vault"
+    input: FT
+    calls:
+      - target: FT
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: curve_ft_ftusd, amount: $amount }
+      - target: curve_ft_ftusd
+        sig: "exchange(uint256 i, uint256 j, uint256 dx, uint256 min_dy, address receiver)"
+        args: { i: 0, j: 1, dx: $amount, min_dy: $min_out, receiver: $AVATAR }
+
+dead_permissions:
+  - target: session_manager
+    selector: "0xc14559e5"
+    why: "createSession(...) takes free token/amount lists that can move funds out"
+
+notes: >
+  FT also sells on CoW (cowswap card, sell token FT, buy USDC). Pin i = 0,
+  j = 1 and receiver = Vault on the Curve exchange.

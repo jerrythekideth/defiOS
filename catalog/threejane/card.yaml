@@ -1,0 +1,57 @@
+protocol: threejane
+name: 3Jane (USD3 via the Helper, JANE rewards)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "3Jane Helper verified source: deposit(assets, receiver, hop) (hop = true stakes into sUSD3), redeem calls USD3.redeem(shares, receiver, msg.sender)"
+  - "USD3 implementation 0xd1F1c3F4… verified source (availableWithdrawLimit)"
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (deposit 0x83df6747, redeem 0x7bde82f2)"
+
+contracts:
+  helper:
+    address: "0x2A66F992bF227D2e50eF19EDD21503C3c4F3f682"
+    kind: router
+    aliases: [3jane helper, threejane helper]
+    note: "pulls USDC on deposit and USD3 on redeem: approve the helper"
+  USD3:
+    address: "0x056B269Eb1f75477a8666ae8C7fE01b64dD55eCc"
+    kind: erc4626
+    aliases: [usd3, 3jane usd3]
+  sUSD3:
+    address: "0xf689555121e529Ff0463e191F9Bd9d1E496164a7"
+    kind: erc4626_cooldown
+    aliases: [susd3]
+    note: "hop = true deposits land here; no exit is scoped, so keep hop = false"
+  JANE:
+    address: "0x333333330522F64EE8d0b3039c460b41670e3404"
+    kind: erc20
+    aliases: [jane]
+    note: "rewards token; exit by selling on CoW"
+  USDC: { ref: stablecoins.USDC }
+
+reads:
+  - { id: usd3_shares, target: USD3, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+  - { id: jane_balance, target: JANE, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+
+actions:
+  deposit:
+    summary: "USDC -> USD3 for the Vault (hop = false: no sUSD3)"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: helper, amount: $amount }
+      - target: helper
+        sig: "deposit(uint256 assets, address receiver, bool hop)"
+        args: { assets: $amount, receiver: $AVATAR, hop: false }
+  redeem:
+    summary: "USD3 -> USDC to the Vault (subject to USD3's withdraw limit)"
+    input: USD3
+    calls:
+      - target: USD3
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: helper, amount: $shares }
+      - target: helper
+        sig: "redeem(uint256 shares, address receiver)"
+        args: { shares: $shares, receiver: $AVATAR }

@@ -1,0 +1,68 @@
+protocol: tokemak
+name: Tokemak Autopilot (autoUSD via the AutopilotRouter)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (redeem 0x4be47418, withdrawVaultToken 0x48840162, claimAutopoolRewards 0xa314d5a7, deposit 0x20e8c565, stakeVaultToken 0xb67ad9a2)"
+  - "param names inferred from Tokemak v2 AutopilotRouter (PeripheryPayments style); verify at review"
+
+contracts:
+  router:
+    address: "0x39ff6d21204B919441d17bef61D19181870835A2"
+    kind: router
+    aliases: [tokemak router, autopilot router, AutopilotRouter]
+    note: "router redeem pulls autoUSD from msg.sender, so autoUSD is approved to the router"
+  autoUSD:
+    address: "0xa7569A44f348d3D70d8ad5889e50F78E33d80D35"
+    kind: erc4626
+    aliases: [autousd, tokemak autousd, autopool]
+  rewarder:
+    address: { read: "autoUSD.rewarder()" }
+    kind: rewarder
+    note: "autoUSD's MainRewarder, read from the Autopool at plan time (not yet resolvable by the engine)"
+  USDC: { ref: stablecoins.USDC }
+
+ui_routes_to_avoid:
+  - ui: "Tokemak app deposit / zap"
+    via: "router multicall + redeemWithRoutes / swap routes"
+    why: "routes and multicall take arbitrary calldata; use redeem directly"
+
+reads:
+  - { id: autousd_shares, target: autoUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+
+actions:
+  redeem:
+    summary: "autoUSD -> USDC to the Vault"
+    input: autoUSD
+    calls:
+      - target: autoUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $shares }
+      - target: router
+        sig: "redeem(address vault, address to, uint256 shares, uint256 minAmountOut)"
+        args: { vault: autoUSD, to: $AVATAR, shares: $shares, minAmountOut: $min_out }
+  unstake:
+    summary: "staked autoUSD (rewarder) -> autoUSD to msg.sender"
+    calls:
+      - target: router
+        sig: "withdrawVaultToken(address vault, address rewarder, uint256 amount, bool claim)"
+        args: { vault: autoUSD, rewarder: rewarder, amount: $amount, claim: false }
+  claim_rewards:
+    summary: "claim autoUSD staking rewards to the Vault"
+    calls:
+      - target: router
+        sig: "claimAutopoolRewards(address vault, address rewarder, address recipient, bool unwrap)"
+        args: { vault: autoUSD, rewarder: rewarder, recipient: $AVATAR, unwrap: false }
+        note: "4th param name inferred"
+
+dead_permissions:
+  - target: router
+    sig: "deposit(address vault, address to, uint256 amount, uint256 minSharesOut)"
+    why: "spends the router's own token balance (PeripheryPayments); with pullToken pinned to the Vault there is no way to fund it in the same call"
+  - target: router
+    sig: "stakeVaultToken(address vault, uint256 maxAmount)"
+    why: "stakes the router's balance of autoUSD; same funding problem as deposit"
+
+not_needed:
+  - "router approve(address,address,uint256) and redeemWithRoutes: arbitrary spender / calldata"

@@ -175,9 +175,11 @@ def _call_contracts(catalog: Catalog, proto: str, action: dict, book_vars: dict)
                 walk(v)
 
     for c in action.get("calls") or []:
-        if "target" in c:
+        if "target" in c and c["target"] != "$token":
             add(c["target"])
         walk(c.get("args") or {})
+    for t in action.get("tokens") or []:
+        add(t)
     return out
 
 
@@ -351,6 +353,16 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
             raise PlanError(f"{where} takes {input_tok['ref']}, not {tok['ref']}")
         tok = tok or input_tok
         vars_: dict[str, Any] = {}
+        if action.get("tokens"):  # per-token action: $token is the chosen token, which must be in the list
+            allowed = catalog.action_tokens(proto, action, vault.book_vars)
+            names_ = ", ".join(str(r) for r in action["tokens"])
+            if tok is None and len(allowed) == 1:
+                tok = resolve_token(catalog, allowed[0], vault.book_vars)
+            if tok is None:
+                raise PlanError(f"{where} works on one of {names_}: pass --token")
+            if (tok["address"] or "").lower() not in {a.lower() for a in allowed}:
+                raise PlanError(f"{where} takes one of {names_}, not {tok['ref']}")
+            vars_["_tokens"] = allowed
         raw = None
         if step.amount is not None:
             if not tok:

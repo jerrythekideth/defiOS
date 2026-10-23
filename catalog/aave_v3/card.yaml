@@ -1,0 +1,106 @@
+protocol: aave_v3
+name: Aave v3 (Ethereum core market)
+chain_id: 1
+status: draft
+reviewed: false
+defi_kit: "aave_v3/deposit targets=[USDC, USDT, DAI, USDS, GHO, PYUSD, USDe, sUSDe] (supply/withdraw; borrow is aave_v3/borrow)"
+sources:
+  - "Aave address book (AaveV3Ethereum.POOL); Pool verified source (IPool)"
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (supply 0x617ba037, withdraw 0x69328dec, borrow 0xa415bcad, repay 0x573ade81, setUserEMode 0x28530a47, setUserUseReserveAsCollateral 0x5a3b74b9)"
+
+contracts:
+  pool:
+    address: "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2"
+    kind: lending_pool
+    aliases: [aave pool, aave v3, aave v3 pool]
+    note: "Pool proxy; also the spender for supply/repay approvals"
+  USDC: { ref: stablecoins.USDC }
+  USDT: { ref: stablecoins.USDT }
+  DAI: { ref: stablecoins.DAI }
+  USDS: { ref: stablecoins.USDS }
+  GHO: { ref: stablecoins.GHO }
+  PYUSD: { ref: stablecoins.PYUSD }
+  USDe: { ref: ethena.USDe }
+  sUSDe: { ref: ethena.sUSDe }
+
+ui_routes_to_avoid:
+  - ui: "Aave app ETH deposit / swap / repay-with-collateral"
+    via: "WrappedTokenGateway, ParaSwap adapters"
+    why: "not in the role; call pool functions directly with an ERC-20"
+
+reads:
+  - id: account_data
+    target: pool
+    sig: "getUserAccountData(address user) returns (uint256 totalCollateralBase, uint256 totalDebtBase, uint256 availableBorrowsBase, uint256 currentLiquidationThreshold, uint256 ltv, uint256 healthFactor)"
+    args: [$AVATAR]
+
+actions:
+  supply:
+    summary: "token -> aToken (collateral), credited to the Vault"
+    tokens: [USDC, USDT, DAI, USDS, GHO, PYUSD, USDe, sUSDe]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: pool, amount: $amount }
+      - target: pool
+        sig: "supply(address asset, uint256 amount, address onBehalfOf, uint16 referralCode)"
+        args: { asset: $token, amount: $amount, onBehalfOf: $AVATAR, referralCode: 0 }
+  withdraw:
+    summary: "aToken -> token, paid to the Vault"
+    tokens: [USDC, USDT, DAI, USDS, GHO, PYUSD, USDe, sUSDe]
+    calls:
+      - target: pool
+        sig: "withdraw(address asset, uint256 amount, address to)"
+        args: { asset: $token, amount: $amount, to: $AVATAR }
+  borrow:
+    summary: "borrow token at variable rate against the Vault's collateral; paid to the Vault"
+    tokens: [USDC, USDT, DAI, USDS, GHO, PYUSD, USDe]
+    calls:
+      - target: pool
+        sig: "borrow(address asset, uint256 amount, uint256 interestRateMode, uint16 referralCode, address onBehalfOf)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2, referralCode: 0, onBehalfOf: $AVATAR }
+  repay:
+    summary: "repay the Vault's variable debt in token"
+    tokens: [USDC, USDT, DAI, USDS, GHO, PYUSD, USDe]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: pool, amount: $amount }
+      - target: pool
+        sig: "repay(address asset, uint256 amount, uint256 interestRateMode, address onBehalfOf)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2, onBehalfOf: $AVATAR }
+  repay_with_atokens:
+    summary: "repay the Vault's debt in token with its aTokens of the same token (no approve)"
+    tokens: [USDC, USDT, DAI, USDS, GHO, PYUSD, USDe]
+    calls:
+      - target: pool
+        sig: "repayWithATokens(address asset, uint256 amount, uint256 interestRateMode)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2 }
+  set_emode:
+    summary: "switch the Vault's e-mode category (0 = none)"
+    calls:
+      - target: pool
+        sig: "setUserEMode(uint8 categoryId)"
+        args: { categoryId: $category }
+  enable_collateral:
+    summary: "use a supplied token as collateral"
+    tokens: [USDC, USDT, DAI, USDS, GHO, PYUSD, USDe, sUSDe]
+    calls:
+      - target: pool
+        sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"
+        args: { asset: $token, useAsCollateral: true }
+  disable_collateral:
+    summary: "stop using a supplied token as collateral"
+    tokens: [USDC, USDT, DAI, USDS, GHO, PYUSD, USDe, sUSDe]
+    calls:
+      - target: pool
+        sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"
+        args: { asset: $token, useAsCollateral: false }
+
+not_needed:
+  - "flashLoan / flashLoanSimple: interestRateMode 2 in flashLoan opens debt on onBehalfOf and sends the funds to any receiver; never allow it"
+  - "liquidationCall, swapBorrowRateMode, setUserUseReserveAsCollateral on assets the Vault never supplies"
+
+notes: >
+  Pin onBehalfOf / to to the Vault and the asset to the Vault's token list.
+  `withdraw` with type(uint256).max withdraws everything; plan never uses "max".

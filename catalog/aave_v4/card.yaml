@@ -1,0 +1,90 @@
+protocol: aave_v4
+name: Aave v4 (Spoke, core hub)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "aave/aave-v4 src/spoke/Spoke.sol (supply/withdraw/borrow/repay(reserveId, amount, onBehalfOf), onlyPositionManager(onBehalfOf))"
+  - "selectors matched against an executed Roles v2 batch (Oct 2026) (0x852a56a5, 0x0ad58d2f, 0xd6bda0c0, 0xb1e8f8ef, 0x9e35c533, 0x91c46d09, 0x826002e2)"
+
+contracts:
+  spoke:
+    address: "0x94e7A5dCbE816e498b89aB752661904E2F56c485"
+    kind: lending_spoke
+    aliases: [aave v4, aave v4 spoke, spoke]
+    note: "TransparentUpgradeableProxy -> SpokeInstance. The Spoke pulls tokens from msg.sender, so it is the approve spender; withdraw and borrow pay msg.sender"
+  USDC: { ref: stablecoins.USDC }
+  USDT: { ref: stablecoins.USDT }
+  DAI: { ref: stablecoins.DAI }
+  USDS: { ref: stablecoins.USDS }
+  GHO: { ref: stablecoins.GHO }
+  PYUSD: { ref: stablecoins.PYUSD }
+  USDe: { ref: ethena.USDe }
+  sUSDe: { ref: ethena.sUSDe }
+
+actions:
+  supply:
+    summary: "token -> Spoke reserve `reserve_id` for the Vault (pass --param reserve_id=<id of that token's reserve>)"
+    tokens: [USDC, USDT, DAI, USDS, GHO, PYUSD, USDe, sUSDe]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: spoke, amount: $amount }
+      - target: spoke
+        sig: "supply(uint256 reserveId, uint256 amount, address onBehalfOf)"
+        args: { reserveId: $reserve_id, amount: $amount, onBehalfOf: $AVATAR }
+  withdraw:
+    summary: "withdraw from reserve `reserve_id`; paid to msg.sender (the Vault)"
+    calls:
+      - target: spoke
+        sig: "withdraw(uint256 reserveId, uint256 amount, address onBehalfOf)"
+        args: { reserveId: $reserve_id, amount: $amount, onBehalfOf: $AVATAR }
+  borrow:
+    summary: "borrow from reserve `reserve_id`; paid to msg.sender (the Vault)"
+    calls:
+      - target: spoke
+        sig: "borrow(uint256 reserveId, uint256 amount, address onBehalfOf)"
+        args: { reserveId: $reserve_id, amount: $amount, onBehalfOf: $AVATAR }
+  repay:
+    summary: "repay the Vault's debt on reserve `reserve_id`"
+    tokens: [USDC, USDT, DAI, USDS, GHO, PYUSD, USDe]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: spoke, amount: $amount }
+      - target: spoke
+        sig: "repay(uint256 reserveId, uint256 amount, address onBehalfOf)"
+        args: { reserveId: $reserve_id, amount: $amount, onBehalfOf: $AVATAR }
+  enable_collateral:
+    summary: "use reserve `reserve_id` as collateral"
+    calls:
+      - target: spoke
+        sig: "setUsingAsCollateral(uint256 reserveId, bool usingAsCollateral, address onBehalfOf)"
+        args: { reserveId: $reserve_id, usingAsCollateral: true, onBehalfOf: $AVATAR }
+  disable_collateral:
+    summary: "stop using reserve `reserve_id` as collateral"
+    calls:
+      - target: spoke
+        sig: "setUsingAsCollateral(uint256 reserveId, bool usingAsCollateral, address onBehalfOf)"
+        args: { reserveId: $reserve_id, usingAsCollateral: false, onBehalfOf: $AVATAR }
+  update_risk_premium:
+    summary: "refresh the Vault's risk premium"
+    calls:
+      - target: spoke
+        sig: "updateUserRiskPremium(address onBehalfOf)"
+        args: { onBehalfOf: $AVATAR }
+  update_dynamic_config:
+    summary: "refresh the Vault's dynamic reserve config"
+    calls:
+      - target: spoke
+        sig: "updateUserDynamicConfig(address onBehalfOf)"
+        args: { onBehalfOf: $AVATAR }
+
+not_needed:
+  - "permitReserve: a permit path is not needed when the Vault approves directly"
+  - "setUserPositionManager: would let another address act for the Vault"
+
+notes: >
+  Reserve ids are per Spoke and per token; read them from the Spoke
+  (getReserve / reserve count) before planning. The `tokens:` list only
+  decides which token is approved; the role should pin onBehalfOf to the Vault.

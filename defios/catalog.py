@@ -22,8 +22,20 @@ RECEIVER_NAMES = {"receiver", "recipient", "owner", "onbehalfof", "to", "benefic
 VALUE_MOVING_KINDS_SAFE = {"oracle", "view", "registry"}
 
 
+TOKEN = "$token"
+
+
 class CardError(ValueError):
     pass
+
+
+def _addr_word(addr: str) -> bytes:
+    """An address as a left-padded bytes32 (CCTP-style mintRecipient)."""
+    return bytes(12) + bytes.fromhex(to_checksum_address(addr)[2:])
+
+
+def _as_type(addr: str, t: str):
+    return _addr_word(addr) if t == "bytes32" else addr
 
 
 # --------------------------------------------------------------------------- #
@@ -249,6 +261,15 @@ class Catalog:
             return self.contract_meta(p2, n2)
         return c
 
+    def action_tokens(self, protocol: str, action: dict, book_vars: dict | None = None) -> list[str]:
+        """Addresses of an action's `tokens:` list (the tokens `$token` may be), unresolved ones skipped."""
+        out = []
+        for ref in action.get("tokens") or []:
+            a = self.resolve_contract(ref, protocol, book_vars)
+            if a:
+                out.append(a)
+        return out
+
     def known_functions(self, book_vars: dict | None = None) -> dict[tuple[str, str], list[dict]]:
         """(target lower, selector) -> [{protocol, action, sig, dead, why}] across all cards."""
         out: dict[tuple[str, str], list[dict]] = {}
@@ -258,13 +279,17 @@ class Catalog:
                     if "sig" not in call or "target" not in call:
                         continue
                     try:
-                        addr = self.resolve_contract(call["target"], proto, book_vars)
                         sig = parse_signature(call["sig"])
+                        if call["target"] == TOKEN:
+                            addrs = self.action_tokens(proto, action or {}, book_vars)
+                        else:
+                            addrs = [self.resolve_contract(call["target"], proto, book_vars)]
                     except CardError:
                         continue
-                    if addr:
-                        out.setdefault((addr.lower(), sig.selector), []).append(
-                            {"protocol": proto, "action": aname, "sig": sig, "call": call, "dead": False})
+                    for addr in addrs:
+                        if addr:
+                            out.setdefault((addr.lower(), sig.selector), []).append(
+                                {"protocol": proto, "action": aname, "sig": sig, "call": call, "dead": False})
             for dead in card.raw.get("dead_permissions") or []:
                 try:
                     addr = self.resolve_contract(dead["target"], proto, book_vars)
@@ -371,7 +396,12 @@ class CallBuilder:
         if isinstance(spec, str):
             if spec == AVATAR:
                 pins.append(Pin(path, [self.avatar], "avatar"))
-                return self.avatar
+                return _as_type(self.avatar, t)
+            if spec == TOKEN and vars_.get("_tokens") and t == "address":
+                pins.append(Pin(path, list(vars_["_tokens"]), "set"))
+                if "token" not in vars_:
+                    raise CardError("$token not chosen")
+                return vars_["token"]
             if spec.startswith("$book."):
                 a = self.catalog.resolve_contract(spec, protocol, self.book_vars)
                 if not a:
@@ -390,12 +420,12 @@ class CallBuilder:
                     elif t.startswith(("uint", "int")):
                         return int(bv, 0)
                 return _sample(t, p.components)
-            if t == "address" and (is_address(spec) or self.catalog.is_contract_ref(spec, protocol)):
+            if t in ("address", "bytes32") and (is_address(spec) or self.catalog.is_contract_ref(spec, protocol)):
                 a = self.catalog.resolve_contract(spec, protocol, self.book_vars)
                 if not a:
                     raise CardError(f"contract {spec} has no address yet (TODO)")
                 pins.append(Pin(path, [a], "contract" if not is_address(spec) else "literal"))
-                return a
+                return _as_type(a, t)
             if t.startswith("bytes") and spec.startswith("0x"):
                 b = bytes.fromhex(spec[2:])
                 return b if t == "bytes" else b.ljust(int(t[5:]), b"\0")
@@ -433,7 +463,13 @@ class CallBuilder:
                        list(call.get("calls_params") or []), bool(call.get("optional")), bool(call.get("alt")),
                        raw=call)
         try:
-            bc.target = self.catalog.resolve_contract(call["target"], protocol, self.book_vars)
+            if call["target"] == TOKEN:
+                bc.target = vars_.get("token")
+                if not bc.target:
+                    bc.error = "target $token: no token chosen (the action's `tokens:` list, or --token)"
+                    return bc
+            else:
+                bc.target = self.catalog.resolve_contract(call["target"], protocol, self.book_vars)
             if not bc.target:
                 bc.error = f"target {call['target']} has no address (TODO or book variable missing)"
                 return bc
@@ -450,7 +486,8 @@ class CallBuilder:
                 bc.value = int(vars_.get("value", 10**18))
             # hostile variants: each pinned path -> DEAD; each calls[] param -> one hostile element
             for pin in bc.pins:
-                hv = _replace_path(values, bc.sig.params, pin.path, to_checksum_address(DEAD))
+                dead = _as_type(DEAD, _type_at(bc.sig.params, pin.path) or "address")
+                hv = _replace_path(values, bc.sig.params, pin.path, dead)
                 if hv is not None:
                     bc.hostile.append((f"{pin.path} = 0x…dEaD (expected {pin.kind})", sel + abi_encode(types, hv),
                                        "loose" if pin.kind == "set" else "unsafe"))
@@ -466,6 +503,23 @@ class CallBuilder:
         except CardError as e:
             bc.error = str(e)
         return bc
+
+
+def _type_at(params: list[Param], path: str) -> str | None:
+    """Solidity type of the value at `path` ("order.receiver", "_amounts[0]")."""
+    parts = re.findall(r"[^.\[\]]+|\[\d+\]", path)
+    plist, t = params, None
+    for part in parts:
+        if part.startswith("["):
+            if t is None or not t.endswith("]"):
+                return None
+            t = t[: t.rfind("[")]
+            continue
+        p = next((x for x in plist if x.name == part), None)
+        if p is None:
+            return None
+        t, plist = p.type, p.components
+    return t
 
 
 def _replace_path(values: list, params: list[Param], path: str, new: Any) -> list | None:
@@ -555,6 +609,15 @@ def validate_card(catalog: Catalog, card: Card) -> list[str]:
                     errs.append(f"{card.protocol}.{aname}: input {inp!r} is not a contract of a card (or ETH)")
             except CardError as e:
                 errs.append(f"{card.protocol}.{aname}: {e}")
+        toks = action.get("tokens")
+        if toks is not None:
+            if not isinstance(toks, list) or not toks:
+                errs.append(f"{card.protocol}.{aname}: `tokens` must be a non-empty list of card contracts")
+            for ref in toks or []:
+                if not catalog.is_contract_ref(str(ref), card.protocol):
+                    errs.append(f"{card.protocol}.{aname}: token {ref!r} is not a contract of a card")
+        if any(c.get("target") == TOKEN for c in action.get("calls") or []) and not toks:
+            errs.append(f"{card.protocol}.{aname}: target $token needs a `tokens:` list")
         used_vars: set[str] = set()
 
         def _vars(spec):
@@ -589,6 +652,8 @@ def validate_card(catalog: Catalog, card: Card) -> list[str]:
                 if receiver_like(p) and (call.get("args") or {}).get(p.name) is None and p.name not in (call.get("free") or []):
                     errs.append(f"{card.protocol}.{aname}[{i}]: receiver-like param {p.name!r} not pinned "
                                 f"(pin it or list it under `free:` with a reason)")
+            if call["target"] == TOKEN:
+                continue
             try:
                 catalog.resolve_contract(call["target"], card.protocol)
             except CardError as e:
