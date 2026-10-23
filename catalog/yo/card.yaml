@@ -1,5 +1,5 @@
 protocol: yo
-name: Yo (yoETH)
+name: Yo (yoETH, yoUSD)
 chain_id: 1
 status: draft
 reviewed: false
@@ -17,8 +17,15 @@ contracts:
     aliases: [YoGateway, yo gateway]
     note: "Yo's own deposit entry point; every vault/receiver param must be pinned"
   WETH: { ref: weth.WETH }
+  yoUSD:
+    address: "0x0000000f2eB9f69274678c76222B35eEc7588a65"
+    kind: erc4626_async_redeem
+    aliases: [yoUSD, yo usd]
+    note: "YoVault: requestRedeem pays instantly when liquid, otherwise an operator's fulfillRedeem pays the receiver"
+  USDC: { ref: stablecoins.USDC }
 
 reads:
+  - { id: yousd_shares, target: yoUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
   - id: yoeth_shares
     target: yoETH
     sig: "balanceOf(address account) returns (uint256)"
@@ -48,3 +55,20 @@ actions:
         sig: "requestRedeem(uint256 shares, address receiver, address owner)"
         args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }
         note: "param order/names inferred (ERC-7540 style); selector 0x7d41c86e matches the live permission. Both addresses must be the Avatar"
+  deposit_yousd:
+    summary: "USDC -> yoUSD via the Yo gateway"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: gateway, amount: $amount }
+      - target: gateway
+        sig: "deposit(address yoVault, uint256 assets, uint256 minSharesOut, address receiver, uint32 partnerId)"
+        args: { yoVault: yoUSD, assets: $amount, minSharesOut: $min_out, receiver: $AVATAR, partnerId: 0 }
+  request_redeem_yousd:
+    summary: "yoUSD -> USDC to the Vault (instant when liquid, else when fulfilled)"
+    input: yoUSD
+    calls:
+      - target: yoUSD
+        sig: "requestRedeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }

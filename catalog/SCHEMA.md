@@ -105,6 +105,7 @@ Action keys used by `defios plan` (all optional):
 |---|---|
 | `input` | contract (in this card, or `card.contract`) or `ETH` that `--amount` is denominated in; its `decimals` convert the human amount. `$amount` / `$shares` get the raw value; for `send:` calls the ETH value is the amount |
 | `defaults` | plan-time values for free `$vars` (e.g. `referral: "0x0…0"`). Any other free `$var` must be given with `--param`: plan never fills one with a check sample |
+| `tokens` | the action works on any one of these tokens (contracts of cards). `$token` in a call's `target` or args is that token; `plan` needs `--token` (one of the list); `check` checks the action once per token and reports `tokens: {USDC: allowed, …}` (status `partial` when only some pass). As an arg, `$token` is pinned to the whole list |
 | `approvals` | `keep` when the spender pulls after the transaction (a CoW settlement, a relayer filling a signed order). Otherwise `plan` ends the batch with `approve(spender, 0)` for every approval it made, so no allowance stays open |
 
 `plan` emits each required call (approves included) or, if the role rejects
@@ -125,6 +126,7 @@ Arg value specs:
 | `$book.credit_account` | per-vault value from `defios.yaml` `book_vars` (`gearbox_v3.credit_account`) | yes |
 | `$amount`, `$shares`, `$token` | free variable chosen at plan time; in checks a sample, or `book_vars["<protocol>.<name>"]` when set | no |
 | `0`, `"0x…"` literal | fixed value | literal addresses yes, numbers no |
+| `$AVATAR` / a contract on a `bytes32` param | the address left-padded to 32 bytes (CCTP `mintRecipient`) | yes |
 | `{field: spec, …}` | tuple param, field by field | per field |
 | `[spec, …]` | array param, element by element | per element |
 

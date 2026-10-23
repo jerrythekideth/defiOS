@@ -108,9 +108,15 @@ Global options: `--root <agent repo>`, `--vault <name>`, `--format both|json|tex
 
 ## Cards
 
-See [`catalog/SCHEMA.md`](catalog/SCHEMA.md). Cards in M1 (Ethereum mainnet):
-lido, gearbox_v3, morpho_vaults, cowswap, weth, avant, origin_arm, etherfi
-(incl. Veda Liquid ETH), yo, makina. Addresses come from
+See [`catalog/SCHEMA.md`](catalog/SCHEMA.md). Cards (Ethereum mainnet):
+
+* ETH: lido, gearbox_v3, morpho_vaults, cowswap, weth, avant, origin_arm,
+  etherfi (incl. Veda Liquid ETH and Liquid USD), yo (yoETH, yoUSD), makina.
+* USD: stablecoins (USDC, USDT, DAI, USDS, GHO, PYUSD), ethena, aave_v3,
+  aave_v4, strata, dialectic, infinifi, tokemak, upshift, noon, re,
+  flying_tulip, threejane, cctp, liminal.
+
+Addresses come from
 [defi-kit](https://github.com/karpatkey/defi-kit) where it covers a protocol and
 from verified, already-used permissions otherwise; unknown ones are `TODO`.
 

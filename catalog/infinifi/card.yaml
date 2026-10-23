@@ -1,0 +1,82 @@
+protocol: infinifi
+name: infiniFi (iUSD, siUSD via the gateway)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "InfiniFiGateway proxy 0x3f04b65D… -> InfiniFiGatewayV4 0x750136aC021a7149F0EE38141d0bA920Cca1fC5D, IInfiniFiGateway interface (verified), read 2026-10-23"
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (mint 0x40c10f19, mintAndStake 0x230ae89c, unstake 0xc2a672e0, redeem 0x2b83cccd, claimRedemption 0xa16ba4e0)"
+  - "unstake/redeem pull siUSD/iUSD with transferFrom (seen in mainnet txs, Oct 2026)"
+
+contracts:
+  gateway:
+    address: "0x3f04b65Ddbd87f9CE0A2e7Eb24d80e7fb87625b5"
+    kind: router
+    aliases: [infinifi gateway, infinifi]
+    note: "pulls USDC / iUSD / siUSD from msg.sender: approve the gateway"
+  iUSD:
+    address: "0x48f9e38f3070AD8945DFEae3FA70987722E3D89c"
+    kind: erc20
+    aliases: [iusd]
+  siUSD:
+    address: "0xDBDC1Ef57537E34680B898E1FEBD3D68c7389bCB"
+    kind: erc4626
+    aliases: [siusd, staked iusd]
+  USDC: { ref: stablecoins.USDC }
+
+ui_routes_to_avoid:
+  - ui: "infiniFi app zap (zapIn / zapInAndStake)"
+    via: "gateway zap functions with a free router + calldata"
+    why: "the router/calldata cannot be scoped; mint with USDC instead"
+
+reads:
+  - { id: iusd_balance, target: iUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+  - { id: siusd_shares, target: siUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
+
+actions:
+  mint:
+    summary: "USDC -> iUSD for the Vault"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: gateway, amount: $amount }
+      - target: gateway
+        sig: "mint(address _to, uint256 _amount)"
+        args: { _to: $AVATAR, _amount: $amount }
+  mint_and_stake:
+    summary: "USDC -> siUSD for the Vault"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: gateway, amount: $amount }
+      - target: gateway
+        sig: "mintAndStake(address _to, uint256 _amount)"
+        args: { _to: $AVATAR, _amount: $amount }
+  unstake:
+    summary: "siUSD -> iUSD to the Vault"
+    input: siUSD
+    calls:
+      - target: siUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: gateway, amount: $amount }
+      - target: gateway
+        sig: "unstake(address _to, uint256 _stakedTokens)"
+        args: { _to: $AVATAR, _stakedTokens: $amount }
+  redeem:
+    summary: "iUSD -> USDC to the Vault (may be partly queued; then claim_redemption)"
+    input: iUSD
+    calls:
+      - target: iUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: gateway, amount: $amount }
+      - target: gateway
+        sig: "redeem(address _to, uint256 _amount, uint256 _minAssetsOut)"
+        args: { _to: $AVATAR, _amount: $amount, _minAssetsOut: $min_out }
+  claim_redemption:
+    summary: "claim a queued redemption (pays the caller)"
+    calls:
+      - target: gateway
+        sig: "claimRedemption()"
+        note: "no arguments; whom it pays is inferred (the requester), not read from source"

@@ -91,6 +91,8 @@ All commands print JSON on stdout and a short summary on stderr
 * `unsafe`: the call passes, **and** so does a hostile variant. Tell the human
   which parameter is free. Do not use the action until it is fixed (unless the
   human explicitly accepts the risk for this one transaction).
+* `partial` (actions with a token list): some tokens pass, others don't; see
+  `tokens: {USDC: allowed, GHO: missing, …}` and plan only with an allowed one.
 * `missing`: the call does not pass. Often a missing approve, or a permission
   whose conditions point at the wrong parameter (see "None-type Pass nodes").
 * `needs_signature`: calls are allowed but the action also needs an off-chain

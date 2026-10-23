@@ -1,0 +1,48 @@
+protocol: cctp
+name: Circle CCTP v2 (bridge USDC)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "Circle CCTP v2 docs: TokenMessengerV2 depositForBurn(amount, destinationDomain, mintRecipient, burnToken, destinationCaller, maxFee, minFinalityThreshold)"
+  - "selector matched against a live Roles v2 permission on mainnet (Oct 2026) (depositForBurn 0x8e0250ee)"
+
+contracts:
+  token_messenger:
+    address: "0x28b5a0e9C621a5BadaA536219b3a228C8168cf5d"
+    kind: bridge
+    aliases: [cctp, token messenger, TokenMessengerV2]
+    note: "burns USDC pulled from msg.sender: approve the messenger"
+  USDC: { ref: stablecoins.USDC }
+
+actions:
+  bridge:
+    summary: "burn USDC here, mint it to the same Vault address on the destination domain"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: token_messenger, amount: $amount }
+      - target: token_messenger
+        sig: "depositForBurn(uint256 amount, uint32 destinationDomain, bytes32 mintRecipient, address burnToken, bytes32 destinationCaller, uint256 maxFee, uint32 minFinalityThreshold)"
+        args:
+          amount: $amount
+          destinationDomain: $domain
+          mintRecipient: $AVATAR
+          burnToken: USDC
+          destinationCaller: "0x0000000000000000000000000000000000000000000000000000000000000000"
+          maxFee: $max_fee
+          minFinalityThreshold: $finality
+        note: >
+          mintRecipient is the Vault as a left-padded bytes32: the funds land at
+          the same address on the destination chain, which must be a Safe the
+          same owners control there. Pin destinationDomain to the domains the
+          vault really uses (an unknown domain strands funds, it does not steal them).
+
+dead_permissions:
+  - target: token_messenger
+    selector: "0x11cffb67"
+    why: "handleReceiveFinalizedMessage is called by the MessageTransmitter only"
+  - target: token_messenger
+    selector: "0xb2118a8d"
+    why: "rescueERC20 is Circle's rescuer role only"

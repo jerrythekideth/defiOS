@@ -1,0 +1,135 @@
+protocol: strata
+name: Strata (senior/junior tranches on USDe and NUSD)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "TrancheDepositor implementation 0x932a1d70A5E1c64a13dAa5a60564aCF5A2Ac0D11 verified source (deposit, TDepositParams), read 2026-10-23"
+  - "Tranche implementation 0xe91869F9… verified source: redeem pays `receiver` in the same tx via cdo.withdraw"
+  - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (deposit 0x59fbfafd, redeem 0xfea53be1 / 0xba087652)"
+
+contracts:
+  srUSDe:
+    address: "0x3d7d6fdf07EE548B939A80edbc9B2256d0cdc003"
+    kind: tranche
+    aliases: [srusde, strata senior usde]
+  jrUSDe:
+    address: "0xC58D044404d8B14e953C115E67823784dEA53d8F"
+    kind: tranche
+    aliases: [jrusde, strata junior usde]
+  srNUSD:
+    address: "0x65a44528e8868166401eA08b549E19552af589dB"
+    kind: tranche
+    aliases: [srnusd, strata senior nusd]
+    note: "NUSD market wound down after the 2026 sNUSD exploit; redeem only"
+  jrNUSD:
+    address: "0xFC807058A352b61aEef6A38e2D0fC3990225E772"
+    kind: tranche
+    aliases: [jrnusd, strata junior nusd]
+    note: "junior NUSD tranche was written down to ~0 after the sNUSD exploit; redeem only"
+  depositor_usde:
+    address: "0x7a6AD3753b51cB0161405e93645B5E1f95b6e50F"
+    kind: router
+    aliases: [strata depositor, strata usde depositor, TrancheDepositor]
+    note: "proxy -> TrancheDepositor; pulls the asset from msg.sender, so it is the approve spender"
+  depositor_nusd:
+    address: "0x7945e45c2F39bE3A0cbF467F3fae982C17CB4Bf7"
+    kind: router
+    note: "NUSD TrancheDepositor; deposits into the NUSD tranches are off (market wound down)"
+  USDe: { ref: ethena.USDe }
+  sUSDe: { ref: ethena.sUSDe }
+
+ui_routes_to_avoid:
+  - ui: "Strata app zap deposits"
+    via: "TrancheDepositor swap params (swapTokenOut)"
+    why: "keep swapTokenOut = 0 (the tranche asset); a swap route is not needed"
+
+reads:
+  - { id: srusde_shares, target: srUSDe, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR], decimals: 18 }
+  - { id: jrusde_shares, target: jrUSDe, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR], decimals: 18 }
+  - { id: srnusd_shares, target: srNUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR], decimals: 18 }
+  - { id: jrnusd_shares, target: jrNUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR], decimals: 18 }
+
+actions:
+  deposit_srusde:
+    summary: "USDe -> srUSDe (senior tranche)"
+    input: USDe
+    calls:
+      - target: USDe
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: depositor_usde, amount: $amount }
+      - target: depositor_usde
+        sig: "deposit(address vault, address asset, uint256 amount, address receiver, (uint256 swapDeadline, uint256 swapAmountOutMinimum, address swapTokenOut, uint256 minShares) params)"
+        args:
+          vault: srUSDe
+          asset: USDe
+          amount: $amount
+          receiver: $AVATAR
+          params: { swapDeadline: 0, swapAmountOutMinimum: 0, swapTokenOut: "0x0000000000000000000000000000000000000000", minShares: $min_shares }
+  deposit_jrusde:
+    summary: "USDe -> jrUSDe (junior tranche)"
+    input: USDe
+    calls:
+      - target: USDe
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: depositor_usde, amount: $amount }
+      - target: depositor_usde
+        sig: "deposit(address vault, address asset, uint256 amount, address receiver, (uint256 swapDeadline, uint256 swapAmountOutMinimum, address swapTokenOut, uint256 minShares) params)"
+        args:
+          vault: jrUSDe
+          asset: USDe
+          amount: $amount
+          receiver: $AVATAR
+          params: { swapDeadline: 0, swapAmountOutMinimum: 0, swapTokenOut: "0x0000000000000000000000000000000000000000", minShares: $min_shares }
+  redeem_srusde:
+    summary: "srUSDe -> underlying, paid to the Vault in the same tx"
+    input: srUSDe
+    calls:
+      - target: srUSDe
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+      - target: srUSDe
+        optional: true
+        sig: "redeem(address token, uint256 shares, address receiver, address owner)"
+        args: { token: $token_out, shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+        note: "same exit, choosing the payout token (the tranche asset or its staked form)"
+  redeem_jrusde:
+    summary: "jrUSDe -> underlying, paid to the Vault in the same tx"
+    input: jrUSDe
+    calls:
+      - target: jrUSDe
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+      - target: jrUSDe
+        optional: true
+        sig: "redeem(address token, uint256 shares, address receiver, address owner)"
+        args: { token: $token_out, shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+        note: "same exit, choosing the payout token (the tranche asset or its staked form)"
+  redeem_srnusd:
+    summary: "srNUSD -> underlying (wind-down exit)"
+    input: srNUSD
+    calls:
+      - target: srNUSD
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+      - target: srNUSD
+        optional: true
+        sig: "redeem(address token, uint256 shares, address receiver, address owner)"
+        args: { token: $token_out, shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+        note: "same exit, choosing the payout token (the tranche asset or its staked form)"
+  redeem_jrnusd:
+    summary: "jrNUSD -> underlying (wind-down exit; written down to ~0)"
+    input: jrNUSD
+    calls:
+      - target: jrNUSD
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+      - target: jrNUSD
+        optional: true
+        sig: "redeem(address token, uint256 shares, address receiver, address owner)"
+        args: { token: $token_out, shares: $shares, receiver: $AVATAR, owner: $AVATAR }
+        note: "same exit, choosing the payout token (the tranche asset or its staked form)"
+
+not_needed:
+  - "allowTarget on the tranche tokens (it also allows transfer/approve of the shares); scope redeem only"
+  - "NUSD TrancheDepositor deposit: NUSD market wound down"
