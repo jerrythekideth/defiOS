@@ -59,6 +59,7 @@ def main(ctx, root, config, vault, fmt, logs_file, offline):
     defios state    sync, then say what the vault holds and can do
     defios check    allowed / missing / unsafe per card action, plus role lints
     defios plan     intent -> engine-built, role-checked calls -> calls.json
+    defios permit   card actions -> Roles permission batch for the Vault (Safe Tx Builder JSON)
     defios propose  dry-run (default) or --send an Operator Safe tx for humans to sign
     """
     ctx.ensure_object(dict)
@@ -247,6 +248,54 @@ def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe, keep_a
             path.write_text(json.dumps(calls_file(res), indent=2) + "\n")
             res["written"] = str(path)
         _emit(ctx, res, summarize(res))
+        if not res["ok"]:
+            sys.exit(3)
+    _run(go)
+
+
+@main.command()
+@click.argument("actions", nargs=-1, required=True)
+@click.option("--token", "tokens", multiple=True, help="Limit actions with a `tokens:` list to these tokens (repeatable). "
+              "Default: every token the card lists.")
+@click.option("--with-optional", is_flag=True, help="Also permit the actions' optional / alternative calls.")
+@click.option("--replace", is_flag=True, help="Overwrite stored scopes that differ from the card (or are looser "
+              "than it) instead of refusing. Whatever stops working is listed.")
+@click.option("--description", default=None, help="Batch description shown in the Safe Transaction Builder.")
+@click.option("--out", default=None, help="Where to write the Safe Tx Builder JSON (relative to --root). Default "
+              "permissions_<vault>_<YYYYMMDD>.json; '-' = do not write.")
+@click.pass_context
+def permit(ctx, actions, tokens, with_optional, replace, description, out):
+    """Build the Roles permission batch that lets the Operator run card ACTIONS.
+
+    \b
+    ACTIONS are <card>.<action> or <alias>.<action>:
+      defios permit aave_v3.supply aave_v3.withdraw --token USDC --token USDT
+    Conditions come from the card; the batch is merged with the live role (existing
+    approve spenders are kept) and checked on a copy of it: every call allowed, hostile
+    variants rejected, nothing that works today broken, no new high lint.
+    Refuses (exit 3, nothing written) otherwise. The output is for the Vault queue
+    (the Roles modifier's owner), not the Operator: humans import, review and sign it.
+    """
+    def go():
+        from datetime import date
+
+        from .catalog import CardError
+        from .permit import PermitError, permit as run, summarize
+        from .plan import PlanError, role_for_plan
+        cfg, vault, catalog, rpc = _setup(ctx)
+        try:
+            state, adapter, source = role_for_plan(cfg, vault, ctx.obj["logs_file"], rpc)
+            res = run(catalog, state, adapter, vault, list(actions), tokens=list(tokens) or None,
+                      with_optional=with_optional, replace=replace, description=description, role_source=source)
+        except (PermitError, PlanError, CardError) as e:
+            raise ConfigError(str(e)) from e
+        if res["ok"] and res.get("batch") and out != "-":
+            path = Path(out or f"permissions_{vault.name}_{date.today():%Y%m%d}.json")
+            if not path.is_absolute():
+                path = cfg.root / path
+            path.write_text(json.dumps(res["batch"], indent=2) + "\n")
+            res["written"] = str(path)
+        _emit(ctx, res, summarize(res) + (f"\n  wrote {res['written']}" if res.get("written") else ""))
         if not res["ok"]:
             sys.exit(3)
     _run(go)

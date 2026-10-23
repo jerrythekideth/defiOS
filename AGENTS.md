@@ -67,7 +67,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
     until the fill: tell the human, and revoke it once the order is filled or
     expired.
 
-## Commands (M1 read-only, plus M2 `plan` and `propose`)
+## Commands
 
 | command | use it when |
 |---|---|
@@ -78,6 +78,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
 | `defios decode batch.json` | someone hands you a permission batch: decode it before the human proposes it |
 | `defios catalog` | list cards and validate them |
 | `defios plan <card>.<action>=<amount> …` | M2: turn an intent into engine-built, role-checked calls; writes `calls.json` (see "Planning") |
+| `defios permit <card>.<action> … [--token T]` | "add the permission to do X": builds the Roles batch from the card, merged with the live role and verified; writes a Tx Builder JSON for the Vault queue (see "Permissions") |
 | `defios propose --file calls.json` | M2: dry run of an Operator proposal (see "Proposing"); `--send` only after the human said yes |
 
 All commands print JSON on stdout and a short summary on stderr
@@ -118,11 +119,34 @@ report them in your summary. `known_dead` and `uncatalogued` are clean-up items.
   warnings → only after the human's yes, `propose --file calls.json --send` →
   give the Operator queue link and nonce. If `plan` refuses: stop, explain,
   offer a permission batch.
-* **"Add permission for X"** (M3): build the batch (defi-kit bundle or
-  `kit/` module), diff it against the live role, lint it, write the Tx Builder
-  JSON into the human's permissions folder, summarize. The human proposes it.
+* **"Add permission for X"**: `sync` → `defios permit <card>.<action> [--token T]`
+  → show the human every `+` line (function, condition tree, why) and every
+  `note` → they import the JSON into the Safe Transaction Builder **on the
+  Vault** and sign there; you never propose on the Vault. If no card covers X,
+  say so (rule 2); do not write the condition yourself.
 * **After anything executes:** `sync` again; note in your journal what changed
   (`role.changes_since_last_sync` in the book).
+
+## Permissions
+
+`defios permit` writes the conditions from the card's arg specs: `$AVATAR`,
+card contracts and literals become `EqualTo`, `one_of` / `$token` an `Or`,
+`$variables` a typed `Pass`. Against the live role it:
+
+* skips calls that are already `allowed` (`=` lines);
+* adds what is missing, keeping what is there: a stored approve gets the new
+  spender added to its list, never replaced;
+* **refuses** (exit 3, nothing written) when the stored scope differs in some
+  other way, when the role is looser than the card (`unsafe`), when a card call
+  carries arbitrary calls (`calls_params`), when anything that works today
+  would stop working, or when the batch adds a high lint (e.g. a free `bytes`
+  param). Explain the refusal; `--replace` overwrites stored scopes and lists
+  what stops working, so use it only when the human asks for exactly that.
+
+Actions with a token list permit every listed token unless `--token` narrows
+it. Optional / alternative calls need `--with-optional`. Signature and
+third-party steps (Avant orders, CoW fills) are listed as notes: no role
+covers them.
 
 ## Planning (M2)
 
