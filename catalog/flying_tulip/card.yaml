@@ -12,32 +12,48 @@ sources:
 contracts:
   mint_and_redeem:
     address: "0xAa48EcBC843cF7E9A29155D112b8Cb27902bD23C"
+    category: minter
     kind: router
     aliases: [flying tulip mint, MintAndRedeem]
     note: "pulls USDC on mint and ftUSD on redeem (safeTransferFrom); redeem may queue part of it (returns queueId)"
   ftUSD:
     address: "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
+    category: token
     kind: erc20
     aliases: [ftusd, flying tulip usd]
   sftUSD:
     address: "0xeb48218a4c35C814C7678cBcae88C6Ee037F7625"
+    category: staking
     kind: erc4626
     aliases: [sftusd, staked ftusd]
+    edges: { underlying: ftUSD }
+    proofs:
+      - { read: "asset() returns (address)", expect: ftUSD }
   ssftUSD:
     address: "0x232128844e5aF56fD4B3f8BF97e08aB477282Ab5"
+    category: staking
     kind: erc4626
     aliases: [ssftusd, stable staked ftusd]
+    edges: { underlying: ftUSD }
+    proofs:
+      - { read: "asset() returns (address)", expect: ftUSD }
   FT:
     address: "0x5DD1A7A369e8273371d2DBf9d83356057088082c"
+    category: governance
     kind: erc20
     decimals: 18
     aliases: [ft, flying tulip]
   curve_ft_ftusd:
     address: "0x68102ff5406475881462880a8dA3C9Bc9181aD6c"
+    category: market
     kind: curve_pool
     aliases: [curve ft pool, ft/ftusd pool]
+    proofs:
+      - { read: "coins(uint256 i) returns (address)", args: [0], expect: FT }
+      - { read: "coins(uint256 i) returns (address)", args: [1], expect: ftUSD }
   session_manager:
     address: "0x880A371CE2C5Dbb2EB47EC0023b358e8aE80071b"
+    category: router
     kind: session_manager
     note: "createSession takes free token lists; not allowed for a Roles-operated vault"
   USDC: { ref: stablecoins.USDC }

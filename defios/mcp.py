@@ -74,7 +74,18 @@ def tool_plan(steps: list[dict], vault: str | None = None, out: str | None = Non
     return res
 
 
+def tool_whois(address: str, chain_id: int | None = None) -> dict[str, Any]:
+    """Needs no defios.yaml: reads the catalog and its proof results only."""
+    from .catalog import Catalog
+    from .config import default_catalog_dir
+    from .registry import Registry, load_results
+
+    d = default_catalog_dir()
+    return Registry.from_catalog(Catalog.load(d)).whois(address, chain_id, load_results(d))
+
+
 TOOLS = {
+    "defios_whois": (tool_whois, "What is this address? Protocol, contract, trust status (act only on verified)."),
     "defios_doctor": (tool_doctor, "Check Vault / Roles / Operator / proposer wiring."),
     "defios_sync": (tool_sync, "Rebuild the vault book from chain (role.lock.json, book.yaml)."),
     "defios_state": (tool_state, "Sync, then summarize holdings and allowed/missing/unsafe actions."),

@@ -70,6 +70,12 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
     until the fill: tell the human, and revoke it once the order is filled or
     expired.
 
+11. **Know the address before you touch it.** Any address you did not get from
+    `defios plan` (an alert, a user's message, a UI, an explorer) goes through
+    `defios whois` first. Act only on `verified` records. `unverified`: say so
+    and stop. `conflict`: hand it to the human. `unknown`: it is not in the
+    registry; never guess which protocol it belongs to.
+
 ## Commands
 
 | command | use it when |
@@ -80,6 +86,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
 | `defios check [--protocol X]` | "is lend permitted?", "what's missing?", "is this role safe?" |
 | `defios decode batch.json` | someone hands you a permission batch: decode it before the human proposes it |
 | `defios catalog` | list cards and validate them |
+| `defios whois 0x… [--chain N]` | "what is this address?": protocol, contract, category, trust status, proxy, edges, card actions (see rule 11) |
 | `defios plan <card>.<action>=<amount> …` | M2: turn an intent into engine-built, role-checked calls; writes `calls.json` (see "Planning") |
 | `defios permit <card>.<action> … [--token T]` | "add the permission to do X": builds the Roles batch from the card, merged with the live role and verified; writes a Tx Builder JSON for the Vault queue (see "Permissions") |
 | `defios simulate [--batch b.json] [--calls calls.json]` | run a permission batch and/or a plan on an anvil fork: per-tx success or decoded revert, gas, Vault token deltas, allowances left open |

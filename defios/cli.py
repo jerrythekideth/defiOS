@@ -183,6 +183,103 @@ def catalog_cmd(ctx, directory):
     _emit(ctx, data, "\n".join(lines))
 
 
+def _registry(directory):
+    from .config import default_catalog_dir
+    from .registry import Registry, RegistryError, load_results
+    d = Path(directory) if directory else default_catalog_dir()
+    reg = Registry.from_catalog(Catalog.load(d))
+    if reg.errors:
+        raise RegistryError("registry errors:\n  " + "\n  ".join(reg.errors))
+    return d, reg, load_results(d)
+
+
+@main.command()
+@click.argument("address")
+@click.option("--chain", "chain_id", type=int, default=None, help="Chain id (default: every chain).")
+@click.option("--dir", "directory", default=None, type=click.Path(file_okay=False), help="Catalog directory.")
+@click.pass_context
+def whois(ctx, address, chain_id, directory):
+    """What is ADDRESS? Protocol, contract, category, trust status, proxy, edges, card actions.
+
+    \b
+    Offline: reads the catalog and catalog/registry.proofs.json (no defios.yaml needed).
+    Only `verified` records may be acted on; `unknown` means do not touch it.
+    """
+    from .registry import RegistryError, summarize_whois
+    try:
+        _d, reg, results = _registry(directory)
+        res = reg.whois(address, chain_id, results)
+    except RegistryError as e:
+        click.echo(json.dumps({"error": str(e)}))
+        click.echo(f"error: {e}", err=True)
+        sys.exit(2)
+    _emit(ctx, res, summarize_whois(res))
+
+
+@main.group()
+def registry():
+    """The protocol registry: verify proofs, export index.json (see catalog/REGISTRY.md)."""
+
+
+@registry.command("verify")
+@click.option("--chain", "chains", type=int, multiple=True, help="Only these chain ids (default: every chain "
+              "with an RPC: RPC_URL for 1, RPC_URL_<chain id> for the others).")
+@click.option("--write/--no-write", default=True, show_default=True,
+              help="Update catalog/registry.proofs.json and catalog/index.json.")
+@click.option("--dir", "directory", default=None, type=click.Path(file_okay=False), help="Catalog directory.")
+@click.pass_context
+def registry_verify(ctx, chains, write, directory):
+    """Re-run every onchain proof: code present, EIP-1967 slots, each card `proofs:` read.
+
+    Exit 3 when any record is in conflict (a failed proof, no code, two protocols claim it).
+    """
+    def go():
+        from .chain import Rpc, env
+        from .registry import INDEX_FILE, PROOFS_FILE, RegistryError, dump, merge_results, summarize_verify, verify
+        try:
+            d, reg, old = _registry(directory)
+        except RegistryError as e:
+            raise ConfigError(str(e)) from e
+        rpcs = {}
+        for cid in sorted({r.chain_id for r in reg.records}):
+            url = env("RPC_URL") if cid == 1 else env(f"RPC_URL_{cid}")
+            if url and (not chains or cid in chains):
+                rpcs[cid] = Rpc(url)
+        if not rpcs:
+            raise ConfigError("no RPC for any registry chain: set RPC_URL (chain 1) or RPC_URL_<chain id>")
+        results = merge_results(old, verify(reg, rpcs, list(chains) or None))
+        if write:
+            (d / PROOFS_FILE).write_text(dump(results))
+            (d / INDEX_FILE).write_text(dump(reg.export_index(results)))
+        checked = [str(c) for c in rpcs]
+        res = {"checked": checked, "statuses": {r.ref: reg.status(r, results).status for r in reg.records},
+               "written": [str(d / PROOFS_FILE), str(d / INDEX_FILE)] if write else []}
+        _emit(ctx, res, summarize_verify(reg, results, checked))
+        if "conflict" in res["statuses"].values():
+            sys.exit(3)
+    _run(go)
+
+
+@registry.command("export")
+@click.option("--out", default=None, help="Where to write (default catalog/index.json; '-' = stdout).")
+@click.option("--dir", "directory", default=None, type=click.Path(file_okay=False), help="Catalog directory.")
+def registry_export(out, directory):
+    """Write the static index.json (deployments, status, edges) for non-Python consumers. Offline."""
+    from .registry import INDEX_FILE, RegistryError, dump
+    try:
+        d, reg, results = _registry(directory)
+    except RegistryError as e:
+        click.echo(f"error: {e}", err=True)
+        sys.exit(2)
+    text = dump(reg.export_index(results))
+    if out == "-":
+        click.echo(text, nl=False)
+        return
+    path = Path(out) if out else d / INDEX_FILE
+    path.write_text(text)
+    click.echo(f"wrote {path}", err=True)
+
+
 @main.command()
 @click.option("--file", "calls_file", required=True, type=click.Path(exists=True, dir_okay=False),
               help="calls.json: inner calls {to, value, data, operation} produced by the engine/cards.")

@@ -11,17 +11,23 @@ sources:
 contracts:
   gateway:
     address: "0x3f04b65Ddbd87f9CE0A2e7Eb24d80e7fb87625b5"
+    category: router
     kind: router
     aliases: [infinifi gateway, infinifi]
     note: "pulls USDC / iUSD / siUSD from msg.sender: approve the gateway"
   iUSD:
     address: "0x48f9e38f3070AD8945DFEae3FA70987722E3D89c"
+    category: token
     kind: erc20
     aliases: [iusd]
   siUSD:
     address: "0xDBDC1Ef57537E34680B898E1FEBD3D68c7389bCB"
+    category: staking
     kind: erc4626
     aliases: [siusd, staked iusd]
+    edges: { underlying: iUSD }
+    proofs:
+      - { read: "asset() returns (address)", expect: iUSD }
   USDC: { ref: stablecoins.USDC }
 
 ui_routes_to_avoid:

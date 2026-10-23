@@ -10,14 +10,19 @@ sources:
 contracts:
   spoke:
     address: "0xaeEC321A209964aAbffF539807AE882917E7b4Db"
+    category: bridge
     kind: bridge
     aliases: [liminal spoke, liminal]
+    edges: { bridges_to: hyperevm_hub }
   limUSD:
     address: "0x9B74D3BD96f54dE689CfFDeb27EE34f68dFf086d"
+    category: receipt
     kind: oft
     aliases: [limusd, liminal usd]
   hyperevm_hub:
     address: "0x28dA642f406bB5234A779Ee0143c317D4d55Fa27"
+    category: vault
+    chain_id: 999
     kind: remote
     note: "the Liminal hub on HyperEVM (chain 999), not a mainnet contract; it is the CCTP mintRecipient of deposits"
   USDC: { ref: stablecoins.USDC }

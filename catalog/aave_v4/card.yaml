@@ -10,6 +10,7 @@ sources:
 contracts:
   spoke:
     address: "0x94e7A5dCbE816e498b89aB752661904E2F56c485"
+    category: market
     kind: lending_spoke
     aliases: [aave v4, aave v4 spoke, spoke]
     note: "TransparentUpgradeableProxy -> SpokeInstance. The Spoke pulls tokens from msg.sender, so it is the approve spender; withdraw and borrow pay msg.sender"

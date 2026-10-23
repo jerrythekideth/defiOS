@@ -9,9 +9,12 @@ sources:
 contracts:
   WETH:
     address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    category: token
     kind: erc20
     decimals: 18
     aliases: [weth, wrapped ether, wrapped eth]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
 
 reads:
   - id: weth_balance

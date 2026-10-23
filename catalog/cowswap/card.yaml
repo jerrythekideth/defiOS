@@ -12,19 +12,23 @@ sources:
 contracts:
   order_signer:
     address: "0x23dA9AdE38E4477b23770DeD512fD37b12381FAB"
+    category: adapter
     kind: library_delegatecall
     aliases: [cow order signer, cowswap signer]
     note: "called with DELEGATECALL from the Avatar so the Avatar pre-signs the order"
   gpv2_vault_relayer:
     address: "0xC92E8bdf79f0507f65a392b0ab4667716BFE0110"
+    category: spender
     kind: spender
     aliases: [cow relayer, GPv2VaultRelayer]
   composable_cow:
     address: "0xfdaFc9d1902f4e0b84f65F49f244b32b31013b74"
+    category: adapter
     kind: twap
     note: "TWAP orders only; not used by the plain swap action"
   sell_token:
     address: $book.sell_token
+    category: token
     kind: erc20
     note: "example sell token for checks; set cowswap.sell_token in book_vars (e.g. the WETH address)"
 

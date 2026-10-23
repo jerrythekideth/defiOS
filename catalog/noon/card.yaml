@@ -10,14 +10,20 @@ sources:
 contracts:
   USN:
     address: "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+    category: token
     kind: erc20
     aliases: [usn, noon usd]
   sUSN:
     address: "0xE24a3DC889621612422A64E6388927901608B91D"
+    category: staking
     kind: erc4626
     aliases: [susn, staked usn]
+    edges: { underlying: USN }
+    proofs:
+      - { read: "asset() returns (address)", expect: USN }
   withdrawal_handler:
     address: "0x0DaBc0D9B270c9B0C4C77AaCeAa712b56D0F9178"
+    category: queue
     kind: queue
     aliases: [noon withdrawal handler]
 

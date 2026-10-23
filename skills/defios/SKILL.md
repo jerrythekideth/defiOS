@@ -29,6 +29,7 @@ SAFE_API_KEY, PROPOSER_PRIVATE_KEY for a delegate key) and `books/` (generated).
 | what do we hold / what can we do | `defios --format text state` | quote block number, holdings, allowed / unsafe / missing |
 | is X permitted / what's missing | `defios check --protocol <card>` | per-action status; for `unsafe` name the free parameter |
 | which pool / which contract is X | read `catalog/<card>/card.yaml` aliases | give the address from the card only |
+| what is 0x… / is this address ours / an alert names an address | `defios --format text whois 0x… [--chain N]` | quote protocol, contract and status; act only on `verified`; `unknown` = not in the registry, never guess |
 | review this permission .json | `defios decode file.json` | list each change in plain words; flag `PASS[NONE]`, unpinned receivers, delegatecall |
 | something is broken | `defios doctor` | report failing checks |
 | do X (lend, stake, wrap, …) | `defios plan <card or alias>.<action>=<amount> [more steps] [--token T]` | show each call's `line`, the warnings; if REFUSED, explain each `why` and stop |
@@ -55,3 +56,5 @@ when you need to parse the output.
 8. No open approvals: `plan` approves the exact amount and sets it back to 0
    in the same transaction. Don't use `--keep-approvals` without the human's
    OK; for orders filled later (CoW, Avant), revoke once filled.
+9. Any address that did not come from `plan` goes through `defios whois`
+   first; act only on `verified` records.

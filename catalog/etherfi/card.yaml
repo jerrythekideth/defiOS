@@ -12,50 +12,73 @@ sources:
 contracts:
   weETH:
     address: "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee"
+    category: token
     kind: erc20
     decimals: 18
     aliases: [weETH, wrapped eETH, ether.fi weeth]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
   deposit_adapter:
     address: "0xcfC6d9Bd7411962Bfe7145451A7EF71A24b6A7A2"
+    category: adapter
     kind: adapter
     aliases: [ether.fi deposit adapter]
   weeth_withdraw_adapter:
     address: "0xFbfe6b9cEe0E555Bad7e2E7309EFFC75200cBE38"
+    category: adapter
     kind: adapter
     aliases: [ether.fi weETH withdraw adapter]
   withdraw_request_nft:
     address: "0x7d5706f6ef3F89B3951E23e557CDFBC3239D4E2c"
+    category: queue
     kind: erc721_queue
     aliases: [ether.fi withdraw request nft, WithdrawRequestNFT]
   liquid_eth:
     address: "0xf0bb20865277aBd641a307eCe5Ee04E79073416C"
+    category: vault
     kind: boring_vault
     aliases: [liquid eth, veda liquid eth, liquidETH, ether.fi liquid]
     note: "Veda BoringVault; also the share token and the spender for deposit approvals"
   liquid_eth_teller:
     address: "0x9AA79C84b79816ab920bBcE20f8f74557B514734"
+    category: router
     kind: teller
     aliases: [liquid eth teller, layerzero teller]
+    edges: { receipt: liquid_eth }
+    proofs:
+      - { read: "vault() returns (address)", expect: liquid_eth }
   liquid_eth_queue:
     address: "0x0D2dF071207E18Ca8638b4f04E98c53155eC2cE0"
+    category: queue
     kind: queue
     aliases: [BoringOnChainQueue, liquid eth withdraw queue]
+    proofs:
+      - { read: "boringVault() returns (address)", expect: liquid_eth }
   WETH: { ref: weth.WETH }
   liquid_usd:
     address: "0x08c6F91e2B681FaF5e17227F2a44C307b3C1364C"
+    category: vault
     kind: boring_vault
     aliases: [liquid usd, veda liquid usd, liquidUSD]
     note: "Veda BoringVault; share token and deposit spender (it pulls the asset)"
   liquid_usd_teller:
     address: "0x4DE413a26fC24c3FC27Cc983be70aA9c5C299387"
+    category: router
     kind: teller
     aliases: [liquid usd teller]
+    edges: { receipt: liquid_usd }
+    proofs:
+      - { read: "vault() returns (address)", expect: liquid_usd }
   liquid_usd_queue:
     address: "0x38FC1BA73b7ED289955a07d9F11A85b6E388064A"
+    category: queue
     kind: queue
     aliases: [liquid usd withdraw queue]
+    proofs:
+      - { read: "boringVault() returns (address)", expect: liquid_usd }
   liquid_usd_solver:
     address: "0x92b10e02825986bAc2375BdACaFA3e89E3f612aA"
+    category: keeper
     kind: solver
     note: "BoringSolver; boringRedeemSolve / boringRedeemSelfSolve are not needed (Veda solves the queue)"
   USDC: { ref: stablecoins.USDC }

@@ -1,0 +1,657 @@
+{
+ "_meta": {
+  "1": {
+   "block": 26256728,
+   "checked": "2026-10-23"
+  },
+  "999": {
+   "block": 49327489,
+   "checked": "2026-10-23"
+  }
+ },
+ "1:0x0000000f2eb9f69274678c76222b35eec7588a65": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == stablecoins.USDC",
+    "ok": true,
+    "got": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+   }
+  ],
+  "implementation": "0xc84a6E01BFF58996540F1ABC22355A9DFE0d78DC",
+  "admin": "0x12E81209d180fF0b3FBFbfe8fA9fFdb5990e1073"
+ },
+ "1:0x056b269eb1f75477a8666ae8c7fe01b64dd55ecc": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == stablecoins.USDC",
+    "ok": true,
+    "got": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+   }
+  ],
+  "implementation": "0xd1F1c3F485063712873285BF4ef25ab068f13893",
+  "admin": "0x41C838664a9C64905537fF410333B9f5964cC596"
+ },
+ "1:0x08c6f91e2b681faf5e17227f2a44c307b3c1364c": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x09becf6e5e297825d19aa14ed6081a03524532d7": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x0d2df071207e18ca8638b4f04e98c53155ec2ce0": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.boringVault() == liquid_eth",
+    "ok": true,
+    "got": "0xf0bb20865277aBd641a307eCe5Ee04E79073416C"
+   }
+  ]
+ },
+ "1:0x0dabc0d9b270c9b0c4c77aaceaa712b56d0f9178": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x1e33e98af620f1d563fcd3cfd3c75ace841204ef": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x232128844e5af56fd4b3f8bf97e08ab477282ab5": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == ftUSD",
+    "ok": true,
+    "got": "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
+   }
+  ],
+  "implementation": "0xD940d531b983557884B31fD915A1Df97bebe6e09"
+ },
+ "1:0x23da9ade38e4477b23770ded512fd37b12381fab": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x28b5a0e9c621a5badaa536219b3a228c8168cf5d": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x555E272506C06e7E559d57418563742AFE363ec8",
+  "admin": "0xa820A620F638114F3Eb45df87382383322dDBC49"
+ },
+ "1:0x2a66f992bf227d2e50ef19edd21503c3c4f3f682": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.USD3() == USD3",
+    "ok": true,
+    "got": "0x056B269Eb1f75477a8666ae8C7fE01b64dD55eCc"
+   },
+   {
+    "id": "$self.sUSD3() == sUSD3",
+    "ok": true,
+    "got": "0xf689555121e529Ff0463e191F9Bd9d1E496164a7"
+   }
+  ]
+ },
+ "1:0x2f39d218133afab8f2b819b1066c7e434ad94e9e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "pool.ADDRESSES_PROVIDER() == $self",
+    "ok": true,
+    "got": "0x2f39d218133AFaB8F2B819B1066c7E434Ad94E9e"
+   }
+  ]
+ },
+ "1:0x333333330522f64ee8d0b3039c460b41670e3404": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x38fc1ba73b7ed289955a07d9f11a85b6e388064a": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.boringVault() == liquid_usd",
+    "ok": true,
+    "got": "0x08c6F91e2B681FaF5e17227F2a44C307b3C1364C"
+   }
+  ]
+ },
+ "1:0x39ff6d21204b919441d17bef61d19181870835a2": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.weth9() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ]
+ },
+ "1:0x3a43aec53490cb9fa922847385d82fe25d0e9de7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ],
+  "implementation": "0xc84a6E01BFF58996540F1ABC22355A9DFE0d78DC",
+  "admin": "0xd460CF1f5D764acAD1c3276c549EE5f1BB671473"
+ },
+ "1:0x3d7d6fdf07ee548b939a80edbc9b2256d0cdc003": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == ethena.USDe",
+    "ok": true,
+    "got": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3"
+   }
+  ],
+  "implementation": "0xE894055CA1c73648927e225f3Ca38Ed48E30210b",
+  "admin": "0x30A17d6bcBDBF1579d6fBBA453aCf776D01fbb50"
+ },
+ "1:0x3f04b65ddbd87f9ce0a2e7eb24d80e7fb87625b5": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x750136aC021a7149F0EE38141d0bA920Cca1fC5D",
+  "admin": "0x21071E0f9D600571Ffe47873e95fffF2FAc9141c"
+ },
+ "1:0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ]
+ },
+ "1:0x4691c475be804fa85f91c2d6d0adf03114de3093": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x06d4ACC104b974cD99bF22e4572f48A051E59670"
+ },
+ "1:0x48f9e38f3070ad8945dfeae3fa70987722e3d89c": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x4c9edd5852cd905f086c759e8383e09bff1e68b3": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ]
+ },
+ "1:0x4de413a26fc24c3fc27cc983be70aa9c5c299387": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.vault() == liquid_usd",
+    "ok": true,
+    "got": "0x08c6F91e2B681FaF5e17227F2a44C307b3C1364C"
+   }
+  ]
+ },
+ "1:0x5086bf358635b81d8c47c66d1c8b9e567db70c72": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0xb5276c436F65913Cd5332DE745d04feDEb4a21D4"
+ },
+ "1:0x5dd1a7a369e8273371d2dbf9d83356057088082c": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x65a44528e8868166401ea08b549e19552af589db": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x470B9D44674b4706bAD670DaBb75ccFDa90D2743",
+  "admin": "0xBfA0344ee901C425F42039D203526cC26bC186fD"
+ },
+ "1:0x68025a4615407993a680102b08a23a61d11c657c": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0xe0Dba0eF9A1C7dF2a94386A3187e9360e1B2c1fb",
+  "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F"
+ },
+ "1:0x68102ff5406475881462880a8da3c9bc9181ad6c": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.coins(0) == FT",
+    "ok": true,
+    "got": "0x5DD1A7A369e8273371d2DBf9d83356057088082c"
+   },
+   {
+    "id": "$self.coins(1) == ftUSD",
+    "ok": true,
+    "got": "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
+   }
+  ]
+ },
+ "1:0x6b175474e89094c44da98b954eedeac495271d0f": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ]
+ },
+ "1:0x6c3ea9036406852006290770bedfcaba0e23a0e8": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ]
+ },
+ "1:0x7945e45c2f39be3a0cbf467f3fae982c17cb4bf7": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x22f92940c5d053CCbAE47F88Fb51752CC04CaBaA",
+  "admin": "0x1aB502c0e1D4325773a01BdCc1AE57A79911F788"
+ },
+ "1:0x79c6c1ce5b12abcc3e407ce8c160ee1160250921": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.creditFacade() == credit_facade",
+    "ok": true,
+    "got": "0x9515AB9BB73A9642F1a93Ba7C2790e9d08227f9a"
+   }
+  ]
+ },
+ "1:0x7a6ad3753b51cb0161405e93645b5e1f95b6e50f": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x932a1d70A5E1c64a13dAa5a60564aCF5A2Ac0D11",
+  "admin": "0x83eB1f36AAdB97c9B88A473d1a299F42124cE9E0"
+ },
+ "1:0x7d5706f6ef3f89b3951e23e557cdfbc3239d4e2c": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x41617D01362770ebAAC10311aB899FBc8a4E4A7E"
+ },
+ "1:0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.stETH() == stETH",
+    "ok": true,
+    "got": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+   },
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ]
+ },
+ "1:0x85b78aca6deae198fbf201c82daf6ca21942acc6": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.token0() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   },
+   {
+    "id": "$self.token1() == lido.stETH",
+    "ok": true,
+    "got": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+   }
+  ],
+  "implementation": "0x850da2E21F1F71479E2A307EDab114777D9F6217",
+  "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F"
+ },
+ "1:0x871ab8e36cae9af35c6a3488b049965233deb7ed": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "addresses_provider.getPool() == $self",
+    "ok": true,
+    "got": "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2"
+   }
+  ],
+  "implementation": "0x728a138A4823392C2EFA55e028d434F526fE03CF"
+ },
+ "1:0x880a371ce2c5dbb2eb47ec0023b358e8ae80071b": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x889edc2edab5f40e902b864ad4d7ade8e412f9b1": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.STETH() == stETH",
+    "ok": true,
+    "got": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+   },
+   {
+    "id": "$self.WSTETH() == wstETH",
+    "ok": true,
+    "got": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"
+   }
+  ],
+  "implementation": "0xE42C659Dc09109566720EA8b2De186c2Be7D94D9",
+  "admin": "0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c"
+ },
+ "1:0x8aeb9453ef22cb38abc7a3af9c208f65c1bfe31e": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x92b10e02825986bac2375bdacafa3e89e3f612aa": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x9469470c9878bf3d6d0604831d9a3a366156f7ee": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x94e7a5dcbe816e498b89ab752661904e2f56c485": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0xABd0E26FE17BDe4F1f1187Ed8aA80C274E03D8b5",
+  "admin": "0xfFeAcCAd70f4393701272212dACD791c01957f7f"
+ },
+ "1:0x9515ab9bb73a9642f1a93ba7c2790e9d08227f9a": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.creditManager() == credit_manager",
+    "ok": true,
+    "got": "0x79C6C1ce5B12abCC3E407ce8C160eE1160250921"
+   }
+  ]
+ },
+ "1:0x9aa79c84b79816ab920bbce20f8f74557b514734": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.vault() == liquid_eth",
+    "ok": true,
+    "got": "0xf0bb20865277aBd641a307eCe5Ee04E79073416C"
+   }
+  ]
+ },
+ "1:0x9b74d3bd96f54de689cffdeb27ee34f68dff086d": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x0631AB29fE888205e3F7322983ba569e064fd23F",
+  "admin": "0xf32e7353DBA967c426A6F54F9a3baC7DBd26eee4"
+ },
+ "1:0x9d39a5de30e57443bff2a8307a4256c8797a3497": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == USDe",
+    "ok": true,
+    "got": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3"
+   },
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ]
+ },
+ "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ]
+ },
+ "1:0xa31deebb3680a3007120e74bcbdf4df36f042a40": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0xa7569a44f348d3d70d8ad5889e50f78e33d80d35": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == stablecoins.USDC",
+    "ok": true,
+    "got": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+   }
+  ],
+  "implementation": "0xfB2eBdeDc38a7d19080E44ab1D621bc9AfAD0695",
+  "admin": "0x84A317a45248d6d3f92F40102680fFEda2Ab95C0"
+ },
+ "1:0xa9d17f6d3285208280a1fd9b94479c62e0aaba64": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == lido.wstETH",
+    "ok": true,
+    "got": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"
+   }
+  ]
+ },
+ "1:0xaa48ecbc843cf7e9a29155d112b8cb27902bd23c": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x8852B132B72613a16f1E3960978a3d45c0A7c3C6"
+ },
+ "1:0xac771209ff2b71eecff6e85a9ad01db8ff2618b0": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0xae7ab96520de3a18e5e111b5eaab095312d7fe84": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0xaeec321a209964aabfff539807ae882917e7b4db": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0xeC0D8f0023ED5A9DA4A82E8C833c85903Ec4ea4F",
+  "admin": "0x849Fe95bC68b1a8Fc9d498C9b7f0259141C7c994"
+ },
+ "1:0xb8431779dd9d5753b5a7f66afa3c65abfd8c3fe1": {
+  "code": true,
+  "proofs": [],
+  "beacon": "0x49eE9b4865CBbF9ec8B142cdd4A5a65971F92542"
+ },
+ "1:0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ]
+ },
+ "1:0xc58d044404d8b14e953c115e67823784dea53d8f": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == ethena.USDe",
+    "ok": true,
+    "got": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3"
+   }
+  ],
+  "implementation": "0xe91869F96806b480dd61d57E17919068d35AC09C",
+  "admin": "0x89d2573471dc0bF81C7c553FFFC1e31cE9e75Bf1"
+ },
+ "1:0xc92e8bdf79f0507f65a392b0ab4667716bfe0110": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0xA6Ca0607190d03CF16fe6F2865Cf40c3D160ccf3"
+ },
+ "1:0xcfc6d9bd7411962bfe7145451a7ef71a24b6a7a2": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0xE774E19f087523EA316fCCb4B156169153f18b9d"
+ },
+ "1:0xda06ee2dacf9245aa80072a4407debdea0d7e341": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == avETH",
+    "ok": true,
+    "got": "0x9469470C9878bf3d6d0604831d9A3A366156f7EE"
+   }
+  ]
+ },
+ "1:0xda67b4284609d2d48e5d10cfac411572727dc1ed": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x79FD7FE2a8EbcAE47798321b2AC97107dF3de229",
+  "admin": "0x55f39512cb43111A13E8440ee3e3602e72628239"
+ },
+ "1:0xdac17f958d2ee523a2206206994597c13d831ec7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ]
+ },
+ "1:0xdbdc1ef57537e34680b898e1febd3d68c7389bcb": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == iUSD",
+    "ok": true,
+    "got": "0x48f9e38f3070AD8945DFEae3FA70987722E3D89c"
+   }
+  ]
+ },
+ "1:0xdc035d45d973e3ec169d2276ddab16f1e407384f": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0x1923DfeE706A8E78157416C29cBCCFDe7cdF4102"
+ },
+ "1:0xe24a3dc889621612422a64e6388927901608b91d": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == USN",
+    "ok": true,
+    "got": "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+   }
+  ],
+  "implementation": "0xeF2eA4250B7CE4D0aA9Ca70607ECeF278C6EAB15",
+  "admin": "0x1908284b50EE152C9f00c8E65a81fc1C4520BD81"
+ },
+ "1:0xe9b725010a9e419412ed67d0fa5f3a5f40159d32": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == stablecoins.USDC",
+    "ok": true,
+    "got": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+   }
+  ],
+  "implementation": "0xf2CD14F02B4fDc0D26681fBc7f60a11B8378f96D",
+  "admin": "0xB5fBf201A35327Ddd89986FfA60CF5A675B2bDbc"
+ },
+ "1:0xeb48218a4c35c814c7678cbcae88c6ee037f7625": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == ftUSD",
+    "ok": true,
+    "got": "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
+   }
+  ],
+  "implementation": "0xEa95e4636BaDc00881f8f73A0623B0fe8627B6da"
+ },
+ "1:0xf0bb20865277abd641a307ece5ee04e79073416c": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0xf1eee0957267b1a474323ff9cff7719e964969fa": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x0cF9a84BB9E916229F3037dc079eF418B97bb0cF",
+  "admin": "0xB3C902F8fA46d7985efaB885105ae2d7b4976827"
+ },
+ "1:0xf689555121e529ff0463e191f9bd9d1e496164a7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == USD3",
+    "ok": true,
+    "got": "0x056B269Eb1f75477a8666ae8C7fE01b64dD55eCc"
+   }
+  ],
+  "implementation": "0x6093d95f6C102163D19F5681E7D84997060BBAed",
+  "admin": "0xecda55c32966B00592Ed3922E386063e1Bc752c2"
+ },
+ "1:0xf7d85ec4e7710f71992752eac2111312e73e9c9c": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0xf47bb65Fb0886Be183dB541AfCE555345e3e1885"
+ },
+ "1:0xfb0a3cf9b019bfd8827443d131b235b3e0fc58d2": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.token0() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ],
+  "implementation": "0x6DB596b66FED6a9994e09EeD70b6d210F01705E5",
+  "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F"
+ },
+ "1:0xfbfe6b9cee0e555bad7e2e7309effc75200cbe38": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0xbe386B1Fb51ffAcAE0522a5dA099371cd4a2AAeA"
+ },
+ "1:0xfc807058a352b61aeef6a38e2d0fc3990225e772": {
+  "code": true,
+  "proofs": [],
+  "implementation": "0x0Ea5BdF736F84949563F1Ec66c79b9c047fb8965",
+  "admin": "0xec45EBDd0278ffBC9ce5731DC8E3a34dc8674c07"
+ },
+ "1:0xfdafc9d1902f4e0b84f65f49f244b32b31013b74": {
+  "code": true,
+  "proofs": []
+ },
+ "999:0x28da642f406bb5234a779ee0143c317d4d55fa27": {
+  "code": false,
+  "proofs": []
+ }
+}

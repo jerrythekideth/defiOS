@@ -11,19 +11,23 @@ sources:
 contracts:
   icl:
     address: "0x4691C475bE804Fa85f91c2D6D0aDf03114de3093"
+    category: vault
     kind: vault
     aliases: [re icl, insurance capital layer]
     note: "pulls the deposit token from msg.sender; KYC-gated (the Vault must be whitelisted)"
   reUSD:
     address: "0x5086bf358635B81D8C47C66d1C8b9E567Db70c72"
+    category: receipt
     kind: erc20
     aliases: [reusd]
   redemption_gateway:
     address: "0x8aEb9453EF22Cb38abC7a3Af9c208F65C1BfE31e"
+    category: router
     kind: router
     aliases: [re redemption gateway]
   instant_redemption:
     address: "0xa31deEbb3680A3007120e74bCbDf4df36F042A40"
+    category: router
     kind: redemption_module
     aliases: [re instant redemption]
     note: "pulls reUSD from the user: the reUSD approve spender for redeemInstant"

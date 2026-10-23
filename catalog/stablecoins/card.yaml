@@ -10,35 +10,53 @@ sources:
 contracts:
   USDC:
     address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+    category: token
     kind: erc20
     decimals: 6
     aliases: [usdc, usd coin]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
   USDT:
     address: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+    category: token
     kind: erc20
     decimals: 6
     aliases: [usdt, tether]
     note: "USDT's approve() reverts when changing a non-zero allowance to another non-zero value; approve 0 first"
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
   DAI:
     address: "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+    category: token
     kind: erc20
     decimals: 18
     aliases: [dai]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
   USDS:
     address: "0xdC035D45d973E3EC169d2276DDab16f1e407384F"
+    category: token
     kind: erc20
     decimals: 18
     aliases: [usds, sky dollar]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
   GHO:
     address: "0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f"
+    category: token
     kind: erc20
     decimals: 18
     aliases: [gho]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
   PYUSD:
     address: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8"
+    category: token
     kind: erc20
     decimals: 6
     aliases: [pyusd, paypal usd]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
 
 reads:
   - { id: usdc_balance, target: USDC, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR], decimals: 6 }

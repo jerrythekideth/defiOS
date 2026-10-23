@@ -9,19 +9,28 @@ sources:
 contracts:
   yoETH:
     address: "0x3A43AEC53490CB9Fa922847385D82fe25d0E9De7"
+    category: vault
     kind: erc4626_async_redeem
     aliases: [yoETH, yo eth, yo vault]
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { read: "asset() returns (address)", expect: weth.WETH }
   gateway:
     address: "0xF1EeE0957267b1A474323Ff9CfF7719E964969FA"
+    category: router
     kind: router
     aliases: [YoGateway, yo gateway]
     note: "Yo's own deposit entry point; every vault/receiver param must be pinned"
   WETH: { ref: weth.WETH }
   yoUSD:
     address: "0x0000000f2eB9f69274678c76222B35eEc7588a65"
+    category: vault
     kind: erc4626_async_redeem
     aliases: [yoUSD, yo usd]
     note: "YoVault: requestRedeem pays instantly when liquid, otherwise an operator's fulfillRedeem pays the receiver"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
   USDC: { ref: stablecoins.USDC }
 
 reads:

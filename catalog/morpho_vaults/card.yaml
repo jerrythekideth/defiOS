@@ -11,6 +11,7 @@ sources:
 contracts:
   vault:
     address: $book.vault
+    category: vault
     kind: erc4626
     aliases: [morpho vault, metamorpho]
     note: >
@@ -19,9 +20,11 @@ contracts:
       morpho/vaults/_ethInfo.ts list so a reviewed bundle exists for it.
   asset:
     address: $book.asset
+    category: token
     kind: erc20
   morpho_blue:
     address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
+    category: market
     kind: core
     note: "Morpho Blue singleton; vaults allocate into it. Not called directly by a depositor."
 

@@ -10,15 +10,23 @@ sources:
 contracts:
   router:
     address: "0x39ff6d21204B919441d17bef61D19181870835A2"
+    category: router
     kind: router
     aliases: [tokemak router, autopilot router, AutopilotRouter]
     note: "router redeem pulls autoUSD from msg.sender, so autoUSD is approved to the router"
+    proofs:
+      - { read: "weth9() returns (address)", expect: weth.WETH }
   autoUSD:
     address: "0xa7569A44f348d3D70d8ad5889e50F78E33d80D35"
+    category: vault
     kind: erc4626
     aliases: [autousd, tokemak autousd, autopool]
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
   rewarder:
     address: { read: "autoUSD.rewarder()" }
+    category: reward
     kind: rewarder
     note: "autoUSD's MainRewarder, read from the Autopool at plan time (not yet resolvable by the engine)"
   USDC: { ref: stablecoins.USDC }

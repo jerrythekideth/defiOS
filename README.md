@@ -106,6 +106,8 @@ your-permissions/           public or private audit trail of permission batches
 | `defios simulate [--batch b.json] [--calls calls.json] [--block N]` | starts `anvil --fork-url $RPC_URL`, impersonates the Roles owner (batch) and the Operator (calls), sends exactly what those Safes would send; reports per-tx success or the decoded revert (Roles `ConditionViolation` names the check), gas, the Vault's token deltas from Transfer logs and every allowance still open. `plan` and `permit` do this by themselves when `RPC_URL` and `anvil` are available (`--no-simulate` skips) |
 | `defios propose --file calls.json [--send]` | M2: wraps engine-built calls in `execTransactionWithRole` (MultiSend when several), picks a non-colliding Operator nonce, computes the SafeTxHash, signs as a delegate; prints everything (dry run) unless `--send` posts it to the Safe Transaction Service. Never signs as an owner, never executes |
 | `defios catalog` | lists and validates cards |
+| `defios whois 0x…` | what an address is, and whether it is verified (see `catalog/REGISTRY.md`) |
+| `defios registry verify` / `export` | re-run onchain proofs; write `catalog/index.json` for non-Python consumers |
 
 Global options: `--root <agent repo>`, `--vault <name>`, `--format both|json|text`,
 `--logs-file <json>` (offline replay), `--offline` (ignore `RPC_URL`).

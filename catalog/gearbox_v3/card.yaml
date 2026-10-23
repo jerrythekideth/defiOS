@@ -12,19 +12,28 @@ sources:
 contracts:
   kpkwstETH_pool:
     address: "0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64"
+    category: vault
     kind: erc4626
-    asset: lido.wstETH
     decimals: 18           # Gearbox v3 pool shares use the underlying's decimals
     aliases: [gearbox pool, gearbox wstETH pool, kpk gearbox, kpkwstETH, wstETH v3]
     defi_kit: "gearbox/deposit targets=[0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64]"
+    edges: { underlying: lido.wstETH }
+    proofs:
+      - { read: "asset() returns (address)", expect: lido.wstETH }
   credit_facade:
     address: "0x9515AB9BB73A9642F1a93Ba7C2790e9d08227f9a"
+    category: market
     kind: gearbox_credit_facade_v3_10
     aliases: [gearbox credit account, gearbox leverage, CA, credit facade]
+    proofs:
+      - { read: "creditManager() returns (address)", expect: credit_manager }
   credit_manager:
     address: "0x79C6C1ce5B12abCC3E407ce8C160eE1160250921"
+    category: spender
     kind: gearbox_credit_manager_v3
     note: "spender for collateral approvals; not called directly"
+    proofs:
+      - { read: "creditFacade() returns (address)", expect: credit_facade }
   wstETH: { ref: lido.wstETH }
   WETH: { ref: weth.WETH }
 
