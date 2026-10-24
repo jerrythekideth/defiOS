@@ -7,7 +7,7 @@ sources:
   - "selectors confirmed against public Roles permission batches (github.com/scytherxyz/permissions)"
   - "WithdrawRequestNFT implementation ABI (Blockscout, 0x41617D01362770ebAAC10311aB899FBc8a4E4A7E, read 2026-10-15)"
   - "BoringOnChainQueue verified ABI (Blockscout, read 2026-10-15)"
-  - "weETH address: karpatkey/defi-kit aave/aura pool info"
+  - "weETH address: onchain proof (Aave v3 getReservesList() contains it)"
 
 contracts:
   weETH:

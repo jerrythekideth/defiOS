@@ -24,8 +24,6 @@ every byte. Humans sign.
 > **M2 so far**: `plan` (intent → role-checked calls.json), `propose` (dry run by
 > default) and balance reads.
 > All cards are `status: draft`, `reviewed: false`.
->
-> What defi-kit covers and which card maps to it: [`catalog/DEFI_KIT.md`](catalog/DEFI_KIT.md).
 
 ## Quickstart
 
@@ -59,7 +57,6 @@ DeFi_os/                    public · this repo · no user data
 ├── defios/                 Python engine: roles/ (v2 adapter, v3 slot), sync, check, doctor, cli, mcp,
 │                           plan (intent -> calls.json), tx (MultiSend + execTransactionWithRole),
 │                           propose (Safe queue), balances
-├── scripts/defikit_map.py  regenerates catalog/DEFI_KIT.md + defi_kit.json from a defi-kit clone
 └── tests/                  offline tests (anonymized Roles v2 event fixture)
 
 your-agent/                 private · one per operator/agent
@@ -118,21 +115,16 @@ See [`catalog/SCHEMA.md`](catalog/SCHEMA.md). Cards (Ethereum mainnet):
 
 * ETH: lido, gearbox_v3, morpho_vaults, cowswap, weth, avant, origin_arm,
   etherfi (incl. Veda Liquid ETH and Liquid USD), yo (yoETH, yoUSD), makina.
+* Curators: kpk (Gearbox v3 pools, Morpho vaults, their admin Safes).
 * USD: stablecoins (USDC, USDT, DAI, USDS, GHO, PYUSD), ethena, aave_v3,
   aave_v4, strata, dialectic, infinifi, tokemak, upshift, noon, re,
   flying_tulip, threejane, cctp, liminal.
 
-Addresses come from
-[defi-kit](https://github.com/karpatkey/defi-kit) where it covers a protocol and
-from verified, already-used permissions otherwise; unknown ones are `TODO`.
-
-[`catalog/DEFI_KIT.md`](catalog/DEFI_KIT.md) (and `catalog/defi_kit.json`) maps
-every defi-kit protocol / action / parameter to a card, or "no card yet", and
-lists the DeFi_os protocols defi-kit does not cover. It records the defi-kit
-version and commit it was generated from. Regenerate it with
-`python scripts/defikit_map.py --defi-kit <path to a defi-kit clone>`;
-`python scripts/defikit_map.py --check` (and the test suite) checks every card's
-`defi_kit:` field against it.
+Every address is checked onchain where possible (`defios registry verify`):
+the protocol's own registry, or the contract reporting its counterpart
+(`asset()`, `pool()`, `owner()` …). Unknown ones are `TODO`. Curated vaults and
+pools live in their curator's card (e.g. `catalog/kpk`). How to add a protocol,
+pool or market: [`catalog/ADDING.md`](catalog/ADDING.md).
 
 ## Development
 

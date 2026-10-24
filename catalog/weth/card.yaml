@@ -4,7 +4,7 @@ chain_id: 1
 status: draft
 reviewed: false
 sources:
-  - "karpatkey/defi-kit sdk/eth-sdk/config.ts (contracts.mainnet.weth)"
+  - "address: onchain proof (Aave v3 getReservesList() contains it; Tokemak router weth9() and Origin ARM token0() return it)"
 
 contracts:
   WETH:

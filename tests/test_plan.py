@@ -133,7 +133,7 @@ def test_e2e_unwrap_stake_wrap_lend_from_lock(agent_dir):
     assert args(calls[7], ["address", "uint256"]) == (POOL.lower(), 0)
 
     lines = [c["line"] for s in p["steps"][:-1] for c in s["calls"]]
-    assert lines[-1] == "gearbox_v3.kpkwstETH_pool.deposit(assets=0.8 wstETH, receiver=the Vault)"
+    assert lines[-1] == "kpk.kpkwstETH.deposit(assets=0.8 wstETH, receiver=the Vault)"
     assert lines[1].endswith("sending 1 ETH")
 
     # the Operator tx preview is execTransactionWithRole(MultiSend(all eight calls))
@@ -303,7 +303,7 @@ def test_probe_refusal_and_onchain_decimals(catalog, vault):
 
 def test_card_plan_fields_validate(catalog):
     from defios.catalog import Card, validate_card
-    for ref in ("weth.WETH", "lido.stETH", "lido.wstETH", "gearbox_v3.kpkwstETH_pool"):
+    for ref in ("weth.WETH", "lido.stETH", "lido.wstETH", "kpk.kpkwstETH"):
         p, n = ref.split(".")
         assert catalog.contract_meta(p, n)["decimals"] == 18
     for proto, a in (("weth", "unwrap"), ("lido", "stake"), ("lido", "wrap"), ("gearbox_v3", "lend")):

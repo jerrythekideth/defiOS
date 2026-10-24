@@ -3,11 +3,8 @@ name: Lido (stETH, wstETH, withdrawal queue)
 chain_id: 1
 status: draft
 reviewed: false
-defi_kit: "lido/deposit"
 sources:
-  - "karpatkey/defi-kit sdk/eth-sdk/config.ts (contracts.mainnet.lido)"
-  - "karpatkey/defi-kit sdk/src/protocols/lido/index.ts (deposit bundle)"
-  - "karpatkey/defi-kit sdk/eth-sdk/abis/mainnet/lido/*.json (signatures)"
+  - "addresses: onchain proofs in catalog/registry.proofs.json (wstETH.stETH(), WithdrawalQueue STETH()/WSTETH(), Aave v3 reserve list)"
 
 contracts:
   stETH:

@@ -283,7 +283,7 @@ def _names(catalog: Catalog, vault: VaultConfig) -> dict[str, str]:
 
 
 def describe_call(bc: BuiltCall, names: dict[str, str], amounts: dict[int, str]) -> tuple[str, dict]:
-    """('lido.wstETH.approve(spender=gearbox_v3.kpkwstETH_pool, amount=0.8 wstETH)', {decoded args})."""
+    """('lido.wstETH.approve(spender=kpk.kpkwstETH, amount=0.8 wstETH)', {decoded args})."""
     assert bc.sig is not None and bc.data is not None and bc.target is not None
     vals = abi_decode([p.type for p in bc.sig.params], bc.data[4:]) if bc.sig.params else ()
     args, parts = {}, []

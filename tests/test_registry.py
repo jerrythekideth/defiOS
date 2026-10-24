@@ -52,8 +52,8 @@ def test_status_rules(reg):
     pool = reg.by_ref["aave_v3.pool"]
     st = reg.status(pool, results)
     assert st.status == "verified" and "independent sources" in st.why[0]
-    # lido's card was built from defi-kit: its implicit source kind is defi-kit, not card
-    assert reg.by_ref["lido.stETH"].sources[0][0] == "defi-kit"
+    # every record's implicit source is the card itself
+    assert reg.by_ref["lido.stETH"].sources[0][0] == "card"
     # one source and no proof result: unverified
     assert reg.status(reg.by_ref["ethena.sUSDe"], {"_meta": {}}).status == "unverified"
 

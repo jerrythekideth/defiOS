@@ -1,8 +1,8 @@
 {
  "_meta": {
   "1": {
-   "block": 26256926,
-   "checked": "2026-10-23"
+   "block": 26265522,
+   "checked": "2026-10-24"
   }
  },
  "1:0x0000000f2eb9f69274678c76222b35eec7588a65": {
@@ -15,7 +15,9 @@
    }
   ],
   "implementation": "0xc84a6E01BFF58996540F1ABC22355A9DFE0d78DC",
-  "admin": "0x12E81209d180fF0b3FBFbfe8fA9fFdb5990e1073"
+  "admin": "0x12E81209d180fF0b3FBFbfe8fA9fFdb5990e1073",
+  "name": "yoUSD",
+  "symbol": "yoUSD"
  },
  "1:0x056b269eb1f75477a8666ae8c7fe01b64dd55ecc": {
   "code": true,
@@ -27,11 +29,15 @@
    }
   ],
   "implementation": "0xd1F1c3F485063712873285BF4ef25ab068f13893",
-  "admin": "0x41C838664a9C64905537fF410333B9f5964cC596"
+  "admin": "0x41C838664a9C64905537fF410333B9f5964cC596",
+  "name": "USD3",
+  "symbol": "USD3"
  },
  "1:0x08c6f91e2b681faf5e17227f2a44c307b3c1364c": {
   "code": true,
-  "proofs": []
+  "proofs": [],
+  "name": "Ether.Fi Liquid USD",
+  "symbol": "liquidUSD"
  },
  "1:0x09becf6e5e297825d19aa14ed6081a03524532d7": {
   "code": true,
@@ -53,7 +59,9 @@
  },
  "1:0x1e33e98af620f1d563fcd3cfd3c75ace841204ef": {
   "code": true,
-  "proofs": []
+  "proofs": [],
+  "name": "Dialectic USD",
+  "symbol": "DUSD"
  },
  "1:0x232128844e5af56fd4b3f8bf97e08ab477282ab5": {
   "code": true,
@@ -64,7 +72,9 @@
     "got": "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
    }
   ],
-  "implementation": "0xD940d531b983557884B31fD915A1Df97bebe6e09"
+  "implementation": "0xD940d531b983557884B31fD915A1Df97bebe6e09",
+  "name": "Stable Staked Flying Tulip USD",
+  "symbol": "ssftUSD"
  },
  "1:0x23da9ade38e4477b23770ded512fd37b12381fab": {
   "code": true,
@@ -113,7 +123,9 @@
  },
  "1:0x333333330522f64ee8d0b3039c460b41670e3404": {
   "code": true,
-  "proofs": []
+  "proofs": [],
+  "name": "Jane",
+  "symbol": "JANE"
  },
  "1:0x38fc1ba73b7ed289955a07d9f11a85b6e388064a": {
   "code": true,
@@ -145,7 +157,9 @@
    }
   ],
   "implementation": "0xc84a6E01BFF58996540F1ABC22355A9DFE0d78DC",
-  "admin": "0xd460CF1f5D764acAD1c3276c549EE5f1BB671473"
+  "admin": "0xd460CF1f5D764acAD1c3276c549EE5f1BB671473",
+  "name": "yoETH",
+  "symbol": "yoETH"
  },
  "1:0x3d7d6fdf07ee548b939a80edbc9b2256d0cdc003": {
   "code": true,
@@ -157,7 +171,9 @@
    }
   ],
   "implementation": "0xE894055CA1c73648927e225f3Ca38Ed48E30210b",
-  "admin": "0x30A17d6bcBDBF1579d6fBBA453aCf776D01fbb50"
+  "admin": "0x30A17d6bcBDBF1579d6fBBA453aCf776D01fbb50",
+  "name": "Strata Senior USDe",
+  "symbol": "srUSDe"
  },
  "1:0x3f04b65ddbd87f9ce0a2e7eb24d80e7fb87625b5": {
   "code": true,
@@ -173,7 +189,9 @@
     "ok": true,
     "got": "67 addresses"
    }
-  ]
+  ],
+  "name": "Gho Token",
+  "symbol": "GHO"
  },
  "1:0x4691c475be804fa85f91c2d6d0adf03114de3093": {
   "code": true,
@@ -182,7 +200,9 @@
  },
  "1:0x48f9e38f3070ad8945dfeae3fa70987722e3d89c": {
   "code": true,
-  "proofs": []
+  "proofs": [],
+  "name": "infiniFi USD",
+  "symbol": "iUSD"
  },
  "1:0x4c9edd5852cd905f086c759e8383e09bff1e68b3": {
   "code": true,
@@ -192,7 +212,9 @@
     "ok": true,
     "got": "67 addresses"
    }
-  ]
+  ],
+  "name": "USDe",
+  "symbol": "USDe"
  },
  "1:0x4de413a26fc24c3fc27cc983be70aa9c5c299387": {
   "code": true,
@@ -207,23 +229,43 @@
  "1:0x5086bf358635b81d8c47c66d1c8b9e567db70c72": {
   "code": true,
   "proofs": [],
-  "implementation": "0xb5276c436F65913Cd5332DE745d04feDEb4a21D4"
+  "implementation": "0xb5276c436F65913Cd5332DE745d04feDEb4a21D4",
+  "name": "Re Protocol Deposit Token",
+  "symbol": "reUSD"
+ },
+ "1:0x5dbf760b4fd0cddde0366b33aeb338b2a6d77725": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ],
+  "name": "KPK ETH Yield",
+  "symbol": "KPK_ETH_Yield"
  },
  "1:0x5dd1a7a369e8273371d2dbf9d83356057088082c": {
   "code": true,
-  "proofs": []
+  "proofs": [],
+  "name": "Flying Tulip",
+  "symbol": "FT"
  },
  "1:0x65a44528e8868166401ea08b549e19552af589db": {
   "code": true,
   "proofs": [],
   "implementation": "0x470B9D44674b4706bAD670DaBb75ccFDa90D2743",
-  "admin": "0xBfA0344ee901C425F42039D203526cC26bC186fD"
+  "admin": "0xBfA0344ee901C425F42039D203526cC26bC186fD",
+  "name": "Strata Senior NUSD",
+  "symbol": "srNUSD"
  },
  "1:0x68025a4615407993a680102b08a23a61d11c657c": {
   "code": true,
   "proofs": [],
   "implementation": "0xe0Dba0eF9A1C7dF2a94386A3187e9360e1B2c1fb",
-  "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F"
+  "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F",
+  "name": "WETH ARM",
+  "symbol": "ARM-WETH"
  },
  "1:0x68102ff5406475881462880a8da3c9bc9181ad6c": {
   "code": true,
@@ -238,7 +280,9 @@
     "ok": true,
     "got": "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
    }
-  ]
+  ],
+  "name": "Flying Tulip Pool",
+  "symbol": "FT/ftUSD"
  },
  "1:0x6b175474e89094c44da98b954eedeac495271d0f": {
   "code": true,
@@ -248,7 +292,9 @@
     "ok": true,
     "got": "67 addresses"
    }
-  ]
+  ],
+  "name": "Dai Stablecoin",
+  "symbol": "DAI"
  },
  "1:0x6c3ea9036406852006290770bedfcaba0e23a0e8": {
   "code": true,
@@ -258,7 +304,9 @@
     "ok": true,
     "got": "67 addresses"
    }
-  ]
+  ],
+  "name": "PayPal USD",
+  "symbol": "PYUSD"
  },
  "1:0x7945e45c2f39be3a0cbf467f3fae982c17cb4bf7": {
   "code": true,
@@ -274,7 +322,8 @@
     "ok": true,
     "got": "0x9515AB9BB73A9642F1a93Ba7C2790e9d08227f9a"
    }
-  ]
+  ],
+  "name": "Tier #I"
  },
  "1:0x7a6ad3753b51cb0161405e93645b5e1f95b6e50f": {
   "code": true,
@@ -285,7 +334,19 @@
  "1:0x7d5706f6ef3f89b3951e23e557cdfbc3239d4e2c": {
   "code": true,
   "proofs": [],
-  "implementation": "0x41617D01362770ebAAC10311aB899FBc8a4E4A7E"
+  "implementation": "0x41617D01362770ebAAC10311aB899FBc8a4E4A7E",
+  "name": "Withdraw Request NFT",
+  "symbol": "WithdrawRequestNFT"
+ },
+ "1:0x7e43df1c1c5a2245858b60d4655fda83704e4171": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "KPK_USDC_Yield.curator() == $self",
+    "ok": true,
+    "got": "0x7E43Df1c1c5A2245858b60D4655fDA83704e4171"
+   }
+  ]
  },
  "1:0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0": {
   "code": true,
@@ -300,7 +361,9 @@
     "ok": true,
     "got": "67 addresses"
    }
-  ]
+  ],
+  "name": "Wrapped liquid staked Ether 2.0",
+  "symbol": "wstETH"
  },
  "1:0x85b78aca6deae198fbf201c82daf6ca21942acc6": {
   "code": true,
@@ -317,11 +380,15 @@
    }
   ],
   "implementation": "0x850da2E21F1F71479E2A307EDab114777D9F6217",
-  "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F"
+  "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F",
+  "name": "Lido ARM",
+  "symbol": "ARM-WETH-stETH"
  },
  "1:0x871ab8e36cae9af35c6a3488b049965233deb7ed": {
   "code": true,
-  "proofs": []
+  "proofs": [],
+  "name": "Dialectic ETH",
+  "symbol": "DETH"
  },
  "1:0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2": {
   "code": true,
@@ -353,11 +420,38 @@
    }
   ],
   "implementation": "0xE42C659Dc09109566720EA8b2De186c2Be7D94D9",
-  "admin": "0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c"
+  "admin": "0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c",
+  "name": "Lido: stETH Withdrawal NFT",
+  "symbol": "unstETH"
  },
  "1:0x8aeb9453ef22cb38abc7a3af9c208f65c1bfe31e": {
   "code": true,
   "proofs": []
+ },
+ "1:0x8b884f80b3b839f52b6ce168f133e7a5d1f0a537": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "KPK_ETH_Yield.owner() == $self",
+    "ok": true,
+    "got": "0x8b884f80B3B839F52b6cE168f133e7a5D1f0A537"
+   },
+   {
+    "id": "KPK_USDC_Yield.owner() == $self",
+    "ok": true,
+    "got": "0x8b884f80B3B839F52b6cE168f133e7a5D1f0A537"
+   }
+  ]
+ },
+ "1:0x9008d19f58aabd9ed0d60971565aa8510560ab41": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "order_signer.signing() == $self",
+    "ok": true,
+    "got": "0x9008D19f58AAbD9eD0D60971565AA8510560ab41"
+   }
+  ]
  },
  "1:0x92b10e02825986bac2375bdacafa3e89e3f612aa": {
   "code": true,
@@ -367,7 +461,7 @@
   "code": true,
   "proofs": [
    {
-    "id": "credit_manager.pool() == $self",
+    "id": "gearbox_v3.credit_manager.pool() == $self",
     "ok": true,
     "got": "0x9396DCbf78fc526bb003665337C5E73b699571EF"
    },
@@ -376,11 +470,15 @@
     "ok": true,
     "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
    }
-  ]
+  ],
+  "name": "WETH Market",
+  "symbol": "kpkWETH"
  },
  "1:0x9469470c9878bf3d6d0604831d9a3a366156f7ee": {
   "code": true,
-  "proofs": []
+  "proofs": [],
+  "name": "avETH",
+  "symbol": "avETH"
  },
  "1:0x94e7a5dcbe816e498b89ab752661904e2f56c485": {
   "code": true,
@@ -412,7 +510,9 @@
   "code": true,
   "proofs": [],
   "implementation": "0x0631AB29fE888205e3F7322983ba569e064fd23F",
-  "admin": "0xf32e7353DBA967c426A6F54F9a3baC7DBd26eee4"
+  "admin": "0xf32e7353DBA967c426A6F54F9a3baC7DBd26eee4",
+  "name": "limUSD",
+  "symbol": "limUSD"
  },
  "1:0x9d39a5de30e57443bff2a8307a4256c8797a3497": {
   "code": true,
@@ -427,7 +527,9 @@
     "ok": true,
     "got": "67 addresses"
    }
-  ]
+  ],
+  "name": "Staked USDe",
+  "symbol": "sUSDe"
  },
  "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": {
   "code": true,
@@ -437,7 +539,9 @@
     "ok": true,
     "got": "67 addresses"
    }
-  ]
+  ],
+  "name": "USD Coin",
+  "symbol": "USDC"
  },
  "1:0xa31deebb3680a3007120e74bcbdf4df36f042a40": {
   "code": true,
@@ -453,7 +557,9 @@
    }
   ],
   "implementation": "0xfB2eBdeDc38a7d19080E44ab1D621bc9AfAD0695",
-  "admin": "0x84A317a45248d6d3f92F40102680fFEda2Ab95C0"
+  "admin": "0x84A317a45248d6d3f92F40102680fFEda2Ab95C0",
+  "name": "Tokemak autoUSD",
+  "symbol": "autoUSD"
  },
  "1:0xa9d17f6d3285208280a1fd9b94479c62e0aaba64": {
   "code": true,
@@ -463,7 +569,9 @@
     "ok": true,
     "got": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"
    }
-  ]
+  ],
+  "name": "wstETH v3",
+  "symbol": "kpkwstETH"
  },
  "1:0xaa48ecbc843cf7e9a29155d112b8cb27902bd23c": {
   "code": true,
@@ -476,7 +584,9 @@
  },
  "1:0xae7ab96520de3a18e5e111b5eaab095312d7fe84": {
   "code": true,
-  "proofs": []
+  "proofs": [],
+  "name": "Liquid staked Ether 2.0",
+  "symbol": "stETH"
  },
  "1:0xaeec321a209964aabfff539807ae882917e7b4db": {
   "code": true,
@@ -493,7 +603,9 @@
  "1:0xb8431779dd9d5753b5a7f66afa3c65abfd8c3fe1": {
   "code": true,
   "proofs": [],
-  "beacon": "0x49eE9b4865CBbF9ec8B142cdd4A5a65971F92542"
+  "beacon": "0x49eE9b4865CBbF9ec8B142cdd4A5a65971F92542",
+  "name": "Security Module: Dialectic USD",
+  "symbol": "smDUSD"
  },
  "1:0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb": {
   "code": true,
@@ -507,7 +619,9 @@
     "ok": true,
     "got": "67 addresses"
    }
-  ]
+  ],
+  "name": "Wrapped Ether",
+  "symbol": "WETH"
  },
  "1:0xc58d044404d8b14e953c115e67823784dea53d8f": {
   "code": true,
@@ -519,11 +633,19 @@
    }
   ],
   "implementation": "0xe91869F96806b480dd61d57E17919068d35AC09C",
-  "admin": "0x89d2573471dc0bF81C7c553FFFC1e31cE9e75Bf1"
+  "admin": "0x89d2573471dc0bF81C7c553FFFC1e31cE9e75Bf1",
+  "name": "Strata Junior USDe",
+  "symbol": "jrUSDe"
  },
  "1:0xc92e8bdf79f0507f65a392b0ab4667716bfe0110": {
   "code": true,
-  "proofs": []
+  "proofs": [
+   {
+    "id": "settlement.vaultRelayer() == $self",
+    "ok": true,
+    "got": "0xC92E8bdf79f0507f65a392b0ab4667716BFE0110"
+   }
+  ]
  },
  "1:0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": {
   "code": true,
@@ -534,12 +656,26 @@
     "got": "67 addresses"
    }
   ],
-  "implementation": "0xA6Ca0607190d03CF16fe6F2865Cf40c3D160ccf3"
+  "implementation": "0xA6Ca0607190d03CF16fe6F2865Cf40c3D160ccf3",
+  "name": "Wrapped eETH",
+  "symbol": "weETH"
  },
  "1:0xcfc6d9bd7411962bfe7145451a7ef71a24b6a7a2": {
   "code": true,
   "proofs": [],
   "implementation": "0xE774E19f087523EA316fCCb4B156169153f18b9d"
+ },
+ "1:0xd5cce260e7a755ddf0fb9cdf06443d593aaeaa13": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == stablecoins.USDC",
+    "ok": true,
+    "got": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+   }
+  ],
+  "name": "KPK USDC Yield",
+  "symbol": "KPK_USDC_Yield"
  },
  "1:0xda06ee2dacf9245aa80072a4407debdea0d7e341": {
   "code": true,
@@ -549,13 +685,17 @@
     "ok": true,
     "got": "0x9469470C9878bf3d6d0604831d9A3A366156f7EE"
    }
-  ]
+  ],
+  "name": "Staked avETH",
+  "symbol": "savETH"
  },
  "1:0xda67b4284609d2d48e5d10cfac411572727dc1ed": {
   "code": true,
   "proofs": [],
   "implementation": "0x79FD7FE2a8EbcAE47798321b2AC97107dF3de229",
-  "admin": "0x55f39512cb43111A13E8440ee3e3602e72628239"
+  "admin": "0x55f39512cb43111A13E8440ee3e3602e72628239",
+  "name": "USN",
+  "symbol": "USN"
  },
  "1:0xdac17f958d2ee523a2206206994597c13d831ec7": {
   "code": true,
@@ -565,7 +705,9 @@
     "ok": true,
     "got": "67 addresses"
    }
-  ]
+  ],
+  "name": "Tether USD",
+  "symbol": "USDT"
  },
  "1:0xdbdc1ef57537e34680b898e1febd3d68c7389bcb": {
   "code": true,
@@ -575,7 +717,9 @@
     "ok": true,
     "got": "0x48f9e38f3070AD8945DFEae3FA70987722E3D89c"
    }
-  ]
+  ],
+  "name": "Staked infiniFi USD",
+  "symbol": "siUSD"
  },
  "1:0xdc035d45d973e3ec169d2276ddab16f1e407384f": {
   "code": true,
@@ -586,7 +730,9 @@
     "got": "67 addresses"
    }
   ],
-  "implementation": "0x1923DfeE706A8E78157416C29cBCCFDe7cdF4102"
+  "implementation": "0x1923DfeE706A8E78157416C29cBCCFDe7cdF4102",
+  "name": "USDS Stablecoin",
+  "symbol": "USDS"
  },
  "1:0xe24a3dc889621612422a64e6388927901608b91d": {
   "code": true,
@@ -598,7 +744,19 @@
    }
   ],
   "implementation": "0xeF2eA4250B7CE4D0aA9Ca70607ECeF278C6EAB15",
-  "admin": "0x1908284b50EE152C9f00c8E65a81fc1C4520BD81"
+  "admin": "0x1908284b50EE152C9f00c8E65a81fc1C4520BD81",
+  "name": "Staked USN",
+  "symbol": "sUSN"
+ },
+ "1:0xe5aec7d0e795456f90cebefba56470f0e5dfc075": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "KPK_ETH_Yield.curator() == $self",
+    "ok": true,
+    "got": "0xE5aEC7D0E795456F90ceBefBa56470F0E5dfC075"
+   }
+  ]
  },
  "1:0xe9b725010a9e419412ed67d0fa5f3a5f40159d32": {
   "code": true,
@@ -610,7 +768,9 @@
    }
   ],
   "implementation": "0xf2CD14F02B4fDc0D26681fBc7f60a11B8378f96D",
-  "admin": "0xB5fBf201A35327Ddd89986FfA60CF5A675B2bDbc"
+  "admin": "0xB5fBf201A35327Ddd89986FfA60CF5A675B2bDbc",
+  "name": "Upshift Core USDC",
+  "symbol": "coreUSDC"
  },
  "1:0xeb48218a4c35c814c7678cbcae88c6ee037f7625": {
   "code": true,
@@ -621,11 +781,15 @@
     "got": "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
    }
   ],
-  "implementation": "0xEa95e4636BaDc00881f8f73A0623B0fe8627B6da"
+  "implementation": "0xEa95e4636BaDc00881f8f73A0623B0fe8627B6da",
+  "name": "Staked Flying Tulip USD",
+  "symbol": "sftUSD"
  },
  "1:0xf0bb20865277abd641a307ece5ee04e79073416c": {
   "code": true,
-  "proofs": []
+  "proofs": [],
+  "name": "Ether.Fi Liquid ETH",
+  "symbol": "liquidETH"
  },
  "1:0xf1eee0957267b1a474323ff9cff7719e964969fa": {
   "code": true,
@@ -643,12 +807,16 @@
    }
   ],
   "implementation": "0x6093d95f6C102163D19F5681E7D84997060BBAed",
-  "admin": "0xecda55c32966B00592Ed3922E386063e1Bc752c2"
+  "admin": "0xecda55c32966B00592Ed3922E386063e1Bc752c2",
+  "name": "sUSD3",
+  "symbol": "sUSD3"
  },
  "1:0xf7d85ec4e7710f71992752eac2111312e73e9c9c": {
   "code": true,
   "proofs": [],
-  "implementation": "0xf47bb65Fb0886Be183dB541AfCE555345e3e1885"
+  "implementation": "0xf47bb65Fb0886Be183dB541AfCE555345e3e1885",
+  "name": "Flying Tulip USD",
+  "symbol": "ftUSD"
  },
  "1:0xfb0a3cf9b019bfd8827443d131b235b3e0fc58d2": {
   "code": true,
@@ -660,7 +828,9 @@
    }
   ],
   "implementation": "0x6DB596b66FED6a9994e09EeD70b6d210F01705E5",
-  "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F"
+  "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F",
+  "name": "Ether.fi ARM",
+  "symbol": "ARM-WETH-eETH"
  },
  "1:0xfbfe6b9cee0e555bad7e2e7309effc75200cbe38": {
   "code": true,
@@ -671,7 +841,9 @@
   "code": true,
   "proofs": [],
   "implementation": "0x0Ea5BdF736F84949563F1Ec66c79b9c047fb8965",
-  "admin": "0xec45EBDd0278ffBC9ce5731DC8E3a34dc8674c07"
+  "admin": "0xec45EBDd0278ffBC9ce5731DC8E3a34dc8674c07",
+  "name": "Strata Junior NUSD",
+  "symbol": "jrNUSD"
  },
  "1:0xfdafc9d1902f4e0b84f65f49f244b32b31013b74": {
   "code": true,

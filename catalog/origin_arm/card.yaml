@@ -30,7 +30,7 @@ contracts:
     address: "0x68025A4615407993A680102b08a23A61D11C657C"
     category: vault
     kind: arm_lp_vault
-    aliases: [multi asset arm, origin multi-asset arm]
+    aliases: [ARM-WETH, multi asset arm, origin multi-asset arm]
   WETH: { ref: weth.WETH }
 
 reads:
