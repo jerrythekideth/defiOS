@@ -11,9 +11,25 @@ sources:
 contracts:
   pool:
     address: "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2"
+    category: market
     kind: lending_pool
     aliases: [aave pool, aave v3, aave v3 pool]
     note: "Pool proxy; also the spender for supply/repay approvals"
+    sources:
+      - "address-book: bgd-labs/aave-address-book AaveV3Ethereum.POOL"
+      - "explorer: Blockscout verified InitializableImmutableAdminUpgradeabilityProxy -> PoolInstance, tagged 'Aave: Pool V3' (checked 2026-10-23)"
+    proofs:
+      - { from: addresses_provider, read: "getPool() returns (address)", expect: $self }
+  addresses_provider:
+    address: "0x2f39d218133AFaB8F2B819B1066c7E434Ad94E9e"
+    category: config
+    kind: registry
+    aliases: [aave v3 addresses provider, PoolAddressesProvider]
+    note: "Aave's own registry for the market: getPool(), getPriceOracle(), getACLManager(). Not called by any action"
+    sources:
+      - "address-book: bgd-labs/aave-address-book AaveV3Ethereum.POOL_ADDRESSES_PROVIDER"
+    proofs:
+      - { from: pool, read: "ADDRESSES_PROVIDER() returns (address)", expect: $self }
   USDC: { ref: stablecoins.USDC }
   USDT: { ref: stablecoins.USDT }
   DAI: { ref: stablecoins.DAI }

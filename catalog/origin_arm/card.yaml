@@ -10,15 +10,25 @@ sources:
 contracts:
   LidoARM:
     address: "0x85B78AcA6Deae198fBF201c82DAF6Ca21942acc6"
+    category: vault
     kind: arm_lp_vault
     aliases: [lido arm, origin lido arm, ARM-WETH-stETH]
     note: "proxy; the ARM contract is also the LP token"
+    edges: { underlying: [weth.WETH, lido.stETH] }
+    proofs:
+      - { read: "token0() returns (address)", expect: weth.WETH }
+      - { read: "token1() returns (address)", expect: lido.stETH }
   EtherFiARM:
     address: "0xfB0A3CF9B019BFd8827443d131b235B3E0FC58d2"
+    category: vault
     kind: arm_lp_vault
     aliases: [etherfi arm, origin etherfi arm, ARM-WETH-eETH]
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { read: "token0() returns (address)", expect: weth.WETH }
   MultiAssetARM:
     address: "0x68025A4615407993A680102b08a23A61D11C657C"
+    category: vault
     kind: arm_lp_vault
     aliases: [multi asset arm, origin multi-asset arm]
   WETH: { ref: weth.WETH }

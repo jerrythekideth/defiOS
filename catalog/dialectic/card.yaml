@@ -10,10 +10,12 @@ sources:
 contracts:
   DUSD:
     address: "0x1e33E98aF620F1D563fcD3cfd3C75acE841204ef"
+    category: token
     kind: erc20
     aliases: [dusd]
   smDUSD:
     address: "0xb8431779dd9d5753b5a7F66afa3C65ABFD8c3fe1"
+    category: staking
     kind: security_module
     aliases: [smdusd, dialectic security module]
     note: "startCooldown mints a cooldown receipt NFT to `receiver`; redeem pays the receipt's current owner and requires msg.sender to own it"

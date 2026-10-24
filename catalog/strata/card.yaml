@@ -11,29 +11,41 @@ sources:
 contracts:
   srUSDe:
     address: "0x3d7d6fdf07EE548B939A80edbc9B2256d0cdc003"
+    category: vault
     kind: tranche
     aliases: [srusde, strata senior usde]
+    edges: { underlying: ethena.USDe }
+    proofs:
+      - { read: "asset() returns (address)", expect: ethena.USDe }
   jrUSDe:
     address: "0xC58D044404d8B14e953C115E67823784dEA53d8F"
+    category: vault
     kind: tranche
     aliases: [jrusde, strata junior usde]
+    edges: { underlying: ethena.USDe }
+    proofs:
+      - { read: "asset() returns (address)", expect: ethena.USDe }
   srNUSD:
     address: "0x65a44528e8868166401eA08b549E19552af589dB"
+    category: vault
     kind: tranche
     aliases: [srnusd, strata senior nusd]
     note: "NUSD market wound down after the 2026 sNUSD exploit; redeem only"
   jrNUSD:
     address: "0xFC807058A352b61aEef6A38e2D0fC3990225E772"
+    category: vault
     kind: tranche
     aliases: [jrnusd, strata junior nusd]
     note: "junior NUSD tranche was written down to ~0 after the sNUSD exploit; redeem only"
   depositor_usde:
     address: "0x7a6AD3753b51cB0161405e93645B5E1f95b6e50F"
+    category: router
     kind: router
     aliases: [strata depositor, strata usde depositor, TrancheDepositor]
     note: "proxy -> TrancheDepositor; pulls the asset from msg.sender, so it is the approve spender"
   depositor_nusd:
     address: "0x7945e45c2F39bE3A0cbF467F3fae982C17CB4Bf7"
+    category: router
     kind: router
     note: "NUSD TrancheDepositor; deposits into the NUSD tranches are off (market wound down)"
   USDe: { ref: ethena.USDe }

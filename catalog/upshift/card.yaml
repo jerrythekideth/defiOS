@@ -11,14 +11,19 @@ sources:
 contracts:
   router:
     address: "0xAC771209FF2b71EECfF6E85a9AD01db8Ff2618B0"
+    category: router
     kind: router
     aliases: [upshift router, upshift swaprouter]
     note: "pulls the asset from msg.sender: approve the router"
   coreUSDC:
     address: "0xE9B725010A9E419412ed67d0fA5f3A5f40159D32"
+    category: vault
     kind: tokenized_account
     aliases: [coreusdc, upshift core usdc]
     note: "redeem is instant when lagDuration = 0, otherwise claimable later via claim()"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
   USDC: { ref: stablecoins.USDC }
 
 reads:

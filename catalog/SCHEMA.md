@@ -48,6 +48,10 @@ contracts:
   depositor: { address: TODO }          # unknown: never guess an address
 ```
 
+Registry fields on a contract (`category` is required for every fixed address;
+`chain_id`, `sources`, `edges`, `proofs`, `status` are optional) are described in
+[`REGISTRY.md`](REGISTRY.md).
+
 `address: TODO` is allowed (with a comment saying what is missing). The engine
 skips any action that needs an unresolved address and reports it.
 

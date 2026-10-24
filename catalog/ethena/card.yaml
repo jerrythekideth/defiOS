@@ -10,15 +10,23 @@ sources:
 contracts:
   USDe:
     address: "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3"
+    category: token
     kind: erc20
     decimals: 18
     aliases: [usde, ethena usd]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
   sUSDe:
     address: "0x9D39A5DE30e57443BfF2A8307A4256c8797A3497"
+    category: staking
     kind: erc4626_cooldown
     decimals: 18
     aliases: [susde, staked usde]
     note: "ERC-4626 with a cooldown: redeem/withdraw are disabled while cooldownDuration > 0; use cooldownShares then unstake"
+    edges: { underlying: USDe }
+    proofs:
+      - { read: "asset() returns (address)", expect: USDe }
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
 
 ui_routes_to_avoid:
   - ui: "Ethena app swap / buy USDe"

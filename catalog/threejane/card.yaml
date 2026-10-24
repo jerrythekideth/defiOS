@@ -11,20 +11,33 @@ sources:
 contracts:
   helper:
     address: "0x2A66F992bF227D2e50eF19EDD21503C3c4F3f682"
+    category: router
     kind: router
     aliases: [3jane helper, threejane helper]
     note: "pulls USDC on deposit and USD3 on redeem: approve the helper"
+    proofs:
+      - { read: "USD3() returns (address)", expect: USD3 }
+      - { read: "sUSD3() returns (address)", expect: sUSD3 }
   USD3:
     address: "0x056B269Eb1f75477a8666ae8C7fE01b64dD55eCc"
+    category: vault
     kind: erc4626
     aliases: [usd3, 3jane usd3]
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
   sUSD3:
     address: "0xf689555121e529Ff0463e191F9Bd9d1E496164a7"
+    category: staking
     kind: erc4626_cooldown
     aliases: [susd3]
     note: "hop = true deposits land here; no exit is scoped, so keep hop = false"
+    edges: { underlying: USD3 }
+    proofs:
+      - { read: "asset() returns (address)", expect: USD3 }
   JANE:
     address: "0x333333330522F64EE8d0b3039c460b41670e3404"
+    category: reward
     kind: erc20
     aliases: [jane]
     note: "rewards token; exit by selling on CoW"

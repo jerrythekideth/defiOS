@@ -10,16 +10,29 @@ sources:
 contracts:
   spoke:
     address: "0xaeEC321A209964aAbffF539807AE882917E7b4Db"
+    category: bridge
     kind: bridge
     aliases: [liminal spoke, liminal]
+    edges: { bridges_to: keeper }
+    proofs:
+      - { read: "burnToken() returns (address)", expect: USDC }
   limUSD:
     address: "0x9B74D3BD96f54dE689CfFDeb27EE34f68dFf086d"
+    category: receipt
     kind: oft
     aliases: [limusd, liminal usd]
-  hyperevm_hub:
+  keeper:
     address: "0x28dA642f406bB5234A779Ee0143c317D4d55Fa27"
-    kind: remote
-    note: "the Liminal hub on HyperEVM (chain 999), not a mainnet contract; it is the CCTP mintRecipient of deposits"
+    category: keeper
+    eoa: true
+    kind: keeper
+    aliases: [liminal keeper, hyperevm_hub]
+    note: >-
+      Liminal's keeper EOA (the spoke's keeper()). Deposits are CCTP-minted to it on HyperEVM (domain 19);
+      Liminal's backend then deposits into the vault and sends shares to the beneficiary named in hookData.
+      Deposits trust this key until the shares arrive. The same key receives the ETH fee on mainnet
+    proofs:
+      - { from: spoke, read: "keeper() returns (address)", expect: $self }
   USDC: { ref: stablecoins.USDC }
 
 actions:
@@ -34,7 +47,7 @@ actions:
         sig: "deposit(uint256 amount, bytes32 mintRecipient, bytes32 destinationCaller, uint256 maxFee, uint32 minFinalityThreshold, bytes32 referral, bytes hookData)"
         args:
           amount: $amount
-          mintRecipient: hyperevm_hub
+          mintRecipient: keeper
           destinationCaller: "0x0000000000000000000000000000000000000000000000000000000000000000"
           maxFee: $max_fee
           minFinalityThreshold: $finality
