@@ -1,0 +1,15 @@
+protocol: curve
+name: Curve (pools, gauges, CRV, veCRV)
+chain_id: 1
+status: draft
+reviewed: false
+adding: >
+  Curve pools are found through the MetaRegistry (address_provider.get_address(7)).
+  A new pool is keyed by its LP symbol() (characters other than letters, digits and _
+  become _, the symbol goes in `aliases`), with get_lp_token(pool) from meta_registry
+  as proof. Old pools whose LP is a separate token get two records (pool + LP).
+  A gauge is `<lp key>_gauge` with lp_token() and meta_registry get_gauge(pool) as proofs.
+
+contracts: {}
+
+actions: {}

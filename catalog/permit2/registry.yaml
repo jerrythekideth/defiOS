@@ -1,0 +1,12 @@
+contracts:
+  Permit2:
+    address: "0x000000000022D473030F116dDEE9F6B43aC78BA3"
+    category: spender
+    kind: permit2
+    aliases: ["permit2", "uniswap permit2"]
+    note: "Shared token-approval contract; Balancer v3 routers pull tokens through it (approve Permit2, then Permit2.approve(token, router, amount, expiration))"
+    sources:
+      - "docs: https://docs.uniswap.org/contracts/v4/deployments"
+      - "explorer: https://etherscan.io/address/0x000000000022D473030F116dDEE9F6B43aC78BA3#code"
+    proofs:
+      - { from: balancer_v3.router, read: "getPermit2() returns (address)", expect: $self }

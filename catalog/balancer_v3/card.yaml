@@ -1,0 +1,14 @@
+protocol: balancer_v3
+name: Balancer v3 (Vault, routers, pools)
+chain_id: 1
+status: draft
+reviewed: false
+adding: >
+  Balancer v3: the Vault holds the tokens, users go through the Router or the
+  CompositeLiquidityRouter (both pull via Permit2). A pool is keyed by its BPT symbol()
+  (sanitized, symbol in `aliases`) with getVault() = vault as proof; its gauge is
+  `<pool key>_gauge` with lp_token() as proof.
+
+contracts: {}
+
+actions: {}

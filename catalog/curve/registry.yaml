@@ -1,0 +1,494 @@
+contracts:
+  address_provider:
+    address: "0x5ffe7FB82894076ECB99A30D6A32e969e6e35E98"
+    category: config
+    kind: curve_address_provider
+    aliases: ["curve address provider", "addressprovider"]
+    note: "Curve's address index: get_address(id) returns the current contract for each id (7 = MetaRegistry)"
+    sources:
+      - "docs: https://docs.curve.finance/user/deployments"
+      - "explorer: https://etherscan.io/address/0x5ffe7FB82894076ECB99A30D6A32e969e6e35E98#code"
+  meta_registry:
+    address: "0xF98B45FA17DE75FB1aD0e7aFD971b0ca00e379fC"
+    category: config
+    kind: curve_meta_registry
+    aliases: ["curve metaregistry", "metaregistry"]
+    note: "Pool index across all Curve factories: get_lp_token / get_gauge / get_pool_from_lp_token"
+    sources:
+      - "docs: https://docs.curve.finance/user/deployments"
+    proofs:
+      - { from: address_provider, read: "get_address(uint256 id) returns (address)", args: [7], expect: $self }
+  CRV:
+    address: "0xD533a949740bb3306d119CC777fa900bA034cd52"
+    name: "Curve DAO Token"
+    category: governance
+    kind: erc20
+    decimals: 18
+    aliases: ["crv", "curve dao token"]
+    sources:
+      - "docs: https://docs.curve.finance/user/deployments"
+    proofs:
+      - { from: address_provider, read: "get_address(uint256 id) returns (address)", args: [19], expect: $self }
+      - { from: minter, read: "token() returns (address)", expect: $self }
+  minter:
+    address: "0xd061D61a4d941c39E5453435B6345Dc261C2fcE0"
+    category: minter
+    kind: curve_minter
+    aliases: ["curve minter", "crv minter"]
+    note: "mint(gauge) claims CRV emissions for a gauge deposit"
+    sources:
+      - "docs: https://docs.curve.finance/user/deployments"
+    edges: { reads_from: gauge_controller }
+    proofs:
+      - { from: steCRV_gauge, read: "minter() returns (address)", expect: $self }
+      - { read: "controller() returns (address)", expect: gauge_controller }
+  gauge_controller:
+    address: "0x2F50D538606Fa9EDD2B11E2446BEb18C9D5846bB"
+    category: config
+    kind: curve_gauge_controller
+    aliases: ["curve gauge controller"]
+    sources:
+      - "docs: https://docs.curve.finance/user/deployments"
+    proofs:
+      - { from: minter, read: "controller() returns (address)", expect: $self }
+      - { read: "voting_escrow() returns (address)", expect: veCRV }
+      - { read: "token() returns (address)", expect: CRV }
+  veCRV:
+    address: "0x5f3b5DfEb7B28CDbD7FAba78963EE202a494e2A2"
+    name: "Vote-escrowed CRV"
+    category: staking
+    kind: voting_escrow
+    decimals: 18
+    aliases: ["vecrv", "vote-escrowed crv"]
+    note: "CRV vote-escrow lock (non-transferable)"
+    sources:
+      - "docs: https://docs.curve.finance/user/deployments"
+    edges: { underlying: CRV }
+    proofs:
+      - { from: gauge_controller, read: "voting_escrow() returns (address)", expect: $self }
+      - { read: "token() returns (address)", expect: CRV }
+  steth_pool:
+    address: "0xDC24316b9AE028F1497c275EB9192a3Ea0f67022"
+    category: market
+    kind: curve_pool
+    aliases: ["curve steth pool", "steth pool"]
+    note: "Curve pool (Curve.fi ETH/stETH); its LP token is the separate contract steCRV"
+    sources:
+      - "explorer: https://etherscan.io/address/0xDC24316b9AE028F1497c275EB9192a3Ea0f67022#code"
+    edges: { receipt: steCRV }
+    proofs:
+      - { from: meta_registry, read: "get_pool_from_lp_token(address lp) returns (address)", args: [steCRV], expect: $self }
+  steCRV:
+    address: "0x06325440D014e39736583c165C2963BA99fAf14E"
+    name: "Curve.fi ETH/stETH"
+    category: receipt
+    kind: curve_lp
+    decimals: 18
+    aliases: ["curve.fi eth/steth"]
+    note: "LP token of steth_pool"
+    sources:
+      - "explorer: https://etherscan.io/address/0x06325440D014e39736583c165C2963BA99fAf14E#code"
+    edges: { underlying: steth_pool }
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [steth_pool], expect: $self }
+  steCRV_gauge:
+    address: "0x182B723a58739a9c974cFDB385ceaDb237453c28"
+    name: "Curve.fi steCRV Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["steCRV-gauge", "steCRV gauge"]
+    note: "Curve gauge for steCRV: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x182B723a58739a9c974cFDB385ceaDb237453c28#code"
+    edges: { underlying: steCRV }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: steCRV }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [steth_pool], expect: $self }
+  threepool:
+    address: "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7"
+    category: market
+    kind: curve_pool
+    aliases: ["3pool", "curve 3pool"]
+    note: "Curve pool (Curve.fi DAI/USDC/USDT); its LP token is the separate contract 3Crv"
+    sources:
+      - "explorer: https://etherscan.io/address/0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7#code"
+    edges: { receipt: 3Crv }
+    proofs:
+      - { from: meta_registry, read: "get_pool_from_lp_token(address lp) returns (address)", args: [3Crv], expect: $self }
+  3Crv:
+    address: "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490"
+    name: "Curve.fi DAI/USDC/USDT"
+    category: receipt
+    kind: curve_lp
+    decimals: 18
+    aliases: ["curve.fi dai/usdc/usdt"]
+    note: "LP token of threepool"
+    sources:
+      - "explorer: https://etherscan.io/address/0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490#code"
+    edges: { underlying: threepool }
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [threepool], expect: $self }
+  3Crv_gauge:
+    address: "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["3Crv gauge"]
+    note: "Curve gauge for 3Crv: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A#code"
+    edges: { underlying: 3Crv }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: 3Crv }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [threepool], expect: $self }
+  cvxeth_pool:
+    address: "0xB576491F1E6e5E62f1d8F26062Ee822B40B0E0d4"
+    category: market
+    kind: curve_pool
+    aliases: ["curve cvx-eth pool", "cvx-eth pool"]
+    note: "Curve pool (Curve CVX-ETH); its LP token is the separate contract crvCVXETH"
+    sources:
+      - "explorer: https://etherscan.io/address/0xB576491F1E6e5E62f1d8F26062Ee822B40B0E0d4#code"
+    edges: { receipt: crvCVXETH }
+    proofs:
+      - { from: meta_registry, read: "get_pool_from_lp_token(address lp) returns (address)", args: [crvCVXETH], expect: $self }
+  crvCVXETH:
+    address: "0x3A283D9c08E8b55966afb64C515f5143cf907611"
+    name: "Curve CVX-ETH"
+    category: receipt
+    kind: curve_lp
+    decimals: 18
+    aliases: ["curve cvx-eth"]
+    note: "LP token of cvxeth_pool"
+    sources:
+      - "explorer: https://etherscan.io/address/0x3A283D9c08E8b55966afb64C515f5143cf907611#code"
+    edges: { underlying: cvxeth_pool }
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [cvxeth_pool], expect: $self }
+  crvCVXETH_gauge:
+    address: "0x7E1444BA99dcdFfE8fBdb42C02F0005D14f13BE1"
+    name: "Curve.fi crvCVXETH Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["crvCVXETH-gauge", "crvCVXETH gauge"]
+    note: "Curve gauge for crvCVXETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x7E1444BA99dcdFfE8fBdb42C02F0005D14f13BE1#code"
+    edges: { underlying: crvCVXETH }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: crvCVXETH }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [cvxeth_pool], expect: $self }
+  osETH_rETH:
+    address: "0xe080027Bd47353b5D1639772b4a75E9Ed3658A0d"
+    name: "osETH/rETH"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["osETH-rETH", "oseth/reth"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0xe080027Bd47353b5D1639772b4a75E9Ed3658A0d#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  osETH_rETH_gauge:
+    address: "0x63037a4e3305d25D48BAED2022b8462b2807351c"
+    name: "Curve.fi osETH-rETH Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["osETH-rETH-gauge", "osETH-rETH gauge"]
+    note: "Curve gauge for osETH_rETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x63037a4e3305d25D48BAED2022b8462b2807351c#code"
+    edges: { underlying: osETH_rETH }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: osETH_rETH }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [osETH_rETH], expect: $self }
+  ETH_ETH:
+    address: "0x2c683fAd51da2cd17793219CC86439C1875c353e"
+    name: "ETH+/ETH"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["ETH+ETH", "eth+/eth"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0x2c683fAd51da2cd17793219CC86439C1875c353e#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  ETH_ETH_gauge:
+    address: "0xAD6D1a4B1B2F33712A8b18BeDc95c0A1f9832269"
+    name: "Curve.fi ETH+ETH Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["ETH+ETH-gauge", "ETH+ETH gauge"]
+    note: "Curve gauge for ETH_ETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0xAD6D1a4B1B2F33712A8b18BeDc95c0A1f9832269#code"
+    edges: { underlying: ETH_ETH }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: ETH_ETH }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [ETH_ETH], expect: $self }
+  stETH_ng_f:
+    address: "0x21E27a5E5513D6e65C4f830167390997aA84843a"
+    name: "Curve.fi Factory Pool: stETH-ng"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["stETH-ng-f", "curve.fi factory pool: steth-ng"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0x21E27a5E5513D6e65C4f830167390997aA84843a#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  stETH_ng_f_gauge:
+    address: "0x79F21BC30632cd40d2aF8134B469a0EB4C9574AA"
+    name: "Curve.fi stETH-ng-f Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["stETH-ng-f-gauge", "stETH-ng-f gauge"]
+    note: "Curve gauge for stETH_ng_f: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x79F21BC30632cd40d2aF8134B469a0EB4C9574AA#code"
+    edges: { underlying: stETH_ng_f }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: stETH_ng_f }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [stETH_ng_f], expect: $self }
+  OETH_WETH:
+    address: "0xcc7d5785AD5755B6164e21495E07aDb0Ff11C2A8"
+    name: "OETH/WETH"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["OETH/WETH", "oeth/weth"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0xcc7d5785AD5755B6164e21495E07aDb0Ff11C2A8#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  OETH_WETH_gauge:
+    address: "0x36cC1d791704445A5b6b9c36a667e511d4702F3f"
+    name: "Curve.fi OETH/WETH Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["OETH/WETH-gauge", "OETH/WETH gauge"]
+    note: "Curve gauge for OETH_WETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x36cC1d791704445A5b6b9c36a667e511d4702F3f#code"
+    edges: { underlying: OETH_WETH }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: OETH_WETH }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [OETH_WETH], expect: $self }
+  weeth_ng:
+    address: "0xDB74dfDD3BB46bE8Ce6C33dC9D82777BCFc3dEd5"
+    name: "weETH/WETH-ng"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["weeth-ng", "weeth/weth-ng"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0xDB74dfDD3BB46bE8Ce6C33dC9D82777BCFc3dEd5#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  weeth_ng_gauge:
+    address: "0x053df3e4D0CeD9a3Bf0494F97E83CE1f13BdC0E2"
+    name: "Curve.fi weeth-ng Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["weeth-ng-gauge", "weeth-ng gauge"]
+    note: "Curve gauge for weeth_ng: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x053df3e4D0CeD9a3Bf0494F97E83CE1f13BdC0E2#code"
+    edges: { underlying: weeth_ng }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: weeth_ng }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [weeth_ng], expect: $self }
+  crvUSDUSDT_f:
+    address: "0x390f3595bCa2Df7d23783dFd126427CCeb997BF4"
+    name: "Curve.fi Factory Plain Pool: crvUSD/USDT"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["crvUSDUSDT-f", "curve.fi factory plain pool: crvusd/usdt"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0x390f3595bCa2Df7d23783dFd126427CCeb997BF4#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  crvUSDUSDT_f_gauge:
+    address: "0x4e6bB6B7447B7B2Aa268C16AB87F4Bb48BF57939"
+    name: "Curve.fi crvUSDUSDT-f Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["crvUSDUSDT-f-gauge", "crvUSDUSDT-f gauge"]
+    note: "Curve gauge for crvUSDUSDT_f: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x4e6bB6B7447B7B2Aa268C16AB87F4Bb48BF57939#code"
+    edges: { underlying: crvUSDUSDT_f }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: crvUSDUSDT_f }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [crvUSDUSDT_f], expect: $self }
+  crvUSDUSDC_f:
+    address: "0x4DEcE678ceceb27446b35C672dC7d61F30bAD69E"
+    name: "Curve.fi Factory Plain Pool: crvUSD/USDC"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["crvUSDUSDC-f", "curve.fi factory plain pool: crvusd/usdc"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0x4DEcE678ceceb27446b35C672dC7d61F30bAD69E#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  crvUSDUSDC_f_gauge:
+    address: "0x95f00391cB5EebCd190EB58728B4CE23DbFa6ac1"
+    name: "Curve.fi crvUSDUSDC-f Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["crvUSDUSDC-f-gauge", "crvUSDUSDC-f gauge"]
+    note: "Curve gauge for crvUSDUSDC_f: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x95f00391cB5EebCd190EB58728B4CE23DbFa6ac1#code"
+    edges: { underlying: crvUSDUSDC_f }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: crvUSDUSDC_f }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [crvUSDUSDC_f], expect: $self }
+  crvUSDTWBTCWETH:
+    address: "0xf5f5B97624542D72A9E06f04804Bf81baA15e2B4"
+    name: "TricryptoUSDT"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["tricryptousdt"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0xf5f5B97624542D72A9E06f04804Bf81baA15e2B4#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  crvUSDTWBTCWETH_gauge:
+    address: "0xF29FfF074f5cF755b55FbB3eb10A29203ac91EA2"
+    name: "Curve.fi crvUSDTWBTCWETH Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["crvUSDTWBTCWETH-gauge", "crvUSDTWBTCWETH gauge"]
+    note: "Curve gauge for crvUSDTWBTCWETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0xF29FfF074f5cF755b55FbB3eb10A29203ac91EA2#code"
+    edges: { underlying: crvUSDTWBTCWETH }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: crvUSDTWBTCWETH }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [crvUSDTWBTCWETH], expect: $self }
+  BTCGHOETH:
+    address: "0x8a4f252812dFF2A8636E4F7EB249d8FC2E3bd77f"
+    name: "TricryptoGHO"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["tricryptogho"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0x8a4f252812dFF2A8636E4F7EB249d8FC2E3bd77f#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  BTCGHOETH_gauge:
+    address: "0x1E4B83f6bFE9dbeB6d5b92a5237E5c18a44176f4"
+    name: "Curve.fi BTCGHOETH Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["BTCGHOETH-gauge", "BTCGHOETH gauge"]
+    note: "Curve gauge for BTCGHOETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x1E4B83f6bFE9dbeB6d5b92a5237E5c18a44176f4#code"
+    edges: { underlying: BTCGHOETH }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: BTCGHOETH }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [BTCGHOETH], expect: $self }
+  USDeUSDC:
+    address: "0x02950460E2b9529D0E00284A5fA2d7bDF3fA4d72"
+    name: "USDe-USDC"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["usde-usdc"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0x02950460E2b9529D0E00284A5fA2d7bDF3fA4d72#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  USDeUSDC_gauge:
+    address: "0x04E80Db3f84873e4132B221831af1045D27f140F"
+    name: "Curve.fi USDeUSDC Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["USDeUSDC-gauge", "USDeUSDC gauge"]
+    note: "Curve gauge for USDeUSDC: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x04E80Db3f84873e4132B221831af1045D27f140F#code"
+    edges: { underlying: USDeUSDC }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: USDeUSDC }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [USDeUSDC], expect: $self }
+  MtEthena:
+    address: "0x167478921b907422F8E88B43C4Af2B8BEa278d3A"
+    name: "sDAI/sUSDe"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["sdai/susde"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0x167478921b907422F8E88B43C4Af2B8BEa278d3A#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  MtEthena_gauge:
+    address: "0x330Cfd12e0E97B0aDF46158D2A81E8Bd2985c6cB"
+    name: "Curve.fi MtEthena Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["MtEthena-gauge", "MtEthena gauge"]
+    note: "Curve gauge for MtEthena: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0x330Cfd12e0E97B0aDF46158D2A81E8Bd2985c6cB#code"
+    edges: { underlying: MtEthena }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: MtEthena }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [MtEthena], expect: $self }
+  RLUSD_USDC:
+    address: "0xD001aE433f254283FeCE51d4ACcE8c53263aa186"
+    name: "RLUSD/USDC"
+    category: market
+    kind: curve_pool
+    decimals: 18
+    aliases: ["RLUSD/USDC", "rlusd/usdc"]
+    note: "Curve pool; the pool contract is also its LP token"
+    sources:
+      - "explorer: https://etherscan.io/address/0xD001aE433f254283FeCE51d4ACcE8c53263aa186#code"
+    proofs:
+      - { from: meta_registry, read: "get_lp_token(address pool) returns (address)", args: [$self], expect: $self }
+  RLUSD_USDC_gauge:
+    address: "0xFc3212Bd9Ad9A28Da6B2bd50a2918969C126894F"
+    name: "Curve.fi RLUSD/USDC Gauge Deposit"
+    category: staking
+    kind: curve_gauge
+    decimals: 18
+    aliases: ["RLUSD/USDC-gauge", "RLUSD/USDC gauge"]
+    note: "Curve gauge for RLUSD_USDC: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+    sources:
+      - "explorer: https://etherscan.io/address/0xFc3212Bd9Ad9A28Da6B2bd50a2918969C126894F#code"
+    edges: { underlying: RLUSD_USDC }
+    proofs:
+      - { read: "lp_token() returns (address)", expect: RLUSD_USDC }
+      - { from: meta_registry, read: "get_gauge(address pool) returns (address)", args: [RLUSD_USDC], expect: $self }
