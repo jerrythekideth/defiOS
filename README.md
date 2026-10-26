@@ -1,4 +1,4 @@
-# DeFi_os
+# defiOS
 
 An agent-agnostic toolkit that lets any LLM agent operate a Safe ("Vault")
 through a [Zodiac Roles](https://github.com/gnosisguild/zodiac-modifier-roles)
