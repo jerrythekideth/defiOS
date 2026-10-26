@@ -10,6 +10,22 @@ The catalog has two layers:
 Agents ask the registry first (`defios whois 0x…`). Monitoring tools and
 non-Python agents load the static export `catalog/index.json`.
 
+## Where records live
+
+Records are contracts with a fixed address, written in either of two files
+of a protocol folder:
+
+* `catalog/<protocol>/card.yaml` `contracts:`: the hand-written contracts the
+  card's actions and reads use.
+* `catalog/<protocol>/registry.yaml` (optional): the rest of the protocol's
+  addresses (markets, vaults, tokens, admin Safes …). Its only top-level key is
+  `contracts:`, with the same fields as below. The engine merges it into the
+  card, so card refs (`aave_v3.aWETH`), `whois`, `verify` and `export` see one
+  map. A name defined in both files is an error, and a `registry.yaml` needs a
+  `card.yaml` next to it. A protocol with addresses and no actions has a
+  minimal card: `protocol`, `name`, `chain_id`, `status: draft`,
+  `reviewed: false`, `adding:`, `contracts: {}`, `actions: {}`.
+
 ## Record fields (on a card contract)
 
 ```yaml
