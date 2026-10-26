@@ -6,7 +6,7 @@ from click.testing import CliRunner
 from eth_abi import encode
 from eth_utils import keccak
 
-from defios.catalog import Catalog
+from defios.catalog import CardError, Catalog
 from defios.chain import CallReverted
 from defios.cli import main
 from defios.registry import CATEGORIES, INDEX_FILE, Registry, dump, load_results, verify
@@ -158,3 +158,78 @@ def test_registry_export_stdout():
     data = json.loads(r.output)
     assert data["schema"] == "defios.registry/1"
     assert "1:" + AAVE_POOL.lower() in data["deployments"]
+
+
+# ---- registry.yaml: imported records next to a hand-written card ---------- #
+DEMO = "0x1111111111111111111111111111111111111111"
+DEMO_CARD = """protocol: demo
+name: Demo
+chain_id: 1
+status: draft
+reviewed: false
+adding: "new reserves: aave_v3.pool getReservesList() lists them"
+contracts: {}
+actions: {}
+"""
+DEMO_REGISTRY = f"""contracts:
+  dUSD:
+    address: "{DEMO}"
+    name: "Demo USD"
+    category: token
+    kind: erc20
+    edges: {{ underlying: weth.WETH }}
+    proofs:
+      - {{ from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: {{ contains: $self }} }}
+"""
+
+
+def _demo_catalog(tmp_path, registry=DEMO_REGISTRY, card=DEMO_CARD):
+    d = tmp_path / "catalog"
+    shutil.copytree(CAT, d)
+    (d / "demo").mkdir()
+    (d / "demo" / "card.yaml").write_text(card)
+    (d / "demo" / "registry.yaml").write_text(registry)
+    return d
+
+
+def test_registry_yaml_merges_into_its_card(tmp_path):
+    d = _demo_catalog(tmp_path)
+    cat = Catalog.load(d)
+    assert "dUSD" in cat.cards["demo"].contracts
+    assert cat.resolve_contract("demo.dUSD", "aave_v3") == DEMO
+    reg = Registry.from_catalog(cat)
+    assert reg.errors == []
+    rec = reg.by_ref["demo.dUSD"]
+    assert rec.sources[0] == ("card", "catalog/demo/registry.yaml")
+    assert reg.by_ref["aave_v3.pool"].sources[0] == ("card", "catalog/aave_v3/card.yaml")
+    reserves = {(AAVE_POOL.lower(), keccak(text="getReservesList()")[:4].hex()): encode(["address[]"], [[DEMO]])}
+    res = verify(reg, {1: FakeRpc(1, reserves)}, [1])
+    assert reg.status(rec, res).status == "verified"
+
+
+def test_registry_yaml_name_also_in_card_is_an_error(tmp_path):
+    card = DEMO_CARD.replace("contracts: {}", f'contracts:\n  dUSD: {{ address: "{DEMO}", category: token }}')
+    d = _demo_catalog(tmp_path, card=card)
+    with pytest.raises(CardError, match="dUSD also defined in card.yaml"):
+        Catalog.load(d)
+
+
+def test_registry_yaml_takes_only_contracts(tmp_path):
+    d = _demo_catalog(tmp_path, registry=DEMO_REGISTRY + "actions: {}\n")
+    with pytest.raises(CardError, match="only a top-level `contracts:`"):
+        Catalog.load(d)
+    d2 = tmp_path / "orphan"
+    shutil.copytree(CAT, d2)
+    (d2 / "orphan").mkdir()
+    (d2 / "orphan" / "registry.yaml").write_text(DEMO_REGISTRY)
+    with pytest.raises(CardError, match="no card.yaml"):
+        Catalog.load(d2)
+
+
+def test_whois_and_export_see_registry_yaml(tmp_path):
+    d = _demo_catalog(tmp_path)
+    r = run(["--format", "json", "whois", DEMO, "--dir", str(d)])
+    m = json.loads(r.output)["matches"][0]
+    assert (m["protocol"], m["name"], m["category"]) == ("demo", "dUSD", "token")
+    r = run(["registry", "export", "--out", "-", "--dir", str(d)])
+    assert "1:" + DEMO.lower() in json.loads(r.output)["deployments"]

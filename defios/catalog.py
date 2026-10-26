@@ -162,11 +162,20 @@ def parse_signature(sig: str) -> Signature:
 # --------------------------------------------------------------------------- #
 
 
+REGISTRY_FILE = "registry.yaml"
+
+
 @dataclass
 class Card:
     protocol: str
     path: Path
     raw: dict
+    registry_path: Path | None = None              # catalog/<protocol>/registry.yaml, when present
+    registry_names: set = field(default_factory=set)  # contracts that came from it
+
+    def source_file(self, name: str) -> Path:
+        """The file a contract is written in: card.yaml or registry.yaml."""
+        return self.registry_path if name in self.registry_names else self.path
 
     @property
     def contracts(self) -> dict:
@@ -179,6 +188,23 @@ class Card:
     @property
     def reads(self) -> list:
         return self.raw.get("reads") or []
+
+
+def _merge_registry(card: Card, path: Path) -> None:
+    """Merge registry.yaml's `contracts:` into the card; a name in both files is an error."""
+    raw = yaml.safe_load(path.read_text()) or {}
+    if not isinstance(raw, dict) or set(raw) - {"contracts"}:
+        raise CardError(f"{path}: only a top-level `contracts:` map is allowed")
+    extra = raw.get("contracts") or {}
+    if not isinstance(extra, dict):
+        raise CardError(f"{path}: `contracts` must be a map")
+    contracts = card.raw.get("contracts") or {}
+    both = sorted(set(contracts) & set(extra))
+    if both:
+        raise CardError(f"{path}: {', '.join(both)} also defined in card.yaml")
+    card.raw["contracts"] = {**contracts, **extra}
+    card.registry_path = path
+    card.registry_names = set(extra)
 
 
 class Catalog:
@@ -194,7 +220,14 @@ class Catalog:
         for p in sorted(d.glob("*/card.yaml")):
             raw = yaml.safe_load(p.read_text()) or {}
             proto = raw.get("protocol") or p.parent.name
-            cards[proto] = Card(proto, p, raw)
+            card = Card(proto, p, raw)
+            reg = p.parent / REGISTRY_FILE
+            if reg.is_file():
+                _merge_registry(card, reg)
+            cards[proto] = card
+        for reg in sorted(d.glob(f"*/{REGISTRY_FILE}")):
+            if not (reg.parent / "card.yaml").is_file():
+                raise CardError(f"{reg}: no card.yaml next to it")
         return cls(cards)
 
     # ---- resolution ------------------------------------------------------

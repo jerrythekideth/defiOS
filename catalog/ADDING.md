@@ -19,9 +19,14 @@ provable onchain, so an agent can trust it without asking anyone.
 5. Add actions only for what you want an agent to do (see `SCHEMA.md`).
    A protocol with addresses and no actions is fine: `whois` can still name it.
 
+Addresses that no action or read uses go in `catalog/<protocol>/registry.yaml`
+(a top-level `contracts:` map, same fields), so `card.yaml` stays short and
+hand-written. See `REGISTRY.md`.
+
 ## 2. A pool, market or vault of an existing protocol
 
-Use the protocol's `adding:` field. In general:
+Use the protocol's `adding:` field and write the record in its
+`registry.yaml`. In general:
 
 | field | value |
 |---|---|

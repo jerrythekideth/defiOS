@@ -49,6 +49,10 @@ contracts:
   depositor: { address: TODO }          # unknown: never guess an address
 ```
 
+More contracts can live in `catalog/<protocol>/registry.yaml` (only a
+`contracts:` map); they are merged into the card's `contracts`, and a name in
+both files is an error.
+
 Registry fields on a contract (`category` is required for every fixed address;
 `chain_id`, `sources`, `edges`, `proofs`, `status` are optional) are described in
 [`REGISTRY.md`](REGISTRY.md).

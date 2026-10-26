@@ -25,7 +25,7 @@ def test_all_cards_present_and_valid(catalog):
 
 def test_addresses_are_checksummed_or_todo(catalog):
     for card in catalog.cards.values():
-        text = card.path.read_text()
+        text = card.path.read_text() + (card.registry_path.read_text() if card.registry_path else "")
         for a in re.findall(r"0x[0-9a-fA-F]{40}", text):
             assert a == to_checksum_address(a), (card.protocol, a)
 

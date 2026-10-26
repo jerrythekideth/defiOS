@@ -152,9 +152,9 @@ class Registry:
         records, errors = [], []
         for proto, card in catalog.cards.items():
             card_chain = int(card.raw.get("chain_id") or 1)
-            implicit = ("card", f"catalog/{proto}/card.yaml")
             for name, c in card.contracts.items():
                 c = c or {}
+                implicit = ("card", f"catalog/{proto}/{card.source_file(name).name}")
                 if "ref" in c:
                     continue
                 where = f"{proto}.{name}"
