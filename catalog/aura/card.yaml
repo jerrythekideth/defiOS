@@ -1,0 +1,14 @@
+protocol: aura
+name: Aura (Balancer LP boosting, auraBAL, vlAURA)
+chain_id: 1
+status: draft
+reviewed: false
+adding: >
+  Aura on mainnet is winding down: the Booster is shut down and pools are
+  withdrawal-only, so records here are for exits (withdraw, claim, unlock).
+  A pool is a deposit token and a BaseRewardPool4626 from booster.poolInfo(pid), keyed
+  by their symbol() (sanitized) with operator() / stakingToken() / asset() proofs.
+
+contracts: {}
+
+actions: {}

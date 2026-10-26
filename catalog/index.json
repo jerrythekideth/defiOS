@@ -2,7 +2,7 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26278019,
+   "block": 26278420,
    "checked": "2026-10-26"
   }
  },
@@ -52,6 +52,15 @@
     "withdraw"
    ]
   },
+  "aura": {
+   "name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
+  },
   "avant": {
    "name": "Avant (avETH / savETH)",
    "status": "draft",
@@ -68,6 +77,33 @@
     "unstake"
    ]
   },
+  "balancer": {
+   "name": "Balancer (BAL, emissions, veBAL)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
+  },
+  "balancer_v2": {
+   "name": "Balancer v2 (Vault)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
+  },
+  "balancer_v3": {
+   "name": "Balancer v3 (Vault, routers, pools)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
+  },
   "cctp": {
    "name": "Circle CCTP v2 (bridge USDC)",
    "status": "draft",
@@ -78,6 +114,15 @@
    "actions": [
     "bridge"
    ]
+  },
+  "convex": {
+   "name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
   },
   "cowswap": {
    "name": "CoW Swap (pre-signed orders via the CowswapOrderSigner)",
@@ -90,6 +135,15 @@
     "cancel",
     "swap"
    ]
+  },
+  "curve": {
+   "name": "Curve (pools, gauges, CRV, veCRV)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
   },
   "dialectic": {
    "name": "Dialectic (DUSD, smDUSD security module)",
@@ -273,6 +327,24 @@
     "lp_multi_asset_arm"
    ]
   },
+  "pendle": {
+   "name": "Pendle (router, PT / YT / SY, markets)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
+  },
+  "permit2": {
+   "name": "Permit2 (shared token approvals)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
+  },
   "re": {
    "name": "Re (reUSD, insurance capital layer)",
    "status": "draft",
@@ -394,6 +466,43 @@
   }
  },
  "deployments": {
+  "1:0x000000000022d473030f116ddee9f6b43ac78ba3": [
+   {
+    "chain_id": 1,
+    "address": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+    "protocol": "permit2",
+    "protocol_name": "Permit2 (shared token approvals)",
+    "name": "Permit2",
+    "title": null,
+    "ref": "permit2.Permit2",
+    "category": "spender",
+    "kind": "permit2",
+    "eoa": false,
+    "aliases": [
+     "permit2",
+     "uniswap permit2"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/permit2/registry.yaml",
+     "docs: https://docs.uniswap.org/contracts/v4/deployments",
+     "explorer: https://etherscan.io/address/0x000000000022D473030F116dDEE9F6B43aC78BA3#code"
+    ],
+    "proofs": [
+     {
+      "id": "balancer_v3.router.getPermit2() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Shared token-approval contract; Balancer v3 routers pull tokens through it (approve Permit2, then Permit2.approve(token, router, amount, expiration))"
+   }
+  ],
   "1:0x0000000f2eb9f69274678c76222b35eec7588a65": [
    {
     "chain_id": 1,
@@ -470,6 +579,46 @@
      "name": "Aave Ethereum GHO",
      "symbol": "aEthGHO"
     }
+   }
+  ],
+  "1:0x00a7ba8ae7bca0b10a32ea1f8e2a1da980c6cad2": [
+   {
+    "chain_id": 1,
+    "address": "0x00A7BA8Ae7bca0B10A32Ea1f8e2a1Da980c6CAd2",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "auraBAL_rewards",
+    "title": null,
+    "ref": "aura.auraBAL_rewards",
+    "category": "staking",
+    "kind": "aura_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "aurabal staking",
+     "aurabal rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
+    ],
+    "proofs": [
+     {
+      "id": "booster.lockRewards() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == auraBAL",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "auraBAL staking (BaseRewardPool); stkauraBAL compounds on top of it"
    }
   ],
   "1:0x00b8e1509398ed692c3f326cbaf1694f9a881e27": [
@@ -682,6 +831,44 @@
     }
    }
   ],
+  "1:0x02950460e2b9529d0e00284a5fa2d7bdf3fa4d72": [
+   {
+    "chain_id": 1,
+    "address": "0x02950460E2b9529D0E00284A5fA2d7bDF3fA4d72",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "USDeUSDC",
+    "title": "USDe-USDC",
+    "ref": "curve.USDeUSDC",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "usde-usdc"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x02950460E2b9529D0E00284A5fA2d7bDF3fA4d72#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "USDe-USDC",
+     "symbol": "USDeUSDC"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
+   }
+  ],
   "1:0x02c3ea4e34c0cbd694d2adfa2c690eecbc1793ee": [
    {
     "chain_id": 1,
@@ -783,6 +970,138 @@
     }
    }
   ],
+  "1:0x04b7fa1e727d7290d6e24fa9b426d0c940283a95": [
+   {
+    "chain_id": 1,
+    "address": "0x04B7Fa1e727d7290D6E24fA9b426d0c940283a95",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "YT_stETH_30DEC2027",
+    "title": "YT stETH 30DEC2027",
+    "ref": "pendle.YT_stETH_30DEC2027",
+    "category": "receipt",
+    "kind": "pendle_yt",
+    "eoa": false,
+    "aliases": [
+     "YT-stETH-30DEC2027"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0x04B7Fa1e727d7290D6E24fA9b426d0c940283a95#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.PT() == PT_stETH_30DEC2027",
+      "ok": true
+     },
+     {
+      "id": "$self.SY() == SY_stETH",
+      "ok": true
+     },
+     {
+      "id": "$self.factory() == yield_contract_factory",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "YT stETH 30DEC2027",
+     "symbol": "YT-stETH-30DEC2027"
+    },
+    "note": "Pendle yield token, expiry 2027-12-30"
+   }
+  ],
+  "1:0x04e80db3f84873e4132b221831af1045d27f140f": [
+   {
+    "chain_id": 1,
+    "address": "0x04E80Db3f84873e4132B221831af1045D27f140F",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "USDeUSDC_gauge",
+    "title": "Curve.fi USDeUSDC Gauge Deposit",
+    "ref": "curve.USDeUSDC_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "USDeUSDC-gauge",
+     "USDeUSDC gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x04E80Db3f84873e4132B221831af1045D27f140F#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == USDeUSDC",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(USDeUSDC) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi USDeUSDC Gauge Deposit",
+     "symbol": "USDeUSDC-gauge"
+    },
+    "note": "Curve gauge for USDeUSDC: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
+  "1:0x053df3e4d0ced9a3bf0494f97e83ce1f13bdc0e2": [
+   {
+    "chain_id": 1,
+    "address": "0x053df3e4D0CeD9a3Bf0494F97E83CE1f13BdC0E2",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "weeth_ng_gauge",
+    "title": "Curve.fi weeth-ng Gauge Deposit",
+    "ref": "curve.weeth_ng_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "weeth-ng-gauge",
+     "weeth-ng gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x053df3e4D0CeD9a3Bf0494F97E83CE1f13BdC0E2#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == weeth_ng",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(weeth_ng) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi weeth-ng Gauge Deposit",
+     "symbol": "weeth-ng-gauge"
+    },
+    "note": "Curve gauge for weeth_ng: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
   "1:0x056b269eb1f75477a8666ae8c7fe01b64dd55ecc": [
    {
     "chain_id": 1,
@@ -821,6 +1140,44 @@
      "name": "USD3",
      "symbol": "USD3"
     }
+   }
+  ],
+  "1:0x06325440d014e39736583c165c2963ba99faf14e": [
+   {
+    "chain_id": 1,
+    "address": "0x06325440D014e39736583c165C2963BA99fAf14E",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "steCRV",
+    "title": "Curve.fi ETH/stETH",
+    "ref": "curve.steCRV",
+    "category": "receipt",
+    "kind": "curve_lp",
+    "eoa": false,
+    "aliases": [
+     "curve.fi eth/steth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x06325440D014e39736583c165C2963BA99fAf14E#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token(steth_pool) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi ETH/stETH",
+     "symbol": "steCRV"
+    },
+    "note": "LP token of steth_pool"
    }
   ],
   "1:0x0650caf159c5a49f711e8169d4336ecb9b950275": [
@@ -1107,6 +1464,45 @@
     "onchain": {}
    }
   ],
+  "1:0x0a760466e1b4621579a82a39cb56dda2f4e70f03": [
+   {
+    "chain_id": 1,
+    "address": "0x0A760466E1B4621579a82a39CB56Dda2F4E70f03",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxsteCRV_rewards",
+    "title": null,
+    "ref": "convex.cvxsteCRV_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 25 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x0A760466E1B4621579a82a39CB56Dda2F4E70f03#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxsteCRV",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 25 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0x0aa97c284e98396202b6a04024f5e2c65026f3c0": [
    {
     "chain_id": 1,
@@ -1179,6 +1575,42 @@
      "name": "Aave Ethereum wstETH",
      "symbol": "aEthwstETH"
     }
+   }
+  ],
+  "1:0x0bc857f97c0554d1d0d602b56f2eece682016fba": [
+   {
+    "chain_id": 1,
+    "address": "0x0bC857f97c0554d1d0D602b56F2EEcE682016fBA",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxcrvCVXETH",
+    "title": "Curve CVX-ETH Convex Deposit",
+    "ref": "convex.cvxcrvCVXETH",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x0bC857f97c0554d1d0D602b56F2EEcE682016fBA#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve CVX-ETH Convex Deposit",
+     "symbol": "cvxcrvCVXETH"
+    },
+    "note": "Convex pid 64 deposit token for curve.crvCVXETH"
    }
   ],
   "1:0x0c0d01abf3e6adfca0989ebba9d6e85dd58eab1e": [
@@ -1543,6 +1975,44 @@
     }
    }
   ],
+  "1:0x167478921b907422f8e88b43c4af2b8bea278d3a": [
+   {
+    "chain_id": 1,
+    "address": "0x167478921b907422F8E88B43C4Af2B8BEa278d3A",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "MtEthena",
+    "title": "sDAI/sUSDe",
+    "ref": "curve.MtEthena",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "sdai/susde"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x167478921b907422F8E88B43C4Af2B8BEa278d3A#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "sDAI/sUSDe",
+     "symbol": "MtEthena"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
+   }
+  ],
   "1:0x173e314c7635b45322cd8cb14f44b312e079f3af": [
    {
     "chain_id": 1,
@@ -1611,6 +2081,49 @@
     "proofs": [],
     "proxy": {},
     "onchain": {}
+   }
+  ],
+  "1:0x182b723a58739a9c974cfdb385ceadb237453c28": [
+   {
+    "chain_id": 1,
+    "address": "0x182B723a58739a9c974cFDB385ceaDb237453c28",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "steCRV_gauge",
+    "title": "Curve.fi steCRV Gauge Deposit",
+    "ref": "curve.steCRV_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "steCRV-gauge",
+     "steCRV gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x182B723a58739a9c974cFDB385ceaDb237453c28#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == steCRV",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(steth_pool) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi steCRV Gauge Deposit",
+     "symbol": "steCRV-gauge"
+    },
+    "note": "Curve gauge for steCRV: deposit the LP to earn CRV (claim with minter.mint(gauge))"
    }
   ],
   "1:0x18577f0f4a0b2ee6f4048db51c7acd8699f97db8": [
@@ -1831,6 +2344,44 @@
      "name": "Euro Coin",
      "symbol": "EURC"
     }
+   }
+  ],
+  "1:0x1b74fa5951dfa4c03d0127011548fa79b956f63b": [
+   {
+    "chain_id": 1,
+    "address": "0x1b74fa5951dfa4c03D0127011548fA79b956f63B",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxstETH_ng_f",
+    "title": "Curve.fi Factory Pool: stETH-ng Convex Deposit",
+    "ref": "convex.cvxstETH_ng_f",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "cvxstETH-ng-f"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x1b74fa5951dfa4c03D0127011548fA79b956f63B#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi Factory Pool: stETH-ng Convex Deposit",
+     "symbol": "cvxstETH-ng-f"
+    },
+    "note": "Convex pid 177 deposit token for curve.stETH_ng_f"
    }
   ],
   "1:0x1b7d3f4b3c032a5ae656e30eea4e8e1ba376068f": [
@@ -2063,6 +2614,174 @@
     }
    }
   ],
+  "1:0x1e4b83f6bfe9dbeb6d5b92a5237e5c18a44176f4": [
+   {
+    "chain_id": 1,
+    "address": "0x1E4B83f6bFE9dbeB6d5b92a5237E5c18a44176f4",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "BTCGHOETH_gauge",
+    "title": "Curve.fi BTCGHOETH Gauge Deposit",
+    "ref": "curve.BTCGHOETH_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "BTCGHOETH-gauge",
+     "BTCGHOETH gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x1E4B83f6bFE9dbeB6d5b92a5237E5c18a44176f4#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == BTCGHOETH",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(BTCGHOETH) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi BTCGHOETH Gauge Deposit",
+     "symbol": "BTCGHOETH-gauge"
+    },
+    "note": "Curve gauge for BTCGHOETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
+  "1:0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3": [
+   {
+    "chain_id": 1,
+    "address": "0x1ea5870f7C037930CE1d5d8d9317c670e89e13E3",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "rETH_waEthWETH",
+    "title": "Balancer rETH - Aave WETH",
+    "ref": "balancer_v3.rETH_waEthWETH",
+    "category": "market",
+    "kind": "balancer_v3_pool",
+    "eoa": false,
+    "aliases": [
+     "rETH-waEthWETH",
+     "balancer reth - aave weth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "explorer: https://etherscan.io/address/0x1ea5870f7C037930CE1d5d8d9317c670e89e13E3#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.getVault() == vault",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer rETH - Aave WETH",
+     "symbol": "rETH-waEthWETH"
+    },
+    "note": "Balancer v3 pool; the pool contract is also its BPT"
+   }
+  ],
+  "1:0x20283cce209b29d19329e8ada47215a52188afdc": [
+   {
+    "chain_id": 1,
+    "address": "0x20283cce209b29D19329E8aDa47215a52188aFDc",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "aurarETH_waEthWETH_vault",
+    "title": "Balancer rETH - Aave WETH Aura Deposit Vault",
+    "ref": "aura.aurarETH_waEthWETH_vault",
+    "category": "staking",
+    "kind": "aura_reward_pool_4626",
+    "eoa": false,
+    "aliases": [
+     "aurarETH-waEthWETH-vault",
+     "aura pid 271 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "explorer: https://etherscan.io/address/0x20283cce209b29D19329E8aDa47215a52188aFDc#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == aurarETH_waEthWETH",
+      "ok": true
+     },
+     {
+      "id": "$self.asset() == balancer_v3.rETH_waEthWETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer rETH - Aave WETH Aura Deposit Vault",
+     "symbol": "aurarETH-waEthWETH-vault"
+    },
+    "note": "Aura pid 271 rewards (BaseRewardPool4626): getReward(), withdrawAndUnwrap() / redeem() back to the BPT"
+   }
+  ],
+  "1:0x21e27a5e5513d6e65c4f830167390997aa84843a": [
+   {
+    "chain_id": 1,
+    "address": "0x21E27a5E5513D6e65C4f830167390997aA84843a",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "stETH_ng_f",
+    "title": "Curve.fi Factory Pool: stETH-ng",
+    "ref": "curve.stETH_ng_f",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "stETH-ng-f",
+     "curve.fi factory pool: steth-ng"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x21E27a5E5513D6e65C4f830167390997aA84843a#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi Factory Pool: stETH-ng",
+     "symbol": "stETH-ng-f"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
+   }
+  ],
   "1:0x22517fe16ded08e52e7ea3423a2ea4995b1f1731": [
    {
     "chain_id": 1,
@@ -2174,6 +2893,47 @@
      "name": "Aave Ethereum USDT",
      "symbol": "aEthUSDT"
     }
+   }
+  ],
+  "1:0x239e55f427d44c3cc793f49bfb507ebe76638a2b": [
+   {
+    "chain_id": 1,
+    "address": "0x239e55F427D44C3cc793f49bFB507ebe76638a2b",
+    "protocol": "balancer",
+    "protocol_name": "Balancer (BAL, emissions, veBAL)",
+    "name": "minter",
+    "title": null,
+    "ref": "balancer.minter",
+    "category": "minter",
+    "kind": "balancer_minter",
+    "eoa": false,
+    "aliases": [
+     "balancer minter",
+     "bal minter"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer/registry.yaml",
+     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
+     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json"
+    ],
+    "proofs": [
+     {
+      "id": "$self.getBalancerToken() == BAL",
+      "ok": true
+     },
+     {
+      "id": "$self.getGaugeController() == gauge_controller",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "mint(gauge) claims BAL emissions for a gauge deposit"
    }
   ],
   "1:0x23da9ade38e4477b23770ded512fd37b12381fab": [
@@ -2315,6 +3075,40 @@
      "name": "Aave Ethereum Variable Debt KNC",
      "symbol": "variableDebtEthKNC"
     }
+   }
+  ],
+  "1:0x27b1dacd74688af24a64bd3c9c1b143118740784": [
+   {
+    "chain_id": 1,
+    "address": "0x27b1dAcd74688aF24a64BD3C9C1B143118740784",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "market_factory",
+    "title": null,
+    "ref": "pendle.market_factory",
+    "category": "config",
+    "kind": "pendle_market_factory",
+    "eoa": false,
+    "aliases": [
+     "pendle market factory v1"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    ],
+    "proofs": [
+     {
+      "id": "$self.yieldContractFactory() == yield_contract_factory",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {}
    }
   ],
   "1:0x285866acb0d60105b4ed350a463361c2d9afa0e2": [
@@ -2461,6 +3255,44 @@
     "proxy": {},
     "onchain": {},
     "note": "Liminal's keeper EOA (the spoke's keeper()). Deposits are CCTP-minted to it on HyperEVM (domain 19); Liminal's backend then deposits into the vault and sends shares to the beneficiary named in hookData. Deposits trust this key until the shares arrive. The same key receives the ETH fee on mainnet"
+   }
+  ],
+  "1:0x2a1e7cf85e533348ac5770514bf713544a11f856": [
+   {
+    "chain_id": 1,
+    "address": "0x2a1e7Cf85E533348AC5770514bF713544a11f856",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxOETH_WETH",
+    "title": "OETH/WETH Convex Deposit",
+    "ref": "convex.cvxOETH_WETH",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "cvxOETH/WETH"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x2a1e7Cf85E533348AC5770514bF713544a11f856#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "OETH/WETH Convex Deposit",
+     "symbol": "cvxOETH/WETH"
+    },
+    "note": "Convex pid 451 deposit token for curve.OETH_WETH"
    }
   ],
   "1:0x2a1fbcb52ed4d9b23dad17e1e8aed4bb0e6079b8": [
@@ -2611,6 +3443,45 @@
      "name": "Aave Ethereum Lido Variable Debt rsETH",
      "symbol": "variableDebtEthLidorsETH"
     }
+   }
+  ],
+  "1:0x2c683fad51da2cd17793219cc86439c1875c353e": [
+   {
+    "chain_id": 1,
+    "address": "0x2c683fAd51da2cd17793219CC86439C1875c353e",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "ETH_ETH",
+    "title": "ETH+/ETH",
+    "ref": "curve.ETH_ETH",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "ETH+ETH",
+     "eth+/eth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x2c683fAd51da2cd17793219CC86439C1875c353e#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "ETH+/ETH",
+     "symbol": "ETH+ETH"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
    }
   ],
   "1:0x2ce7e7b238985a8ad3863de03f200b245b0c1216": [
@@ -2838,6 +3709,84 @@
     "note": "Aave's own registry for the market: getPool(), getPriceOracle(), getACLManager(). Not called by any action"
    }
   ],
+  "1:0x2f50d538606fa9edd2b11e2446beb18c9d5846bb": [
+   {
+    "chain_id": 1,
+    "address": "0x2F50D538606Fa9EDD2B11E2446BEb18C9D5846bB",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "gauge_controller",
+    "title": null,
+    "ref": "curve.gauge_controller",
+    "category": "config",
+    "kind": "curve_gauge_controller",
+    "eoa": false,
+    "aliases": [
+     "curve gauge controller"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "docs: https://docs.curve.finance/user/deployments"
+    ],
+    "proofs": [
+     {
+      "id": "minter.controller() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.voting_escrow() == veCRV",
+      "ok": true
+     },
+     {
+      "id": "$self.token() == CRV",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {}
+   }
+  ],
+  "1:0x30d9410ed1d5da1f6c8391af5338c93ab8d4035c": [
+   {
+    "chain_id": 1,
+    "address": "0x30D9410ED1D5DA1F6C8391af5338C93ab8d4035C",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvx3Crv",
+    "title": "Curve.fi DAI/USDC/USDT Convex Deposit",
+    "ref": "convex.cvx3Crv",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x30D9410ED1D5DA1F6C8391af5338C93ab8d4035C#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi DAI/USDC/USDT Convex Deposit",
+     "symbol": "cvx3Crv"
+    },
+    "note": "Convex pid 9 deposit token for curve.3Crv"
+   }
+  ],
   "1:0x312ffc57778cefa11989733e6e08143e7e229c1c": [
    {
     "chain_id": 1,
@@ -3051,6 +4000,49 @@
     "note": "Executes Spark governance spells; ACL admin of SparkLend"
    }
   ],
+  "1:0x330cfd12e0e97b0adf46158d2a81e8bd2985c6cb": [
+   {
+    "chain_id": 1,
+    "address": "0x330Cfd12e0E97B0aDF46158D2A81E8Bd2985c6cB",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "MtEthena_gauge",
+    "title": "Curve.fi MtEthena Gauge Deposit",
+    "ref": "curve.MtEthena_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "MtEthena-gauge",
+     "MtEthena gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x330Cfd12e0E97B0aDF46158D2A81E8Bd2985c6cB#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == MtEthena",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(MtEthena) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi MtEthena Gauge Deposit",
+     "symbol": "MtEthena-gauge"
+    },
+    "note": "Curve gauge for MtEthena: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
   "1:0x333333330522f64ee8d0b3039c460b41670e3404": [
    {
     "chain_id": 1,
@@ -3195,6 +4187,44 @@
     "onchain": {}
    }
   ],
+  "1:0x34280882267ffa6383b363e278b027be083bbe3b": [
+   {
+    "chain_id": 1,
+    "address": "0x34280882267ffa6383B363E278B027Be083bBe3b",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "market_stETH_30DEC2027",
+    "title": "Pendle Market",
+    "ref": "pendle.market_stETH_30DEC2027",
+    "category": "market",
+    "kind": "pendle_market",
+    "eoa": false,
+    "aliases": [
+     "pendle wstETH 2027-12-30"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0x34280882267ffa6383B363E278B027Be083bBe3b#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.factory() == market_factory",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Pendle Market",
+     "symbol": "PENDLE-LPT"
+    },
+    "note": "Pendle market (LP token) for PT_stETH_30DEC2027 / SY_stETH, expiry 2027-12-30"
+   }
+  ],
   "1:0x3620c39c1269d6e31e5e76e9a2fa6afe0e8b14d6": [
    {
     "chain_id": 1,
@@ -3266,6 +4296,49 @@
     "proofs": [],
     "proxy": {},
     "onchain": {}
+   }
+  ],
+  "1:0x36cc1d791704445a5b6b9c36a667e511d4702f3f": [
+   {
+    "chain_id": 1,
+    "address": "0x36cC1d791704445A5b6b9c36a667e511d4702F3f",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "OETH_WETH_gauge",
+    "title": "Curve.fi OETH/WETH Gauge Deposit",
+    "ref": "curve.OETH_WETH_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "OETH/WETH-gauge",
+     "OETH/WETH gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x36cC1d791704445A5b6b9c36a667e511d4702F3f#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == OETH_WETH",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(OETH_WETH) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi OETH/WETH Gauge Deposit",
+     "symbol": "OETH/WETH-gauge"
+    },
+    "note": "Curve gauge for OETH_WETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
    }
   ],
   "1:0x377c3bd93f2a2984e1e7be6a5c22c525ed4a4815": [
@@ -3416,6 +4489,45 @@
     "onchain": {}
    }
   ],
+  "1:0x390f3595bca2df7d23783dfd126427cceb997bf4": [
+   {
+    "chain_id": 1,
+    "address": "0x390f3595bCa2Df7d23783dFd126427CCeb997BF4",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "crvUSDUSDT_f",
+    "title": "Curve.fi Factory Plain Pool: crvUSD/USDT",
+    "ref": "curve.crvUSDUSDT_f",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "crvUSDUSDT-f",
+     "curve.fi factory plain pool: crvusd/usdt"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x390f3595bCa2Df7d23783dFd126427CCeb997BF4#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi Factory Plain Pool: crvUSD/USDT",
+     "symbol": "crvUSDUSDT-f"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
+   }
+  ],
   "1:0x39ff6d21204b919441d17bef61d19181870835a2": [
    {
     "chain_id": 1,
@@ -3450,6 +4562,44 @@
     "proxy": {},
     "onchain": {},
     "note": "router redeem pulls autoUSD from msg.sender, so autoUSD is approved to the router"
+   }
+  ],
+  "1:0x3a283d9c08e8b55966afb64c515f5143cf907611": [
+   {
+    "chain_id": 1,
+    "address": "0x3A283D9c08E8b55966afb64C515f5143cf907611",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "crvCVXETH",
+    "title": "Curve CVX-ETH",
+    "ref": "curve.crvCVXETH",
+    "category": "receipt",
+    "kind": "curve_lp",
+    "eoa": false,
+    "aliases": [
+     "curve cvx-eth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x3A283D9c08E8b55966afb64C515f5143cf907611#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token(cvxeth_pool) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve CVX-ETH",
+     "symbol": "crvCVXETH"
+    },
+    "note": "LP token of cvxeth_pool"
    }
   ],
   "1:0x3a3868898305f04bec7fea77becff04c13444112": [
@@ -3719,6 +4869,43 @@
     }
    }
   ],
+  "1:0x3e6eba46abc5ab18ed95f6667d8b2fd4020e4637": [
+   {
+    "chain_id": 1,
+    "address": "0x3E6EBa46AbC5ab18ED95F6667d8B2fd4020E4637",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "yield_contract_factory_v6",
+    "title": null,
+    "ref": "pendle.yield_contract_factory_v6",
+    "category": "config",
+    "kind": "pendle_yield_contract_factory",
+    "eoa": false,
+    "aliases": [
+     "pendle yield contract factory v6"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    ],
+    "proofs": [
+     {
+      "id": "market_factory_v6.yieldContractFactory() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x21414E68da7658b5B2d9C04B06a1f03055763087",
+     "admin": "0xA28c08f165116587D4F3E708743B4dEe155c5E64"
+    },
+    "onchain": {}
+   }
+  ],
   "1:0x3f04b65ddbd87f9ce0a2e7eb24d80e7fb87625b5": [
    {
     "chain_id": 1,
@@ -3750,6 +4937,128 @@
     },
     "onchain": {},
     "note": "pulls USDC / iUSD / siUSD from msg.sender: approve the gateway"
+   }
+  ],
+  "1:0x3f353d76ae89dc2c89dcd0426e7fa9c96a332273": [
+   {
+    "chain_id": 1,
+    "address": "0x3f353d76Ae89dc2C89Dcd0426e7Fa9c96A332273",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxweeth_ng",
+    "title": "weETH/WETH-ng Convex Deposit",
+    "ref": "convex.cvxweeth_ng",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "cvxweeth-ng"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x3f353d76Ae89dc2C89Dcd0426e7Fa9c96A332273#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "weETH/WETH-ng Convex Deposit",
+     "symbol": "cvxweeth-ng"
+    },
+    "note": "Convex pid 355 deposit token for curve.weeth_ng"
+   }
+  ],
+  "1:0x3fa73f1e5d8a792c80f426fc8f84fbf7ce9bbcac": [
+   {
+    "chain_id": 1,
+    "address": "0x3Fa73f1E5d8A792C80F426fc8F84FBF7Ce9bBCAC",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "vlAURA",
+    "title": "Vote Locked Aura",
+    "ref": "aura.vlAURA",
+    "category": "staking",
+    "kind": "aura_locker",
+    "eoa": false,
+    "aliases": [
+     "vlaura",
+     "vote locked aura",
+     "auralocker"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
+    ],
+    "proofs": [
+     {
+      "id": "$self.stakingToken() == AURA",
+      "ok": true
+     },
+     {
+      "id": "$self.cvxCrv() == auraBAL",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Vote Locked Aura",
+     "symbol": "vlAURA"
+    },
+    "note": "AURA vote lock (16 weeks); processExpiredLocks(relock) to exit"
+   }
+  ],
+  "1:0x3fe65692bfcd0e6cf84cb1e7d24108e434a7587e": [
+   {
+    "chain_id": 1,
+    "address": "0x3Fe65692bfCD0e6CF84cB1E7d24108E434A7587e",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxCRV_rewards",
+    "title": null,
+    "ref": "convex.cvxCRV_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "cvxcrv staking",
+     "cvxcrv rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "booster.lockRewards() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxCRV",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Legacy cvxCRV staking (BaseRewardPool); stkCvxCrv wraps it"
    }
   ],
   "1:0x3fe6a295459fae07df8a0cecc36f37160fe86aa9": [
@@ -3936,6 +5245,44 @@
     }
    }
   ],
+  "1:0x42d0ed5c192f70e7a66bd17b71200856141e32a0": [
+   {
+    "chain_id": 1,
+    "address": "0x42D0Ed5C192f70e7A66bd17b71200856141e32A0",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "auraosETH_waWETH",
+    "title": "Balancer osETH-waWETH Aura Deposit",
+    "ref": "aura.auraosETH_waWETH",
+    "category": "receipt",
+    "kind": "aura_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "auraosETH-waWETH"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "explorer: https://etherscan.io/address/0x42D0Ed5C192f70e7A66bd17b71200856141e32A0#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer osETH-waWETH Aura Deposit",
+     "symbol": "auraosETH-waWETH"
+    },
+    "note": "Aura pid 260 deposit token for balancer_v3.osETH_waWETH (pool shut down: withdraw only)"
+   }
+  ],
   "1:0x4370d3b6c9588e02ce9d22e684387859c7ff5b34": [
    {
     "chain_id": 1,
@@ -4047,6 +5394,45 @@
     "note": "KPK_USDC_Prime_Core's adapter into Morpho markets (adapters(0))"
    }
   ],
+  "1:0x44d8fab7cd8b7877d5f79974c2f501af6e65abba": [
+   {
+    "chain_id": 1,
+    "address": "0x44D8FaB7CD8b7877D5F79974c2F501aF6E65AbBA",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxcrvUSDUSDC_f_rewards",
+    "title": null,
+    "ref": "convex.cvxcrvUSDUSDC_f_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 182 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x44D8FaB7CD8b7877D5F79974c2F501aF6E65AbBA#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxcrvUSDUSDC_f",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 182 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0x4579a27af00a62c0eb156349f31b345c08386419": [
    {
     "chain_id": 1,
@@ -4153,6 +5539,45 @@
     },
     "onchain": {},
     "note": "pulls the deposit token from msg.sender; KYC-gated (the Vault must be whitelisted)"
+   }
+  ],
+  "1:0x47ad2cd1dd15739a7a035b9d3b7828d916fef77e": [
+   {
+    "chain_id": 1,
+    "address": "0x47ad2Cd1DD15739A7a035b9d3B7828d916FEF77E",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "market_sUSDE_26NOV2026",
+    "title": "PLP Ethena sUSDE 26NOV2026",
+    "ref": "pendle.market_sUSDE_26NOV2026",
+    "category": "market",
+    "kind": "pendle_market",
+    "eoa": false,
+    "aliases": [
+     "PLP-sUSDE-26NOV2026",
+     "pendle sUSDe 2026-11-26"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0x47ad2Cd1DD15739A7a035b9d3B7828d916FEF77E#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.factory() == market_factory_v6",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "PLP Ethena sUSDE 26NOV2026",
+     "symbol": "PLP-sUSDE-26NOV2026"
+    },
+    "note": "Pendle market (LP token) for PT_sUSDE_26NOV2026 / SY_sUSDE, expiry 2026-11-26"
    }
   ],
   "1:0x47ed0509e64615c0d5c6d39af1b38d02bc9fe58f": [
@@ -4563,6 +5988,45 @@
     }
    }
   ],
+  "1:0x4d10e7fc03de065aef3dfbc0394cbed1e4d36d6e": [
+   {
+    "chain_id": 1,
+    "address": "0x4d10e7FC03dE065Aef3dfbc0394CbEd1e4d36D6E",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxBTCGHOETH_rewards",
+    "title": null,
+    "ref": "convex.cvxBTCGHOETH_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 409 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x4d10e7FC03dE065Aef3dfbc0394CbEd1e4d36D6E#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxBTCGHOETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 409 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0x4d5f47fa6a74757f35c14fd3a6ef8e3c9bc514e8": [
    {
     "chain_id": 1,
@@ -4671,6 +6135,45 @@
     ],
     "proxy": {},
     "onchain": {}
+   }
+  ],
+  "1:0x4dece678ceceb27446b35c672dc7d61f30bad69e": [
+   {
+    "chain_id": 1,
+    "address": "0x4DEcE678ceceb27446b35C672dC7d61F30bAD69E",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "crvUSDUSDC_f",
+    "title": "Curve.fi Factory Plain Pool: crvUSD/USDC",
+    "ref": "curve.crvUSDUSDC_f",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "crvUSDUSDC-f",
+     "curve.fi factory plain pool: crvusd/usdc"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x4DEcE678ceceb27446b35C672dC7d61F30bAD69E#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi Factory Plain Pool: crvUSD/USDC",
+     "symbol": "crvUSDUSDC-f"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
    }
   ],
   "1:0x4dedf26112b3ec8ec46e7e31ea5e123490b05b8b": [
@@ -4786,6 +6289,87 @@
      "name": "Aave Ethereum ezETH",
      "symbol": "aEthezETH"
     }
+   }
+  ],
+  "1:0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b": [
+   {
+    "chain_id": 1,
+    "address": "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "CVX",
+    "title": "Convex Token",
+    "ref": "convex.CVX",
+    "category": "governance",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "cvx",
+     "convex token"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "booster.minter() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Convex Token",
+     "symbol": "CVX"
+    }
+   }
+  ],
+  "1:0x4e6bb6b7447b7b2aa268c16ab87f4bb48bf57939": [
+   {
+    "chain_id": 1,
+    "address": "0x4e6bB6B7447B7B2Aa268C16AB87F4Bb48BF57939",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "crvUSDUSDT_f_gauge",
+    "title": "Curve.fi crvUSDUSDT-f Gauge Deposit",
+    "ref": "curve.crvUSDUSDT_f_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "crvUSDUSDT-f-gauge",
+     "crvUSDUSDT-f gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x4e6bB6B7447B7B2Aa268C16AB87F4Bb48BF57939#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == crvUSDUSDT_f",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(crvUSDUSDT_f) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi crvUSDUSDT-f Gauge Deposit",
+     "symbol": "crvUSDUSDT-f-gauge"
+    },
+    "note": "Curve gauge for crvUSDUSDT_f: deposit the LP to earn CRV (claim with minter.mint(gauge))"
    }
   ],
   "1:0x4e89b83f426fed3f2ef7bb2d7eb5b53e288e1a13": [
@@ -5131,6 +6715,45 @@
     "note": "Executes Aave governance payloads; ACL admin of the v3 markets"
    }
   ],
+  "1:0x5411cc583f0b51104fa523eef9fc77a29df80f58": [
+   {
+    "chain_id": 1,
+    "address": "0x5411CC583f0b51104fA523eEF9FC77A29DF80F58",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxweeth_ng_rewards",
+    "title": null,
+    "ref": "convex.cvxweeth_ng_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 355 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x5411CC583f0b51104fA523eEF9FC77A29DF80F58#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxweeth_ng",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 355 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0x542dba469bde58faee189ffb60c6b49ce60e0738": [
    {
     "chain_id": 1,
@@ -5375,6 +6998,45 @@
     }
    }
   ],
+  "1:0x57c23c58b1d8c3292c15becf07c62c5c52457a42": [
+   {
+    "chain_id": 1,
+    "address": "0x57c23c58B1D8C3292c15BEcF07c62C5c52457A42",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "osETH_waWETH",
+    "title": "Balancer osETH-waWETH",
+    "ref": "balancer_v3.osETH_waWETH",
+    "category": "market",
+    "kind": "balancer_v3_pool",
+    "eoa": false,
+    "aliases": [
+     "osETH-waWETH",
+     "balancer oseth-waweth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "explorer: https://etherscan.io/address/0x57c23c58B1D8C3292c15BEcF07c62C5c52457A42#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.getVault() == vault",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer osETH-waWETH",
+     "symbol": "osETH-waWETH"
+    },
+    "note": "Balancer v3 pool; the pool contract is also its BPT"
+   }
+  ],
   "1:0x57e114b691db790c35207b2e685d4a43181e6061": [
    {
     "chain_id": 1,
@@ -5515,6 +7177,45 @@
     }
    }
   ],
+  "1:0x5a71e7e04f8725fd42a216949e7099ebd08a42e3": [
+   {
+    "chain_id": 1,
+    "address": "0x5A71E7e04F8725fD42a216949E7099ebd08A42E3",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxRLUSD_USDC_rewards",
+    "title": null,
+    "ref": "convex.cvxRLUSD_USDC_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 443 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x5A71E7e04F8725fD42a216949E7099ebd08A42E3#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxRLUSD_USDC",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 443 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0x5a98fcbea516cf06857215779fd812ca3bef1b32": [
    {
     "chain_id": 1,
@@ -5624,6 +7325,50 @@
      "name": "Aave Ethereum cbBTC",
      "symbol": "aEthcbBTC"
     }
+   }
+  ],
+  "1:0x5c6ee304399dbdb9c8ef030ab642b10820db8f56": [
+   {
+    "chain_id": 1,
+    "address": "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56",
+    "protocol": "balancer",
+    "protocol_name": "Balancer (BAL, emissions, veBAL)",
+    "name": "B_80BAL_20WETH",
+    "title": "Balancer 80 BAL 20 WETH",
+    "ref": "balancer.B_80BAL_20WETH",
+    "category": "receipt",
+    "kind": "balancer_v2_bpt",
+    "eoa": false,
+    "aliases": [
+     "B-80BAL-20WETH",
+     "80bal-20weth",
+     "balancer 80 bal 20 weth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer/registry.yaml",
+     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html"
+    ],
+    "proofs": [
+     {
+      "id": "veBAL.token() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.getVault() == balancer_v2.vault",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer 80 BAL 20 WETH",
+     "symbol": "B-80BAL-20WETH"
+    },
+    "note": "80/20 BAL-WETH Balancer v2 pool token; the asset locked in veBAL"
    }
   ],
   "1:0x5cf1eaf763e8ce5f949bea9a0cd051e8db252d5b": [
@@ -5807,6 +7552,49 @@
     }
    }
   ],
+  "1:0x5f3b5dfeb7b28cdbd7faba78963ee202a494e2a2": [
+   {
+    "chain_id": 1,
+    "address": "0x5f3b5DfEb7B28CDbD7FAba78963EE202a494e2A2",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "veCRV",
+    "title": "Vote-escrowed CRV",
+    "ref": "curve.veCRV",
+    "category": "staking",
+    "kind": "voting_escrow",
+    "eoa": false,
+    "aliases": [
+     "vecrv",
+     "vote-escrowed crv"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "docs: https://docs.curve.finance/user/deployments"
+    ],
+    "proofs": [
+     {
+      "id": "gauge_controller.voting_escrow() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.token() == CRV",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Vote-escrowed CRV",
+     "symbol": "veCRV"
+    },
+    "note": "CRV vote-escrow lock (non-transferable)"
+   }
+  ],
   "1:0x5f4a0873a3a02f7c0cb0e13a1d4362a1ad90e751": [
    {
     "chain_id": 1,
@@ -5916,6 +7704,195 @@
      "name": "Aave Ethereum eBTC",
      "symbol": "aEtheBTC"
     }
+   }
+  ],
+  "1:0x5ffe7fb82894076ecb99a30d6a32e969e6e35e98": [
+   {
+    "chain_id": 1,
+    "address": "0x5ffe7FB82894076ECB99A30D6A32e969e6e35E98",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "address_provider",
+    "title": null,
+    "ref": "curve.address_provider",
+    "category": "config",
+    "kind": "curve_address_provider",
+    "eoa": false,
+    "aliases": [
+     "curve address provider",
+     "addressprovider"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "docs: https://docs.curve.finance/user/deployments",
+     "explorer: https://etherscan.io/address/0x5ffe7FB82894076ECB99A30D6A32e969e6e35E98#code"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {},
+    "note": "Curve's address index: get_address(id) returns the current contract for each id (7 = MetaRegistry)"
+   }
+  ],
+  "1:0x616e8bfa43f920657b3497dbf40d6b1a02d4608d": [
+   {
+    "chain_id": 1,
+    "address": "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "auraBAL",
+    "title": "Aura BAL",
+    "ref": "aura.auraBAL",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "aurabal",
+     "aura bal"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
+    ],
+    "proofs": [
+     {
+      "id": "bal_depositor.minter() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Aura BAL",
+     "symbol": "auraBAL"
+    }
+   }
+  ],
+  "1:0x62a66eb9abf7a788f48d0ce7c0c065df9e09da19": [
+   {
+    "chain_id": 1,
+    "address": "0x62A66eB9aBf7a788F48D0ce7C0C065df9e09dA19",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "rETH_waEthWETH_gauge",
+    "title": "Balancer rETH-waEthWETH Gauge Deposit",
+    "ref": "balancer_v3.rETH_waEthWETH_gauge",
+    "category": "staking",
+    "kind": "balancer_gauge",
+    "eoa": false,
+    "aliases": [
+     "rETH-waEthWETH-gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "explorer: https://etherscan.io/address/0x62A66eB9aBf7a788F48D0ce7C0C065df9e09dA19#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == rETH_waEthWETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer rETH-waEthWETH Gauge Deposit",
+     "symbol": "rETH-waEthWETH-gauge"
+    },
+    "note": "Balancer gauge for rETH_waEthWETH: deposit the BPT to earn BAL (claim with balancer.minter.mint(gauge))"
+   }
+  ],
+  "1:0x62b9c7356a2dc64a1969e19c23e4f579f9810aa7": [
+   {
+    "chain_id": 1,
+    "address": "0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxCRV",
+    "title": "Convex CRV",
+    "ref": "convex.cvxCRV",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "cvxcrv",
+     "convex crv"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "crv_depositor.minter() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Convex CRV",
+     "symbol": "cvxCRV"
+    }
+   }
+  ],
+  "1:0x63037a4e3305d25d48baed2022b8462b2807351c": [
+   {
+    "chain_id": 1,
+    "address": "0x63037a4e3305d25D48BAED2022b8462b2807351c",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "osETH_rETH_gauge",
+    "title": "Curve.fi osETH-rETH Gauge Deposit",
+    "ref": "curve.osETH_rETH_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "osETH-rETH-gauge",
+     "osETH-rETH gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x63037a4e3305d25D48BAED2022b8462b2807351c#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == osETH_rETH",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(osETH_rETH) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi osETH-rETH Gauge Deposit",
+     "symbol": "osETH-rETH-gauge"
+    },
+    "note": "Curve gauge for osETH_rETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
    }
   ],
   "1:0x64b761d848206f447fe2dd461b0c635ec39ebb27": [
@@ -6217,6 +8194,45 @@
     }
    }
   ],
+  "1:0x689440f2ff927e1f24c72f1087e1faf471ece1c8": [
+   {
+    "chain_id": 1,
+    "address": "0x689440f2Ff927E1f24c72F1087E1FAF471eCe1c8",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvx3Crv_rewards",
+    "title": null,
+    "ref": "convex.cvx3Crv_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 9 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x689440f2Ff927E1f24c72F1087E1FAF471eCe1c8#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvx3Crv",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 9 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0x68aeb290c7727d899b47c56d1c96aeac475cd0dd": [
    {
     "chain_id": 1,
@@ -6401,6 +8417,45 @@
     }
    }
   ],
+  "1:0x6b27d7bc63f1999d14ff9ba900069ee516669ee8": [
+   {
+    "chain_id": 1,
+    "address": "0x6B27D7BC63F1999D14fF9bA900069ee516669ee8",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxstETH_ng_f_rewards",
+    "title": null,
+    "ref": "convex.cvxstETH_ng_f_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 177 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x6B27D7BC63F1999D14fF9bA900069ee516669ee8#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxstETH_ng_f",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 177 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0x6c3ea9036406852006290770bedfcaba0e23a0e8": [
    {
     "chain_id": 1,
@@ -6436,6 +8491,44 @@
      "name": "PayPal USD",
      "symbol": "PYUSD"
     }
+   }
+  ],
+  "1:0x6c3f90f043a72fa612cbac8115ee7e52bde6e490": [
+   {
+    "chain_id": 1,
+    "address": "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "3Crv",
+    "title": "Curve.fi DAI/USDC/USDT",
+    "ref": "curve.3Crv",
+    "category": "receipt",
+    "kind": "curve_lp",
+    "eoa": false,
+    "aliases": [
+     "curve.fi dai/usdc/usdt"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token(threepool) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi DAI/USDC/USDT",
+     "symbol": "3Crv"
+    },
+    "note": "LP token of threepool"
    }
   ],
   "1:0x6c67e666bb954d4be23e9f1ce20e7e8699d29339": [
@@ -6510,6 +8603,43 @@
      "name": "Aave Ethereum Variable Debt EURC",
      "symbol": "variableDebtEthEURC"
     }
+   }
+  ],
+  "1:0x6d247b1c044fa1e22e6b04fa9f71baf99eb29a9f": [
+   {
+    "chain_id": 1,
+    "address": "0x6d247b1c044fA1E22e6B04fA9F71Baf99EB29A9f",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "market_factory_v6",
+    "title": null,
+    "ref": "pendle.market_factory_v6",
+    "category": "config",
+    "kind": "pendle_market_factory",
+    "eoa": false,
+    "aliases": [
+     "pendle market factory v6"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    ],
+    "proofs": [
+     {
+      "id": "$self.yieldContractFactory() == yield_contract_factory_v6",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xE7a7477c636EbC2eD7C1968b5Fac5eaF29Ff6C0C",
+     "admin": "0xA28c08f165116587D4F3E708743B4dEe155c5E64"
+    },
+    "onchain": {}
    }
   ],
   "1:0x6de3e52a1b7294a34e271a508082b1ff4a37e30e": [
@@ -6660,6 +8790,78 @@
     }
    }
   ],
+  "1:0x70a1c01902dab7a45dca1098ca76a8314dd8adba": [
+   {
+    "chain_id": 1,
+    "address": "0x70A1c01902DAb7a45dcA1098Ca76A8314dd8aDbA",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "osETH_waWETH_gauge",
+    "title": "Balancer osETH-waWETH Gauge Deposit",
+    "ref": "balancer_v3.osETH_waWETH_gauge",
+    "category": "staking",
+    "kind": "balancer_gauge",
+    "eoa": false,
+    "aliases": [
+     "osETH-waWETH-gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "explorer: https://etherscan.io/address/0x70A1c01902DAb7a45dcA1098Ca76A8314dd8aDbA#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == osETH_waWETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer osETH-waWETH Gauge Deposit",
+     "symbol": "osETH-waWETH-gauge"
+    },
+    "note": "Balancer gauge for osETH_waWETH: deposit the BPT to earn BAL (claim with balancer.minter.mint(gauge))"
+   }
+  ],
+  "1:0x70ee0a6db4f5a2dc4d9c0b57be97b9987e75bafd": [
+   {
+    "chain_id": 1,
+    "address": "0x70ee0A6DB4F5a2Dc4d9c0b57bE97B9987e75BAFD",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "yield_contract_factory",
+    "title": null,
+    "ref": "pendle.yield_contract_factory",
+    "category": "config",
+    "kind": "pendle_yield_contract_factory",
+    "eoa": false,
+    "aliases": [
+     "pendle yield contract factory v1"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    ],
+    "proofs": [
+     {
+      "id": "market_factory.yieldContractFactory() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {}
+   }
+  ],
   "1:0x71aef7b30728b9bb371578f36c5a1f1502a5723e": [
    {
     "chain_id": 1,
@@ -6695,6 +8897,50 @@
      "name": "Aave Ethereum 1INCH",
      "symbol": "aEth1INCH"
     }
+   }
+  ],
+  "1:0x72a19342e8f1838460ebfccef09f6585e32db86e": [
+   {
+    "chain_id": 1,
+    "address": "0x72a19342e8F1838460eBFCCEf09F6585e32db86E",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "vlCVX",
+    "title": "Vote Locked Convex Token",
+    "ref": "convex.vlCVX",
+    "category": "staking",
+    "kind": "convex_locker",
+    "eoa": false,
+    "aliases": [
+     "vlcvx",
+     "vote locked convex token",
+     "cvxlocker"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "$self.stakingToken() == CVX",
+      "ok": true
+     },
+     {
+      "id": "$self.cvxCrv() == cvxCRV",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Vote Locked Convex Token",
+     "symbol": "vlCVX"
+    },
+    "note": "CVX vote lock (16 weeks); processExpiredLocks(relock) to exit"
    }
   ],
   "1:0x72e95b8931767c79ba4eee721354d6e99a61d004": [
@@ -6877,6 +9123,44 @@
      "name": "Aave Ethereum Lido ezETH",
      "symbol": "aEthLidoezETH"
     }
+   }
+  ],
+  "1:0x75a2f59ec37c18962c53b0244d60b53f749df25e": [
+   {
+    "chain_id": 1,
+    "address": "0x75A2F59eC37c18962c53b0244D60B53f749DF25E",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxcrvUSDUSDC_f",
+    "title": "Curve.fi Factory Plain Pool: crvUSD/USDC Convex Deposit",
+    "ref": "convex.cvxcrvUSDUSDC_f",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "cvxcrvUSDUSDC-f"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x75A2F59eC37c18962c53b0244D60B53f749DF25E#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi Factory Plain Pool: crvUSD/USDC Convex Deposit",
+     "symbol": "cvxcrvUSDUSDC-f"
+    },
+    "note": "Convex pid 182 deposit token for curve.crvUSDUSDC_f"
    }
   ],
   "1:0x762edb8d79b97487f82093f85059e42eeef61e9e": [
@@ -7171,6 +9455,49 @@
      "name": "Tier #I"
     },
     "note": "spender for collateral approvals; not called directly"
+   }
+  ],
+  "1:0x79f21bc30632cd40d2af8134b469a0eb4c9574aa": [
+   {
+    "chain_id": 1,
+    "address": "0x79F21BC30632cd40d2aF8134B469a0EB4C9574AA",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "stETH_ng_f_gauge",
+    "title": "Curve.fi stETH-ng-f Gauge Deposit",
+    "ref": "curve.stETH_ng_f_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "stETH-ng-f-gauge",
+     "stETH-ng-f gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x79F21BC30632cd40d2aF8134B469a0EB4C9574AA#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == stETH_ng_f",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(stETH_ng_f) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi stETH-ng-f Gauge Deposit",
+     "symbol": "stETH-ng-f-gauge"
+    },
+    "note": "Curve gauge for stETH_ng_f: deposit the LP to earn CRV (claim with minter.mint(gauge))"
    }
   ],
   "1:0x7a2ce012fe37db488c24e31f5e38816cad82b45e": [
@@ -7494,6 +9821,49 @@
     }
    }
   ],
+  "1:0x7e1444ba99dcdffe8fbdb42c02f0005d14f13be1": [
+   {
+    "chain_id": 1,
+    "address": "0x7E1444BA99dcdFfE8fBdb42C02F0005D14f13BE1",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "crvCVXETH_gauge",
+    "title": "Curve.fi crvCVXETH Gauge Deposit",
+    "ref": "curve.crvCVXETH_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "crvCVXETH-gauge",
+     "crvCVXETH gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x7E1444BA99dcdFfE8fBdb42C02F0005D14f13BE1#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == crvCVXETH",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(cvxeth_pool) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi crvCVXETH Gauge Deposit",
+     "symbol": "crvCVXETH-gauge"
+    },
+    "note": "Curve gauge for crvCVXETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
   "1:0x7e43df1c1c5a2245858b60d4655fda83704e4171": [
    {
     "chain_id": 1,
@@ -7679,6 +10049,82 @@
     "onchain": {
      "name": "Spark Savings PYUSD",
      "symbol": "spPYUSD"
+    }
+   }
+  ],
+  "1:0x8014595f2ab54cd7c604b00e9fb932176fdc86ae": [
+   {
+    "chain_id": 1,
+    "address": "0x8014595F2AB54cD7c604B00E9fb932176fDc86Ae",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "crv_depositor",
+    "title": null,
+    "ref": "convex.crv_depositor",
+    "category": "minter",
+    "kind": "convex_crv_depositor",
+    "eoa": false,
+    "aliases": [
+     "convex crv depositor"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "cvxCRV.operator() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.crv() == curve.CRV",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "deposit(amount, lock, stakeAddress): CRV in, cvxCRV out (one way)"
+   }
+  ],
+  "1:0x808507121b80c02388fad14726482e061b8da827": [
+   {
+    "chain_id": 1,
+    "address": "0x808507121B80c02388fAd14726482e061B8da827",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "PENDLE",
+    "title": "Pendle",
+    "ref": "pendle.PENDLE",
+    "category": "governance",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "pendle"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    ],
+    "proofs": [
+     {
+      "id": "sPENDLE.PENDLE() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Pendle",
+     "symbol": "PENDLE"
     }
    }
   ],
@@ -8001,6 +10447,45 @@
     }
    }
   ],
+  "1:0x85b2b559bc2d21104c4defdd6efca8a20343361d": [
+   {
+    "chain_id": 1,
+    "address": "0x85B2b559bC2D21104C4DEFdd6EFcA8A20343361D",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "Aave_GHO_USDT_USDC",
+    "title": "Balancer Aave GHO/USDT/USDC",
+    "ref": "balancer_v3.Aave_GHO_USDT_USDC",
+    "category": "market",
+    "kind": "balancer_v3_pool",
+    "eoa": false,
+    "aliases": [
+     "Aave GHO/USDT/USDC",
+     "balancer aave gho/usdt/usdc"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "explorer: https://etherscan.io/address/0x85B2b559bC2D21104C4DEFdd6EFcA8A20343361D#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.getVault() == vault",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer Aave GHO/USDT/USDC",
+     "symbol": "Aave GHO/USDT/USDC"
+    },
+    "note": "Balancer v3 pool; the pool contract is also its BPT"
+   }
+  ],
   "1:0x85b78aca6deae198fbf201c82daf6ca21942acc6": [
    {
     "chain_id": 1,
@@ -8294,6 +10779,39 @@
     }
    }
   ],
+  "1:0x888888888889758f76e7103c6cbf23abbf58f946": [
+   {
+    "chain_id": 1,
+    "address": "0x888888888889758F76e7103c6CbF23ABbF58F946",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "router",
+    "title": null,
+    "ref": "pendle.router",
+    "category": "router",
+    "kind": "pendle_router_v4",
+    "eoa": false,
+    "aliases": [
+     "pendle router",
+     "pendle router v4",
+     "routerv4"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json",
+     "explorer: https://etherscan.io/address/0x888888888889758F76e7103c6CbF23ABbF58F946#code"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {},
+    "note": "PendleRouterV4: mint/redeem PT+YT from SY or a token, swap PT/YT, add/remove market liquidity, redeem after expiry"
+   }
+  ],
   "1:0x889edc2edab5f40e902b864ad4d7ade8e412f9b1": [
    {
     "chain_id": 1,
@@ -8413,6 +10931,52 @@
     }
    }
   ],
+  "1:0x89e6e5f7c3a60e7d6347f054051a29a272f4ce44": [
+   {
+    "chain_id": 1,
+    "address": "0x89E6e5f7c3A60e7D6347F054051A29a272F4cE44",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "YT_sUSDE_26NOV2026",
+    "title": "YT Ethena sUSDE 26NOV2026",
+    "ref": "pendle.YT_sUSDE_26NOV2026",
+    "category": "receipt",
+    "kind": "pendle_yt",
+    "eoa": false,
+    "aliases": [
+     "YT-sUSDE-26NOV2026"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0x89E6e5f7c3A60e7D6347F054051A29a272F4cE44#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.PT() == PT_sUSDE_26NOV2026",
+      "ok": true
+     },
+     {
+      "id": "$self.SY() == SY_sUSDE",
+      "ok": true
+     },
+     {
+      "id": "$self.factory() == yield_contract_factory_v6",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "YT Ethena sUSDE 26NOV2026",
+     "symbol": "YT-sUSDE-26NOV2026"
+    },
+    "note": "Pendle yield token, expiry 2026-11-26"
+   }
+  ],
   "1:0x8a2b6f94ff3a89a03e8c02ee92b55af90c9454a2": [
    {
     "chain_id": 1,
@@ -8485,6 +11049,44 @@
      "name": "Aave Ethereum MKR",
      "symbol": "aEthMKR"
     }
+   }
+  ],
+  "1:0x8a4f252812dff2a8636e4f7eb249d8fc2e3bd77f": [
+   {
+    "chain_id": 1,
+    "address": "0x8a4f252812dFF2A8636E4F7EB249d8FC2E3bd77f",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "BTCGHOETH",
+    "title": "TricryptoGHO",
+    "ref": "curve.BTCGHOETH",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "tricryptogho"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x8a4f252812dFF2A8636E4F7EB249d8FC2E3bd77f#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "TricryptoGHO",
+     "symbol": "BTCGHOETH"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
    }
   ],
   "1:0x8aeb9453ef22cb38abc7a3af9c208f65c1bfe31e": [
@@ -8743,6 +11345,53 @@
     }
    }
   ],
+  "1:0x8e89d41c563e6c3d9901ad75b75e2d8e140def04": [
+   {
+    "chain_id": 1,
+    "address": "0x8e89d41c563e6C3d9901ad75B75e2d8e140DEF04",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "auraAave_GHO_USDT_USDC_vault",
+    "title": "Balancer Aave GHO/USDT/USDC Aura Deposit Vault",
+    "ref": "aura.auraAave_GHO_USDT_USDC_vault",
+    "category": "staking",
+    "kind": "aura_reward_pool_4626",
+    "eoa": false,
+    "aliases": [
+     "auraAave GHO/USDT/USDC-vault",
+     "aura pid 246 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "explorer: https://etherscan.io/address/0x8e89d41c563e6C3d9901ad75B75e2d8e140DEF04#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == auraAave_GHO_USDT_USDC",
+      "ok": true
+     },
+     {
+      "id": "$self.asset() == balancer_v3.Aave_GHO_USDT_USDC",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer Aave GHO/USDT/USDC Aura Deposit Vault",
+     "symbol": "auraAave GHO/USDT/USDC-vault"
+    },
+    "note": "Aura pid 246 rewards (BaseRewardPool4626): getReward(), withdrawAndUnwrap() / redeem() back to the BPT"
+   }
+  ],
   "1:0x9008d19f58aabd9ed0d60971565aa8510560ab41": [
    {
     "chain_id": 1,
@@ -8958,6 +11607,44 @@
     "note": "Gearbox v3 lending pool (WETH); the scyETH credit manager borrows from it. Not called by any action"
    }
   ],
+  "1:0x939e4c11e391a28cd81248163f3a2e595f12ce5e": [
+   {
+    "chain_id": 1,
+    "address": "0x939e4C11E391a28CD81248163f3a2e595f12CE5E",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxcrvUSDUSDT_f",
+    "title": "Curve.fi Factory Plain Pool: crvUSD/USDT Convex Deposit",
+    "ref": "convex.cvxcrvUSDUSDT_f",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "cvxcrvUSDUSDT-f"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x939e4C11E391a28CD81248163f3a2e595f12CE5E#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi Factory Plain Pool: crvUSD/USDT Convex Deposit",
+     "symbol": "cvxcrvUSDUSDT-f"
+    },
+    "note": "Convex pid 179 deposit token for curve.crvUSDUSDT_f"
+   }
+  ],
   "1:0x9469470c9878bf3d6d0604831d9a3a366156f7ee": [
    {
     "chain_id": 1,
@@ -9061,6 +11748,121 @@
     "onchain": {}
    }
   ],
+  "1:0x9518c9063eb0262d791f38d8d6eb0aca33c63ed0": [
+   {
+    "chain_id": 1,
+    "address": "0x9518c9063eB0262D791f38d8d6Eb0aca33c63ed0",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxsteCRV",
+    "title": "Curve.fi ETH/stETH Convex Deposit",
+    "ref": "convex.cvxsteCRV",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x9518c9063eB0262D791f38d8d6Eb0aca33c63ed0#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi ETH/stETH Convex Deposit",
+     "symbol": "cvxsteCRV"
+    },
+    "note": "Convex pid 25 deposit token for curve.steCRV"
+   }
+  ],
+  "1:0x952a316330705ac7b2116aa3decab4dd211340c7": [
+   {
+    "chain_id": 1,
+    "address": "0x952A316330705AC7B2116aa3dECaB4Dd211340c7",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxBTCGHOETH",
+    "title": "TricryptoGHO Convex Deposit",
+    "ref": "convex.cvxBTCGHOETH",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x952A316330705AC7B2116aa3dECaB4Dd211340c7#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "TricryptoGHO Convex Deposit",
+     "symbol": "cvxBTCGHOETH"
+    },
+    "note": "Convex pid 409 deposit token for curve.BTCGHOETH"
+   }
+  ],
+  "1:0x95f00391cb5eebcd190eb58728b4ce23dbfa6ac1": [
+   {
+    "chain_id": 1,
+    "address": "0x95f00391cB5EebCd190EB58728B4CE23DbFa6ac1",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "crvUSDUSDC_f_gauge",
+    "title": "Curve.fi crvUSDUSDC-f Gauge Deposit",
+    "ref": "curve.crvUSDUSDC_f_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "crvUSDUSDC-f-gauge",
+     "crvUSDUSDC-f gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0x95f00391cB5EebCd190EB58728B4CE23DbFa6ac1#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == crvUSDUSDC_f",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(crvUSDUSDC_f) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi crvUSDUSDC-f Gauge Deposit",
+     "symbol": "crvUSDUSDC-f-gauge"
+    },
+    "note": "Curve gauge for crvUSDUSDC_f: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
   "1:0x977b6fc5de62598b08c85ac8cf2b745874e8b78c": [
    {
     "chain_id": 1,
@@ -9135,6 +11937,53 @@
     }
    }
   ],
+  "1:0x994be003de5fd6e41d37c6948f405eb0759149e6": [
+   {
+    "chain_id": 1,
+    "address": "0x994BE003de5FD6E41d37c6948f405EB0759149e6",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "auraosETH_waWETH_vault",
+    "title": "Balancer osETH-waWETH Aura Deposit Vault",
+    "ref": "aura.auraosETH_waWETH_vault",
+    "category": "staking",
+    "kind": "aura_reward_pool_4626",
+    "eoa": false,
+    "aliases": [
+     "auraosETH-waWETH-vault",
+     "aura pid 260 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "explorer: https://etherscan.io/address/0x994BE003de5FD6E41d37c6948f405EB0759149e6#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == auraosETH_waWETH",
+      "ok": true
+     },
+     {
+      "id": "$self.asset() == balancer_v3.osETH_waWETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer osETH-waWETH Aura Deposit Vault",
+     "symbol": "auraosETH-waWETH-vault"
+    },
+    "note": "Aura pid 260 rewards (BaseRewardPool4626): getReward(), withdrawAndUnwrap() / redeem() back to the BPT"
+   }
+  ],
   "1:0x9985df20d7e9103ecbceb16a84956434b6f06ae8": [
    {
     "chain_id": 1,
@@ -9170,6 +12019,49 @@
      "name": "Spark rETH",
      "symbol": "sprETH"
     }
+   }
+  ],
+  "1:0x999999999991e178d52cd95afd4b00d066664144": [
+   {
+    "chain_id": 1,
+    "address": "0x999999999991E178D52Cd95AFd4b00d066664144",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "sPENDLE",
+    "title": "StakedPendle",
+    "ref": "pendle.sPENDLE",
+    "category": "staking",
+    "kind": "pendle_staking",
+    "eoa": false,
+    "aliases": [
+     "spendle",
+     "stakedpendle",
+     "staked pendle"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    ],
+    "proofs": [
+     {
+      "id": "$self.PENDLE() == PENDLE",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xA98D1483781C08e60D944a63721B93fE40749032",
+     "admin": "0xA28c08f165116587D4F3E708743B4dEe155c5E64"
+    },
+    "onchain": {
+     "name": "StakedPendle",
+     "symbol": "sPENDLE"
+    },
+    "note": "PENDLE staking (replaces the deprecated vePENDLE)"
    }
   ],
   "1:0x99cd4ec3f88a45940936f469e4bb72a2a701eeb9": [
@@ -9354,6 +12246,45 @@
     }
    }
   ],
+  "1:0x9c560ebaf78e596cbcc27411d633a74d628dd7dc": [
+   {
+    "chain_id": 1,
+    "address": "0x9C560eBaF78e596cbcC27411d633a74D628dd7dC",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "market_sUSDS_26NOV2026",
+    "title": "PLP Savings USDS 26NOV2026",
+    "ref": "pendle.market_sUSDS_26NOV2026",
+    "category": "market",
+    "kind": "pendle_market",
+    "eoa": false,
+    "aliases": [
+     "PLP-sUSDS-26NOV2026",
+     "pendle sUSDS 2026-11-26"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0x9C560eBaF78e596cbcC27411d633a74D628dd7dC#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.factory() == market_factory_v6",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "PLP Savings USDS 26NOV2026",
+     "symbol": "PLP-sUSDS-26NOV2026"
+    },
+    "note": "Pendle market (LP token) for PT_sUSDS_26NOV2026 / SY_sUSDS, expiry 2026-11-26"
+   }
+  ],
   "1:0x9d244a99801dc05cbc04183769c17056b8a1ad53": [
    {
     "chain_id": 1,
@@ -9433,6 +12364,45 @@
     "note": "ERC-4626 with a cooldown: redeem/withdraw are disabled while cooldownDuration > 0; use cooldownShares then unstake"
    }
   ],
+  "1:0x9e0a248528aa933ff1f8f707ea75f61ed780836e": [
+   {
+    "chain_id": 1,
+    "address": "0x9e0A248528Aa933ff1F8f707ea75F61eD780836E",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxETH_ETH_rewards",
+    "title": null,
+    "ref": "convex.cvxETH_ETH_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 470 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0x9e0A248528Aa933ff1F8f707ea75F61eD780836E#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxETH_ETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 470 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2": [
    {
     "chain_id": 1,
@@ -9461,6 +12431,44 @@
      "name": "Maker",
      "symbol": "MKR"
     }
+   }
+  ],
+  "1:0x9fdd52efeb601e4bc78b89c6490505b8ac637e9f": [
+   {
+    "chain_id": 1,
+    "address": "0x9fdD52eFEb601E4Bc78b89C6490505B8aC637E9f",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "Aave_GHO_USDT_USDC_gauge",
+    "title": "Balancer Aave GHO/USDT/USDC Gauge Deposit",
+    "ref": "balancer_v3.Aave_GHO_USDT_USDC_gauge",
+    "category": "staking",
+    "kind": "balancer_gauge",
+    "eoa": false,
+    "aliases": [
+     "Aave GHO/USDT/USDC-gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "explorer: https://etherscan.io/address/0x9fdD52eFEb601E4Bc78b89C6490505B8aC637E9f#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == Aave_GHO_USDT_USDC",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer Aave GHO/USDT/USDC Gauge Deposit",
+     "symbol": "Aave GHO/USDT/USDC-gauge"
+    },
+    "note": "Balancer gauge for Aave_GHO_USDT_USDC: deposit the BPT to earn BAL (claim with balancer.minter.mint(gauge))"
    }
   ],
   "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": [
@@ -9716,6 +12724,46 @@
      "name": "Savings USDS",
      "symbol": "sUSDS"
     }
+   }
+  ],
+  "1:0xa57b8d98dae62b26ec3bcc4a365338157060b234": [
+   {
+    "chain_id": 1,
+    "address": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "booster",
+    "title": null,
+    "ref": "aura.booster",
+    "category": "staking",
+    "kind": "aura_booster",
+    "eoa": false,
+    "aliases": [
+     "aura booster"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts",
+     "explorer: https://etherscan.io/address/0xA57b8d98dAE62B26Ec3bcC4a365338157060B234#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.crv() == balancer.BAL",
+      "ok": true
+     },
+     {
+      "id": "$self.minter() == AURA",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Aura is winding down on mainnet: the Booster is shut down (isShutdown() = true) and pools are withdrawal-only. withdraw(pid, amount) still works; deposits revert"
    }
   ],
   "1:0xa665bb258d2a732c170dfd505924214c0b1ac74f": [
@@ -10128,6 +13176,48 @@
     }
    }
   ],
+  "1:0xaa0c3f5f7dfd688c6e646f66cd2a6b66acdbe434": [
+   {
+    "chain_id": 1,
+    "address": "0xaa0C3f5F7DFD688C6E646F66CD2a6B66ACdbE434",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "stkCvxCrv",
+    "title": "Staked CvxCrv",
+    "ref": "convex.stkCvxCrv",
+    "category": "staking",
+    "kind": "convex_cvxcrv_staking_wrapper",
+    "eoa": false,
+    "aliases": [
+     "stkcvxcrv",
+     "staked cvxcrv"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "$self.cvxCrv() == cvxCRV",
+      "ok": true
+     },
+     {
+      "id": "$self.cvxCrvStaking() == cvxCRV_rewards",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Staked CvxCrv",
+     "symbol": "stkCvxCrv"
+    }
+   }
+  ],
   "1:0xaa48ecbc843cf7e9a29155d112b8cb27902bd23c": [
    {
     "chain_id": 1,
@@ -10282,6 +13372,45 @@
     }
    }
   ],
+  "1:0xac15fffdca77fc86770beaba20cbc1bc2d00494c": [
+   {
+    "chain_id": 1,
+    "address": "0xAc15ffFdCA77fc86770bEAbA20cbC1bc2D00494c",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxOETH_WETH_rewards",
+    "title": null,
+    "ref": "convex.cvxOETH_WETH_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 451 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0xAc15ffFdCA77fc86770bEAbA20cbC1bc2D00494c#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxOETH_WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 451 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0xac50890a80a2731eb1ea2e9b4f29569ceb06d960": [
    {
     "chain_id": 1,
@@ -10384,6 +13513,90 @@
      "name": "Aave Ethereum Variable Debt PT_srUSDe_2APR2026",
      "symbol": "variableDebtEthPT_srUSDe_2APR2026"
     }
+   }
+  ],
+  "1:0xad6d1a4b1b2f33712a8b18bedc95c0a1f9832269": [
+   {
+    "chain_id": 1,
+    "address": "0xAD6D1a4B1B2F33712A8b18BeDc95c0A1f9832269",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "ETH_ETH_gauge",
+    "title": "Curve.fi ETH+ETH Gauge Deposit",
+    "ref": "curve.ETH_ETH_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "ETH+ETH-gauge",
+     "ETH+ETH gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xAD6D1a4B1B2F33712A8b18BeDc95c0A1f9832269#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == ETH_ETH",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(ETH_ETH) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi ETH+ETH Gauge Deposit",
+     "symbol": "ETH+ETH-gauge"
+    },
+    "note": "Curve gauge for ETH_ETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
+  "1:0xae563e3f8219521950555f5962419c8919758ea2": [
+   {
+    "chain_id": 1,
+    "address": "0xAE563E3f8219521950555F5962419C8919758Ea2",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "router",
+    "title": null,
+    "ref": "balancer_v3.router",
+    "category": "router",
+    "kind": "balancer_v3_router",
+    "eoa": false,
+    "aliases": [
+     "balancer v3 router"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
+     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json",
+     "explorer: https://etherscan.io/address/0xAE563E3f8219521950555F5962419C8919758Ea2#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.getPermit2() == permit2.Permit2",
+      "ok": true
+     },
+     {
+      "id": "$self.getWeth() == weth.WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "v3 Router (version 2): add/remove liquidity and swaps for a single pool; pulls tokens via Permit2"
    }
   ],
   "1:0xae7ab96520de3a18e5e111b5eaab095312d7fe84": [
@@ -10530,6 +13743,45 @@
     }
    }
   ],
+  "1:0xb05262d4aaaa38d0af4aab244d446ebdb5afd4a7": [
+   {
+    "chain_id": 1,
+    "address": "0xb05262D4aaAA38D0Af4AaB244D446ebDb5afd4A7",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxcrvUSDTWBTCWETH_rewards",
+    "title": null,
+    "ref": "convex.cvxcrvUSDTWBTCWETH_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 188 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0xb05262D4aaAA38D0Af4AaB244D446ebDb5afd4A7#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxcrvUSDTWBTCWETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 188 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0xb0b14dd477e6159b4f3f210cf45f0954f57c0fab": [
    {
     "chain_id": 1,
@@ -10604,6 +13856,178 @@
     }
    }
   ],
+  "1:0xb195b618ea52b77cb2a58846f452f59f8dfa9390": [
+   {
+    "chain_id": 1,
+    "address": "0xB195B618EA52b77CB2a58846F452f59f8dFa9390",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "PT_sUSDE_26NOV2026",
+    "title": "PT Ethena sUSDE 26NOV2026",
+    "ref": "pendle.PT_sUSDE_26NOV2026",
+    "category": "receipt",
+    "kind": "pendle_pt",
+    "eoa": false,
+    "aliases": [
+     "PT-sUSDE-26NOV2026"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0xB195B618EA52b77CB2a58846F452f59f8dFa9390#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.SY() == SY_sUSDE",
+      "ok": true
+     },
+     {
+      "id": "$self.YT() == YT_sUSDE_26NOV2026",
+      "ok": true
+     },
+     {
+      "id": "$self.factory() == yield_contract_factory_v6",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "PT Ethena sUSDE 26NOV2026",
+     "symbol": "PT-sUSDE-26NOV2026"
+    },
+    "note": "Pendle principal token, expiry 2026-11-26"
+   }
+  ],
+  "1:0xb1fb0ba0676a1ffa83882c7f4805408ba232c1fa": [
+   {
+    "chain_id": 1,
+    "address": "0xb1Fb0BA0676A1fFA83882c7F4805408bA232C1fA",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxcrvCVXETH_rewards",
+    "title": null,
+    "ref": "convex.cvxcrvCVXETH_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 64 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0xb1Fb0BA0676A1fFA83882c7F4805408bA232C1fA#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxcrvCVXETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 64 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
+  "1:0xb21a277466e7db6934556a1ce12eb3f032815c8a": [
+   {
+    "chain_id": 1,
+    "address": "0xb21A277466e7dB6934556a1Ce12eb3F032815c8A",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "composite_liquidity_router",
+    "title": null,
+    "ref": "balancer_v3.composite_liquidity_router",
+    "category": "router",
+    "kind": "balancer_v3_composite_liquidity_router",
+    "eoa": false,
+    "aliases": [
+     "balancer v3 composite liquidity router"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
+     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json",
+     "explorer: https://etherscan.io/address/0xb21A277466e7dB6934556a1Ce12eb3F032815c8A#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.getPermit2() == permit2.Permit2",
+      "ok": true
+     },
+     {
+      "id": "$self.getWeth() == weth.WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "v3 CompositeLiquidityRouter (version 2): add/remove liquidity in underlying tokens for pools of ERC-4626 wrappers (waEthWETH, ...)"
+   }
+  ],
+  "1:0xb253eff1104802b97ac7e3ac9fdd73aece295a2c": [
+   {
+    "chain_id": 1,
+    "address": "0xb253Eff1104802b97aC7E3aC9FdD73AecE295a2c",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "PT_stETH_30DEC2027",
+    "title": "PT stETH 30DEC2027",
+    "ref": "pendle.PT_stETH_30DEC2027",
+    "category": "receipt",
+    "kind": "pendle_pt",
+    "eoa": false,
+    "aliases": [
+     "PT-stETH-30DEC2027"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0xb253Eff1104802b97aC7E3aC9FdD73AecE295a2c#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.SY() == SY_stETH",
+      "ok": true
+     },
+     {
+      "id": "$self.YT() == YT_stETH_30DEC2027",
+      "ok": true
+     },
+     {
+      "id": "$self.factory() == yield_contract_factory",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "PT stETH 30DEC2027",
+     "symbol": "PT-stETH-30DEC2027"
+    },
+    "note": "Pendle principal token, expiry 2027-12-30"
+   }
+  ],
   "1:0xb3973d459df38ae57797811f2a1fd061da1bc123": [
    {
     "chain_id": 1,
@@ -10639,6 +14063,42 @@
      "name": "Spark cbBTC",
      "symbol": "spcbBTC"
     }
+   }
+  ],
+  "1:0xb576491f1e6e5e62f1d8f26062ee822b40b0e0d4": [
+   {
+    "chain_id": 1,
+    "address": "0xB576491F1E6e5E62f1d8F26062Ee822B40B0E0d4",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "cvxeth_pool",
+    "title": null,
+    "ref": "curve.cvxeth_pool",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "curve cvx-eth pool",
+     "cvx-eth pool"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xB576491F1E6e5E62f1d8F26062Ee822B40B0E0d4#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_pool_from_lp_token(crvCVXETH) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Curve pool (Curve CVX-ETH); its LP token is the separate contract crvCVXETH"
    }
   ],
   "1:0xb5ce3ca2c774b72955c25875022fdd91f7a7b938": [
@@ -10717,6 +14177,42 @@
      "name": "Aave Ethereum RPL",
      "symbol": "aEthRPL"
     }
+   }
+  ],
+  "1:0xb77ba8b4b9d981269466ee95796a9af57d4e82db": [
+   {
+    "chain_id": 1,
+    "address": "0xB77BA8B4b9d981269466eE95796A9Af57d4E82DB",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxcrvUSDTWBTCWETH",
+    "title": "TricryptoUSDT Convex Deposit",
+    "ref": "convex.cvxcrvUSDTWBTCWETH",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0xB77BA8B4b9d981269466eE95796A9Af57d4E82DB#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "TricryptoUSDT Convex Deposit",
+     "symbol": "cvxcrvUSDTWBTCWETH"
+    },
+    "note": "Convex pid 188 deposit token for curve.crvUSDTWBTCWETH"
    }
   ],
   "1:0xb82fa9f31612989525992fcfbb09ab22eff5c85a": [
@@ -10823,6 +14319,153 @@
     "onchain": {}
    }
   ],
+  "1:0xb8db64dfde4bbead174a6cba756743dec72bbd20": [
+   {
+    "chain_id": 1,
+    "address": "0xB8Db64DFDe4bbead174a6CbA756743dEC72Bbd20",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "aurarETH_waEthWETH",
+    "title": "Balancer rETH - Aave WETH Aura Deposit",
+    "ref": "aura.aurarETH_waEthWETH",
+    "category": "receipt",
+    "kind": "aura_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "aurarETH-waEthWETH"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "explorer: https://etherscan.io/address/0xB8Db64DFDe4bbead174a6CbA756743dEC72Bbd20#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer rETH - Aave WETH Aura Deposit",
+     "symbol": "aurarETH-waEthWETH"
+    },
+    "note": "Aura pid 271 deposit token for balancer_v3.rETH_waEthWETH (pool shut down: withdraw only)"
+   }
+  ],
+  "1:0xba100000625a3754423978a60c9317c58a424e3d": [
+   {
+    "chain_id": 1,
+    "address": "0xba100000625a3754423978a60c9317c58a424e3D",
+    "protocol": "balancer",
+    "protocol_name": "Balancer (BAL, emissions, veBAL)",
+    "name": "BAL",
+    "title": "Balancer",
+    "ref": "balancer.BAL",
+    "category": "governance",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "bal",
+     "balancer"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer/registry.yaml",
+     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html"
+    ],
+    "proofs": [
+     {
+      "id": "minter.getBalancerToken() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer",
+     "symbol": "BAL"
+    }
+   }
+  ],
+  "1:0xba12222222228d8ba445958a75a0704d566bf2c8": [
+   {
+    "chain_id": 1,
+    "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    "protocol": "balancer_v2",
+    "protocol_name": "Balancer v2 (Vault)",
+    "name": "vault",
+    "title": null,
+    "ref": "balancer_v2.vault",
+    "category": "market",
+    "kind": "balancer_v2_vault",
+    "eoa": false,
+    "aliases": [
+     "balancer v2 vault",
+     "balancer vault v2"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v2/registry.yaml",
+     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
+     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json",
+     "explorer: https://etherscan.io/address/0xBA12222222228d8Ba445958a75a0704d566BF2C8#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.WETH() == weth.WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Single entry point for v2 pools: joinPool / exitPool / swap / batchSwap"
+   }
+  ],
+  "1:0xba1333333333a1ba1108e8412f11850a5c319ba9": [
+   {
+    "chain_id": 1,
+    "address": "0xbA1333333333a1BA1108E8412f11850A5C319bA9",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "vault",
+    "title": null,
+    "ref": "balancer_v3.vault",
+    "category": "market",
+    "kind": "balancer_v3_vault",
+    "eoa": false,
+    "aliases": [
+     "balancer v3 vault",
+     "balancer vault v3"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
+     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json",
+     "explorer: https://etherscan.io/address/0xbA1333333333a1BA1108E8412f11850A5C319bA9#code"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {},
+    "note": "Holds every v3 pool's tokens; users go through the routers, not the vault"
+   }
+  ],
   "1:0xba2c8f2ea5b56690bfb8b709438f049e5dd76b96": [
    {
     "chain_id": 1,
@@ -10858,6 +14501,45 @@
      "name": "Spark Variable Debt rETH",
      "symbol": "variableDebtrETH"
     }
+   }
+  ],
+  "1:0xba7ebdef7723e55c909ac44226fb87a93625c44e": [
+   {
+    "chain_id": 1,
+    "address": "0xBA7eBDEF7723e55c909Ac44226FB87a93625c44e",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxosETH_rETH_rewards",
+    "title": null,
+    "ref": "convex.cvxosETH_rETH_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 268 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0xBA7eBDEF7723e55c909Ac44226FB87a93625c44e#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxosETH_rETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 268 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
    }
   ],
   "1:0xbaa999ac55eace41ccae355c77809e68bb345170": [
@@ -11116,6 +14798,44 @@
     "note": "USDC in, held as sUSDS through the USDS PSM wrapper"
    }
   ],
+  "1:0xbd5d4c539b3773086632416a4ec8cef57c945319": [
+   {
+    "chain_id": 1,
+    "address": "0xBd5D4c539B3773086632416A4EC8ceF57c945319",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxRLUSD_USDC",
+    "title": "RLUSD/USDC Convex Deposit",
+    "ref": "convex.cvxRLUSD_USDC",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "cvxRLUSD/USDC"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0xBd5D4c539B3773086632416A4EC8ceF57c945319#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "RLUSD/USDC Convex Deposit",
+     "symbol": "cvxRLUSD/USDC"
+    },
+    "note": "Convex pid 443 deposit token for curve.RLUSD_USDC"
+   }
+  ],
   "1:0xbd7d6a9ad7865463de44b05f04559f65e3b11704": [
    {
     "chain_id": 1,
@@ -11257,6 +14977,48 @@
     }
    }
   ],
+  "1:0xbe3d4ec488a0a042bb86f9176c24f8cd54018ba7": [
+   {
+    "chain_id": 1,
+    "address": "0xBe3d4ec488A0a042BB86F9176C24f8CD54018BA7",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "SY_sUSDS",
+    "title": "SY Savings USDS",
+    "ref": "pendle.SY_sUSDS",
+    "category": "receipt",
+    "kind": "pendle_sy",
+    "eoa": false,
+    "aliases": [
+     "SY-sUSDS"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0xBe3d4ec488A0a042BB86F9176C24f8CD54018BA7#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.yieldToken() == sky.sUSDS",
+      "ok": true
+     },
+     {
+      "id": "PT_sUSDS_26NOV2026.SY() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "SY Savings USDS",
+     "symbol": "SY-sUSDS"
+    },
+    "note": "Pendle SY wrapper; yieldToken() = sky.sUSDS"
+   }
+  ],
   "1:0xbe54767735fb7acca2aa7e2d209a6f705073536d": [
    {
     "chain_id": 1,
@@ -11322,6 +15084,123 @@
     "proxy": {},
     "onchain": {},
     "note": "Executes Sky governance spells"
+   }
+  ],
+  "1:0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7": [
+   {
+    "chain_id": 1,
+    "address": "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "threepool",
+    "title": null,
+    "ref": "curve.threepool",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "3pool",
+     "curve 3pool"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_pool_from_lp_token(3Crv) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Curve pool (Curve.fi DAI/USDC/USDT); its LP token is the separate contract 3Crv"
+   }
+  ],
+  "1:0xbf98480425a29197e5d99d003017f63a1e595d02": [
+   {
+    "chain_id": 1,
+    "address": "0xBF98480425A29197e5d99D003017f63a1e595D02",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "SY_sUSDE",
+    "title": "SY Ethena sUSDE",
+    "ref": "pendle.SY_sUSDE",
+    "category": "receipt",
+    "kind": "pendle_sy",
+    "eoa": false,
+    "aliases": [
+     "SY-sUSDE"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0xBF98480425A29197e5d99D003017f63a1e595D02#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.yieldToken() == ethena.sUSDe",
+      "ok": true
+     },
+     {
+      "id": "PT_sUSDE_26NOV2026.SY() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "SY Ethena sUSDE",
+     "symbol": "SY-sUSDE"
+    },
+    "note": "Pendle SY wrapper; yieldToken() = ethena.sUSDe"
+   }
+  ],
+  "1:0xbfcf63294ad7105dea65aa58f8ae5be2d9d0952a": [
+   {
+    "chain_id": 1,
+    "address": "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "3Crv_gauge",
+    "title": null,
+    "ref": "curve.3Crv_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "3Crv gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == 3Crv",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(threepool) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Curve gauge for 3Crv: deposit the LP to earn CRV (claim with minter.mint(gauge))"
    }
   ],
   "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": [
@@ -11440,6 +15319,43 @@
     }
    }
   ],
+  "1:0xc0c293ce456ff0ed870add98a0828dd4d2903dbf": [
+   {
+    "chain_id": 1,
+    "address": "0xC0c293ce456fF0ED870ADd98a0828Dd4d2903DBF",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "AURA",
+    "title": "Aura",
+    "ref": "aura.AURA",
+    "category": "governance",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "aura"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
+    ],
+    "proofs": [
+     {
+      "id": "booster.minter() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Aura",
+     "symbol": "AURA"
+    }
+   }
+  ],
   "1:0xc0cf47d16a332f9e12e506e9a5c8b4baf2a6f1f6": [
    {
     "chain_id": 1,
@@ -11482,6 +15398,89 @@
     "proxy": {},
     "onchain": {},
     "note": "KPK_ETH_Yield's adapter into Morpho markets (adapters(0))"
+   }
+  ],
+  "1:0xc128468b7ce63ea702c1f104d55a2566b13d3abd": [
+   {
+    "chain_id": 1,
+    "address": "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD",
+    "protocol": "balancer",
+    "protocol_name": "Balancer (BAL, emissions, veBAL)",
+    "name": "gauge_controller",
+    "title": null,
+    "ref": "balancer.gauge_controller",
+    "category": "config",
+    "kind": "balancer_gauge_controller",
+    "eoa": false,
+    "aliases": [
+     "balancer gauge controller"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer/registry.yaml",
+     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
+     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json"
+    ],
+    "proofs": [
+     {
+      "id": "minter.getGaugeController() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.voting_escrow() == veBAL",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {}
+   }
+  ],
+  "1:0xc128a9954e6c874ea3d62ce62b468ba073093f25": [
+   {
+    "chain_id": 1,
+    "address": "0xC128a9954e6c874eA3d62ce62B468bA073093F25",
+    "protocol": "balancer",
+    "protocol_name": "Balancer (BAL, emissions, veBAL)",
+    "name": "veBAL",
+    "title": "Vote Escrowed Balancer BPT",
+    "ref": "balancer.veBAL",
+    "category": "staking",
+    "kind": "voting_escrow",
+    "eoa": false,
+    "aliases": [
+     "vebal",
+     "vote escrowed balancer bpt"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer/registry.yaml",
+     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
+     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json"
+    ],
+    "proofs": [
+     {
+      "id": "gauge_controller.voting_escrow() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.token() == B_80BAL_20WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Vote Escrowed Balancer BPT",
+     "symbol": "veBAL"
+    },
+    "note": "B-80BAL-20WETH vote-escrow lock (non-transferable)"
    }
   ],
   "1:0xc139190f447e929f090edeb554d95abb8b18ac1c": [
@@ -11997,6 +15996,52 @@
     }
    }
   ],
+  "1:0xc7b8551c6b286ce0b44952320e940bd3dee58a09": [
+   {
+    "chain_id": 1,
+    "address": "0xC7B8551C6B286Ce0b44952320e940Bd3Dee58A09",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "YT_sUSDS_26NOV2026",
+    "title": "YT Savings USDS 26NOV2026",
+    "ref": "pendle.YT_sUSDS_26NOV2026",
+    "category": "receipt",
+    "kind": "pendle_yt",
+    "eoa": false,
+    "aliases": [
+     "YT-sUSDS-26NOV2026"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0xC7B8551C6B286Ce0b44952320e940Bd3Dee58A09#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.PT() == PT_sUSDS_26NOV2026",
+      "ok": true
+     },
+     {
+      "id": "$self.SY() == SY_sUSDS",
+      "ok": true
+     },
+     {
+      "id": "$self.factory() == yield_contract_factory_v6",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "YT Savings USDS 26NOV2026",
+     "symbol": "YT-sUSDS-26NOV2026"
+    },
+    "note": "Pendle yield token, expiry 2026-11-26"
+   }
+  ],
   "1:0xc92e8bdf79f0507f65a392b0ab4667716bfe0110": [
    {
     "chain_id": 1,
@@ -12103,6 +16148,87 @@
      "name": "Aave Ethereum Variable Debt PT_sUSDE_25SEP2025",
      "symbol": "variableDebtEthPT_sUSDE_25SEP2025"
     }
+   }
+  ],
+  "1:0xcbc72d92b2dc8187414f6734718563898740c0bc": [
+   {
+    "chain_id": 1,
+    "address": "0xcbC72d92b2dc8187414F6734718563898740C0BC",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "SY_stETH",
+    "title": "SY stETH",
+    "ref": "pendle.SY_stETH",
+    "category": "receipt",
+    "kind": "pendle_sy",
+    "eoa": false,
+    "aliases": [
+     "SY-stETH"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0xcbC72d92b2dc8187414F6734718563898740C0BC#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.yieldToken() == lido.wstETH",
+      "ok": true
+     },
+     {
+      "id": "PT_stETH_30DEC2027.SY() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "SY stETH",
+     "symbol": "SY-stETH"
+    },
+    "note": "Pendle SY wrapper; yieldToken() = lido.wstETH"
+   }
+  ],
+  "1:0xcc7d5785ad5755b6164e21495e07adb0ff11c2a8": [
+   {
+    "chain_id": 1,
+    "address": "0xcc7d5785AD5755B6164e21495E07aDb0Ff11C2A8",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "OETH_WETH",
+    "title": "OETH/WETH",
+    "ref": "curve.OETH_WETH",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "OETH/WETH",
+     "oeth/weth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xcc7d5785AD5755B6164e21495E07aDb0Ff11C2A8#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "OETH/WETH",
+     "symbol": "OETH/WETH"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
    }
   ],
   "1:0xcc9ee9483f662091a1de4795249e24ac0ac2630f": [
@@ -12336,6 +16462,46 @@
     }
    }
   ],
+  "1:0xcf50b810e57ac33b91dcf525c6ddd9881b139332": [
+   {
+    "chain_id": 1,
+    "address": "0xCF50b810E57Ac33B91dCF525C6ddd9881B139332",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvx_rewards",
+    "title": null,
+    "ref": "convex.cvx_rewards",
+    "category": "staking",
+    "kind": "convex_cvx_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "cvx staking",
+     "cvxrewardpool"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "booster.stakerRewards() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == CVX",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "CVX staking (cvxRewardPool), earns cvxCRV"
+   }
+  ],
   "1:0xcf8d0c70c850859266f5c338b38f9d663181c314": [
    {
     "chain_id": 1,
@@ -12436,6 +16602,45 @@
     "onchain": {}
    }
   ],
+  "1:0xd001ae433f254283fece51d4acce8c53263aa186": [
+   {
+    "chain_id": 1,
+    "address": "0xD001aE433f254283FeCE51d4ACcE8c53263aa186",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "RLUSD_USDC",
+    "title": "RLUSD/USDC",
+    "ref": "curve.RLUSD_USDC",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "RLUSD/USDC",
+     "rlusd/usdc"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xD001aE433f254283FeCE51d4ACcE8c53263aa186#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "RLUSD/USDC",
+     "symbol": "RLUSD/USDC"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
+   }
+  ],
   "1:0xd01607c3c5ecaba394d8be377a08590149325722": [
    {
     "chain_id": 1,
@@ -12469,6 +16674,46 @@
     "proxy": {},
     "onchain": {},
     "note": "Wraps ETH and supplies / repays / withdraws WETH on the pool"
+   }
+  ],
+  "1:0xd061d61a4d941c39e5453435b6345dc261c2fce0": [
+   {
+    "chain_id": 1,
+    "address": "0xd061D61a4d941c39E5453435B6345Dc261C2fcE0",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "minter",
+    "title": null,
+    "ref": "curve.minter",
+    "category": "minter",
+    "kind": "curve_minter",
+    "eoa": false,
+    "aliases": [
+     "curve minter",
+     "crv minter"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "docs: https://docs.curve.finance/user/deployments"
+    ],
+    "proofs": [
+     {
+      "id": "steCRV_gauge.minter() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.controller() == gauge_controller",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "mint(gauge) claims CRV emissions for a gauge deposit"
    }
   ],
   "1:0xd15f11b334e1e233127302e5f759c17da1260df5": [
@@ -12569,6 +16814,45 @@
     "onchain": {}
    }
   ],
+  "1:0xd1ddb0a0815fd28932fbb194c84003683af8a824": [
+   {
+    "chain_id": 1,
+    "address": "0xD1DdB0a0815fD28932fBb194C84003683AF8a824",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxcrvUSDUSDT_f_rewards",
+    "title": null,
+    "ref": "convex.cvxcrvUSDUSDT_f_rewards",
+    "category": "staking",
+    "kind": "convex_base_reward_pool",
+    "eoa": false,
+    "aliases": [
+     "convex pid 179 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0xD1DdB0a0815fD28932fBb194C84003683AF8a824#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     },
+     {
+      "id": "$self.stakingToken() == cvxcrvUSDUSDT_f",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Convex pid 179 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+   }
+  ],
   "1:0xd2cf07dee40d3d530d15b88d689f5cd97a31fc3d": [
    {
     "chain_id": 1,
@@ -12640,6 +16924,48 @@
     "onchain": {
      "name": "Aave Ethereum FRAX",
      "symbol": "aEthFRAX"
+    }
+   }
+  ],
+  "1:0xd533a949740bb3306d119cc777fa900ba034cd52": [
+   {
+    "chain_id": 1,
+    "address": "0xD533a949740bb3306d119CC777fa900bA034cd52",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "CRV",
+    "title": "Curve DAO Token",
+    "ref": "curve.CRV",
+    "category": "governance",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "crv",
+     "curve dao token"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "docs: https://docs.curve.finance/user/deployments"
+    ],
+    "proofs": [
+     {
+      "id": "address_provider.get_address(19) == $self",
+      "ok": true
+     },
+     {
+      "id": "minter.token() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve DAO Token",
+     "symbol": "CRV"
     }
    }
   ],
@@ -12902,6 +17228,45 @@
     "note": "USDT's approve() reverts when changing a non-zero allowance to another non-zero value; approve 0 first"
    }
   ],
+  "1:0xdb74dfdd3bb46be8ce6c33dc9d82777bcfc3ded5": [
+   {
+    "chain_id": 1,
+    "address": "0xDB74dfDD3BB46bE8Ce6C33dC9D82777BCFc3dEd5",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "weeth_ng",
+    "title": "weETH/WETH-ng",
+    "ref": "curve.weeth_ng",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "weeth-ng",
+     "weeth/weth-ng"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xDB74dfDD3BB46bE8Ce6C33dC9D82777BCFc3dEd5#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "weETH/WETH-ng",
+     "symbol": "weeth-ng"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
+   }
+  ],
   "1:0xdbdc1ef57537e34680b898e1febd3d68c7389bcb": [
    {
     "chain_id": 1,
@@ -12976,6 +17341,88 @@
      "name": "USDS Stablecoin",
      "symbol": "USDS"
     }
+   }
+  ],
+  "1:0xdc169abe56461a2e0c034da431ac2a3ebf596094": [
+   {
+    "chain_id": 1,
+    "address": "0xdC169AbE56461A2E0c034Da431Ac2a3ebf596094",
+    "protocol": "pendle",
+    "protocol_name": "Pendle (router, PT / YT / SY, markets)",
+    "name": "PT_sUSDS_26NOV2026",
+    "title": "PT Savings USDS 26NOV2026",
+    "ref": "pendle.PT_sUSDS_26NOV2026",
+    "category": "receipt",
+    "kind": "pendle_pt",
+    "eoa": false,
+    "aliases": [
+     "PT-sUSDS-26NOV2026"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/pendle/registry.yaml",
+     "explorer: https://etherscan.io/address/0xdC169AbE56461A2E0c034Da431Ac2a3ebf596094#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.SY() == SY_sUSDS",
+      "ok": true
+     },
+     {
+      "id": "$self.YT() == YT_sUSDS_26NOV2026",
+      "ok": true
+     },
+     {
+      "id": "$self.factory() == yield_contract_factory_v6",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "PT Savings USDS 26NOV2026",
+     "symbol": "PT-sUSDS-26NOV2026"
+    },
+    "note": "Pendle principal token, expiry 2026-11-26"
+   }
+  ],
+  "1:0xdc24316b9ae028f1497c275eb9192a3ea0f67022": [
+   {
+    "chain_id": 1,
+    "address": "0xDC24316b9AE028F1497c275EB9192a3Ea0f67022",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "steth_pool",
+    "title": null,
+    "ref": "curve.steth_pool",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "curve steth pool",
+     "steth pool"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xDC24316b9AE028F1497c275EB9192a3Ea0f67022#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_pool_from_lp_token(steCRV) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Curve pool (Curve.fi ETH/stETH); its LP token is the separate contract steCRV"
    }
   ],
   "1:0xde6ef6cb4abd3a473ffc2942eef5d84536f8e864": [
@@ -13087,6 +17534,45 @@
      "name": "Aave Ethereum PT_USDe_7MAY2026",
      "symbol": "aEthPT_USDe_7MAY2026"
     }
+   }
+  ],
+  "1:0xe080027bd47353b5d1639772b4a75e9ed3658a0d": [
+   {
+    "chain_id": 1,
+    "address": "0xe080027Bd47353b5D1639772b4a75E9Ed3658A0d",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "osETH_rETH",
+    "title": "osETH/rETH",
+    "ref": "curve.osETH_rETH",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "osETH-rETH",
+     "oseth/reth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xe080027Bd47353b5D1639772b4a75E9Ed3658A0d#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "osETH/rETH",
+     "symbol": "osETH-rETH"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
    }
   ],
   "1:0xe1753f2e00940cc31213dd92013cf019dfe4ca1d": [
@@ -13313,6 +17799,44 @@
     ],
     "proxy": {},
     "onchain": {}
+   }
+  ],
+  "1:0xe3ea98bd863bef37d951973743aac2e56edd99bc": [
+   {
+    "chain_id": 1,
+    "address": "0xE3eA98BD863bEF37D951973743aAC2e56edd99BC",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxosETH_rETH",
+    "title": "osETH/rETH Convex Deposit",
+    "ref": "convex.cvxosETH_rETH",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "cvxosETH-rETH"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0xE3eA98BD863bEF37D951973743aAC2e56edd99BC#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "osETH/rETH Convex Deposit",
+     "symbol": "cvxosETH-rETH"
+    },
+    "note": "Convex pid 268 deposit token for curve.osETH_rETH"
    }
   ],
   "1:0xe439edd2625772aa635b437c099c607b6eb7d35f": [
@@ -13646,6 +18170,84 @@
     "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_wARS_Yield"
    }
   ],
+  "1:0xead792b55340aa20181a80d6a16db6a0ecd1b827": [
+   {
+    "chain_id": 1,
+    "address": "0xeAd792B55340Aa20181A80d6a16db6A0ECd1b827",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "bal_depositor",
+    "title": null,
+    "ref": "aura.bal_depositor",
+    "category": "minter",
+    "kind": "aura_crv_depositor",
+    "eoa": false,
+    "aliases": [
+     "aura bal depositor",
+     "aurabal depositor"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
+    ],
+    "proofs": [
+     {
+      "id": "auraBAL.operator() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.crvBpt() == balancer.B_80BAL_20WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "B-80BAL-20WETH in, auraBAL out (one way)"
+   }
+  ],
+  "1:0xeb12fbcb0a068720ee5f7816416a3ebfc3090a2b": [
+   {
+    "chain_id": 1,
+    "address": "0xeb12FBcb0a068720EE5F7816416a3Ebfc3090A2B",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "auraAave_GHO_USDT_USDC",
+    "title": "Balancer Aave GHO/USDT/USDC Aura Deposit",
+    "ref": "aura.auraAave_GHO_USDT_USDC",
+    "category": "receipt",
+    "kind": "aura_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "auraAave GHO/USDT/USDC"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "explorer: https://etherscan.io/address/0xeb12FBcb0a068720EE5F7816416a3Ebfc3090A2B#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Balancer Aave GHO/USDT/USDC Aura Deposit",
+     "symbol": "auraAave GHO/USDT/USDC"
+    },
+    "note": "Aura pid 246 deposit token for balancer_v3.Aave_GHO_USDT_USDC (pool shut down: withdraw only)"
+   }
+  ],
   "1:0xeb284a70557efe3591b9e6d9d720040e02c54a4d": [
    {
     "chain_id": 1,
@@ -13901,6 +18503,44 @@
     "note": "Veda BoringVault; also the share token and the spender for deposit approvals"
    }
   ],
+  "1:0xf0bb7682830941e105ce0fe2c043d1bb058d45b6": [
+   {
+    "chain_id": 1,
+    "address": "0xf0BB7682830941e105Ce0FE2c043d1Bb058d45B6",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "cvxETH_ETH",
+    "title": "ETH+/ETH Convex Deposit",
+    "ref": "convex.cvxETH_ETH",
+    "category": "receipt",
+    "kind": "convex_deposit_token",
+    "eoa": false,
+    "aliases": [
+     "cvxETH+ETH"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "explorer: https://etherscan.io/address/0xf0BB7682830941e105Ce0FE2c043d1Bb058d45B6#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.operator() == booster",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "ETH+/ETH Convex Deposit",
+     "symbol": "cvxETH+ETH"
+    },
+    "note": "Convex pid 470 deposit token for curve.ETH_ETH"
+   }
+  ],
   "1:0xf1eee0957267b1a474323ff9cff7719e964969fa": [
    {
     "chain_id": 1,
@@ -13932,6 +18572,123 @@
     },
     "onchain": {},
     "note": "Yo's own deposit entry point; every vault/receiver param must be pinned"
+   }
+  ],
+  "1:0xf29fff074f5cf755b55fbb3eb10a29203ac91ea2": [
+   {
+    "chain_id": 1,
+    "address": "0xF29FfF074f5cF755b55FbB3eb10A29203ac91EA2",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "crvUSDTWBTCWETH_gauge",
+    "title": "Curve.fi crvUSDTWBTCWETH Gauge Deposit",
+    "ref": "curve.crvUSDTWBTCWETH_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "crvUSDTWBTCWETH-gauge",
+     "crvUSDTWBTCWETH gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xF29FfF074f5cF755b55FbB3eb10A29203ac91EA2#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == crvUSDTWBTCWETH",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(crvUSDTWBTCWETH) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi crvUSDTWBTCWETH Gauge Deposit",
+     "symbol": "crvUSDTWBTCWETH-gauge"
+    },
+    "note": "Curve gauge for crvUSDTWBTCWETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
+  "1:0xf403c135812408bfbe8713b5a23a04b3d48aae31": [
+   {
+    "chain_id": 1,
+    "address": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31",
+    "protocol": "convex",
+    "protocol_name": "Convex (Curve LP boosting, cvxCRV, CVX)",
+    "name": "booster",
+    "title": null,
+    "ref": "convex.booster",
+    "category": "staking",
+    "kind": "convex_booster",
+    "eoa": false,
+    "aliases": [
+     "convex booster"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/convex/registry.yaml",
+     "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses",
+     "explorer: https://etherscan.io/address/0xF403C135812408BFbE8713b5A23a04b3D48AAE31#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.crv() == curve.CRV",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Entry point: deposit(pid, amount, stake) / withdraw(pid, amount); poolInfo(pid) lists each pool's contracts"
+   }
+  ],
+  "1:0xf5f5b97624542d72a9e06f04804bf81baa15e2b4": [
+   {
+    "chain_id": 1,
+    "address": "0xf5f5B97624542D72A9E06f04804Bf81baA15e2B4",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "crvUSDTWBTCWETH",
+    "title": "TricryptoUSDT",
+    "ref": "curve.crvUSDTWBTCWETH",
+    "category": "market",
+    "kind": "curve_pool",
+    "eoa": false,
+    "aliases": [
+     "tricryptousdt"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xf5f5B97624542D72A9E06f04804Bf81baA15e2B4#code"
+    ],
+    "proofs": [
+     {
+      "id": "meta_registry.get_lp_token($self) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "TricryptoUSDT",
+     "symbol": "crvUSDTWBTCWETH"
+    },
+    "note": "Curve pool; the pool contract is also its LP token"
    }
   ],
   "1:0xf64178ebd2e2719f2b1233bcb5ef6db4bcc4d09a": [
@@ -14232,6 +18989,48 @@
     "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDC_Prime"
    }
   ],
+  "1:0xf939e0a03fb07f59a73314e73794be0e57ac1b4e": [
+   {
+    "chain_id": 1,
+    "address": "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E",
+    "protocol": "stablecoins",
+    "protocol_name": "Blue-chip USD stablecoins (token contracts only)",
+    "name": "crvUSD",
+    "title": "Curve.Fi USD Stablecoin",
+    "ref": "stablecoins.crvUSD",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "crvusd",
+     "curve usd"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/stablecoins/registry.yaml",
+     "docs: https://docs.curve.finance/user/deployments"
+    ],
+    "proofs": [
+     {
+      "id": "curve.crvUSDUSDC_f.coins(1) == $self",
+      "ok": true
+     },
+     {
+      "id": "curve.crvUSDUSDT_f.coins(1) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.Fi USD Stablecoin",
+     "symbol": "crvUSD"
+    }
+   }
+  ],
   "1:0xf956b38f035dc9067fb827a512d3cf35202ab0bc": [
    {
     "chain_id": 1,
@@ -14265,6 +19064,42 @@
     "proxy": {},
     "onchain": {},
     "note": "Wraps ETH and supplies / repays / withdraws WETH on the pool"
+   }
+  ],
+  "1:0xf98b45fa17de75fb1ad0e7afd971b0ca00e379fc": [
+   {
+    "chain_id": 1,
+    "address": "0xF98B45FA17DE75FB1aD0e7aFD971b0ca00e379fC",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "meta_registry",
+    "title": null,
+    "ref": "curve.meta_registry",
+    "category": "config",
+    "kind": "curve_meta_registry",
+    "eoa": false,
+    "aliases": [
+     "curve metaregistry",
+     "metaregistry"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "docs: https://docs.curve.finance/user/deployments"
+    ],
+    "proofs": [
+     {
+      "id": "address_provider.get_address(7) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Pool index across all Curve factories: get_lp_token / get_gauge / get_pool_from_lp_token"
    }
   ],
   "1:0xf9a9cfd3229e985b91f99bc866d42938044ffa1c": [
@@ -14373,6 +19208,43 @@
     }
    }
   ],
+  "1:0xfaa2ed111b4f580fcb85c48e6dc6782dc5fcd7a6": [
+   {
+    "chain_id": 1,
+    "address": "0xfAA2eD111B4F580fCb85C48E6DC6782Dc5FCD7a6",
+    "protocol": "aura",
+    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
+    "name": "stkauraBAL",
+    "title": "Staked Aura BAL",
+    "ref": "aura.stkauraBAL",
+    "category": "vault",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "staked aura bal"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aura/registry.yaml",
+     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
+    ],
+    "proofs": [
+     {
+      "id": "$self.asset() == auraBAL",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Staked Aura BAL",
+     "symbol": "stkauraBAL"
+    }
+   }
+  ],
   "1:0xfb0a3cf9b019bfd8827443d131b235b3e0fc58d2": [
    {
     "chain_id": 1,
@@ -14474,6 +19346,49 @@
     ],
     "proxy": {},
     "onchain": {}
+   }
+  ],
+  "1:0xfc3212bd9ad9a28da6b2bd50a2918969c126894f": [
+   {
+    "chain_id": 1,
+    "address": "0xFc3212Bd9Ad9A28Da6B2bd50a2918969C126894F",
+    "protocol": "curve",
+    "protocol_name": "Curve (pools, gauges, CRV, veCRV)",
+    "name": "RLUSD_USDC_gauge",
+    "title": "Curve.fi RLUSD/USDC Gauge Deposit",
+    "ref": "curve.RLUSD_USDC_gauge",
+    "category": "staking",
+    "kind": "curve_gauge",
+    "eoa": false,
+    "aliases": [
+     "RLUSD/USDC-gauge",
+     "RLUSD/USDC gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/curve/registry.yaml",
+     "explorer: https://etherscan.io/address/0xFc3212Bd9Ad9A28Da6B2bd50a2918969C126894F#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.lp_token() == RLUSD_USDC",
+      "ok": true
+     },
+     {
+      "id": "meta_registry.get_gauge(RLUSD_USDC) == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Curve.fi RLUSD/USDC Gauge Deposit",
+     "symbol": "RLUSD/USDC-gauge"
+    },
+    "note": "Curve gauge for RLUSD_USDC: deposit the LP to earn CRV (claim with minter.mint(gauge))"
    }
   ],
   "1:0xfc807058a352b61aeef6a38e2d0fc3990225e772": [
@@ -14684,11 +19599,53 @@
  },
  "edges": [
   {
+   "from": "1:0x000000000022d473030f116ddee9f6b43ac78ba3",
+   "relation": "spender_for",
+   "to": "1:0xae563e3f8219521950555f5962419c8919758ea2",
+   "from_ref": "permit2.Permit2",
+   "to_ref": "balancer_v3.router"
+  },
+  {
+   "from": "1:0x000000000022d473030f116ddee9f6b43ac78ba3",
+   "relation": "spender_for",
+   "to": "1:0xb21a277466e7db6934556a1ce12eb3f032815c8a",
+   "from_ref": "permit2.Permit2",
+   "to_ref": "balancer_v3.composite_liquidity_router"
+  },
+  {
+   "from": "1:0x02950460e2b9529d0e00284a5fa2d7bdf3fa4d72",
+   "relation": "underlying_of",
+   "to": "1:0x04e80db3f84873e4132b221831af1045d27f140f",
+   "from_ref": "curve.USDeUSDC",
+   "to_ref": "curve.USDeUSDC_gauge"
+  },
+  {
    "from": "1:0x056b269eb1f75477a8666ae8c7fe01b64dd55ecc",
    "relation": "underlying_of",
    "to": "1:0xf689555121e529ff0463e191f9bd9d1e496164a7",
    "from_ref": "threejane.USD3",
    "to_ref": "threejane.sUSD3"
+  },
+  {
+   "from": "1:0x06325440d014e39736583c165c2963ba99faf14e",
+   "relation": "receipt_of",
+   "to": "1:0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+   "from_ref": "curve.steCRV",
+   "to_ref": "curve.steth_pool"
+  },
+  {
+   "from": "1:0x06325440d014e39736583c165c2963ba99faf14e",
+   "relation": "underlying_of",
+   "to": "1:0x182b723a58739a9c974cfdb385ceadb237453c28",
+   "from_ref": "curve.steCRV",
+   "to_ref": "curve.steCRV_gauge"
+  },
+  {
+   "from": "1:0x06325440d014e39736583c165c2963ba99faf14e",
+   "relation": "underlying_of",
+   "to": "1:0x9518c9063eb0262d791f38d8d6eb0aca33c63ed0",
+   "from_ref": "curve.steCRV",
+   "to_ref": "convex.cvxsteCRV"
   },
   {
    "from": "1:0x08c6f91e2b681faf5e17227f2a44c307b3c1364c",
@@ -14703,6 +19660,20 @@
    "to": "1:0xeba440b438ad808101d1c451c1c5322c90befcda",
    "from_ref": "aave_v3.etherfi_pool",
    "to_ref": "aave_v3.etherfi_addresses_provider"
+  },
+  {
+   "from": "1:0x0bc857f97c0554d1d0d602b56f2eece682016fba",
+   "relation": "underlying_of",
+   "to": "1:0xb1fb0ba0676a1ffa83882c7f4805408ba232c1fa",
+   "from_ref": "convex.cvxcrvCVXETH",
+   "to_ref": "convex.cvxcrvCVXETH_rewards"
+  },
+  {
+   "from": "1:0x167478921b907422f8e88b43c4af2b8bea278d3a",
+   "relation": "underlying_of",
+   "to": "1:0x330cfd12e0e97b0adf46158d2a81e8bd2985c6cb",
+   "from_ref": "curve.MtEthena",
+   "to_ref": "curve.MtEthena_gauge"
   },
   {
    "from": "1:0x1897a8997241c1cd4bd0698647e4eb7213535c24",
@@ -14740,6 +19711,13 @@
    "to_ref": "aave_v3.aEthEURC"
   },
   {
+   "from": "1:0x1b74fa5951dfa4c03d0127011548fa79b956f63b",
+   "relation": "underlying_of",
+   "to": "1:0x6b27d7bc63f1999d14ff9ba900069ee516669ee8",
+   "from_ref": "convex.cvxstETH_ng_f",
+   "to_ref": "convex.cvxstETH_ng_f_rewards"
+  },
+  {
    "from": "1:0x1d511811aca9d8817a3e50f29cadff6243a02902",
    "relation": "reads_from",
    "to": "1:0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
@@ -14754,6 +19732,69 @@
    "to_ref": "morpho_vaults.morpho_blue"
   },
   {
+   "from": "1:0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3",
+   "relation": "underlying_of",
+   "to": "1:0x20283cce209b29d19329e8ada47215a52188afdc",
+   "from_ref": "balancer_v3.rETH_waEthWETH",
+   "to_ref": "aura.aurarETH_waEthWETH_vault"
+  },
+  {
+   "from": "1:0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3",
+   "relation": "underlying_of",
+   "to": "1:0x62a66eb9abf7a788f48d0ce7c0c065df9e09da19",
+   "from_ref": "balancer_v3.rETH_waEthWETH",
+   "to_ref": "balancer_v3.rETH_waEthWETH_gauge"
+  },
+  {
+   "from": "1:0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3",
+   "relation": "underlying_of",
+   "to": "1:0xb8db64dfde4bbead174a6cba756743dec72bbd20",
+   "from_ref": "balancer_v3.rETH_waEthWETH",
+   "to_ref": "aura.aurarETH_waEthWETH"
+  },
+  {
+   "from": "1:0x21e27a5e5513d6e65c4f830167390997aa84843a",
+   "relation": "underlying_of",
+   "to": "1:0x1b74fa5951dfa4c03d0127011548fa79b956f63b",
+   "from_ref": "curve.stETH_ng_f",
+   "to_ref": "convex.cvxstETH_ng_f"
+  },
+  {
+   "from": "1:0x21e27a5e5513d6e65c4f830167390997aa84843a",
+   "relation": "underlying_of",
+   "to": "1:0x79f21bc30632cd40d2af8134b469a0eb4c9574aa",
+   "from_ref": "curve.stETH_ng_f",
+   "to_ref": "curve.stETH_ng_f_gauge"
+  },
+  {
+   "from": "1:0x2a1e7cf85e533348ac5770514bf713544a11f856",
+   "relation": "underlying_of",
+   "to": "1:0xac15fffdca77fc86770beaba20cbc1bc2d00494c",
+   "from_ref": "convex.cvxOETH_WETH",
+   "to_ref": "convex.cvxOETH_WETH_rewards"
+  },
+  {
+   "from": "1:0x2c683fad51da2cd17793219cc86439c1875c353e",
+   "relation": "underlying_of",
+   "to": "1:0xad6d1a4b1b2f33712a8b18bedc95c0a1f9832269",
+   "from_ref": "curve.ETH_ETH",
+   "to_ref": "curve.ETH_ETH_gauge"
+  },
+  {
+   "from": "1:0x2c683fad51da2cd17793219cc86439c1875c353e",
+   "relation": "underlying_of",
+   "to": "1:0xf0bb7682830941e105ce0fe2c043d1bb058d45b6",
+   "from_ref": "curve.ETH_ETH",
+   "to_ref": "convex.cvxETH_ETH"
+  },
+  {
+   "from": "1:0x30d9410ed1d5da1f6c8391af5338c93ab8d4035c",
+   "relation": "underlying_of",
+   "to": "1:0x689440f2ff927e1f24c72f1087e1faf471ece1c8",
+   "from_ref": "convex.cvx3Crv",
+   "to_ref": "convex.cvx3Crv_rewards"
+  },
+  {
    "from": "1:0x3300f198988e4c9c63f75df86de36421f06af8c4",
    "relation": "admin_of",
    "to": "1:0xda135cd78a086025bcdc87b038a1c462032b510c",
@@ -14766,6 +19807,48 @@
    "to": "1:0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
    "from_ref": "kpk.KPK_wARS_Yield_adapter",
    "to_ref": "morpho_vaults.morpho_blue"
+  },
+  {
+   "from": "1:0x390f3595bca2df7d23783dfd126427cceb997bf4",
+   "relation": "underlying_of",
+   "to": "1:0x4e6bb6b7447b7b2aa268c16ab87f4bb48bf57939",
+   "from_ref": "curve.crvUSDUSDT_f",
+   "to_ref": "curve.crvUSDUSDT_f_gauge"
+  },
+  {
+   "from": "1:0x390f3595bca2df7d23783dfd126427cceb997bf4",
+   "relation": "underlying_of",
+   "to": "1:0x939e4c11e391a28cd81248163f3a2e595f12ce5e",
+   "from_ref": "curve.crvUSDUSDT_f",
+   "to_ref": "convex.cvxcrvUSDUSDT_f"
+  },
+  {
+   "from": "1:0x3a283d9c08e8b55966afb64c515f5143cf907611",
+   "relation": "receipt_of",
+   "to": "1:0xb576491f1e6e5e62f1d8f26062ee822b40b0e0d4",
+   "from_ref": "curve.crvCVXETH",
+   "to_ref": "curve.cvxeth_pool"
+  },
+  {
+   "from": "1:0x3a283d9c08e8b55966afb64c515f5143cf907611",
+   "relation": "underlying_of",
+   "to": "1:0x0bc857f97c0554d1d0d602b56f2eece682016fba",
+   "from_ref": "curve.crvCVXETH",
+   "to_ref": "convex.cvxcrvCVXETH"
+  },
+  {
+   "from": "1:0x3a283d9c08e8b55966afb64c515f5143cf907611",
+   "relation": "underlying_of",
+   "to": "1:0x7e1444ba99dcdffe8fbdb42c02f0005d14f13be1",
+   "from_ref": "curve.crvCVXETH",
+   "to_ref": "curve.crvCVXETH_gauge"
+  },
+  {
+   "from": "1:0x3f353d76ae89dc2c89dcd0426e7fa9c96a332273",
+   "relation": "underlying_of",
+   "to": "1:0x5411cc583f0b51104fa523eef9fc77a29df80f58",
+   "from_ref": "convex.cvxweeth_ng",
+   "to_ref": "convex.cvxweeth_ng_rewards"
   },
   {
    "from": "1:0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
@@ -14880,11 +19963,39 @@
    "to_ref": "strata.jrUSDe"
   },
   {
+   "from": "1:0x4dece678ceceb27446b35c672dc7d61f30bad69e",
+   "relation": "underlying_of",
+   "to": "1:0x75a2f59ec37c18962c53b0244d60b53f749df25e",
+   "from_ref": "curve.crvUSDUSDC_f",
+   "to_ref": "convex.cvxcrvUSDUSDC_f"
+  },
+  {
+   "from": "1:0x4dece678ceceb27446b35c672dc7d61f30bad69e",
+   "relation": "underlying_of",
+   "to": "1:0x95f00391cb5eebcd190eb58728b4ce23dbfa6ac1",
+   "from_ref": "curve.crvUSDUSDC_f",
+   "to_ref": "curve.crvUSDUSDC_f_gauge"
+  },
+  {
    "from": "1:0x4e033931ad43597d96d6bcc25c280717730b58b1",
    "relation": "reads_from",
    "to": "1:0xcfbf336fe147d643b9cb705648500e101504b16d",
    "from_ref": "aave_v3.prime_pool",
    "to_ref": "aave_v3.prime_addresses_provider"
+  },
+  {
+   "from": "1:0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b",
+   "relation": "underlying_of",
+   "to": "1:0x72a19342e8f1838460ebfccef09f6585e32db86e",
+   "from_ref": "convex.CVX",
+   "to_ref": "convex.vlCVX"
+  },
+  {
+   "from": "1:0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b",
+   "relation": "underlying_of",
+   "to": "1:0xcf50b810e57ac33b91dcf525c6ddd9881b139332",
+   "from_ref": "convex.CVX",
+   "to_ref": "convex.cvx_rewards"
   },
   {
    "from": "1:0x4ef53d2caa51c447fdfeeedee8f07fd1962c9ee6",
@@ -14936,6 +20047,27 @@
    "to_ref": "sky.lockstake_engine"
   },
   {
+   "from": "1:0x57c23c58b1d8c3292c15becf07c62c5c52457a42",
+   "relation": "underlying_of",
+   "to": "1:0x42d0ed5c192f70e7a66bd17b71200856141e32a0",
+   "from_ref": "balancer_v3.osETH_waWETH",
+   "to_ref": "aura.auraosETH_waWETH"
+  },
+  {
+   "from": "1:0x57c23c58b1d8c3292c15becf07c62c5c52457a42",
+   "relation": "underlying_of",
+   "to": "1:0x70a1c01902dab7a45dca1098ca76a8314dd8adba",
+   "from_ref": "balancer_v3.osETH_waWETH",
+   "to_ref": "balancer_v3.osETH_waWETH_gauge"
+  },
+  {
+   "from": "1:0x57c23c58b1d8c3292c15becf07c62c5c52457a42",
+   "relation": "underlying_of",
+   "to": "1:0x994be003de5fd6e41d37c6948f405eb0759149e6",
+   "from_ref": "balancer_v3.osETH_waWETH",
+   "to_ref": "aura.auraosETH_waWETH_vault"
+  },
+  {
    "from": "1:0x57e114b691db790c35207b2e685d4a43181e6061",
    "relation": "underlying_of",
    "to": "1:0x8be3460a480c80728a8c4d7a5d5303c85ba7b3b9",
@@ -14957,11 +20089,53 @@
    "to_ref": "aave_v3.variableDebtEthLDO"
   },
   {
+   "from": "1:0x5c6ee304399dbdb9c8ef030ab642b10820db8f56",
+   "relation": "underlying_of",
+   "to": "1:0x616e8bfa43f920657b3497dbf40d6b1a02d4608d",
+   "from_ref": "balancer.B_80BAL_20WETH",
+   "to_ref": "aura.auraBAL"
+  },
+  {
+   "from": "1:0x5c6ee304399dbdb9c8ef030ab642b10820db8f56",
+   "relation": "underlying_of",
+   "to": "1:0xc128a9954e6c874ea3d62ce62b468ba073093f25",
+   "from_ref": "balancer.B_80BAL_20WETH",
+   "to_ref": "balancer.veBAL"
+  },
+  {
    "from": "1:0x5dbf760b4fd0cddde0366b33aeb338b2a6d77725",
    "relation": "owner_of",
    "to": "1:0xc0cf47d16a332f9e12e506e9a5c8b4baf2a6f1f6",
    "from_ref": "kpk.KPK_ETH_Yield",
    "to_ref": "kpk.KPK_ETH_Yield_adapter"
+  },
+  {
+   "from": "1:0x616e8bfa43f920657b3497dbf40d6b1a02d4608d",
+   "relation": "underlying_of",
+   "to": "1:0x00a7ba8ae7bca0b10a32ea1f8e2a1da980c6cad2",
+   "from_ref": "aura.auraBAL",
+   "to_ref": "aura.auraBAL_rewards"
+  },
+  {
+   "from": "1:0x616e8bfa43f920657b3497dbf40d6b1a02d4608d",
+   "relation": "underlying_of",
+   "to": "1:0xfaa2ed111b4f580fcb85c48e6dc6782dc5fcd7a6",
+   "from_ref": "aura.auraBAL",
+   "to_ref": "aura.stkauraBAL"
+  },
+  {
+   "from": "1:0x62b9c7356a2dc64a1969e19c23e4f579f9810aa7",
+   "relation": "underlying_of",
+   "to": "1:0x3fe65692bfcd0e6cf84cb1e7d24108e434a7587e",
+   "from_ref": "convex.cvxCRV",
+   "to_ref": "convex.cvxCRV_rewards"
+  },
+  {
+   "from": "1:0x62b9c7356a2dc64a1969e19c23e4f579f9810aa7",
+   "relation": "underlying_of",
+   "to": "1:0xaa0c3f5f7dfd688c6e646f66cd2a6b66acdbe434",
+   "from_ref": "convex.cvxCRV",
+   "to_ref": "convex.stkCvxCrv"
   },
   {
    "from": "1:0x6b175474e89094c44da98b954eedeac495271d0f",
@@ -15062,6 +20236,34 @@
    "to_ref": "aave_v3.aEthEtherFiPYUSD"
   },
   {
+   "from": "1:0x6c3f90f043a72fa612cbac8115ee7e52bde6e490",
+   "relation": "receipt_of",
+   "to": "1:0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7",
+   "from_ref": "curve.3Crv",
+   "to_ref": "curve.threepool"
+  },
+  {
+   "from": "1:0x6c3f90f043a72fa612cbac8115ee7e52bde6e490",
+   "relation": "underlying_of",
+   "to": "1:0x30d9410ed1d5da1f6c8391af5338c93ab8d4035c",
+   "from_ref": "curve.3Crv",
+   "to_ref": "convex.cvx3Crv"
+  },
+  {
+   "from": "1:0x6c3f90f043a72fa612cbac8115ee7e52bde6e490",
+   "relation": "underlying_of",
+   "to": "1:0xbfcf63294ad7105dea65aa58f8ae5be2d9d0952a",
+   "from_ref": "curve.3Crv",
+   "to_ref": "curve.3Crv_gauge"
+  },
+  {
+   "from": "1:0x75a2f59ec37c18962c53b0244d60b53f749df25e",
+   "relation": "underlying_of",
+   "to": "1:0x44d8fab7cd8b7877d5f79974c2f501af6e65abba",
+   "from_ref": "convex.cvxcrvUSDUSDC_f",
+   "to_ref": "convex.cvxcrvUSDUSDC_f_rewards"
+  },
+  {
    "from": "1:0x7a2ce012fe37db488c24e31f5e38816cad82b45e",
    "relation": "admin_of",
    "to": "1:0x1a1985f50352b58090eb36425afdfacbac7806f4",
@@ -15120,6 +20322,13 @@
   {
    "from": "1:0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
    "relation": "underlying_of",
+   "to": "1:0xcbc72d92b2dc8187414f6734718563898740c0bc",
+   "from_ref": "lido.wstETH",
+   "to_ref": "pendle.SY_stETH"
+  },
+  {
+   "from": "1:0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+   "relation": "underlying_of",
    "to": "1:0xd5c3e3b566a42a6110513ac7670c1a86d76e13e6",
    "from_ref": "lido.wstETH",
    "to_ref": "spark.variableDebtwstETH"
@@ -15151,6 +20360,13 @@
    "to": "1:0xbae535520abd9f8c85e58929e0006a2c8b372f74",
    "from_ref": "aave.AAVE",
    "to_ref": "aave_v3.variableDebtEthAAVE"
+  },
+  {
+   "from": "1:0x808507121b80c02388fad14726482e061b8da827",
+   "relation": "underlying_of",
+   "to": "1:0x999999999991e178d52cd95afd4b00d066664144",
+   "from_ref": "pendle.PENDLE",
+   "to_ref": "pendle.sPENDLE"
   },
   {
    "from": "1:0x834e1c1ea40173b82106f9177646b66d96ae7de8",
@@ -15188,6 +20404,27 @@
    "to_ref": "spark.variableDebtsDAI"
   },
   {
+   "from": "1:0x85b2b559bc2d21104c4defdd6efca8a20343361d",
+   "relation": "underlying_of",
+   "to": "1:0x8e89d41c563e6c3d9901ad75b75e2d8e140def04",
+   "from_ref": "balancer_v3.Aave_GHO_USDT_USDC",
+   "to_ref": "aura.auraAave_GHO_USDT_USDC_vault"
+  },
+  {
+   "from": "1:0x85b2b559bc2d21104c4defdd6efca8a20343361d",
+   "relation": "underlying_of",
+   "to": "1:0x9fdd52efeb601e4bc78b89c6490505b8ac637e9f",
+   "from_ref": "balancer_v3.Aave_GHO_USDT_USDC",
+   "to_ref": "balancer_v3.Aave_GHO_USDT_USDC_gauge"
+  },
+  {
+   "from": "1:0x85b2b559bc2d21104c4defdd6efca8a20343361d",
+   "relation": "underlying_of",
+   "to": "1:0xeb12fbcb0a068720ee5f7816416a3ebfc3090a2b",
+   "from_ref": "balancer_v3.Aave_GHO_USDT_USDC",
+   "to_ref": "aura.auraAave_GHO_USDT_USDC"
+  },
+  {
    "from": "1:0x870ac11d48b15db9a138cf899d20f13f79ba00bc",
    "relation": "reads_from",
    "to": "1:0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
@@ -15200,6 +20437,20 @@
    "to": "1:0x1dbf07a746a08b8be86c673d56acbaec9b50fe04",
    "from_ref": "kpk.KPK_USDT_Prime",
    "to_ref": "kpk.KPK_USDT_Prime_adapter"
+  },
+  {
+   "from": "1:0x8a4f252812dff2a8636e4f7eb249d8fc2e3bd77f",
+   "relation": "underlying_of",
+   "to": "1:0x1e4b83f6bfe9dbeb6d5b92a5237e5c18a44176f4",
+   "from_ref": "curve.BTCGHOETH",
+   "to_ref": "curve.BTCGHOETH_gauge"
+  },
+  {
+   "from": "1:0x8a4f252812dff2a8636e4f7eb249d8fc2e3bd77f",
+   "relation": "underlying_of",
+   "to": "1:0x952a316330705ac7b2116aa3decab4dd211340c7",
+   "from_ref": "curve.BTCGHOETH",
+   "to_ref": "convex.cvxBTCGHOETH"
   },
   {
    "from": "1:0x8b884f80b3b839f52b6ce168f133e7a5d1f0a537",
@@ -15265,11 +20516,32 @@
    "to_ref": "kpk.KPK_USDC_Yield"
   },
   {
+   "from": "1:0x939e4c11e391a28cd81248163f3a2e595f12ce5e",
+   "relation": "underlying_of",
+   "to": "1:0xd1ddb0a0815fd28932fbb194c84003683af8a824",
+   "from_ref": "convex.cvxcrvUSDUSDT_f",
+   "to_ref": "convex.cvxcrvUSDUSDT_f_rewards"
+  },
+  {
    "from": "1:0x9469470c9878bf3d6d0604831d9a3a366156f7ee",
    "relation": "underlying_of",
    "to": "1:0xda06ee2dacf9245aa80072a4407debdea0d7e341",
    "from_ref": "avant.avETH",
    "to_ref": "avant.savETH"
+  },
+  {
+   "from": "1:0x9518c9063eb0262d791f38d8d6eb0aca33c63ed0",
+   "relation": "underlying_of",
+   "to": "1:0x0a760466e1b4621579a82a39cb56dda2f4e70f03",
+   "from_ref": "convex.cvxsteCRV",
+   "to_ref": "convex.cvxsteCRV_rewards"
+  },
+  {
+   "from": "1:0x952a316330705ac7b2116aa3decab4dd211340c7",
+   "relation": "underlying_of",
+   "to": "1:0x4d10e7fc03de065aef3dfbc0394cbed1e4d36d6e",
+   "from_ref": "convex.cvxBTCGHOETH",
+   "to_ref": "convex.cvxBTCGHOETH_rewards"
   },
   {
    "from": "1:0x9d39a5de30e57443bff2a8307a4256c8797a3497",
@@ -15284,6 +20556,13 @@
    "to": "1:0x4579a27af00a62c0eb156349f31b345c08386419",
    "from_ref": "ethena.sUSDe",
    "to_ref": "aave_v3.aEthsUSDe"
+  },
+  {
+   "from": "1:0x9d39a5de30e57443bff2a8307a4256c8797a3497",
+   "relation": "underlying_of",
+   "to": "1:0xbf98480425a29197e5d99d003017f63a1e595d02",
+   "from_ref": "ethena.sUSDe",
+   "to_ref": "pendle.SY_sUSDE"
   },
   {
    "from": "1:0x9d39a5de30e57443bff2a8307a4256c8797a3497",
@@ -15482,6 +20761,13 @@
    "to_ref": "spark.spsUSDS"
   },
   {
+   "from": "1:0xa3931d71877c0e7a3148cb7eb4463524fec27fbd",
+   "relation": "underlying_of",
+   "to": "1:0xbe3d4ec488a0a042bb86f9176c24f8cd54018ba7",
+   "from_ref": "sky.sUSDS",
+   "to_ref": "pendle.SY_sUSDS"
+  },
+  {
    "from": "1:0xa877d5bb0274dccba8556154a30e1ca4021a275f",
    "relation": "owner_of",
    "to": "1:0x4b484ba771456c71c820a3a8842a7672627f9bae",
@@ -15524,11 +20810,39 @@
    "to_ref": "liminal.keeper"
   },
   {
+   "from": "1:0xb195b618ea52b77cb2a58846f452f59f8dfa9390",
+   "relation": "underlying_of",
+   "to": "1:0x47ad2cd1dd15739a7a035b9d3b7828d916fef77e",
+   "from_ref": "pendle.PT_sUSDE_26NOV2026",
+   "to_ref": "pendle.market_sUSDE_26NOV2026"
+  },
+  {
+   "from": "1:0xb253eff1104802b97ac7e3ac9fdd73aece295a2c",
+   "relation": "underlying_of",
+   "to": "1:0x34280882267ffa6383b363e278b027be083bbe3b",
+   "from_ref": "pendle.PT_stETH_30DEC2027",
+   "to_ref": "pendle.market_stETH_30DEC2027"
+  },
+  {
+   "from": "1:0xb576491f1e6e5e62f1d8f26062ee822b40b0e0d4",
+   "relation": "underlying_of",
+   "to": "1:0x3a283d9c08e8b55966afb64c515f5143cf907611",
+   "from_ref": "curve.cvxeth_pool",
+   "to_ref": "curve.crvCVXETH"
+  },
+  {
    "from": "1:0xb5ce3ca2c774b72955c25875022fdd91f7a7b938",
    "relation": "owner_of",
    "to": "1:0x3620c39c1269d6e31e5e76e9a2fa6afe0e8b14d6",
    "from_ref": "kpk.KPK_wARS_Yield",
    "to_ref": "kpk.KPK_wARS_Yield_adapter"
+  },
+  {
+   "from": "1:0xb77ba8b4b9d981269466ee95796a9af57d4e82db",
+   "relation": "underlying_of",
+   "to": "1:0xb05262d4aaaa38d0af4aab244d446ebdb5afd4a7",
+   "from_ref": "convex.cvxcrvUSDTWBTCWETH",
+   "to_ref": "convex.cvxcrvUSDTWBTCWETH_rewards"
   },
   {
    "from": "1:0xbb50a5341368751024ddf33385ba8cf61fe65ff9",
@@ -15550,6 +20864,62 @@
    "to": "1:0xa3931d71877c0e7a3148cb7eb4463524fec27fbd",
    "from_ref": "spark.sUSDC",
    "to_ref": "sky.sUSDS"
+  },
+  {
+   "from": "1:0xbd5d4c539b3773086632416a4ec8cef57c945319",
+   "relation": "underlying_of",
+   "to": "1:0x5a71e7e04f8725fd42a216949e7099ebd08a42e3",
+   "from_ref": "convex.cvxRLUSD_USDC",
+   "to_ref": "convex.cvxRLUSD_USDC_rewards"
+  },
+  {
+   "from": "1:0xbe3d4ec488a0a042bb86f9176c24f8cd54018ba7",
+   "relation": "underlying_of",
+   "to": "1:0x9c560ebaf78e596cbcc27411d633a74d628dd7dc",
+   "from_ref": "pendle.SY_sUSDS",
+   "to_ref": "pendle.market_sUSDS_26NOV2026"
+  },
+  {
+   "from": "1:0xbe3d4ec488a0a042bb86f9176c24f8cd54018ba7",
+   "relation": "underlying_of",
+   "to": "1:0xc7b8551c6b286ce0b44952320e940bd3dee58a09",
+   "from_ref": "pendle.SY_sUSDS",
+   "to_ref": "pendle.YT_sUSDS_26NOV2026"
+  },
+  {
+   "from": "1:0xbe3d4ec488a0a042bb86f9176c24f8cd54018ba7",
+   "relation": "underlying_of",
+   "to": "1:0xdc169abe56461a2e0c034da431ac2a3ebf596094",
+   "from_ref": "pendle.SY_sUSDS",
+   "to_ref": "pendle.PT_sUSDS_26NOV2026"
+  },
+  {
+   "from": "1:0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7",
+   "relation": "underlying_of",
+   "to": "1:0x6c3f90f043a72fa612cbac8115ee7e52bde6e490",
+   "from_ref": "curve.threepool",
+   "to_ref": "curve.3Crv"
+  },
+  {
+   "from": "1:0xbf98480425a29197e5d99d003017f63a1e595d02",
+   "relation": "underlying_of",
+   "to": "1:0x47ad2cd1dd15739a7a035b9d3b7828d916fef77e",
+   "from_ref": "pendle.SY_sUSDE",
+   "to_ref": "pendle.market_sUSDE_26NOV2026"
+  },
+  {
+   "from": "1:0xbf98480425a29197e5d99d003017f63a1e595d02",
+   "relation": "underlying_of",
+   "to": "1:0x89e6e5f7c3a60e7d6347f054051a29a272f4ce44",
+   "from_ref": "pendle.SY_sUSDE",
+   "to_ref": "pendle.YT_sUSDE_26NOV2026"
+  },
+  {
+   "from": "1:0xbf98480425a29197e5d99d003017f63a1e595d02",
+   "relation": "underlying_of",
+   "to": "1:0xb195b618ea52b77cb2a58846f452f59f8dfa9390",
+   "from_ref": "pendle.SY_sUSDE",
+   "to_ref": "pendle.PT_sUSDE_26NOV2026"
   },
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -15671,6 +21041,13 @@
    "to_ref": "spark.spETH"
   },
   {
+   "from": "1:0xc0c293ce456ff0ed870add98a0828dd4d2903dbf",
+   "relation": "underlying_of",
+   "to": "1:0x3fa73f1e5d8a792c80f426fc8f84fbf7ce9bbcac",
+   "from_ref": "aura.AURA",
+   "to_ref": "aura.vlAURA"
+  },
+  {
    "from": "1:0xc0cf47d16a332f9e12e506e9a5c8b4baf2a6f1f6",
    "relation": "reads_from",
    "to": "1:0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
@@ -15720,6 +21097,41 @@
    "to_ref": "kpk.KPK_ETH_Prime"
   },
   {
+   "from": "1:0xcbc72d92b2dc8187414f6734718563898740c0bc",
+   "relation": "underlying_of",
+   "to": "1:0x04b7fa1e727d7290d6e24fa9b426d0c940283a95",
+   "from_ref": "pendle.SY_stETH",
+   "to_ref": "pendle.YT_stETH_30DEC2027"
+  },
+  {
+   "from": "1:0xcbc72d92b2dc8187414f6734718563898740c0bc",
+   "relation": "underlying_of",
+   "to": "1:0x34280882267ffa6383b363e278b027be083bbe3b",
+   "from_ref": "pendle.SY_stETH",
+   "to_ref": "pendle.market_stETH_30DEC2027"
+  },
+  {
+   "from": "1:0xcbc72d92b2dc8187414f6734718563898740c0bc",
+   "relation": "underlying_of",
+   "to": "1:0xb253eff1104802b97ac7e3ac9fdd73aece295a2c",
+   "from_ref": "pendle.SY_stETH",
+   "to_ref": "pendle.PT_stETH_30DEC2027"
+  },
+  {
+   "from": "1:0xcc7d5785ad5755b6164e21495e07adb0ff11c2a8",
+   "relation": "underlying_of",
+   "to": "1:0x2a1e7cf85e533348ac5770514bf713544a11f856",
+   "from_ref": "curve.OETH_WETH",
+   "to_ref": "convex.cvxOETH_WETH"
+  },
+  {
+   "from": "1:0xcc7d5785ad5755b6164e21495e07adb0ff11c2a8",
+   "relation": "underlying_of",
+   "to": "1:0x36cc1d791704445a5b6b9c36a667e511d4702f3f",
+   "from_ref": "curve.OETH_WETH",
+   "to_ref": "curve.OETH_WETH_gauge"
+  },
+  {
    "from": "1:0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
    "relation": "underlying_of",
    "to": "1:0x16264412cb72f0d16a446f7d928dd0d822810048",
@@ -15762,11 +21174,46 @@
    "to_ref": "spark.variableDebtweETH"
   },
   {
+   "from": "1:0xd001ae433f254283fece51d4acce8c53263aa186",
+   "relation": "underlying_of",
+   "to": "1:0xbd5d4c539b3773086632416a4ec8cef57c945319",
+   "from_ref": "curve.RLUSD_USDC",
+   "to_ref": "convex.cvxRLUSD_USDC"
+  },
+  {
+   "from": "1:0xd001ae433f254283fece51d4acce8c53263aa186",
+   "relation": "underlying_of",
+   "to": "1:0xfc3212bd9ad9a28da6b2bd50a2918969c126894f",
+   "from_ref": "curve.RLUSD_USDC",
+   "to_ref": "curve.RLUSD_USDC_gauge"
+  },
+  {
+   "from": "1:0xd061d61a4d941c39e5453435b6345dc261c2fce0",
+   "relation": "reads_from",
+   "to": "1:0x2f50d538606fa9edd2b11e2446beb18c9d5846bb",
+   "from_ref": "curve.minter",
+   "to_ref": "curve.gauge_controller"
+  },
+  {
    "from": "1:0xd15f11b334e1e233127302e5f759c17da1260df5",
    "relation": "admin_of",
    "to": "1:0xa877d5bb0274dccba8556154a30e1ca4021a275f",
    "from_ref": "kpk.curator_eurc_safe",
    "to_ref": "kpk.KPK_EURC_Yield"
+  },
+  {
+   "from": "1:0xd533a949740bb3306d119cc777fa900ba034cd52",
+   "relation": "underlying_of",
+   "to": "1:0x5f3b5dfeb7b28cdbd7faba78963ee202a494e2a2",
+   "from_ref": "curve.CRV",
+   "to_ref": "curve.veCRV"
+  },
+  {
+   "from": "1:0xd533a949740bb3306d119cc777fa900ba034cd52",
+   "relation": "underlying_of",
+   "to": "1:0x62b9c7356a2dc64a1969e19c23e4f579f9810aa7",
+   "from_ref": "curve.CRV",
+   "to_ref": "convex.cvxCRV"
   },
   {
    "from": "1:0xd5cce260e7a755ddf0fb9cdf06443d593aaeaa13",
@@ -15823,6 +21270,20 @@
    "to": "1:0xe7df13b8e3d6740fe17cbe928c7334243d86c92f",
    "from_ref": "stablecoins.USDT",
    "to_ref": "spark.spUSDT"
+  },
+  {
+   "from": "1:0xdb74dfdd3bb46be8ce6c33dc9d82777bcfc3ded5",
+   "relation": "underlying_of",
+   "to": "1:0x053df3e4d0ced9a3bf0494f97e83ce1f13bdc0e2",
+   "from_ref": "curve.weeth_ng",
+   "to_ref": "curve.weeth_ng_gauge"
+  },
+  {
+   "from": "1:0xdb74dfdd3bb46be8ce6c33dc9d82777bcfc3ded5",
+   "relation": "underlying_of",
+   "to": "1:0x3f353d76ae89dc2c89dcd0426e7fa9c96a332273",
+   "from_ref": "curve.weeth_ng",
+   "to_ref": "convex.cvxweeth_ng"
   },
   {
    "from": "1:0xdc035d45d973e3ec169d2276ddab16f1e407384f",
@@ -15909,6 +21370,41 @@
    "to_ref": "spark.spUSDS"
   },
   {
+   "from": "1:0xdc169abe56461a2e0c034da431ac2a3ebf596094",
+   "relation": "underlying_of",
+   "to": "1:0x9c560ebaf78e596cbcc27411d633a74d628dd7dc",
+   "from_ref": "pendle.PT_sUSDS_26NOV2026",
+   "to_ref": "pendle.market_sUSDS_26NOV2026"
+  },
+  {
+   "from": "1:0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+   "relation": "underlying_of",
+   "to": "1:0x06325440d014e39736583c165c2963ba99faf14e",
+   "from_ref": "curve.steth_pool",
+   "to_ref": "curve.steCRV"
+  },
+  {
+   "from": "1:0xe080027bd47353b5d1639772b4a75e9ed3658a0d",
+   "relation": "underlying_of",
+   "to": "1:0x63037a4e3305d25d48baed2022b8462b2807351c",
+   "from_ref": "curve.osETH_rETH",
+   "to_ref": "curve.osETH_rETH_gauge"
+  },
+  {
+   "from": "1:0xe080027bd47353b5d1639772b4a75e9ed3658a0d",
+   "relation": "underlying_of",
+   "to": "1:0xe3ea98bd863bef37d951973743aac2e56edd99bc",
+   "from_ref": "curve.osETH_rETH",
+   "to_ref": "convex.cvxosETH_rETH"
+  },
+  {
+   "from": "1:0xe3ea98bd863bef37d951973743aac2e56edd99bc",
+   "relation": "underlying_of",
+   "to": "1:0xba7ebdef7723e55c909ac44226fb87a93625c44e",
+   "from_ref": "convex.cvxosETH_rETH",
+   "to_ref": "convex.cvxosETH_rETH_rewards"
+  },
+  {
    "from": "1:0xe5aec7d0e795456f90cebefba56470f0e5dfc075",
    "relation": "admin_of",
    "to": "1:0x5dbf760b4fd0cddde0366b33aeb338b2a6d77725",
@@ -15928,6 +21424,27 @@
    "to": "1:0x9aa79c84b79816ab920bbce20f8f74557b514734",
    "from_ref": "etherfi.liquid_eth",
    "to_ref": "etherfi.liquid_eth_teller"
+  },
+  {
+   "from": "1:0xf0bb7682830941e105ce0fe2c043d1bb058d45b6",
+   "relation": "underlying_of",
+   "to": "1:0x9e0a248528aa933ff1f8f707ea75f61ed780836e",
+   "from_ref": "convex.cvxETH_ETH",
+   "to_ref": "convex.cvxETH_ETH_rewards"
+  },
+  {
+   "from": "1:0xf5f5b97624542d72a9e06f04804bf81baa15e2b4",
+   "relation": "underlying_of",
+   "to": "1:0xb77ba8b4b9d981269466ee95796a9af57d4e82db",
+   "from_ref": "curve.crvUSDTWBTCWETH",
+   "to_ref": "convex.cvxcrvUSDTWBTCWETH"
+  },
+  {
+   "from": "1:0xf5f5b97624542d72a9e06f04804bf81baa15e2b4",
+   "relation": "underlying_of",
+   "to": "1:0xf29fff074f5cf755b55fbb3eb10a29203ac91ea2",
+   "from_ref": "curve.crvUSDTWBTCWETH",
+   "to_ref": "curve.crvUSDTWBTCWETH_gauge"
   },
   {
    "from": "1:0xf7d85ec4e7710f71992752eac2111312e73e9c9c",

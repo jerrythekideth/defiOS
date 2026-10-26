@@ -1,0 +1,417 @@
+contracts:
+  booster:
+    address: "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+    category: staking
+    kind: convex_booster
+    aliases: ["convex booster"]
+    note: "Entry point: deposit(pid, amount, stake) / withdraw(pid, amount); poolInfo(pid) lists each pool's contracts"
+    sources:
+      - "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+      - "explorer: https://etherscan.io/address/0xF403C135812408BFbE8713b5A23a04b3D48AAE31#code"
+    proofs:
+      - { read: "crv() returns (address)", expect: curve.CRV }
+  CVX:
+    address: "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B"
+    name: "Convex Token"
+    category: governance
+    kind: erc20
+    decimals: 18
+    aliases: ["cvx", "convex token"]
+    sources:
+      - "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    proofs:
+      - { from: booster, read: "minter() returns (address)", expect: $self }
+  cvxCRV:
+    address: "0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7"
+    name: "Convex CRV"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: ["cvxcrv", "convex crv"]
+    sources:
+      - "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    edges: { underlying: curve.CRV }
+    proofs:
+      - { from: crv_depositor, read: "minter() returns (address)", expect: $self }
+  crv_depositor:
+    address: "0x8014595F2AB54cD7c604B00E9fb932176fDc86Ae"
+    category: minter
+    kind: convex_crv_depositor
+    aliases: ["convex crv depositor"]
+    note: "deposit(amount, lock, stakeAddress): CRV in, cvxCRV out (one way)"
+    sources:
+      - "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    proofs:
+      - { from: cvxCRV, read: "operator() returns (address)", expect: $self }
+      - { read: "crv() returns (address)", expect: curve.CRV }
+  cvxCRV_rewards:
+    address: "0x3Fe65692bfCD0e6CF84cB1E7d24108E434A7587e"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["cvxcrv staking", "cvxcrv rewards"]
+    note: "Legacy cvxCRV staking (BaseRewardPool); stkCvxCrv wraps it"
+    sources:
+      - "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    edges: { underlying: cvxCRV }
+    proofs:
+      - { from: booster, read: "lockRewards() returns (address)", expect: $self }
+      - { read: "stakingToken() returns (address)", expect: cvxCRV }
+  stkCvxCrv:
+    address: "0xaa0C3f5F7DFD688C6E646F66CD2a6B66ACdbE434"
+    name: "Staked CvxCrv"
+    category: staking
+    kind: convex_cvxcrv_staking_wrapper
+    decimals: 18
+    aliases: ["stkcvxcrv", "staked cvxcrv"]
+    sources:
+      - "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    edges: { underlying: cvxCRV }
+    proofs:
+      - { read: "cvxCrv() returns (address)", expect: cvxCRV }
+      - { read: "cvxCrvStaking() returns (address)", expect: cvxCRV_rewards }
+  cvx_rewards:
+    address: "0xCF50b810E57Ac33B91dCF525C6ddd9881B139332"
+    category: staking
+    kind: convex_cvx_reward_pool
+    aliases: ["cvx staking", "cvxrewardpool"]
+    note: "CVX staking (cvxRewardPool), earns cvxCRV"
+    sources:
+      - "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    edges: { underlying: CVX }
+    proofs:
+      - { from: booster, read: "stakerRewards() returns (address)", expect: $self }
+      - { read: "stakingToken() returns (address)", expect: CVX }
+  vlCVX:
+    address: "0x72a19342e8F1838460eBFCCEf09F6585e32db86E"
+    name: "Vote Locked Convex Token"
+    category: staking
+    kind: convex_locker
+    decimals: 18
+    aliases: ["vlcvx", "vote locked convex token", "cvxlocker"]
+    note: "CVX vote lock (16 weeks); processExpiredLocks(relock) to exit"
+    sources:
+      - "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
+    edges: { underlying: CVX }
+    proofs:
+      - { read: "stakingToken() returns (address)", expect: CVX }
+      - { read: "cvxCrv() returns (address)", expect: cvxCRV }
+  cvx3Crv:
+    address: "0x30D9410ED1D5DA1F6C8391af5338C93ab8d4035C"
+    name: "Curve.fi DAI/USDC/USDT Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    note: "Convex pid 9 deposit token for curve.3Crv"
+    sources:
+      - "explorer: https://etherscan.io/address/0x30D9410ED1D5DA1F6C8391af5338C93ab8d4035C#code"
+    edges: { underlying: curve.3Crv }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvx3Crv_rewards:
+    address: "0x689440f2Ff927E1f24c72F1087E1FAF471eCe1c8"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 9 rewards"]
+    note: "Convex pid 9 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0x689440f2Ff927E1f24c72F1087E1FAF471eCe1c8#code"
+    edges: { underlying: cvx3Crv }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvx3Crv }
+  cvxsteCRV:
+    address: "0x9518c9063eB0262D791f38d8d6Eb0aca33c63ed0"
+    name: "Curve.fi ETH/stETH Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    note: "Convex pid 25 deposit token for curve.steCRV"
+    sources:
+      - "explorer: https://etherscan.io/address/0x9518c9063eB0262D791f38d8d6Eb0aca33c63ed0#code"
+    edges: { underlying: curve.steCRV }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxsteCRV_rewards:
+    address: "0x0A760466E1B4621579a82a39CB56Dda2F4E70f03"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 25 rewards"]
+    note: "Convex pid 25 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0x0A760466E1B4621579a82a39CB56Dda2F4E70f03#code"
+    edges: { underlying: cvxsteCRV }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxsteCRV }
+  cvxcrvCVXETH:
+    address: "0x0bC857f97c0554d1d0D602b56F2EEcE682016fBA"
+    name: "Curve CVX-ETH Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    note: "Convex pid 64 deposit token for curve.crvCVXETH"
+    sources:
+      - "explorer: https://etherscan.io/address/0x0bC857f97c0554d1d0D602b56F2EEcE682016fBA#code"
+    edges: { underlying: curve.crvCVXETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxcrvCVXETH_rewards:
+    address: "0xb1Fb0BA0676A1fFA83882c7F4805408bA232C1fA"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 64 rewards"]
+    note: "Convex pid 64 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0xb1Fb0BA0676A1fFA83882c7F4805408bA232C1fA#code"
+    edges: { underlying: cvxcrvCVXETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxcrvCVXETH }
+  cvxstETH_ng_f:
+    address: "0x1b74fa5951dfa4c03D0127011548fA79b956f63B"
+    name: "Curve.fi Factory Pool: stETH-ng Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    aliases: ["cvxstETH-ng-f"]
+    note: "Convex pid 177 deposit token for curve.stETH_ng_f"
+    sources:
+      - "explorer: https://etherscan.io/address/0x1b74fa5951dfa4c03D0127011548fA79b956f63B#code"
+    edges: { underlying: curve.stETH_ng_f }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxstETH_ng_f_rewards:
+    address: "0x6B27D7BC63F1999D14fF9bA900069ee516669ee8"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 177 rewards"]
+    note: "Convex pid 177 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0x6B27D7BC63F1999D14fF9bA900069ee516669ee8#code"
+    edges: { underlying: cvxstETH_ng_f }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxstETH_ng_f }
+  cvxcrvUSDUSDT_f:
+    address: "0x939e4C11E391a28CD81248163f3a2e595f12CE5E"
+    name: "Curve.fi Factory Plain Pool: crvUSD/USDT Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    aliases: ["cvxcrvUSDUSDT-f"]
+    note: "Convex pid 179 deposit token for curve.crvUSDUSDT_f"
+    sources:
+      - "explorer: https://etherscan.io/address/0x939e4C11E391a28CD81248163f3a2e595f12CE5E#code"
+    edges: { underlying: curve.crvUSDUSDT_f }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxcrvUSDUSDT_f_rewards:
+    address: "0xD1DdB0a0815fD28932fBb194C84003683AF8a824"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 179 rewards"]
+    note: "Convex pid 179 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0xD1DdB0a0815fD28932fBb194C84003683AF8a824#code"
+    edges: { underlying: cvxcrvUSDUSDT_f }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxcrvUSDUSDT_f }
+  cvxcrvUSDUSDC_f:
+    address: "0x75A2F59eC37c18962c53b0244D60B53f749DF25E"
+    name: "Curve.fi Factory Plain Pool: crvUSD/USDC Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    aliases: ["cvxcrvUSDUSDC-f"]
+    note: "Convex pid 182 deposit token for curve.crvUSDUSDC_f"
+    sources:
+      - "explorer: https://etherscan.io/address/0x75A2F59eC37c18962c53b0244D60B53f749DF25E#code"
+    edges: { underlying: curve.crvUSDUSDC_f }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxcrvUSDUSDC_f_rewards:
+    address: "0x44D8FaB7CD8b7877D5F79974c2F501aF6E65AbBA"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 182 rewards"]
+    note: "Convex pid 182 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0x44D8FaB7CD8b7877D5F79974c2F501aF6E65AbBA#code"
+    edges: { underlying: cvxcrvUSDUSDC_f }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxcrvUSDUSDC_f }
+  cvxcrvUSDTWBTCWETH:
+    address: "0xB77BA8B4b9d981269466eE95796A9Af57d4E82DB"
+    name: "TricryptoUSDT Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    note: "Convex pid 188 deposit token for curve.crvUSDTWBTCWETH"
+    sources:
+      - "explorer: https://etherscan.io/address/0xB77BA8B4b9d981269466eE95796A9Af57d4E82DB#code"
+    edges: { underlying: curve.crvUSDTWBTCWETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxcrvUSDTWBTCWETH_rewards:
+    address: "0xb05262D4aaAA38D0Af4AaB244D446ebDb5afd4A7"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 188 rewards"]
+    note: "Convex pid 188 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0xb05262D4aaAA38D0Af4AaB244D446ebDb5afd4A7#code"
+    edges: { underlying: cvxcrvUSDTWBTCWETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxcrvUSDTWBTCWETH }
+  cvxosETH_rETH:
+    address: "0xE3eA98BD863bEF37D951973743aAC2e56edd99BC"
+    name: "osETH/rETH Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    aliases: ["cvxosETH-rETH"]
+    note: "Convex pid 268 deposit token for curve.osETH_rETH"
+    sources:
+      - "explorer: https://etherscan.io/address/0xE3eA98BD863bEF37D951973743aAC2e56edd99BC#code"
+    edges: { underlying: curve.osETH_rETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxosETH_rETH_rewards:
+    address: "0xBA7eBDEF7723e55c909Ac44226FB87a93625c44e"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 268 rewards"]
+    note: "Convex pid 268 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0xBA7eBDEF7723e55c909Ac44226FB87a93625c44e#code"
+    edges: { underlying: cvxosETH_rETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxosETH_rETH }
+  cvxweeth_ng:
+    address: "0x3f353d76Ae89dc2C89Dcd0426e7Fa9c96A332273"
+    name: "weETH/WETH-ng Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    aliases: ["cvxweeth-ng"]
+    note: "Convex pid 355 deposit token for curve.weeth_ng"
+    sources:
+      - "explorer: https://etherscan.io/address/0x3f353d76Ae89dc2C89Dcd0426e7Fa9c96A332273#code"
+    edges: { underlying: curve.weeth_ng }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxweeth_ng_rewards:
+    address: "0x5411CC583f0b51104fA523eEF9FC77A29DF80F58"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 355 rewards"]
+    note: "Convex pid 355 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0x5411CC583f0b51104fA523eEF9FC77A29DF80F58#code"
+    edges: { underlying: cvxweeth_ng }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxweeth_ng }
+  cvxBTCGHOETH:
+    address: "0x952A316330705AC7B2116aa3dECaB4Dd211340c7"
+    name: "TricryptoGHO Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    note: "Convex pid 409 deposit token for curve.BTCGHOETH"
+    sources:
+      - "explorer: https://etherscan.io/address/0x952A316330705AC7B2116aa3dECaB4Dd211340c7#code"
+    edges: { underlying: curve.BTCGHOETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxBTCGHOETH_rewards:
+    address: "0x4d10e7FC03dE065Aef3dfbc0394CbEd1e4d36D6E"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 409 rewards"]
+    note: "Convex pid 409 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0x4d10e7FC03dE065Aef3dfbc0394CbEd1e4d36D6E#code"
+    edges: { underlying: cvxBTCGHOETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxBTCGHOETH }
+  cvxRLUSD_USDC:
+    address: "0xBd5D4c539B3773086632416A4EC8ceF57c945319"
+    name: "RLUSD/USDC Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    aliases: ["cvxRLUSD/USDC"]
+    note: "Convex pid 443 deposit token for curve.RLUSD_USDC"
+    sources:
+      - "explorer: https://etherscan.io/address/0xBd5D4c539B3773086632416A4EC8ceF57c945319#code"
+    edges: { underlying: curve.RLUSD_USDC }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxRLUSD_USDC_rewards:
+    address: "0x5A71E7e04F8725fD42a216949E7099ebd08A42E3"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 443 rewards"]
+    note: "Convex pid 443 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0x5A71E7e04F8725fD42a216949E7099ebd08A42E3#code"
+    edges: { underlying: cvxRLUSD_USDC }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxRLUSD_USDC }
+  cvxOETH_WETH:
+    address: "0x2a1e7Cf85E533348AC5770514bF713544a11f856"
+    name: "OETH/WETH Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    aliases: ["cvxOETH/WETH"]
+    note: "Convex pid 451 deposit token for curve.OETH_WETH"
+    sources:
+      - "explorer: https://etherscan.io/address/0x2a1e7Cf85E533348AC5770514bF713544a11f856#code"
+    edges: { underlying: curve.OETH_WETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxOETH_WETH_rewards:
+    address: "0xAc15ffFdCA77fc86770bEAbA20cbC1bc2D00494c"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 451 rewards"]
+    note: "Convex pid 451 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0xAc15ffFdCA77fc86770bEAbA20cbC1bc2D00494c#code"
+    edges: { underlying: cvxOETH_WETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxOETH_WETH }
+  cvxETH_ETH:
+    address: "0xf0BB7682830941e105Ce0FE2c043d1Bb058d45B6"
+    name: "ETH+/ETH Convex Deposit"
+    category: receipt
+    kind: convex_deposit_token
+    decimals: 18
+    aliases: ["cvxETH+ETH"]
+    note: "Convex pid 470 deposit token for curve.ETH_ETH"
+    sources:
+      - "explorer: https://etherscan.io/address/0xf0BB7682830941e105Ce0FE2c043d1Bb058d45B6#code"
+    edges: { underlying: curve.ETH_ETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+  cvxETH_ETH_rewards:
+    address: "0x9e0A248528Aa933ff1F8f707ea75F61eD780836E"
+    category: staking
+    kind: convex_base_reward_pool
+    aliases: ["convex pid 470 rewards"]
+    note: "Convex pid 470 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
+    sources:
+      - "explorer: https://etherscan.io/address/0x9e0A248528Aa933ff1F8f707ea75F61eD780836E#code"
+    edges: { underlying: cvxETH_ETH }
+    proofs:
+      - { read: "operator() returns (address)", expect: booster }
+      - { read: "stakingToken() returns (address)", expect: cvxETH_ETH }

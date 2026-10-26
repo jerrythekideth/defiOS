@@ -1,9 +1,19 @@
 {
  "_meta": {
   "1": {
-   "block": 26278019,
+   "block": 26278420,
    "checked": "2026-10-26"
   }
+ },
+ "1:0x000000000022d473030f116ddee9f6b43ac78ba3": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "balancer_v3.router.getPermit2() == $self",
+    "ok": true,
+    "got": "0x000000000022D473030F116dDEE9F6B43aC78BA3"
+   }
+  ]
  },
  "1:0x0000000f2eb9f69274678c76222b35eec7588a65": {
   "code": true,
@@ -31,6 +41,21 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum GHO",
   "symbol": "aEthGHO"
+ },
+ "1:0x00a7ba8ae7bca0b10a32ea1f8e2a1da980c6cad2": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "booster.lockRewards() == $self",
+    "ok": true,
+    "got": "0x00A7BA8Ae7bca0B10A32Ea1f8e2a1Da980c6CAd2"
+   },
+   {
+    "id": "$self.stakingToken() == auraBAL",
+    "ok": true,
+    "got": "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d"
+   }
+  ]
  },
  "1:0x00b8e1509398ed692c3f326cbaf1694f9a881e27": {
   "code": true,
@@ -98,6 +123,18 @@
   "name": "Aave Ethereum Variable Debt crvUSD",
   "symbol": "variableDebtEthcrvUSD"
  },
+ "1:0x02950460e2b9529d0e00284a5fa2d7bdf3fa4d72": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0x02950460E2b9529D0E00284A5fA2d7bDF3fA4d72"
+   }
+  ],
+  "name": "USDe-USDC",
+  "symbol": "USDeUSDC"
+ },
  "1:0x02c3ea4e34c0cbd694d2adfa2c690eecbc1793ee": {
   "code": true,
   "proofs": [
@@ -131,6 +168,62 @@
   "name": "Aave Ethereum Variable Debt PT_USDe_7MAY2026",
   "symbol": "variableDebtEthPT_USDe_7MAY2026"
  },
+ "1:0x04b7fa1e727d7290d6e24fa9b426d0c940283a95": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.PT() == PT_stETH_30DEC2027",
+    "ok": true,
+    "got": "0xb253Eff1104802b97aC7E3aC9FdD73AecE295a2c"
+   },
+   {
+    "id": "$self.SY() == SY_stETH",
+    "ok": true,
+    "got": "0xcbC72d92b2dc8187414F6734718563898740C0BC"
+   },
+   {
+    "id": "$self.factory() == yield_contract_factory",
+    "ok": true,
+    "got": "0x70ee0A6DB4F5a2Dc4d9c0b57bE97B9987e75BAFD"
+   }
+  ],
+  "name": "YT stETH 30DEC2027",
+  "symbol": "YT-stETH-30DEC2027"
+ },
+ "1:0x04e80db3f84873e4132b221831af1045d27f140f": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == USDeUSDC",
+    "ok": true,
+    "got": "0x02950460E2b9529D0E00284A5fA2d7bDF3fA4d72"
+   },
+   {
+    "id": "meta_registry.get_gauge(USDeUSDC) == $self",
+    "ok": true,
+    "got": "0x04E80Db3f84873e4132B221831af1045D27f140F"
+   }
+  ],
+  "name": "Curve.fi USDeUSDC Gauge Deposit",
+  "symbol": "USDeUSDC-gauge"
+ },
+ "1:0x053df3e4d0ced9a3bf0494f97e83ce1f13bdc0e2": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == weeth_ng",
+    "ok": true,
+    "got": "0xDB74dfDD3BB46bE8Ce6C33dC9D82777BCFc3dEd5"
+   },
+   {
+    "id": "meta_registry.get_gauge(weeth_ng) == $self",
+    "ok": true,
+    "got": "0x053df3e4D0CeD9a3Bf0494F97E83CE1f13BdC0E2"
+   }
+  ],
+  "name": "Curve.fi weeth-ng Gauge Deposit",
+  "symbol": "weeth-ng-gauge"
+ },
  "1:0x056b269eb1f75477a8666ae8c7fe01b64dd55ecc": {
   "code": true,
   "proofs": [
@@ -144,6 +237,18 @@
   "admin": "0x41C838664a9C64905537fF410333B9f5964cC596",
   "name": "USD3",
   "symbol": "USD3"
+ },
+ "1:0x06325440d014e39736583c165c2963ba99faf14e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token(steth_pool) == $self",
+    "ok": true,
+    "got": "0x06325440D014e39736583c165C2963BA99fAf14E"
+   }
+  ],
+  "name": "Curve.fi ETH/stETH",
+  "symbol": "steCRV"
  },
  "1:0x0650caf159c5a49f711e8169d4336ecb9b950275": {
   "code": true,
@@ -232,6 +337,21 @@
    }
   ]
  },
+ "1:0x0a760466e1b4621579a82a39cb56dda2f4e70f03": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxsteCRV",
+    "ok": true,
+    "got": "0x9518c9063eB0262D791f38d8d6Eb0aca33c63ed0"
+   }
+  ]
+ },
  "1:0x0aa97c284e98396202b6a04024f5e2c65026f3c0": {
   "code": true,
   "proofs": [
@@ -255,6 +375,18 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum wstETH",
   "symbol": "aEthwstETH"
+ },
+ "1:0x0bc857f97c0554d1d0d602b56f2eece682016fba": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "Curve CVX-ETH Convex Deposit",
+  "symbol": "cvxcrvCVXETH"
  },
  "1:0x0c0d01abf3e6adfca0989ebba9d6e85dd58eab1e": {
   "code": true,
@@ -379,6 +511,18 @@
   "name": "Aave Ethereum EtherFi Variable Debt weETH",
   "symbol": "variableDebtEthEtherFiweETH"
  },
+ "1:0x167478921b907422f8e88b43c4af2b8bea278d3a": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0x167478921b907422F8E88B43C4Af2B8BEa278d3A"
+   }
+  ],
+  "name": "sDAI/sUSDe",
+  "symbol": "MtEthena"
+ },
  "1:0x173e314c7635b45322cd8cb14f44b312e079f3af": {
   "code": true,
   "proofs": [
@@ -397,6 +541,23 @@
  "1:0x17dd33ed0e3dd2a80e37489b8a63063161be6957": {
   "code": true,
   "proofs": []
+ },
+ "1:0x182b723a58739a9c974cfdb385ceadb237453c28": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == steCRV",
+    "ok": true,
+    "got": "0x06325440D014e39736583c165C2963BA99fAf14E"
+   },
+   {
+    "id": "meta_registry.get_gauge(steth_pool) == $self",
+    "ok": true,
+    "got": "0x182B723a58739a9c974cFDB385ceaDb237453c28"
+   }
+  ],
+  "name": "Curve.fi steCRV Gauge Deposit",
+  "symbol": "steCRV-gauge"
  },
  "1:0x18577f0f4a0b2ee6f4048db51c7acd8699f97db8": {
   "code": true,
@@ -470,6 +631,18 @@
   ],
   "name": "Euro Coin",
   "symbol": "EURC"
+ },
+ "1:0x1b74fa5951dfa4c03d0127011548fa79b956f63b": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "Curve.fi Factory Pool: stETH-ng Convex Deposit",
+  "symbol": "cvxstETH-ng-f"
  },
  "1:0x1b7d3f4b3c032a5ae656e30eea4e8e1ba376068f": {
   "code": true,
@@ -566,6 +739,69 @@
   "name": "Dialectic USD",
   "symbol": "DUSD"
  },
+ "1:0x1e4b83f6bfe9dbeb6d5b92a5237e5c18a44176f4": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == BTCGHOETH",
+    "ok": true,
+    "got": "0x8a4f252812dFF2A8636E4F7EB249d8FC2E3bd77f"
+   },
+   {
+    "id": "meta_registry.get_gauge(BTCGHOETH) == $self",
+    "ok": true,
+    "got": "0x1E4B83f6bFE9dbeB6d5b92a5237E5c18a44176f4"
+   }
+  ],
+  "name": "Curve.fi BTCGHOETH Gauge Deposit",
+  "symbol": "BTCGHOETH-gauge"
+ },
+ "1:0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.getVault() == vault",
+    "ok": true,
+    "got": "0xbA1333333333a1BA1108E8412f11850A5C319bA9"
+   }
+  ],
+  "name": "Balancer rETH - Aave WETH",
+  "symbol": "rETH-waEthWETH"
+ },
+ "1:0x20283cce209b29d19329e8ada47215a52188afdc": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
+   },
+   {
+    "id": "$self.stakingToken() == aurarETH_waEthWETH",
+    "ok": true,
+    "got": "0xB8Db64DFDe4bbead174a6CbA756743dEC72Bbd20"
+   },
+   {
+    "id": "$self.asset() == balancer_v3.rETH_waEthWETH",
+    "ok": true,
+    "got": "0x1ea5870f7C037930CE1d5d8d9317c670e89e13E3"
+   }
+  ],
+  "name": "Balancer rETH - Aave WETH Aura Deposit Vault",
+  "symbol": "aurarETH-waEthWETH-vault"
+ },
+ "1:0x21e27a5e5513d6e65c4f830167390997aa84843a": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0x21E27a5E5513D6e65C4f830167390997aA84843a"
+   }
+  ],
+  "name": "Curve.fi Factory Pool: stETH-ng",
+  "symbol": "stETH-ng-f"
+ },
  "1:0x22517fe16ded08e52e7ea3423a2ea4995b1f1731": {
   "code": true,
   "proofs": [
@@ -604,6 +840,21 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum USDT",
   "symbol": "aEthUSDT"
+ },
+ "1:0x239e55f427d44c3cc793f49bfb507ebe76638a2b": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.getBalancerToken() == BAL",
+    "ok": true,
+    "got": "0xba100000625a3754423978a60c9317c58a424e3D"
+   },
+   {
+    "id": "$self.getGaugeController() == gauge_controller",
+    "ok": true,
+    "got": "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
+   }
+  ]
  },
  "1:0x23da9ade38e4477b23770ded512fd37b12381fab": {
   "code": true,
@@ -648,6 +899,16 @@
   "name": "Aave Ethereum Variable Debt KNC",
   "symbol": "variableDebtEthKNC"
  },
+ "1:0x27b1dacd74688af24a64bd3c9c1b143118740784": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.yieldContractFactory() == yield_contract_factory",
+    "ok": true,
+    "got": "0x70ee0A6DB4F5a2Dc4d9c0b57bE97B9987e75BAFD"
+   }
+  ]
+ },
  "1:0x285866acb0d60105b4ed350a463361c2d9afa0e2": {
   "code": true,
   "proofs": [
@@ -689,6 +950,18 @@
     "got": "0x28dA642f406bB5234A779Ee0143c317D4d55Fa27"
    }
   ]
+ },
+ "1:0x2a1e7cf85e533348ac5770514bf713544a11f856": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "OETH/WETH Convex Deposit",
+  "symbol": "cvxOETH/WETH"
  },
  "1:0x2a1fbcb52ed4d9b23dad17e1e8aed4bb0e6079b8": {
   "code": true,
@@ -743,6 +1016,18 @@
   "implementation": "0x79f5C4562EC3e85C3103Ce63Ab94E92EFfDd6197",
   "name": "Aave Ethereum Lido Variable Debt rsETH",
   "symbol": "variableDebtEthLidorsETH"
+ },
+ "1:0x2c683fad51da2cd17793219cc86439c1875c353e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0x2c683fAd51da2cd17793219CC86439C1875c353e"
+   }
+  ],
+  "name": "ETH+/ETH",
+  "symbol": "ETH+ETH"
  },
  "1:0x2ce7e7b238985a8ad3863de03f200b245b0c1216": {
   "code": true,
@@ -824,6 +1109,38 @@
    }
   ]
  },
+ "1:0x2f50d538606fa9edd2b11e2446beb18c9d5846bb": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "minter.controller() == $self",
+    "ok": true,
+    "got": "0x2F50D538606Fa9EDD2B11E2446BEb18C9D5846bB"
+   },
+   {
+    "id": "$self.voting_escrow() == veCRV",
+    "ok": true,
+    "got": "0x5f3b5DfEb7B28CDbD7FAba78963EE202a494e2A2"
+   },
+   {
+    "id": "$self.token() == CRV",
+    "ok": true,
+    "got": "0xD533a949740bb3306d119CC777fa900bA034cd52"
+   }
+  ]
+ },
+ "1:0x30d9410ed1d5da1f6c8391af5338c93ab8d4035c": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "Curve.fi DAI/USDC/USDT Convex Deposit",
+  "symbol": "cvx3Crv"
+ },
  "1:0x312ffc57778cefa11989733e6e08143e7e229c1c": {
   "code": true,
   "proofs": [
@@ -889,6 +1206,23 @@
    }
   ]
  },
+ "1:0x330cfd12e0e97b0adf46158d2a81e8bd2985c6cb": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == MtEthena",
+    "ok": true,
+    "got": "0x167478921b907422F8E88B43C4Af2B8BEa278d3A"
+   },
+   {
+    "id": "meta_registry.get_gauge(MtEthena) == $self",
+    "ok": true,
+    "got": "0x330Cfd12e0E97B0aDF46158D2A81E8Bd2985c6cB"
+   }
+  ],
+  "name": "Curve.fi MtEthena Gauge Deposit",
+  "symbol": "MtEthena-gauge"
+ },
  "1:0x333333330522f64ee8d0b3039c460b41670e3404": {
   "code": true,
   "proofs": [],
@@ -937,6 +1271,18 @@
   ],
   "implementation": "0xFF42Ce30054dcE7dc7C1282a9a497aa58eaBCe99"
  },
+ "1:0x34280882267ffa6383b363e278b027be083bbe3b": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.factory() == market_factory",
+    "ok": true,
+    "got": "0x27b1dAcd74688aF24a64BD3C9C1B143118740784"
+   }
+  ],
+  "name": "Pendle Market",
+  "symbol": "PENDLE-LPT"
+ },
  "1:0x3620c39c1269d6e31e5e76e9a2fa6afe0e8b14d6": {
   "code": true,
   "proofs": [
@@ -965,6 +1311,23 @@
  "1:0x3696c5eae4a7ffd04ea163564571e9cd8ed9364e": {
   "code": true,
   "proofs": []
+ },
+ "1:0x36cc1d791704445a5b6b9c36a667e511d4702f3f": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == OETH_WETH",
+    "ok": true,
+    "got": "0xcc7d5785AD5755B6164e21495E07aDb0Ff11C2A8"
+   },
+   {
+    "id": "meta_registry.get_gauge(OETH_WETH) == $self",
+    "ok": true,
+    "got": "0x36cC1d791704445A5b6b9c36a667e511d4702F3f"
+   }
+  ],
+  "name": "Curve.fi OETH/WETH Gauge Deposit",
+  "symbol": "OETH/WETH-gauge"
  },
  "1:0x377c3bd93f2a2984e1e7be6a5c22c525ed4a4815": {
   "code": true,
@@ -1020,6 +1383,18 @@
    }
   ]
  },
+ "1:0x390f3595bca2df7d23783dfd126427cceb997bf4": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0x390f3595bCa2Df7d23783dFd126427CCeb997BF4"
+   }
+  ],
+  "name": "Curve.fi Factory Plain Pool: crvUSD/USDT",
+  "symbol": "crvUSDUSDT-f"
+ },
  "1:0x39ff6d21204b919441d17bef61d19181870835a2": {
   "code": true,
   "proofs": [
@@ -1029,6 +1404,18 @@
     "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
    }
   ]
+ },
+ "1:0x3a283d9c08e8b55966afb64c515f5143cf907611": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token(cvxeth_pool) == $self",
+    "ok": true,
+    "got": "0x3A283D9c08E8b55966afb64C515f5143cf907611"
+   }
+  ],
+  "name": "Curve CVX-ETH",
+  "symbol": "crvCVXETH"
  },
  "1:0x3a3868898305f04bec7fea77becff04c13444112": {
   "code": true,
@@ -1124,11 +1511,67 @@
   "name": "Strata Senior USDe",
   "symbol": "srUSDe"
  },
+ "1:0x3e6eba46abc5ab18ed95f6667d8b2fd4020e4637": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "market_factory_v6.yieldContractFactory() == $self",
+    "ok": true,
+    "got": "0x3E6EBa46AbC5ab18ED95F6667d8B2fd4020E4637"
+   }
+  ],
+  "implementation": "0x21414E68da7658b5B2d9C04B06a1f03055763087",
+  "admin": "0xA28c08f165116587D4F3E708743B4dEe155c5E64"
+ },
  "1:0x3f04b65ddbd87f9ce0a2e7eb24d80e7fb87625b5": {
   "code": true,
   "proofs": [],
   "implementation": "0x750136aC021a7149F0EE38141d0bA920Cca1fC5D",
   "admin": "0x21071E0f9D600571Ffe47873e95fffF2FAc9141c"
+ },
+ "1:0x3f353d76ae89dc2c89dcd0426e7fa9c96a332273": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "weETH/WETH-ng Convex Deposit",
+  "symbol": "cvxweeth-ng"
+ },
+ "1:0x3fa73f1e5d8a792c80f426fc8f84fbf7ce9bbcac": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.stakingToken() == AURA",
+    "ok": true,
+    "got": "0xC0c293ce456fF0ED870ADd98a0828Dd4d2903DBF"
+   },
+   {
+    "id": "$self.cvxCrv() == auraBAL",
+    "ok": true,
+    "got": "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d"
+   }
+  ],
+  "name": "Vote Locked Aura",
+  "symbol": "vlAURA"
+ },
+ "1:0x3fe65692bfcd0e6cf84cb1e7d24108e434a7587e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "booster.lockRewards() == $self",
+    "ok": true,
+    "got": "0x3Fe65692bfCD0e6CF84cB1E7d24108E434A7587e"
+   },
+   {
+    "id": "$self.stakingToken() == cvxCRV",
+    "ok": true,
+    "got": "0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7"
+   }
+  ]
  },
  "1:0x3fe6a295459fae07df8a0cecc36f37160fe86aa9": {
   "code": true,
@@ -1194,6 +1637,18 @@
   "name": "Aave Ethereum Variable Debt LINK",
   "symbol": "variableDebtEthLINK"
  },
+ "1:0x42d0ed5c192f70e7a66bd17b71200856141e32a0": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
+   }
+  ],
+  "name": "Balancer osETH-waWETH Aura Deposit",
+  "symbol": "auraosETH-waWETH"
+ },
  "1:0x4370d3b6c9588e02ce9d22e684387859c7ff5b34": {
   "code": true,
   "proofs": [
@@ -1241,6 +1696,21 @@
    }
   ]
  },
+ "1:0x44d8fab7cd8b7877d5f79974c2f501af6e65abba": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxcrvUSDUSDC_f",
+    "ok": true,
+    "got": "0x75A2F59eC37c18962c53b0244D60B53f749DF25E"
+   }
+  ]
+ },
  "1:0x4579a27af00a62c0eb156349f31b345c08386419": {
   "code": true,
   "proofs": [
@@ -1270,6 +1740,18 @@
   "code": true,
   "proofs": [],
   "implementation": "0x06d4ACC104b974cD99bF22e4572f48A051E59670"
+ },
+ "1:0x47ad2cd1dd15739a7a035b9d3b7828d916fef77e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.factory() == market_factory_v6",
+    "ok": true,
+    "got": "0x6d247b1c044fA1E22e6B04fA9F71Baf99EB29A9f"
+   }
+  ],
+  "name": "PLP Ethena sUSDE 26NOV2026",
+  "symbol": "PLP-sUSDE-26NOV2026"
  },
  "1:0x47ed0509e64615c0d5c6d39af1b38d02bc9fe58f": {
   "code": true,
@@ -1418,6 +1900,21 @@
   "name": "USDe",
   "symbol": "USDe"
  },
+ "1:0x4d10e7fc03de065aef3dfbc0394cbed1e4d36d6e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxBTCGHOETH",
+    "ok": true,
+    "got": "0x952A316330705AC7B2116aa3dECaB4Dd211340c7"
+   }
+  ]
+ },
  "1:0x4d5f47fa6a74757f35c14fd3a6ef8e3c9bc514e8": {
   "code": true,
   "proofs": [
@@ -1454,6 +1951,18 @@
     "got": "0x08c6F91e2B681FaF5e17227F2a44C307b3C1364C"
    }
   ]
+ },
+ "1:0x4dece678ceceb27446b35c672dc7d61f30bad69e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0x4DEcE678ceceb27446b35C672dC7d61F30bAD69E"
+   }
+  ],
+  "name": "Curve.fi Factory Plain Pool: crvUSD/USDC",
+  "symbol": "crvUSDUSDC-f"
  },
  "1:0x4dedf26112b3ec8ec46e7e31ea5e123490b05b8b": {
   "code": true,
@@ -1496,6 +2005,35 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum ezETH",
   "symbol": "aEthezETH"
+ },
+ "1:0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "booster.minter() == $self",
+    "ok": true,
+    "got": "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B"
+   }
+  ],
+  "name": "Convex Token",
+  "symbol": "CVX"
+ },
+ "1:0x4e6bb6b7447b7b2aa268c16ab87f4bb48bf57939": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == crvUSDUSDT_f",
+    "ok": true,
+    "got": "0x390f3595bCa2Df7d23783dFd126427CCeb997BF4"
+   },
+   {
+    "id": "meta_registry.get_gauge(crvUSDUSDT_f) == $self",
+    "ok": true,
+    "got": "0x4e6bB6B7447B7B2Aa268C16AB87F4Bb48BF57939"
+   }
+  ],
+  "name": "Curve.fi crvUSDUSDT-f Gauge Deposit",
+  "symbol": "crvUSDUSDT-f-gauge"
  },
  "1:0x4e89b83f426fed3f2ef7bb2d7eb5b53e288e1a13": {
   "code": true,
@@ -1626,6 +2164,21 @@
    }
   ]
  },
+ "1:0x5411cc583f0b51104fa523eef9fc77a29df80f58": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxweeth_ng",
+    "ok": true,
+    "got": "0x3f353d76Ae89dc2C89Dcd0426e7Fa9c96A332273"
+   }
+  ]
+ },
  "1:0x542dba469bde58faee189ffb60c6b49ce60e0738": {
   "code": true,
   "proofs": [
@@ -1705,6 +2258,18 @@
   "name": "Aave Ethereum Variable Debt PYUSD",
   "symbol": "variableDebtEthPYUSD"
  },
+ "1:0x57c23c58b1d8c3292c15becf07c62c5c52457a42": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.getVault() == vault",
+    "ok": true,
+    "got": "0xbA1333333333a1BA1108E8412f11850A5C319bA9"
+   }
+  ],
+  "name": "Balancer osETH-waWETH",
+  "symbol": "osETH-waWETH"
+ },
  "1:0x57e114b691db790c35207b2e685d4a43181e6061": {
   "code": true,
   "proofs": [],
@@ -1749,6 +2314,21 @@
   "name": "Spark WETH",
   "symbol": "spWETH"
  },
+ "1:0x5a71e7e04f8725fd42a216949e7099ebd08a42e3": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxRLUSD_USDC",
+    "ok": true,
+    "got": "0xBd5D4c539B3773086632416A4EC8ceF57c945319"
+   }
+  ]
+ },
  "1:0x5a98fcbea516cf06857215779fd812ca3bef1b32": {
   "code": true,
   "proofs": [
@@ -1786,6 +2366,23 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum cbBTC",
   "symbol": "aEthcbBTC"
+ },
+ "1:0x5c6ee304399dbdb9c8ef030ab642b10820db8f56": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "veBAL.token() == $self",
+    "ok": true,
+    "got": "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56"
+   },
+   {
+    "id": "$self.getVault() == balancer_v2.vault",
+    "ok": true,
+    "got": "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+   }
+  ],
+  "name": "Balancer 80 BAL 20 WETH",
+  "symbol": "B-80BAL-20WETH"
  },
  "1:0x5cf1eaf763e8ce5f949bea9a0cd051e8db252d5b": {
   "code": true,
@@ -1844,6 +2441,23 @@
   "name": "Aave Ethereum WBTC",
   "symbol": "aEthWBTC"
  },
+ "1:0x5f3b5dfeb7b28cdbd7faba78963ee202a494e2a2": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "gauge_controller.voting_escrow() == $self",
+    "ok": true,
+    "got": "0x5f3b5DfEb7B28CDbD7FAba78963EE202a494e2A2"
+   },
+   {
+    "id": "$self.token() == CRV",
+    "ok": true,
+    "got": "0xD533a949740bb3306d119CC777fa900bA034cd52"
+   }
+  ],
+  "name": "Vote-escrowed CRV",
+  "symbol": "veCRV"
+ },
  "1:0x5f4a0873a3a02f7c0cb0e13a1d4362a1ad90e751": {
   "code": true,
   "proofs": [
@@ -1882,6 +2496,63 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum eBTC",
   "symbol": "aEtheBTC"
+ },
+ "1:0x5ffe7fb82894076ecb99a30d6a32e969e6e35e98": {
+  "code": true,
+  "proofs": []
+ },
+ "1:0x616e8bfa43f920657b3497dbf40d6b1a02d4608d": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "bal_depositor.minter() == $self",
+    "ok": true,
+    "got": "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d"
+   }
+  ],
+  "name": "Aura BAL",
+  "symbol": "auraBAL"
+ },
+ "1:0x62a66eb9abf7a788f48d0ce7c0c065df9e09da19": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == rETH_waEthWETH",
+    "ok": true,
+    "got": "0x1ea5870f7C037930CE1d5d8d9317c670e89e13E3"
+   }
+  ],
+  "name": "Balancer rETH-waEthWETH Gauge Deposit",
+  "symbol": "rETH-waEthWETH-gauge"
+ },
+ "1:0x62b9c7356a2dc64a1969e19c23e4f579f9810aa7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "crv_depositor.minter() == $self",
+    "ok": true,
+    "got": "0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7"
+   }
+  ],
+  "name": "Convex CRV",
+  "symbol": "cvxCRV"
+ },
+ "1:0x63037a4e3305d25d48baed2022b8462b2807351c": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == osETH_rETH",
+    "ok": true,
+    "got": "0xe080027Bd47353b5D1639772b4a75E9Ed3658A0d"
+   },
+   {
+    "id": "meta_registry.get_gauge(osETH_rETH) == $self",
+    "ok": true,
+    "got": "0x63037a4e3305d25D48BAED2022b8462b2807351c"
+   }
+  ],
+  "name": "Curve.fi osETH-rETH Gauge Deposit",
+  "symbol": "osETH-rETH-gauge"
  },
  "1:0x64b761d848206f447fe2dd461b0c635ec39ebb27": {
   "code": true,
@@ -1984,6 +2655,21 @@
   "name": "Flying Tulip Pool",
   "symbol": "FT/ftUSD"
  },
+ "1:0x689440f2ff927e1f24c72f1087e1faf471ece1c8": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvx3Crv",
+    "ok": true,
+    "got": "0x30D9410ED1D5DA1F6C8391af5338C93ab8d4035C"
+   }
+  ]
+ },
  "1:0x68aeb290c7727d899b47c56d1c96aeac475cd0dd": {
   "code": true,
   "proofs": [
@@ -2048,6 +2734,21 @@
   "name": "Dai Stablecoin",
   "symbol": "DAI"
  },
+ "1:0x6b27d7bc63f1999d14ff9ba900069ee516669ee8": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxstETH_ng_f",
+    "ok": true,
+    "got": "0x1b74fa5951dfa4c03D0127011548fA79b956f63B"
+   }
+  ]
+ },
  "1:0x6c3ea9036406852006290770bedfcaba0e23a0e8": {
   "code": true,
   "proofs": [
@@ -2059,6 +2760,18 @@
   ],
   "name": "PayPal USD",
   "symbol": "PYUSD"
+ },
+ "1:0x6c3f90f043a72fa612cbac8115ee7e52bde6e490": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token(threepool) == $self",
+    "ok": true,
+    "got": "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490"
+   }
+  ],
+  "name": "Curve.fi DAI/USDC/USDT",
+  "symbol": "3Crv"
  },
  "1:0x6c67e666bb954d4be23e9f1ce20e7e8699d29339": {
   "code": true,
@@ -2085,6 +2798,18 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt EURC",
   "symbol": "variableDebtEthEURC"
+ },
+ "1:0x6d247b1c044fa1e22e6b04fa9f71baf99eb29a9f": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.yieldContractFactory() == yield_contract_factory_v6",
+    "ok": true,
+    "got": "0x3E6EBa46AbC5ab18ED95F6667d8B2fd4020E4637"
+   }
+  ],
+  "implementation": "0xE7a7477c636EbC2eD7C1968b5Fac5eaF29Ff6C0C",
+  "admin": "0xA28c08f165116587D4F3E708743B4dEe155c5E64"
  },
  "1:0x6de3e52a1b7294a34e271a508082b1ff4a37e30e": {
   "code": true,
@@ -2138,6 +2863,28 @@
   "name": "Spark USDG",
   "symbol": "spUSDG"
  },
+ "1:0x70a1c01902dab7a45dca1098ca76a8314dd8adba": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == osETH_waWETH",
+    "ok": true,
+    "got": "0x57c23c58B1D8C3292c15BEcF07c62C5c52457A42"
+   }
+  ],
+  "name": "Balancer osETH-waWETH Gauge Deposit",
+  "symbol": "osETH-waWETH-gauge"
+ },
+ "1:0x70ee0a6db4f5a2dc4d9c0b57be97b9987e75bafd": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "market_factory.yieldContractFactory() == $self",
+    "ok": true,
+    "got": "0x70ee0A6DB4F5a2Dc4d9c0b57bE97B9987e75BAFD"
+   }
+  ]
+ },
  "1:0x71aef7b30728b9bb371578f36c5a1f1502a5723e": {
   "code": true,
   "proofs": [
@@ -2150,6 +2897,23 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum 1INCH",
   "symbol": "aEth1INCH"
+ },
+ "1:0x72a19342e8f1838460ebfccef09f6585e32db86e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.stakingToken() == CVX",
+    "ok": true,
+    "got": "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B"
+   },
+   {
+    "id": "$self.cvxCrv() == cvxCRV",
+    "ok": true,
+    "got": "0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7"
+   }
+  ],
+  "name": "Vote Locked Convex Token",
+  "symbol": "vlCVX"
  },
  "1:0x72e95b8931767c79ba4eee721354d6e99a61d004": {
   "code": true,
@@ -2212,6 +2976,18 @@
   "implementation": "0x80D786DF608603cCDcC83F5712B97C185A6A948d",
   "name": "Aave Ethereum Lido ezETH",
   "symbol": "aEthLidoezETH"
+ },
+ "1:0x75a2f59ec37c18962c53b0244d60b53f749df25e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "Curve.fi Factory Plain Pool: crvUSD/USDC Convex Deposit",
+  "symbol": "cvxcrvUSDUSDC-f"
  },
  "1:0x762edb8d79b97487f82093f85059e42eeef61e9e": {
   "code": true,
@@ -2318,6 +3094,23 @@
   ],
   "name": "Tier #I"
  },
+ "1:0x79f21bc30632cd40d2af8134b469a0eb4c9574aa": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == stETH_ng_f",
+    "ok": true,
+    "got": "0x21E27a5E5513D6e65C4f830167390997aA84843a"
+   },
+   {
+    "id": "meta_registry.get_gauge(stETH_ng_f) == $self",
+    "ok": true,
+    "got": "0x79F21BC30632cd40d2aF8134B469a0EB4C9574AA"
+   }
+  ],
+  "name": "Curve.fi stETH-ng-f Gauge Deposit",
+  "symbol": "stETH-ng-f-gauge"
+ },
  "1:0x7a2ce012fe37db488c24e31f5e38816cad82b45e": {
   "code": true,
   "proofs": [
@@ -2420,6 +3213,23 @@
   "name": "Withdraw Request NFT",
   "symbol": "WithdrawRequestNFT"
  },
+ "1:0x7e1444ba99dcdffe8fbdb42c02f0005d14f13be1": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == crvCVXETH",
+    "ok": true,
+    "got": "0x3A283D9c08E8b55966afb64C515f5143cf907611"
+   },
+   {
+    "id": "meta_registry.get_gauge(cvxeth_pool) == $self",
+    "ok": true,
+    "got": "0x7E1444BA99dcdFfE8fBdb42C02F0005D14f13BE1"
+   }
+  ],
+  "name": "Curve.fi crvCVXETH Gauge Deposit",
+  "symbol": "crvCVXETH-gauge"
+ },
  "1:0x7e43df1c1c5a2245858b60d4655fda83704e4171": {
   "code": true,
   "proofs": [
@@ -2486,6 +3296,33 @@
   "implementation": "0x1b992302652A92611DCd5090D1Cb388C6377f455",
   "name": "Spark Savings PYUSD",
   "symbol": "spPYUSD"
+ },
+ "1:0x8014595f2ab54cd7c604b00e9fb932176fdc86ae": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "cvxCRV.operator() == $self",
+    "ok": true,
+    "got": "0x8014595F2AB54cD7c604B00E9fb932176fDc86Ae"
+   },
+   {
+    "id": "$self.crv() == curve.CRV",
+    "ok": true,
+    "got": "0xD533a949740bb3306d119CC777fa900bA034cd52"
+   }
+  ]
+ },
+ "1:0x808507121b80c02388fad14726482e061b8da827": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "sPENDLE.PENDLE() == $self",
+    "ok": true,
+    "got": "0x808507121B80c02388fAd14726482e061B8da827"
+   }
+  ],
+  "name": "Pendle",
+  "symbol": "PENDLE"
  },
  "1:0x8105f69d9c41644c6a0803fda7d03aa70996cfd9": {
   "code": true,
@@ -2592,6 +3429,18 @@
   "name": "Spark rsETH",
   "symbol": "sprsETH"
  },
+ "1:0x85b2b559bc2d21104c4defdd6efca8a20343361d": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.getVault() == vault",
+    "ok": true,
+    "got": "0xbA1333333333a1BA1108E8412f11850A5C319bA9"
+   }
+  ],
+  "name": "Balancer Aave GHO/USDT/USDC",
+  "symbol": "Aave GHO/USDT/USDC"
+ },
  "1:0x85b78aca6deae198fbf201c82daf6ca21942acc6": {
   "code": true,
   "proofs": [
@@ -2679,6 +3528,10 @@
   "name": "Aave Ethereum Variable Debt osETH",
   "symbol": "variableDebtEthosETH"
  },
+ "1:0x888888888889758f76e7103c6cbf23abbf58f946": {
+  "code": true,
+  "proofs": []
+ },
  "1:0x889edc2edab5f40e902b864ad4d7ade8e412f9b1": {
   "code": true,
   "proofs": [
@@ -2724,6 +3577,28 @@
   "name": "Aave Ethereum Variable Debt RPL",
   "symbol": "variableDebtEthRPL"
  },
+ "1:0x89e6e5f7c3a60e7d6347f054051a29a272f4ce44": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.PT() == PT_sUSDE_26NOV2026",
+    "ok": true,
+    "got": "0xB195B618EA52b77CB2a58846F452f59f8dFa9390"
+   },
+   {
+    "id": "$self.SY() == SY_sUSDE",
+    "ok": true,
+    "got": "0xBF98480425A29197e5d99D003017f63a1e595D02"
+   },
+   {
+    "id": "$self.factory() == yield_contract_factory_v6",
+    "ok": true,
+    "got": "0x3E6EBa46AbC5ab18ED95F6667d8B2fd4020E4637"
+   }
+  ],
+  "name": "YT Ethena sUSDE 26NOV2026",
+  "symbol": "YT-sUSDE-26NOV2026"
+ },
  "1:0x8a2b6f94ff3a89a03e8c02ee92b55af90c9454a2": {
   "code": true,
   "proofs": [
@@ -2749,6 +3624,18 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum MKR",
   "symbol": "aEthMKR"
+ },
+ "1:0x8a4f252812dff2a8636e4f7eb249d8fc2e3bd77f": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0x8a4f252812dFF2A8636E4F7EB249d8FC2E3bd77f"
+   }
+  ],
+  "name": "TricryptoGHO",
+  "symbol": "BTCGHOETH"
  },
  "1:0x8aeb9453ef22cb38abc7a3af9c208f65c1bfe31e": {
   "code": true,
@@ -2840,6 +3727,28 @@
   "name": "Aave Ethereum Variable Debt sDAI",
   "symbol": "variableDebtEthsDAI"
  },
+ "1:0x8e89d41c563e6c3d9901ad75b75e2d8e140def04": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
+   },
+   {
+    "id": "$self.stakingToken() == auraAave_GHO_USDT_USDC",
+    "ok": true,
+    "got": "0xeb12FBcb0a068720EE5F7816416a3Ebfc3090A2B"
+   },
+   {
+    "id": "$self.asset() == balancer_v3.Aave_GHO_USDT_USDC",
+    "ok": true,
+    "got": "0x85B2b559bC2D21104C4DEFdd6EFcA8A20343361D"
+   }
+  ],
+  "name": "Balancer Aave GHO/USDT/USDC Aura Deposit Vault",
+  "symbol": "auraAave GHO/USDT/USDC-vault"
+ },
  "1:0x9008d19f58aabd9ed0d60971565aa8510560ab41": {
   "code": true,
   "proofs": [
@@ -2910,6 +3819,18 @@
   "name": "WETH Market",
   "symbol": "kpkWETH"
  },
+ "1:0x939e4c11e391a28cd81248163f3a2e595f12ce5e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "Curve.fi Factory Plain Pool: crvUSD/USDT Convex Deposit",
+  "symbol": "cvxcrvUSDUSDT-f"
+ },
  "1:0x9469470c9878bf3d6d0604831d9a3a366156f7ee": {
   "code": true,
   "proofs": [],
@@ -2931,6 +3852,47 @@
     "got": "0x79C6C1ce5B12abCC3E407ce8C160eE1160250921"
    }
   ]
+ },
+ "1:0x9518c9063eb0262d791f38d8d6eb0aca33c63ed0": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "Curve.fi ETH/stETH Convex Deposit",
+  "symbol": "cvxsteCRV"
+ },
+ "1:0x952a316330705ac7b2116aa3decab4dd211340c7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "TricryptoGHO Convex Deposit",
+  "symbol": "cvxBTCGHOETH"
+ },
+ "1:0x95f00391cb5eebcd190eb58728b4ce23dbfa6ac1": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == crvUSDUSDC_f",
+    "ok": true,
+    "got": "0x4DEcE678ceceb27446b35C672dC7d61F30bAD69E"
+   },
+   {
+    "id": "meta_registry.get_gauge(crvUSDUSDC_f) == $self",
+    "ok": true,
+    "got": "0x95f00391cB5EebCd190EB58728B4CE23DbFa6ac1"
+   }
+  ],
+  "name": "Curve.fi crvUSDUSDC-f Gauge Deposit",
+  "symbol": "crvUSDUSDC-f-gauge"
  },
  "1:0x977b6fc5de62598b08c85ac8cf2b745874e8b78c": {
   "code": true,
@@ -2958,6 +3920,28 @@
   "name": "Aave Ethereum USDC",
   "symbol": "aEthUSDC"
  },
+ "1:0x994be003de5fd6e41d37c6948f405eb0759149e6": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
+   },
+   {
+    "id": "$self.stakingToken() == auraosETH_waWETH",
+    "ok": true,
+    "got": "0x42D0Ed5C192f70e7A66bd17b71200856141e32A0"
+   },
+   {
+    "id": "$self.asset() == balancer_v3.osETH_waWETH",
+    "ok": true,
+    "got": "0x57c23c58B1D8C3292c15BEcF07c62C5c52457A42"
+   }
+  ],
+  "name": "Balancer osETH-waWETH Aura Deposit Vault",
+  "symbol": "auraosETH-waWETH-vault"
+ },
  "1:0x9985df20d7e9103ecbceb16a84956434b6f06ae8": {
   "code": true,
   "proofs": [
@@ -2970,6 +3954,20 @@
   "implementation": "0x6175ddEc3B9b38c88157C10A01ed4A3fa8639cC6",
   "name": "Spark rETH",
   "symbol": "sprETH"
+ },
+ "1:0x999999999991e178d52cd95afd4b00d066664144": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.PENDLE() == PENDLE",
+    "ok": true,
+    "got": "0x808507121B80c02388fAd14726482e061B8da827"
+   }
+  ],
+  "implementation": "0xA98D1483781C08e60D944a63721B93fE40749032",
+  "admin": "0xA28c08f165116587D4F3E708743B4dEe155c5E64",
+  "name": "StakedPendle",
+  "symbol": "sPENDLE"
  },
  "1:0x99cd4ec3f88a45940936f469e4bb72a2a701eeb9": {
   "code": true,
@@ -3028,6 +4026,18 @@
   "name": "Aave Ethereum Variable Debt PT_srUSDe_25JUN2026",
   "symbol": "variableDebtEthPT_srUSDe_25JUN2026"
  },
+ "1:0x9c560ebaf78e596cbcc27411d633a74d628dd7dc": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.factory() == market_factory_v6",
+    "ok": true,
+    "got": "0x6d247b1c044fA1E22e6B04fA9F71Baf99EB29A9f"
+   }
+  ],
+  "name": "PLP Savings USDS 26NOV2026",
+  "symbol": "PLP-sUSDS-26NOV2026"
+ },
  "1:0x9d244a99801dc05cbc04183769c17056b8a1ad53": {
   "code": true,
   "proofs": [
@@ -3058,11 +4068,38 @@
   "name": "Staked USDe",
   "symbol": "sUSDe"
  },
+ "1:0x9e0a248528aa933ff1f8f707ea75f61ed780836e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxETH_ETH",
+    "ok": true,
+    "got": "0xf0BB7682830941e105Ce0FE2c043d1Bb058d45B6"
+   }
+  ]
+ },
  "1:0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2": {
   "code": true,
   "proofs": [],
   "name": "Maker",
   "symbol": "MKR"
+ },
+ "1:0x9fdd52efeb601e4bc78b89c6490505b8ac637e9f": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == Aave_GHO_USDT_USDC",
+    "ok": true,
+    "got": "0x85B2b559bC2D21104C4DEFdd6EFcA8A20343361D"
+   }
+  ],
+  "name": "Balancer Aave GHO/USDT/USDC Gauge Deposit",
+  "symbol": "Aave GHO/USDT/USDC-gauge"
  },
  "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": {
   "code": true,
@@ -3144,6 +4181,21 @@
   "implementation": "0x4e7991e5C547ce825BdEb665EE14a3274f9F61e0",
   "name": "Savings USDS",
   "symbol": "sUSDS"
+ },
+ "1:0xa57b8d98dae62b26ec3bcc4a365338157060b234": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.crv() == balancer.BAL",
+    "ok": true,
+    "got": "0xba100000625a3754423978a60c9317c58a424e3D"
+   },
+   {
+    "id": "$self.minter() == AURA",
+    "ok": true,
+    "got": "0xC0c293ce456fF0ED870ADd98a0828Dd4d2903DBF"
+   }
+  ]
  },
  "1:0xa665bb258d2a732c170dfd505924214c0b1ac74f": {
   "code": true,
@@ -3284,6 +4336,23 @@
   "name": "Aave Ethereum mUSD",
   "symbol": "aEthmUSD"
  },
+ "1:0xaa0c3f5f7dfd688c6e646f66cd2a6b66acdbe434": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.cvxCrv() == cvxCRV",
+    "ok": true,
+    "got": "0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7"
+   },
+   {
+    "id": "$self.cvxCrvStaking() == cvxCRV_rewards",
+    "ok": true,
+    "got": "0x3Fe65692bfCD0e6CF84cB1E7d24108E434A7587e"
+   }
+  ],
+  "name": "Staked CvxCrv",
+  "symbol": "stkCvxCrv"
+ },
  "1:0xaa48ecbc843cf7e9a29155d112b8cb27902bd23c": {
   "code": true,
   "proofs": [],
@@ -3345,6 +4414,21 @@
   "name": "Spark Variable Debt sDAI",
   "symbol": "variableDebtsDAI"
  },
+ "1:0xac15fffdca77fc86770beaba20cbc1bc2d00494c": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxOETH_WETH",
+    "ok": true,
+    "got": "0x2a1e7Cf85E533348AC5770514bF713544a11f856"
+   }
+  ]
+ },
  "1:0xac50890a80a2731eb1ea2e9b4f29569ceb06d960": {
   "code": true,
   "proofs": [
@@ -3374,6 +4458,38 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt PT_srUSDe_2APR2026",
   "symbol": "variableDebtEthPT_srUSDe_2APR2026"
+ },
+ "1:0xad6d1a4b1b2f33712a8b18bedc95c0a1f9832269": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == ETH_ETH",
+    "ok": true,
+    "got": "0x2c683fAd51da2cd17793219CC86439C1875c353e"
+   },
+   {
+    "id": "meta_registry.get_gauge(ETH_ETH) == $self",
+    "ok": true,
+    "got": "0xAD6D1a4B1B2F33712A8b18BeDc95c0A1f9832269"
+   }
+  ],
+  "name": "Curve.fi ETH+ETH Gauge Deposit",
+  "symbol": "ETH+ETH-gauge"
+ },
+ "1:0xae563e3f8219521950555f5962419c8919758ea2": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.getPermit2() == permit2.Permit2",
+    "ok": true,
+    "got": "0x000000000022D473030F116dDEE9F6B43aC78BA3"
+   },
+   {
+    "id": "$self.getWeth() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ]
  },
  "1:0xae7ab96520de3a18e5e111b5eaab095312d7fe84": {
   "code": true,
@@ -3419,6 +4535,21 @@
   "name": "Aave Ethereum Variable Debt syrupUSDT",
   "symbol": "variableDebtEthsyrupUSDT"
  },
+ "1:0xb05262d4aaaa38d0af4aab244d446ebdb5afd4a7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxcrvUSDTWBTCWETH",
+    "ok": true,
+    "got": "0xB77BA8B4b9d981269466eE95796A9Af57d4E82DB"
+   }
+  ]
+ },
  "1:0xb0b14dd477e6159b4f3f210cf45f0954f57c0fab": {
   "code": true,
   "proofs": [
@@ -3445,6 +4576,80 @@
   "name": "Spark ezETH",
   "symbol": "spezETH"
  },
+ "1:0xb195b618ea52b77cb2a58846f452f59f8dfa9390": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.SY() == SY_sUSDE",
+    "ok": true,
+    "got": "0xBF98480425A29197e5d99D003017f63a1e595D02"
+   },
+   {
+    "id": "$self.YT() == YT_sUSDE_26NOV2026",
+    "ok": true,
+    "got": "0x89E6e5f7c3A60e7D6347F054051A29a272F4cE44"
+   },
+   {
+    "id": "$self.factory() == yield_contract_factory_v6",
+    "ok": true,
+    "got": "0x3E6EBa46AbC5ab18ED95F6667d8B2fd4020E4637"
+   }
+  ],
+  "name": "PT Ethena sUSDE 26NOV2026",
+  "symbol": "PT-sUSDE-26NOV2026"
+ },
+ "1:0xb1fb0ba0676a1ffa83882c7f4805408ba232c1fa": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxcrvCVXETH",
+    "ok": true,
+    "got": "0x0bC857f97c0554d1d0D602b56F2EEcE682016fBA"
+   }
+  ]
+ },
+ "1:0xb21a277466e7db6934556a1ce12eb3f032815c8a": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.getPermit2() == permit2.Permit2",
+    "ok": true,
+    "got": "0x000000000022D473030F116dDEE9F6B43aC78BA3"
+   },
+   {
+    "id": "$self.getWeth() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ]
+ },
+ "1:0xb253eff1104802b97ac7e3ac9fdd73aece295a2c": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.SY() == SY_stETH",
+    "ok": true,
+    "got": "0xcbC72d92b2dc8187414F6734718563898740C0BC"
+   },
+   {
+    "id": "$self.YT() == YT_stETH_30DEC2027",
+    "ok": true,
+    "got": "0x04B7Fa1e727d7290D6E24fA9b426d0c940283a95"
+   },
+   {
+    "id": "$self.factory() == yield_contract_factory",
+    "ok": true,
+    "got": "0x70ee0A6DB4F5a2Dc4d9c0b57bE97B9987e75BAFD"
+   }
+  ],
+  "name": "PT stETH 30DEC2027",
+  "symbol": "PT-stETH-30DEC2027"
+ },
  "1:0xb3973d459df38ae57797811f2a1fd061da1bc123": {
   "code": true,
   "proofs": [
@@ -3457,6 +4662,16 @@
   "implementation": "0x6175ddEc3B9b38c88157C10A01ed4A3fa8639cC6",
   "name": "Spark cbBTC",
   "symbol": "spcbBTC"
+ },
+ "1:0xb576491f1e6e5e62f1d8f26062ee822b40b0e0d4": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_pool_from_lp_token(crvCVXETH) == $self",
+    "ok": true,
+    "got": "0xB576491F1E6e5E62f1d8F26062Ee822B40B0E0d4"
+   }
+  ]
  },
  "1:0xb5ce3ca2c774b72955c25875022fdd91f7a7b938": {
   "code": true,
@@ -3488,6 +4703,18 @@
   "name": "Aave Ethereum RPL",
   "symbol": "aEthRPL"
  },
+ "1:0xb77ba8b4b9d981269466ee95796a9af57d4e82db": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "TricryptoUSDT Convex Deposit",
+  "symbol": "cvxcrvUSDTWBTCWETH"
+ },
  "1:0xb82fa9f31612989525992fcfbb09ab22eff5c85a": {
   "code": true,
   "proofs": [
@@ -3518,6 +4745,44 @@
    }
   ]
  },
+ "1:0xb8db64dfde4bbead174a6cba756743dec72bbd20": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
+   }
+  ],
+  "name": "Balancer rETH - Aave WETH Aura Deposit",
+  "symbol": "aurarETH-waEthWETH"
+ },
+ "1:0xba100000625a3754423978a60c9317c58a424e3d": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "minter.getBalancerToken() == $self",
+    "ok": true,
+    "got": "0xba100000625a3754423978a60c9317c58a424e3D"
+   }
+  ],
+  "name": "Balancer",
+  "symbol": "BAL"
+ },
+ "1:0xba12222222228d8ba445958a75a0704d566bf2c8": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.WETH() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ]
+ },
+ "1:0xba1333333333a1ba1108e8412f11850a5c319ba9": {
+  "code": true,
+  "proofs": []
+ },
  "1:0xba2c8f2ea5b56690bfb8b709438f049e5dd76b96": {
   "code": true,
   "proofs": [
@@ -3530,6 +4795,21 @@
   "implementation": "0x86C71796CcDB31c3997F8Ec5C2E3dB3e9e40b985",
   "name": "Spark Variable Debt rETH",
   "symbol": "variableDebtrETH"
+ },
+ "1:0xba7ebdef7723e55c909ac44226fb87a93625c44e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxosETH_rETH",
+    "ok": true,
+    "got": "0xE3eA98BD863bEF37D951973743aAC2e56edd99BC"
+   }
+  ]
  },
  "1:0xbaa999ac55eace41ccae355c77809e68bb345170": {
   "code": true,
@@ -3622,6 +4902,18 @@
   "name": "Spark USDC Vault",
   "symbol": "sUSDC"
  },
+ "1:0xbd5d4c539b3773086632416a4ec8cef57c945319": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "RLUSD/USDC Convex Deposit",
+  "symbol": "cvxRLUSD/USDC"
+ },
  "1:0xbd7d6a9ad7865463de44b05f04559f65e3b11704": {
   "code": true,
   "proofs": []
@@ -3665,6 +4957,23 @@
   "name": "Aave Ethereum EtherFi weETH",
   "symbol": "aEthEtherFiweETH"
  },
+ "1:0xbe3d4ec488a0a042bb86f9176c24f8cd54018ba7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.yieldToken() == sky.sUSDS",
+    "ok": true,
+    "got": "0xa3931d71877C0E7a3148CB7Eb4463524FEc27fbD"
+   },
+   {
+    "id": "PT_sUSDS_26NOV2026.SY() == $self",
+    "ok": true,
+    "got": "0xBe3d4ec488A0a042BB86F9176C24f8CD54018BA7"
+   }
+  ],
+  "name": "SY Savings USDS",
+  "symbol": "SY-sUSDS"
+ },
  "1:0xbe54767735fb7acca2aa7e2d209a6f705073536d": {
   "code": true,
   "proofs": [
@@ -3681,6 +4990,48 @@
  "1:0xbe8e3e3618f7474f8cb1d074a26affef007e98fb": {
   "code": true,
   "proofs": []
+ },
+ "1:0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_pool_from_lp_token(3Crv) == $self",
+    "ok": true,
+    "got": "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7"
+   }
+  ]
+ },
+ "1:0xbf98480425a29197e5d99d003017f63a1e595d02": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.yieldToken() == ethena.sUSDe",
+    "ok": true,
+    "got": "0x9D39A5DE30e57443BfF2A8307A4256c8797A3497"
+   },
+   {
+    "id": "PT_sUSDE_26NOV2026.SY() == $self",
+    "ok": true,
+    "got": "0xBF98480425A29197e5d99D003017f63a1e595D02"
+   }
+  ],
+  "name": "SY Ethena sUSDE",
+  "symbol": "SY-sUSDE"
+ },
+ "1:0xbfcf63294ad7105dea65aa58f8ae5be2d9d0952a": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == 3Crv",
+    "ok": true,
+    "got": "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490"
+   },
+   {
+    "id": "meta_registry.get_gauge(threepool) == $self",
+    "ok": true,
+    "got": "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A"
+   }
+  ]
  },
  "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
   "code": true,
@@ -3725,6 +5076,18 @@
   "name": "Aave Ethereum Lido wstETH",
   "symbol": "aEthLidowstETH"
  },
+ "1:0xc0c293ce456ff0ed870add98a0828dd4d2903dbf": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "booster.minter() == $self",
+    "ok": true,
+    "got": "0xC0c293ce456fF0ED870ADd98a0828Dd4d2903DBF"
+   }
+  ],
+  "name": "Aura",
+  "symbol": "AURA"
+ },
  "1:0xc0cf47d16a332f9e12e506e9a5c8b4baf2a6f1f6": {
   "code": true,
   "proofs": [
@@ -3749,6 +5112,38 @@
     "got": "0xC0cf47D16a332F9e12E506E9A5C8B4bAf2A6F1f6"
    }
   ]
+ },
+ "1:0xc128468b7ce63ea702c1f104d55a2566b13d3abd": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "minter.getGaugeController() == $self",
+    "ok": true,
+    "got": "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
+   },
+   {
+    "id": "$self.voting_escrow() == veBAL",
+    "ok": true,
+    "got": "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
+   }
+  ]
+ },
+ "1:0xc128a9954e6c874ea3d62ce62b468ba073093f25": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "gauge_controller.voting_escrow() == $self",
+    "ok": true,
+    "got": "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
+   },
+   {
+    "id": "$self.token() == B_80BAL_20WETH",
+    "ok": true,
+    "got": "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56"
+   }
+  ],
+  "name": "Vote Escrowed Balancer BPT",
+  "symbol": "veBAL"
  },
  "1:0xc139190f447e929f090edeb554d95abb8b18ac1c": {
   "code": true,
@@ -3925,6 +5320,28 @@
   "name": "Aave Ethereum SNX",
   "symbol": "aEthSNX"
  },
+ "1:0xc7b8551c6b286ce0b44952320e940bd3dee58a09": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.PT() == PT_sUSDS_26NOV2026",
+    "ok": true,
+    "got": "0xdC169AbE56461A2E0c034Da431Ac2a3ebf596094"
+   },
+   {
+    "id": "$self.SY() == SY_sUSDS",
+    "ok": true,
+    "got": "0xBe3d4ec488A0a042BB86F9176C24f8CD54018BA7"
+   },
+   {
+    "id": "$self.factory() == yield_contract_factory_v6",
+    "ok": true,
+    "got": "0x3E6EBa46AbC5ab18ED95F6667d8B2fd4020E4637"
+   }
+  ],
+  "name": "YT Savings USDS 26NOV2026",
+  "symbol": "YT-sUSDS-26NOV2026"
+ },
  "1:0xc92e8bdf79f0507f65a392b0ab4667716bfe0110": {
   "code": true,
   "proofs": [
@@ -3960,6 +5377,35 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt PT_sUSDE_25SEP2025",
   "symbol": "variableDebtEthPT_sUSDE_25SEP2025"
+ },
+ "1:0xcbc72d92b2dc8187414f6734718563898740c0bc": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.yieldToken() == lido.wstETH",
+    "ok": true,
+    "got": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"
+   },
+   {
+    "id": "PT_stETH_30DEC2027.SY() == $self",
+    "ok": true,
+    "got": "0xcbC72d92b2dc8187414F6734718563898740C0BC"
+   }
+  ],
+  "name": "SY stETH",
+  "symbol": "SY-stETH"
+ },
+ "1:0xcc7d5785ad5755b6164e21495e07adb0ff11c2a8": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0xcc7d5785AD5755B6164e21495E07aDb0Ff11C2A8"
+   }
+  ],
+  "name": "OETH/WETH",
+  "symbol": "OETH/WETH"
  },
  "1:0xcc9ee9483f662091a1de4795249e24ac0ac2630f": {
   "code": true,
@@ -4046,6 +5492,21 @@
   "name": "Aave Ethereum Lido tETH",
   "symbol": "aEthLidotETH"
  },
+ "1:0xcf50b810e57ac33b91dcf525c6ddd9881b139332": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "booster.stakerRewards() == $self",
+    "ok": true,
+    "got": "0xCF50b810E57Ac33B91dCF525C6ddd9881B139332"
+   },
+   {
+    "id": "$self.stakingToken() == CVX",
+    "ok": true,
+    "got": "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B"
+   }
+  ]
+ },
  "1:0xcf8d0c70c850859266f5c338b38f9d663181c314": {
   "code": true,
   "proofs": [
@@ -4074,6 +5535,18 @@
   "proofs": [],
   "implementation": "0xE774E19f087523EA316fCCb4B156169153f18b9d"
  },
+ "1:0xd001ae433f254283fece51d4acce8c53263aa186": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0xD001aE433f254283FeCE51d4ACcE8c53263aa186"
+   }
+  ],
+  "name": "RLUSD/USDC",
+  "symbol": "RLUSD/USDC"
+ },
  "1:0xd01607c3c5ecaba394d8be377a08590149325722": {
   "code": true,
   "proofs": [
@@ -4081,6 +5554,21 @@
     "id": "$self.POOL() == pool",
     "ok": true,
     "got": "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2"
+   }
+  ]
+ },
+ "1:0xd061d61a4d941c39e5453435b6345dc261c2fce0": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "steCRV_gauge.minter() == $self",
+    "ok": true,
+    "got": "0xd061D61a4d941c39E5453435B6345Dc261C2fcE0"
+   },
+   {
+    "id": "$self.controller() == gauge_controller",
+    "ok": true,
+    "got": "0x2F50D538606Fa9EDD2B11E2446BEb18C9D5846bB"
    }
   ]
  },
@@ -4111,6 +5599,21 @@
   "code": true,
   "proofs": []
  },
+ "1:0xd1ddb0a0815fd28932fbb194c84003683af8a824": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   },
+   {
+    "id": "$self.stakingToken() == cvxcrvUSDUSDT_f",
+    "ok": true,
+    "got": "0x939e4C11E391a28CD81248163f3a2e595f12CE5E"
+   }
+  ]
+ },
  "1:0xd2cf07dee40d3d530d15b88d689f5cd97a31fc3d": {
   "code": true,
   "proofs": [
@@ -4136,6 +5639,23 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum FRAX",
   "symbol": "aEthFRAX"
+ },
+ "1:0xd533a949740bb3306d119cc777fa900ba034cd52": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "address_provider.get_address(19) == $self",
+    "ok": true,
+    "got": "0xD533a949740bb3306d119CC777fa900bA034cd52"
+   },
+   {
+    "id": "minter.token() == $self",
+    "ok": true,
+    "got": "0xD533a949740bb3306d119CC777fa900bA034cd52"
+   }
+  ],
+  "name": "Curve DAO Token",
+  "symbol": "CRV"
  },
  "1:0xd5c3e3b566a42a6110513ac7670c1a86d76e13e6": {
   "code": true,
@@ -4222,6 +5742,18 @@
   "name": "Tether USD",
   "symbol": "USDT"
  },
+ "1:0xdb74dfdd3bb46be8ce6c33dc9d82777bcfc3ded5": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0xDB74dfDD3BB46bE8Ce6C33dC9D82777BCFc3dEd5"
+   }
+  ],
+  "name": "weETH/WETH-ng",
+  "symbol": "weeth-ng"
+ },
  "1:0xdbdc1ef57537e34680b898e1febd3d68c7389bcb": {
   "code": true,
   "proofs": [
@@ -4246,6 +5778,38 @@
   "implementation": "0x1923DfeE706A8E78157416C29cBCCFDe7cdF4102",
   "name": "USDS Stablecoin",
   "symbol": "USDS"
+ },
+ "1:0xdc169abe56461a2e0c034da431ac2a3ebf596094": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.SY() == SY_sUSDS",
+    "ok": true,
+    "got": "0xBe3d4ec488A0a042BB86F9176C24f8CD54018BA7"
+   },
+   {
+    "id": "$self.YT() == YT_sUSDS_26NOV2026",
+    "ok": true,
+    "got": "0xC7B8551C6B286Ce0b44952320e940Bd3Dee58A09"
+   },
+   {
+    "id": "$self.factory() == yield_contract_factory_v6",
+    "ok": true,
+    "got": "0x3E6EBa46AbC5ab18ED95F6667d8B2fd4020E4637"
+   }
+  ],
+  "name": "PT Savings USDS 26NOV2026",
+  "symbol": "PT-sUSDS-26NOV2026"
+ },
+ "1:0xdc24316b9ae028f1497c275eb9192a3ea0f67022": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_pool_from_lp_token(steCRV) == $self",
+    "ok": true,
+    "got": "0xDC24316b9AE028F1497c275EB9192a3Ea0f67022"
+   }
+  ]
  },
  "1:0xde6ef6cb4abd3a473ffc2942eef5d84536f8e864": {
   "code": true,
@@ -4285,6 +5849,18 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum PT_USDe_7MAY2026",
   "symbol": "aEthPT_USDe_7MAY2026"
+ },
+ "1:0xe080027bd47353b5d1639772b4a75e9ed3658a0d": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0xe080027Bd47353b5D1639772b4a75E9Ed3658A0d"
+   }
+  ],
+  "name": "osETH/rETH",
+  "symbol": "osETH-rETH"
  },
  "1:0xe1753f2e00940cc31213dd92013cf019dfe4ca1d": {
   "code": true,
@@ -4359,6 +5935,18 @@
     "got": "0xE3C061981870C0C7b1f3C4F4bB36B95f1F260BE6"
    }
   ]
+ },
+ "1:0xe3ea98bd863bef37d951973743aac2e56edd99bc": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "osETH/rETH Convex Deposit",
+  "symbol": "cvxosETH-rETH"
  },
  "1:0xe439edd2625772aa635b437c099c607b6eb7d35f": {
   "code": true,
@@ -4477,6 +6065,33 @@
    }
   ]
  },
+ "1:0xead792b55340aa20181a80d6a16db6a0ecd1b827": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "auraBAL.operator() == $self",
+    "ok": true,
+    "got": "0xeAd792B55340Aa20181A80d6a16db6A0ECd1b827"
+   },
+   {
+    "id": "$self.crvBpt() == balancer.B_80BAL_20WETH",
+    "ok": true,
+    "got": "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56"
+   }
+  ]
+ },
+ "1:0xeb12fbcb0a068720ee5f7816416a3ebfc3090a2b": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
+   }
+  ],
+  "name": "Balancer Aave GHO/USDT/USDC Aura Deposit",
+  "symbol": "auraAave GHO/USDT/USDC"
+ },
  "1:0xeb284a70557efe3591b9e6d9d720040e02c54a4d": {
   "code": true,
   "proofs": [
@@ -4558,11 +6173,62 @@
   "name": "Ether.Fi Liquid ETH",
   "symbol": "liquidETH"
  },
+ "1:0xf0bb7682830941e105ce0fe2c043d1bb058d45b6": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.operator() == booster",
+    "ok": true,
+    "got": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31"
+   }
+  ],
+  "name": "ETH+/ETH Convex Deposit",
+  "symbol": "cvxETH+ETH"
+ },
  "1:0xf1eee0957267b1a474323ff9cff7719e964969fa": {
   "code": true,
   "proofs": [],
   "implementation": "0x0cF9a84BB9E916229F3037dc079eF418B97bb0cF",
   "admin": "0xB3C902F8fA46d7985efaB885105ae2d7b4976827"
+ },
+ "1:0xf29fff074f5cf755b55fbb3eb10a29203ac91ea2": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == crvUSDTWBTCWETH",
+    "ok": true,
+    "got": "0xf5f5B97624542D72A9E06f04804Bf81baA15e2B4"
+   },
+   {
+    "id": "meta_registry.get_gauge(crvUSDTWBTCWETH) == $self",
+    "ok": true,
+    "got": "0xF29FfF074f5cF755b55FbB3eb10A29203ac91EA2"
+   }
+  ],
+  "name": "Curve.fi crvUSDTWBTCWETH Gauge Deposit",
+  "symbol": "crvUSDTWBTCWETH-gauge"
+ },
+ "1:0xf403c135812408bfbe8713b5a23a04b3d48aae31": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.crv() == curve.CRV",
+    "ok": true,
+    "got": "0xD533a949740bb3306d119CC777fa900bA034cd52"
+   }
+  ]
+ },
+ "1:0xf5f5b97624542d72a9e06f04804bf81baa15e2b4": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "meta_registry.get_lp_token($self) == $self",
+    "ok": true,
+    "got": "0xf5f5B97624542D72A9E06f04804Bf81baA15e2B4"
+   }
+  ],
+  "name": "TricryptoUSDT",
+  "symbol": "crvUSDTWBTCWETH"
  },
  "1:0xf64178ebd2e2719f2b1233bcb5ef6db4bcc4d09a": {
   "code": true,
@@ -4667,6 +6333,23 @@
    }
   ]
  },
+ "1:0xf939e0a03fb07f59a73314e73794be0e57ac1b4e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "curve.crvUSDUSDC_f.coins(1) == $self",
+    "ok": true,
+    "got": "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E"
+   },
+   {
+    "id": "curve.crvUSDUSDT_f.coins(1) == $self",
+    "ok": true,
+    "got": "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E"
+   }
+  ],
+  "name": "Curve.Fi USD Stablecoin",
+  "symbol": "crvUSD"
+ },
  "1:0xf956b38f035dc9067fb827a512d3cf35202ab0bc": {
   "code": true,
   "proofs": [
@@ -4674,6 +6357,16 @@
     "id": "$self.POOL() == etherfi_pool",
     "ok": true,
     "got": "0x0AA97c284e98396202b6A04024F5E2c65026F3c0"
+   }
+  ]
+ },
+ "1:0xf98b45fa17de75fb1ad0e7afd971b0ca00e379fc": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "address_provider.get_address(7) == $self",
+    "ok": true,
+    "got": "0xF98B45FA17DE75FB1aD0e7aFD971b0ca00e379fC"
    }
   ]
  },
@@ -4709,6 +6402,18 @@
   "name": "Aave Ethereum RLUSD",
   "symbol": "aEthRLUSD"
  },
+ "1:0xfaa2ed111b4f580fcb85c48e6dc6782dc5fcd7a6": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == auraBAL",
+    "ok": true,
+    "got": "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d"
+   }
+  ],
+  "name": "Staked Aura BAL",
+  "symbol": "stkauraBAL"
+ },
  "1:0xfb0a3cf9b019bfd8827443d131b235b3e0fc58d2": {
   "code": true,
   "proofs": [
@@ -4737,6 +6442,23 @@
     "got": "0xFc21d6d146E6086B8359705C8b28512a983db0cb"
    }
   ]
+ },
+ "1:0xfc3212bd9ad9a28da6b2bd50a2918969c126894f": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.lp_token() == RLUSD_USDC",
+    "ok": true,
+    "got": "0xD001aE433f254283FeCE51d4ACcE8c53263aa186"
+   },
+   {
+    "id": "meta_registry.get_gauge(RLUSD_USDC) == $self",
+    "ok": true,
+    "got": "0xFc3212Bd9Ad9A28Da6B2bd50a2918969C126894F"
+   }
+  ],
+  "name": "Curve.fi RLUSD/USDC Gauge Deposit",
+  "symbol": "RLUSD/USDC-gauge"
  },
  "1:0xfc807058a352b61aeef6a38e2d0fc3990225e772": {
   "code": true,

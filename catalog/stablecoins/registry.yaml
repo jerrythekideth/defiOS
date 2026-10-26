@@ -10,3 +10,15 @@ contracts:
       - "docs: https://developers.circle.com/stablecoins/eurc-contract-addresses"
     proofs:
       - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  crvUSD:
+    address: "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E"
+    name: "Curve.Fi USD Stablecoin"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: ["crvusd", "curve usd"]
+    sources:
+      - "docs: https://docs.curve.finance/user/deployments"
+    proofs:
+      - { from: curve.crvUSDUSDC_f, read: "coins(uint256 i) returns (address)", args: [1], expect: $self }
+      - { from: curve.crvUSDUSDT_f, read: "coins(uint256 i) returns (address)", args: [1], expect: $self }

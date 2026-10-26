@@ -1,0 +1,241 @@
+contracts:
+  router:
+    address: "0x888888888889758F76e7103c6CbF23ABbF58F946"
+    category: router
+    kind: pendle_router_v4
+    aliases: ["pendle router", "pendle router v4", "routerv4"]
+    note: "PendleRouterV4: mint/redeem PT+YT from SY or a token, swap PT/YT, add/remove market liquidity, redeem after expiry"
+    sources:
+      - "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+      - "explorer: https://etherscan.io/address/0x888888888889758F76e7103c6CbF23ABbF58F946#code"
+  PENDLE:
+    address: "0x808507121B80c02388fAd14726482e061B8da827"
+    name: "Pendle"
+    category: governance
+    kind: erc20
+    decimals: 18
+    aliases: ["pendle"]
+    sources:
+      - "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    proofs:
+      - { from: sPENDLE, read: "PENDLE() returns (address)", expect: $self }
+  sPENDLE:
+    address: "0x999999999991E178D52Cd95AFd4b00d066664144"
+    name: "StakedPendle"
+    category: staking
+    kind: pendle_staking
+    decimals: 18
+    aliases: ["spendle", "stakedpendle", "staked pendle"]
+    note: "PENDLE staking (replaces the deprecated vePENDLE)"
+    sources:
+      - "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    edges: { underlying: PENDLE }
+    proofs:
+      - { read: "PENDLE() returns (address)", expect: PENDLE }
+  market_factory:
+    address: "0x27b1dAcd74688aF24a64BD3C9C1B143118740784"
+    category: config
+    kind: pendle_market_factory
+    aliases: ["pendle market factory v1"]
+    sources:
+      - "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    proofs:
+      - { read: "yieldContractFactory() returns (address)", expect: yield_contract_factory }
+  market_factory_v6:
+    address: "0x6d247b1c044fA1E22e6B04fA9F71Baf99EB29A9f"
+    category: config
+    kind: pendle_market_factory
+    aliases: ["pendle market factory v6"]
+    sources:
+      - "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    proofs:
+      - { read: "yieldContractFactory() returns (address)", expect: yield_contract_factory_v6 }
+  yield_contract_factory:
+    address: "0x70ee0A6DB4F5a2Dc4d9c0b57bE97B9987e75BAFD"
+    category: config
+    kind: pendle_yield_contract_factory
+    aliases: ["pendle yield contract factory v1"]
+    sources:
+      - "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    proofs:
+      - { from: market_factory, read: "yieldContractFactory() returns (address)", expect: $self }
+  yield_contract_factory_v6:
+    address: "0x3E6EBa46AbC5ab18ED95F6667d8B2fd4020E4637"
+    category: config
+    kind: pendle_yield_contract_factory
+    aliases: ["pendle yield contract factory v6"]
+    sources:
+      - "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
+    proofs:
+      - { from: market_factory_v6, read: "yieldContractFactory() returns (address)", expect: $self }
+  SY_stETH:
+    address: "0xcbC72d92b2dc8187414F6734718563898740C0BC"
+    name: "SY stETH"
+    category: receipt
+    kind: pendle_sy
+    decimals: 18
+    aliases: ["SY-stETH"]
+    note: "Pendle SY wrapper; yieldToken() = lido.wstETH"
+    sources:
+      - "explorer: https://etherscan.io/address/0xcbC72d92b2dc8187414F6734718563898740C0BC#code"
+    edges: { underlying: lido.wstETH }
+    proofs:
+      - { read: "yieldToken() returns (address)", expect: lido.wstETH }
+      - { from: PT_stETH_30DEC2027, read: "SY() returns (address)", expect: $self }
+  PT_stETH_30DEC2027:
+    address: "0xb253Eff1104802b97aC7E3aC9FdD73AecE295a2c"
+    name: "PT stETH 30DEC2027"
+    category: receipt
+    kind: pendle_pt
+    decimals: 18
+    aliases: ["PT-stETH-30DEC2027"]
+    note: "Pendle principal token, expiry 2027-12-30"
+    sources:
+      - "explorer: https://etherscan.io/address/0xb253Eff1104802b97aC7E3aC9FdD73AecE295a2c#code"
+    edges: { underlying: SY_stETH }
+    proofs:
+      - { read: "SY() returns (address)", expect: SY_stETH }
+      - { read: "YT() returns (address)", expect: YT_stETH_30DEC2027 }
+      - { read: "factory() returns (address)", expect: yield_contract_factory }
+  YT_stETH_30DEC2027:
+    address: "0x04B7Fa1e727d7290D6E24fA9b426d0c940283a95"
+    name: "YT stETH 30DEC2027"
+    category: receipt
+    kind: pendle_yt
+    decimals: 18
+    aliases: ["YT-stETH-30DEC2027"]
+    note: "Pendle yield token, expiry 2027-12-30"
+    sources:
+      - "explorer: https://etherscan.io/address/0x04B7Fa1e727d7290D6E24fA9b426d0c940283a95#code"
+    edges: { underlying: SY_stETH }
+    proofs:
+      - { read: "PT() returns (address)", expect: PT_stETH_30DEC2027 }
+      - { read: "SY() returns (address)", expect: SY_stETH }
+      - { read: "factory() returns (address)", expect: yield_contract_factory }
+  market_stETH_30DEC2027:
+    address: "0x34280882267ffa6383B363E278B027Be083bBe3b"
+    name: "Pendle Market"
+    category: market
+    kind: pendle_market
+    decimals: 18
+    aliases: ["pendle wstETH 2027-12-30"]
+    note: "Pendle market (LP token) for PT_stETH_30DEC2027 / SY_stETH, expiry 2027-12-30"
+    sources:
+      - "explorer: https://etherscan.io/address/0x34280882267ffa6383B363E278B027Be083bBe3b#code"
+    edges: { underlying: [PT_stETH_30DEC2027, SY_stETH] }
+    proofs:
+      - { read: "factory() returns (address)", expect: market_factory }
+  SY_sUSDE:
+    address: "0xBF98480425A29197e5d99D003017f63a1e595D02"
+    name: "SY Ethena sUSDE"
+    category: receipt
+    kind: pendle_sy
+    decimals: 18
+    aliases: ["SY-sUSDE"]
+    note: "Pendle SY wrapper; yieldToken() = ethena.sUSDe"
+    sources:
+      - "explorer: https://etherscan.io/address/0xBF98480425A29197e5d99D003017f63a1e595D02#code"
+    edges: { underlying: ethena.sUSDe }
+    proofs:
+      - { read: "yieldToken() returns (address)", expect: ethena.sUSDe }
+      - { from: PT_sUSDE_26NOV2026, read: "SY() returns (address)", expect: $self }
+  PT_sUSDE_26NOV2026:
+    address: "0xB195B618EA52b77CB2a58846F452f59f8dFa9390"
+    name: "PT Ethena sUSDE 26NOV2026"
+    category: receipt
+    kind: pendle_pt
+    decimals: 18
+    aliases: ["PT-sUSDE-26NOV2026"]
+    note: "Pendle principal token, expiry 2026-11-26"
+    sources:
+      - "explorer: https://etherscan.io/address/0xB195B618EA52b77CB2a58846F452f59f8dFa9390#code"
+    edges: { underlying: SY_sUSDE }
+    proofs:
+      - { read: "SY() returns (address)", expect: SY_sUSDE }
+      - { read: "YT() returns (address)", expect: YT_sUSDE_26NOV2026 }
+      - { read: "factory() returns (address)", expect: yield_contract_factory_v6 }
+  YT_sUSDE_26NOV2026:
+    address: "0x89E6e5f7c3A60e7D6347F054051A29a272F4cE44"
+    name: "YT Ethena sUSDE 26NOV2026"
+    category: receipt
+    kind: pendle_yt
+    decimals: 18
+    aliases: ["YT-sUSDE-26NOV2026"]
+    note: "Pendle yield token, expiry 2026-11-26"
+    sources:
+      - "explorer: https://etherscan.io/address/0x89E6e5f7c3A60e7D6347F054051A29a272F4cE44#code"
+    edges: { underlying: SY_sUSDE }
+    proofs:
+      - { read: "PT() returns (address)", expect: PT_sUSDE_26NOV2026 }
+      - { read: "SY() returns (address)", expect: SY_sUSDE }
+      - { read: "factory() returns (address)", expect: yield_contract_factory_v6 }
+  market_sUSDE_26NOV2026:
+    address: "0x47ad2Cd1DD15739A7a035b9d3B7828d916FEF77E"
+    name: "PLP Ethena sUSDE 26NOV2026"
+    category: market
+    kind: pendle_market
+    decimals: 18
+    aliases: ["PLP-sUSDE-26NOV2026", "pendle sUSDe 2026-11-26"]
+    note: "Pendle market (LP token) for PT_sUSDE_26NOV2026 / SY_sUSDE, expiry 2026-11-26"
+    sources:
+      - "explorer: https://etherscan.io/address/0x47ad2Cd1DD15739A7a035b9d3B7828d916FEF77E#code"
+    edges: { underlying: [PT_sUSDE_26NOV2026, SY_sUSDE] }
+    proofs:
+      - { read: "factory() returns (address)", expect: market_factory_v6 }
+  SY_sUSDS:
+    address: "0xBe3d4ec488A0a042BB86F9176C24f8CD54018BA7"
+    name: "SY Savings USDS"
+    category: receipt
+    kind: pendle_sy
+    decimals: 18
+    aliases: ["SY-sUSDS"]
+    note: "Pendle SY wrapper; yieldToken() = sky.sUSDS"
+    sources:
+      - "explorer: https://etherscan.io/address/0xBe3d4ec488A0a042BB86F9176C24f8CD54018BA7#code"
+    edges: { underlying: sky.sUSDS }
+    proofs:
+      - { read: "yieldToken() returns (address)", expect: sky.sUSDS }
+      - { from: PT_sUSDS_26NOV2026, read: "SY() returns (address)", expect: $self }
+  PT_sUSDS_26NOV2026:
+    address: "0xdC169AbE56461A2E0c034Da431Ac2a3ebf596094"
+    name: "PT Savings USDS 26NOV2026"
+    category: receipt
+    kind: pendle_pt
+    decimals: 18
+    aliases: ["PT-sUSDS-26NOV2026"]
+    note: "Pendle principal token, expiry 2026-11-26"
+    sources:
+      - "explorer: https://etherscan.io/address/0xdC169AbE56461A2E0c034Da431Ac2a3ebf596094#code"
+    edges: { underlying: SY_sUSDS }
+    proofs:
+      - { read: "SY() returns (address)", expect: SY_sUSDS }
+      - { read: "YT() returns (address)", expect: YT_sUSDS_26NOV2026 }
+      - { read: "factory() returns (address)", expect: yield_contract_factory_v6 }
+  YT_sUSDS_26NOV2026:
+    address: "0xC7B8551C6B286Ce0b44952320e940Bd3Dee58A09"
+    name: "YT Savings USDS 26NOV2026"
+    category: receipt
+    kind: pendle_yt
+    decimals: 18
+    aliases: ["YT-sUSDS-26NOV2026"]
+    note: "Pendle yield token, expiry 2026-11-26"
+    sources:
+      - "explorer: https://etherscan.io/address/0xC7B8551C6B286Ce0b44952320e940Bd3Dee58A09#code"
+    edges: { underlying: SY_sUSDS }
+    proofs:
+      - { read: "PT() returns (address)", expect: PT_sUSDS_26NOV2026 }
+      - { read: "SY() returns (address)", expect: SY_sUSDS }
+      - { read: "factory() returns (address)", expect: yield_contract_factory_v6 }
+  market_sUSDS_26NOV2026:
+    address: "0x9C560eBaF78e596cbcC27411d633a74D628dd7dC"
+    name: "PLP Savings USDS 26NOV2026"
+    category: market
+    kind: pendle_market
+    decimals: 18
+    aliases: ["PLP-sUSDS-26NOV2026", "pendle sUSDS 2026-11-26"]
+    note: "Pendle market (LP token) for PT_sUSDS_26NOV2026 / SY_sUSDS, expiry 2026-11-26"
+    sources:
+      - "explorer: https://etherscan.io/address/0x9C560eBaF78e596cbcC27411d633a74D628dd7dC#code"
+    edges: { underlying: [PT_sUSDS_26NOV2026, SY_sUSDS] }
+    proofs:
+      - { read: "factory() returns (address)", expect: market_factory_v6 }
