@@ -77,124 +77,27 @@ contracts:
     proofs:
       - { read: "owner() returns (address)", expect: owner_safe }
       - { read: "curator() returns (address)", expect: curator_wars_safe }
-  kpk_ETH_Prime:
-    address: "0xd564F765F9aD3E7d2d6cA782100795a885e8e7C8"
-    name: "kpk ETH Prime"
-    category: vault
-    kind: erc4626
-    decimals: 18
-    aliases: ["kpk eth prime v1"]
-    note: "Morpho vault (MetaMorpho v1.1) on WETH"
-    edges: { underlying: weth.WETH, owner: vault_v1_owner_safe, admin: curator_eth_prime_safe }
-    proofs:
-      - { read: "asset() returns (address)", expect: weth.WETH }
-      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
-  kpk_ETH_Yield:
-    address: "0xc88eFFD6e74D55c78290892809955463468E982A"
-    name: "kpk ETH Yield"
-    category: vault
-    kind: erc4626
-    decimals: 18
-    aliases: ["kpk eth yield v1"]
-    note: "Morpho vault (MetaMorpho v1.1) on WETH"
-    edges: { underlying: weth.WETH, owner: vault_v1_owner_safe, admin: curator_eth_safe }
-    proofs:
-      - { read: "asset() returns (address)", expect: weth.WETH }
-      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
-  kpk_EURC_Yield:
-    address: "0x0c6aec603d48eBf1cECc7b247a2c3DA08b398DC1"
-    name: "kpk EURC Yield"
-    category: vault
-    kind: erc4626
-    decimals: 18
-    aliases: ["kpk eurc yield v1"]
-    note: "Morpho vault (MetaMorpho v1.1) on EURC"
-    edges: { underlying: stablecoins.EURC, owner: vault_v1_owner_safe, admin: curator_eurc_safe }
-    proofs:
-      - { read: "asset() returns (address)", expect: stablecoins.EURC }
-      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
-  kpk_USDC_Prime:
-    address: "0xe108fbc04852B5df72f9E44d7C29F47e7A993aDd"
-    name: "kpk USDC Prime"
-    category: vault
-    kind: erc4626
-    decimals: 18
-    aliases: ["kpk usdc prime v1"]
-    note: "Morpho vault (MetaMorpho v1.1) on USDC"
-    edges: { underlying: stablecoins.USDC, owner: vault_v1_owner_safe, admin: curator_usdc_prime_safe }
-    proofs:
-      - { read: "asset() returns (address)", expect: stablecoins.USDC }
-      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
-  kpk_USDC_Yield:
-    address: "0x9178eBE0691593184c1D785a864B62a326cc3509"
-    name: "kpk USDC Yield"
-    category: vault
-    kind: erc4626
-    decimals: 18
-    aliases: ["kpk usdc yield v1"]
-    note: "Morpho vault (MetaMorpho v1.1) on USDC"
-    edges: { underlying: stablecoins.USDC, owner: vault_v1_owner_safe, admin: curator_usdc_safe }
-    proofs:
-      - { read: "asset() returns (address)", expect: stablecoins.USDC }
-      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
-  kpk_USDT_Prime:
-    address: "0xdaD4e51d64c3B65A9d27aD9F3185B09449712065"
-    name: "kpk USDT Prime"
-    category: vault
-    kind: erc4626
-    decimals: 18
-    aliases: ["kpk usdt prime v1"]
-    note: "Morpho vault (MetaMorpho v1.1) on USDT"
-    edges: { underlying: stablecoins.USDT, owner: vault_v1_owner_safe, admin: curator_usdt_safe }
-    proofs:
-      - { read: "asset() returns (address)", expect: stablecoins.USDT }
-      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
-  kpkUSDT:
-    address: "0xd4e95092a8f108728c49f32A30f30556896563b5"
-    name: "USDT Yield"
-    category: vault
-    kind: erc4626
-    decimals: 18
-    aliases: ["usdt yield v1"]
-    note: "Morpho vault (MetaMorpho v1.1) on USDT"
-    edges: { underlying: stablecoins.USDT, owner: vault_v1_owner_safe, admin: curator_eth_prime_safe }
-    proofs:
-      - { read: "asset() returns (address)", expect: stablecoins.USDT }
-      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
-  vault_v1_owner_safe:
-    address: "0x354C92aF243d53A24feb3dFF20372Af7b7c47478"
-    category: multisig
-    kind: safe
-    note: "Safe, 5-of-8 at 2026-10-26; owner() and guardian() of the kpk Morpho v1 vaults"
-    proofs:
-      - { from: kpk_ETH_Prime, read: "owner() returns (address)", expect: $self }
-      - { from: kpk_ETH_Yield, read: "owner() returns (address)", expect: $self }
-      - { from: kpk_EURC_Yield, read: "owner() returns (address)", expect: $self }
   curator_eth_prime_safe:
     address: "0xC266b1181A80E84EDC2c6596718E88E8115c1eaa"
     category: multisig
     kind: safe
-    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_ETH_Prime, kpk_ETH_Prime, kpkUSDT"
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_ETH_Prime"
     proofs:
       - { from: KPK_ETH_Prime, read: "curator() returns (address)", expect: $self }
-      - { from: kpk_ETH_Prime, read: "curator() returns (address)", expect: $self }
-      - { from: kpkUSDT, read: "curator() returns (address)", expect: $self }
   curator_eurc_safe:
     address: "0xd15f11B334e1e233127302E5F759C17DA1260df5"
     category: multisig
     kind: safe
-    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_EURC_Yield, kpk_EURC_Yield"
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_EURC_Yield"
     proofs:
       - { from: KPK_EURC_Yield, read: "curator() returns (address)", expect: $self }
-      - { from: kpk_EURC_Yield, read: "curator() returns (address)", expect: $self }
   curator_usdc_prime_safe:
     address: "0xf8182E5827c06a47A985eC565A3bcd56437a97bE"
     category: multisig
     kind: safe
-    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDC_Prime, kpk_USDC_Prime"
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDC_Prime"
     proofs:
       - { from: KPK_USDC_Prime, read: "curator() returns (address)", expect: $self }
-      - { from: kpk_USDC_Prime, read: "curator() returns (address)", expect: $self }
   curator_usdc_prime_core_safe:
     address: "0x7a2CE012Fe37dB488C24e31f5e38816cAd82b45E"
     category: multisig
@@ -213,10 +116,9 @@ contracts:
     address: "0x834e1c1ea40173B82106F9177646b66d96AE7De8"
     category: multisig
     kind: safe
-    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDT_Prime, kpk_USDT_Prime"
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDT_Prime"
     proofs:
       - { from: KPK_USDT_Prime, read: "curator() returns (address)", expect: $self }
-      - { from: kpk_USDT_Prime, read: "curator() returns (address)", expect: $self }
   curator_wars_safe:
     address: "0xEaCFA855d172F1B40D9b04245960b2c12266C5f5"
     category: multisig

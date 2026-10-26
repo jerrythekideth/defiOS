@@ -2,7 +2,7 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26277873,
+   "block": 26278019,
    "checked": "2026-10-26"
   }
  },
@@ -1216,47 +1216,6 @@
      "name": "Aave Ethereum PYUSD",
      "symbol": "aEthPYUSD"
     }
-   }
-  ],
-  "1:0x0c6aec603d48ebf1cecc7b247a2c3da08b398dc1": [
-   {
-    "chain_id": 1,
-    "address": "0x0c6aec603d48eBf1cECc7b247a2c3DA08b398DC1",
-    "protocol": "kpk",
-    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
-    "name": "kpk_EURC_Yield",
-    "title": "kpk EURC Yield",
-    "ref": "kpk.kpk_EURC_Yield",
-    "category": "vault",
-    "kind": "erc4626",
-    "eoa": false,
-    "aliases": [
-     "kpk eurc yield v1"
-    ],
-    "status": "verified",
-    "why": [
-     "source card + onchain proof: $self.asset() == stablecoins.EURC"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/kpk/registry.yaml"
-    ],
-    "proofs": [
-     {
-      "id": "$self.asset() == stablecoins.EURC",
-      "ok": true
-     },
-     {
-      "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "kpk EURC Yield",
-     "symbol": "kpk_EURC_Yield"
-    },
-    "note": "Morpho vault (MetaMorpho v1.1) on EURC"
    }
   ],
   "1:0x0c91bca95b5fe69164ce583a2ec9429a569798ed": [
@@ -3234,46 +3193,6 @@
      "implementation": "0xFF42Ce30054dcE7dc7C1282a9a497aa58eaBCe99"
     },
     "onchain": {}
-   }
-  ],
-  "1:0x354c92af243d53a24feb3dff20372af7b7c47478": [
-   {
-    "chain_id": 1,
-    "address": "0x354C92aF243d53A24feb3dFF20372Af7b7c47478",
-    "protocol": "kpk",
-    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
-    "name": "vault_v1_owner_safe",
-    "title": null,
-    "ref": "kpk.vault_v1_owner_safe",
-    "category": "multisig",
-    "kind": "safe",
-    "eoa": false,
-    "aliases": [],
-    "status": "verified",
-    "why": [
-     "source card + onchain proof: kpk_ETH_Prime.owner() == $self"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/kpk/registry.yaml"
-    ],
-    "proofs": [
-     {
-      "id": "kpk_ETH_Prime.owner() == $self",
-      "ok": true
-     },
-     {
-      "id": "kpk_ETH_Yield.owner() == $self",
-      "ok": true
-     },
-     {
-      "id": "kpk_EURC_Yield.owner() == $self",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {},
-    "note": "Safe, 5-of-8 at 2026-10-26; owner() and guardian() of the kpk Morpho v1 vaults"
    }
   ],
   "1:0x3620c39c1269d6e31e5e76e9a2fa6afe0e8b14d6": [
@@ -7931,15 +7850,11 @@
      {
       "id": "KPK_USDT_Prime.curator() == $self",
       "ok": true
-     },
-     {
-      "id": "kpk_USDT_Prime.curator() == $self",
-      "ok": true
      }
     ],
     "proxy": {},
     "onchain": {},
-    "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDT_Prime, kpk_USDT_Prime"
+    "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDT_Prime"
    }
   ],
   "1:0x83f20f44975d03b1b09e64809b757c47f942beea": [
@@ -8861,47 +8776,6 @@
     "proxy": {},
     "onchain": {},
     "note": "settles the orders; the pre-signature lives here. Not called directly"
-   }
-  ],
-  "1:0x9178ebe0691593184c1d785a864b62a326cc3509": [
-   {
-    "chain_id": 1,
-    "address": "0x9178eBE0691593184c1D785a864B62a326cc3509",
-    "protocol": "kpk",
-    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
-    "name": "kpk_USDC_Yield",
-    "title": "kpk USDC Yield",
-    "ref": "kpk.kpk_USDC_Yield",
-    "category": "vault",
-    "kind": "erc4626",
-    "eoa": false,
-    "aliases": [
-     "kpk usdc yield v1"
-    ],
-    "status": "verified",
-    "why": [
-     "source card + onchain proof: $self.asset() == stablecoins.USDC"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/kpk/registry.yaml"
-    ],
-    "proofs": [
-     {
-      "id": "$self.asset() == stablecoins.USDC",
-      "ok": true
-     },
-     {
-      "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "kpk USDC Yield",
-     "symbol": "kpk_USDC_Yield"
-    },
-    "note": "Morpho vault (MetaMorpho v1.1) on USDC"
    }
   ],
   "1:0x91b7d78bf92db564221f6b5aee744d1727d1dd1e": [
@@ -11825,19 +11699,11 @@
      {
       "id": "KPK_ETH_Prime.curator() == $self",
       "ok": true
-     },
-     {
-      "id": "kpk_ETH_Prime.curator() == $self",
-      "ok": true
-     },
-     {
-      "id": "kpkUSDT.curator() == $self",
-      "ok": true
      }
     ],
     "proxy": {},
     "onchain": {},
-    "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_ETH_Prime, kpk_ETH_Prime, kpkUSDT"
+    "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_ETH_Prime"
    }
   ],
   "1:0xc2aacf6553d20d1e9d78e365aaba8032af9c85b0": [
@@ -12129,47 +11995,6 @@
      "name": "Aave Ethereum SNX",
      "symbol": "aEthSNX"
     }
-   }
-  ],
-  "1:0xc88effd6e74d55c78290892809955463468e982a": [
-   {
-    "chain_id": 1,
-    "address": "0xc88eFFD6e74D55c78290892809955463468E982A",
-    "protocol": "kpk",
-    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
-    "name": "kpk_ETH_Yield",
-    "title": "kpk ETH Yield",
-    "ref": "kpk.kpk_ETH_Yield",
-    "category": "vault",
-    "kind": "erc4626",
-    "eoa": false,
-    "aliases": [
-     "kpk eth yield v1"
-    ],
-    "status": "verified",
-    "why": [
-     "source card + onchain proof: $self.asset() == weth.WETH"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/kpk/registry.yaml"
-    ],
-    "proofs": [
-     {
-      "id": "$self.asset() == weth.WETH",
-      "ok": true
-     },
-     {
-      "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "kpk ETH Yield",
-     "symbol": "kpk_ETH_Yield"
-    },
-    "note": "Morpho vault (MetaMorpho v1.1) on WETH"
    }
   ],
   "1:0xc92e8bdf79f0507f65a392b0ab4667716bfe0110": [
@@ -12671,15 +12496,11 @@
      {
       "id": "KPK_EURC_Yield.curator() == $self",
       "ok": true
-     },
-     {
-      "id": "kpk_EURC_Yield.curator() == $self",
-      "ok": true
      }
     ],
     "proxy": {},
     "onchain": {},
-    "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_EURC_Yield, kpk_EURC_Yield"
+    "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_EURC_Yield"
    }
   ],
   "1:0xd180d7fdd4092f07428efe801e17bc03576b3192": [
@@ -12820,88 +12641,6 @@
      "name": "Aave Ethereum FRAX",
      "symbol": "aEthFRAX"
     }
-   }
-  ],
-  "1:0xd4e95092a8f108728c49f32a30f30556896563b5": [
-   {
-    "chain_id": 1,
-    "address": "0xd4e95092a8f108728c49f32A30f30556896563b5",
-    "protocol": "kpk",
-    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
-    "name": "kpkUSDT",
-    "title": "USDT Yield",
-    "ref": "kpk.kpkUSDT",
-    "category": "vault",
-    "kind": "erc4626",
-    "eoa": false,
-    "aliases": [
-     "usdt yield v1"
-    ],
-    "status": "verified",
-    "why": [
-     "source card + onchain proof: $self.asset() == stablecoins.USDT"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/kpk/registry.yaml"
-    ],
-    "proofs": [
-     {
-      "id": "$self.asset() == stablecoins.USDT",
-      "ok": true
-     },
-     {
-      "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "USDT Yield",
-     "symbol": "kpkUSDT"
-    },
-    "note": "Morpho vault (MetaMorpho v1.1) on USDT"
-   }
-  ],
-  "1:0xd564f765f9ad3e7d2d6ca782100795a885e8e7c8": [
-   {
-    "chain_id": 1,
-    "address": "0xd564F765F9aD3E7d2d6cA782100795a885e8e7C8",
-    "protocol": "kpk",
-    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
-    "name": "kpk_ETH_Prime",
-    "title": "kpk ETH Prime",
-    "ref": "kpk.kpk_ETH_Prime",
-    "category": "vault",
-    "kind": "erc4626",
-    "eoa": false,
-    "aliases": [
-     "kpk eth prime v1"
-    ],
-    "status": "verified",
-    "why": [
-     "source card + onchain proof: $self.asset() == weth.WETH"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/kpk/registry.yaml"
-    ],
-    "proofs": [
-     {
-      "id": "$self.asset() == weth.WETH",
-      "ok": true
-     },
-     {
-      "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "kpk ETH Prime",
-     "symbol": "kpk_ETH_Prime"
-    },
-    "note": "Morpho vault (MetaMorpho v1.1) on WETH"
    }
   ],
   "1:0xd5c3e3b566a42a6110513ac7670c1a86d76e13e6": [
@@ -13163,47 +12902,6 @@
     "note": "USDT's approve() reverts when changing a non-zero allowance to another non-zero value; approve 0 first"
    }
   ],
-  "1:0xdad4e51d64c3b65a9d27ad9f3185b09449712065": [
-   {
-    "chain_id": 1,
-    "address": "0xdaD4e51d64c3B65A9d27aD9F3185B09449712065",
-    "protocol": "kpk",
-    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
-    "name": "kpk_USDT_Prime",
-    "title": "kpk USDT Prime",
-    "ref": "kpk.kpk_USDT_Prime",
-    "category": "vault",
-    "kind": "erc4626",
-    "eoa": false,
-    "aliases": [
-     "kpk usdt prime v1"
-    ],
-    "status": "verified",
-    "why": [
-     "source card + onchain proof: $self.asset() == stablecoins.USDT"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/kpk/registry.yaml"
-    ],
-    "proofs": [
-     {
-      "id": "$self.asset() == stablecoins.USDT",
-      "ok": true
-     },
-     {
-      "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "kpk USDT Prime",
-     "symbol": "kpk_USDT_Prime"
-    },
-    "note": "Morpho vault (MetaMorpho v1.1) on USDT"
-   }
-  ],
   "1:0xdbdc1ef57537e34680b898e1febd3d68c7389bcb": [
    {
     "chain_id": 1,
@@ -13389,47 +13087,6 @@
      "name": "Aave Ethereum PT_USDe_7MAY2026",
      "symbol": "aEthPT_USDe_7MAY2026"
     }
-   }
-  ],
-  "1:0xe108fbc04852b5df72f9e44d7c29f47e7a993add": [
-   {
-    "chain_id": 1,
-    "address": "0xe108fbc04852B5df72f9E44d7C29F47e7A993aDd",
-    "protocol": "kpk",
-    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
-    "name": "kpk_USDC_Prime",
-    "title": "kpk USDC Prime",
-    "ref": "kpk.kpk_USDC_Prime",
-    "category": "vault",
-    "kind": "erc4626",
-    "eoa": false,
-    "aliases": [
-     "kpk usdc prime v1"
-    ],
-    "status": "verified",
-    "why": [
-     "source card + onchain proof: $self.asset() == stablecoins.USDC"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/kpk/registry.yaml"
-    ],
-    "proofs": [
-     {
-      "id": "$self.asset() == stablecoins.USDC",
-      "ok": true
-     },
-     {
-      "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "kpk USDC Prime",
-     "symbol": "kpk_USDC_Prime"
-    },
-    "note": "Morpho vault (MetaMorpho v1.1) on USDC"
    }
   ],
   "1:0xe1753f2e00940cc31213dd92013cf019dfe4ca1d": [
@@ -14568,15 +14225,11 @@
      {
       "id": "KPK_USDC_Prime.curator() == $self",
       "ok": true
-     },
-     {
-      "id": "kpk_USDC_Prime.curator() == $self",
-      "ok": true
      }
     ],
     "proxy": {},
     "onchain": {},
-    "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDC_Prime, kpk_USDC_Prime"
+    "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDC_Prime"
    }
   ],
   "1:0xf956b38f035dc9067fb827a512d3cf35202ab0bc": [
@@ -15068,13 +14721,6 @@
   {
    "from": "1:0x1abaea1f7c830bd89acc67ec4af516284b1bc33c",
    "relation": "underlying_of",
-   "to": "1:0x0c6aec603d48ebf1cecc7b247a2c3da08b398dc1",
-   "from_ref": "stablecoins.EURC",
-   "to_ref": "kpk.kpk_EURC_Yield"
-  },
-  {
-   "from": "1:0x1abaea1f7c830bd89acc67ec4af516284b1bc33c",
-   "relation": "underlying_of",
    "to": "1:0x6c82c66622eb360fc973d3f492f9d8e9ea538b08",
    "from_ref": "stablecoins.EURC",
    "to_ref": "aave_v3.variableDebtEthEURC"
@@ -15113,55 +14759,6 @@
    "to": "1:0xda135cd78a086025bcdc87b038a1c462032b510c",
    "from_ref": "spark.spark_proxy",
    "to_ref": "spark.acl_manager"
-  },
-  {
-   "from": "1:0x354c92af243d53a24feb3dff20372af7b7c47478",
-   "relation": "owner_of",
-   "to": "1:0x0c6aec603d48ebf1cecc7b247a2c3da08b398dc1",
-   "from_ref": "kpk.vault_v1_owner_safe",
-   "to_ref": "kpk.kpk_EURC_Yield"
-  },
-  {
-   "from": "1:0x354c92af243d53a24feb3dff20372af7b7c47478",
-   "relation": "owner_of",
-   "to": "1:0x9178ebe0691593184c1d785a864b62a326cc3509",
-   "from_ref": "kpk.vault_v1_owner_safe",
-   "to_ref": "kpk.kpk_USDC_Yield"
-  },
-  {
-   "from": "1:0x354c92af243d53a24feb3dff20372af7b7c47478",
-   "relation": "owner_of",
-   "to": "1:0xc88effd6e74d55c78290892809955463468e982a",
-   "from_ref": "kpk.vault_v1_owner_safe",
-   "to_ref": "kpk.kpk_ETH_Yield"
-  },
-  {
-   "from": "1:0x354c92af243d53a24feb3dff20372af7b7c47478",
-   "relation": "owner_of",
-   "to": "1:0xd4e95092a8f108728c49f32a30f30556896563b5",
-   "from_ref": "kpk.vault_v1_owner_safe",
-   "to_ref": "kpk.kpkUSDT"
-  },
-  {
-   "from": "1:0x354c92af243d53a24feb3dff20372af7b7c47478",
-   "relation": "owner_of",
-   "to": "1:0xd564f765f9ad3e7d2d6ca782100795a885e8e7c8",
-   "from_ref": "kpk.vault_v1_owner_safe",
-   "to_ref": "kpk.kpk_ETH_Prime"
-  },
-  {
-   "from": "1:0x354c92af243d53a24feb3dff20372af7b7c47478",
-   "relation": "owner_of",
-   "to": "1:0xdad4e51d64c3b65a9d27ad9f3185b09449712065",
-   "from_ref": "kpk.vault_v1_owner_safe",
-   "to_ref": "kpk.kpk_USDT_Prime"
-  },
-  {
-   "from": "1:0x354c92af243d53a24feb3dff20372af7b7c47478",
-   "relation": "owner_of",
-   "to": "1:0xe108fbc04852b5df72f9e44d7c29f47e7a993add",
-   "from_ref": "kpk.vault_v1_owner_safe",
-   "to_ref": "kpk.kpk_USDC_Prime"
   },
   {
    "from": "1:0x3620c39c1269d6e31e5e76e9a2fa6afe0e8b14d6",
@@ -15481,13 +15078,6 @@
   {
    "from": "1:0x7e43df1c1c5a2245858b60d4655fda83704e4171",
    "relation": "admin_of",
-   "to": "1:0x9178ebe0691593184c1d785a864b62a326cc3509",
-   "from_ref": "kpk.curator_usdc_safe",
-   "to_ref": "kpk.kpk_USDC_Yield"
-  },
-  {
-   "from": "1:0x7e43df1c1c5a2245858b60d4655fda83704e4171",
-   "relation": "admin_of",
    "to": "1:0xd5cce260e7a755ddf0fb9cdf06443d593aaeaa13",
    "from_ref": "kpk.curator_usdc_safe",
    "to_ref": "kpk.KPK_USDC_Yield"
@@ -15568,13 +15158,6 @@
    "to": "1:0x870f0bf29a25a40e7cc087cd5c53e70c11f2c8a8",
    "from_ref": "kpk.curator_usdt_safe",
    "to_ref": "kpk.KPK_USDT_Prime"
-  },
-  {
-   "from": "1:0x834e1c1ea40173b82106f9177646b66d96ae7de8",
-   "relation": "admin_of",
-   "to": "1:0xdad4e51d64c3b65a9d27ad9f3185b09449712065",
-   "from_ref": "kpk.curator_usdt_safe",
-   "to_ref": "kpk.kpk_USDT_Prime"
   },
   {
    "from": "1:0x83f20f44975d03b1b09e64809b757c47f942beea",
@@ -15817,13 +15400,6 @@
   {
    "from": "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
    "relation": "underlying_of",
-   "to": "1:0x9178ebe0691593184c1d785a864b62a326cc3509",
-   "from_ref": "stablecoins.USDC",
-   "to_ref": "kpk.kpk_USDC_Yield"
-  },
-  {
-   "from": "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-   "relation": "underlying_of",
    "to": "1:0x9355032d747f1e08f8720cd01950e652ee15cdb7",
    "from_ref": "stablecoins.USDC",
    "to_ref": "aave_v3.variableDebtEthEtherFiUSDC"
@@ -15862,13 +15438,6 @@
    "to": "1:0xd5cce260e7a755ddf0fb9cdf06443d593aaeaa13",
    "from_ref": "stablecoins.USDC",
    "to_ref": "kpk.KPK_USDC_Yield"
-  },
-  {
-   "from": "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-   "relation": "underlying_of",
-   "to": "1:0xe108fbc04852b5df72f9e44d7c29f47e7a993add",
-   "from_ref": "stablecoins.USDC",
-   "to_ref": "kpk.kpk_USDC_Prime"
   },
   {
    "from": "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -16062,23 +15631,9 @@
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
    "relation": "underlying_of",
-   "to": "1:0xc88effd6e74d55c78290892809955463468e982a",
-   "from_ref": "weth.WETH",
-   "to_ref": "kpk.kpk_ETH_Yield"
-  },
-  {
-   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-   "relation": "underlying_of",
    "to": "1:0xd01607c3c5ecaba394d8be377a08590149325722",
    "from_ref": "weth.WETH",
    "to_ref": "aave_v3.weth_gateway"
-  },
-  {
-   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-   "relation": "underlying_of",
-   "to": "1:0xd564f765f9ad3e7d2d6ca782100795a885e8e7c8",
-   "from_ref": "weth.WETH",
-   "to_ref": "kpk.kpk_ETH_Prime"
   },
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -16165,20 +15720,6 @@
    "to_ref": "kpk.KPK_ETH_Prime"
   },
   {
-   "from": "1:0xc266b1181a80e84edc2c6596718e88e8115c1eaa",
-   "relation": "admin_of",
-   "to": "1:0xd4e95092a8f108728c49f32a30f30556896563b5",
-   "from_ref": "kpk.curator_eth_prime_safe",
-   "to_ref": "kpk.kpkUSDT"
-  },
-  {
-   "from": "1:0xc266b1181a80e84edc2c6596718e88e8115c1eaa",
-   "relation": "admin_of",
-   "to": "1:0xd564f765f9ad3e7d2d6ca782100795a885e8e7c8",
-   "from_ref": "kpk.curator_eth_prime_safe",
-   "to_ref": "kpk.kpk_ETH_Prime"
-  },
-  {
    "from": "1:0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
    "relation": "underlying_of",
    "to": "1:0x16264412cb72f0d16a446f7d928dd0d822810048",
@@ -16219,13 +15760,6 @@
    "to": "1:0xc2bd6d2fee70a0a73a33795bdbee0368aef5c766",
    "from_ref": "etherfi.weETH",
    "to_ref": "spark.variableDebtweETH"
-  },
-  {
-   "from": "1:0xd15f11b334e1e233127302e5f759c17da1260df5",
-   "relation": "admin_of",
-   "to": "1:0x0c6aec603d48ebf1cecc7b247a2c3da08b398dc1",
-   "from_ref": "kpk.curator_eurc_safe",
-   "to_ref": "kpk.kpk_EURC_Yield"
   },
   {
    "from": "1:0xd15f11b334e1e233127302e5f759c17da1260df5",
@@ -16275,20 +15809,6 @@
    "to": "1:0x870f0bf29a25a40e7cc087cd5c53e70c11f2c8a8",
    "from_ref": "stablecoins.USDT",
    "to_ref": "kpk.KPK_USDT_Prime"
-  },
-  {
-   "from": "1:0xdac17f958d2ee523a2206206994597c13d831ec7",
-   "relation": "underlying_of",
-   "to": "1:0xd4e95092a8f108728c49f32a30f30556896563b5",
-   "from_ref": "stablecoins.USDT",
-   "to_ref": "kpk.kpkUSDT"
-  },
-  {
-   "from": "1:0xdac17f958d2ee523a2206206994597c13d831ec7",
-   "relation": "underlying_of",
-   "to": "1:0xdad4e51d64c3b65a9d27ad9f3185b09449712065",
-   "from_ref": "stablecoins.USDT",
-   "to_ref": "kpk.kpk_USDT_Prime"
   },
   {
    "from": "1:0xdac17f958d2ee523a2206206994597c13d831ec7",
@@ -16396,13 +15916,6 @@
    "to_ref": "kpk.KPK_ETH_Yield"
   },
   {
-   "from": "1:0xe5aec7d0e795456f90cebefba56470f0e5dfc075",
-   "relation": "admin_of",
-   "to": "1:0xc88effd6e74d55c78290892809955463468e982a",
-   "from_ref": "kpk.curator_eth_safe",
-   "to_ref": "kpk.kpk_ETH_Yield"
-  },
-  {
    "from": "1:0xeacfa855d172f1b40d9b04245960b2c12266c5f5",
    "relation": "admin_of",
    "to": "1:0xb5ce3ca2c774b72955c25875022fdd91f7a7b938",
@@ -16436,13 +15949,6 @@
    "to": "1:0x4ef53d2caa51c447fdfeeedee8f07fd1962c9ee6",
    "from_ref": "kpk.curator_usdc_prime_safe",
    "to_ref": "kpk.KPK_USDC_Prime"
-  },
-  {
-   "from": "1:0xf8182e5827c06a47a985ec565a3bcd56437a97be",
-   "relation": "admin_of",
-   "to": "1:0xe108fbc04852b5df72f9e44d7c29f47e7a993add",
-   "from_ref": "kpk.curator_usdc_prime_safe",
-   "to_ref": "kpk.kpk_USDC_Prime"
   },
   {
    "from": "1:0xf9a9cfd3229e985b91f99bc866d42938044ffa1c",
