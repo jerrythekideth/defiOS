@@ -1,0 +1,15 @@
+protocol: aave
+name: Aave (governance, staking, GHO)
+chain_id: 1
+status: draft
+reviewed: false
+adding: >
+  Aave DAO contracts shared by every Aave market: governance executors, the collector,
+  the rewards controller, AAVE / stkAAVE, sGHO and the GHO stability modules. Markets live
+  in aave_v3 (and aave_v4). Add a contract keyed by its onchain symbol() (tokens) or a
+  short snake_case name, with a proof that ties it to an aave_v3 market (getACLAdmin(),
+  RESERVE_TREASURY_ADDRESS(), getIncentivesController(), STAKED_TOKEN(), GHO_TOKEN()).
+
+contracts: {}
+
+actions: {}

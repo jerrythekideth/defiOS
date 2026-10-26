@@ -1,0 +1,53 @@
+contracts:
+  ENA:
+    address: "0x57e114B691Db790C35207b2e685D4A43181e6061"
+    name: "ENA"
+    category: governance
+    kind: erc20
+    decimals: 18
+    sources:
+      - "docs: https://docs.ethena.fi/solution-design/key-addresses"
+  sENA:
+    address: "0x8bE3460A480c80728a8C4D7a5D5303c85ba7B3b9"
+    name: "Staked ENA"
+    category: staking
+    kind: erc4626
+    decimals: 18
+    aliases: ["staked ena"]
+    sources:
+      - "docs: https://docs.ethena.fi/solution-design/key-addresses"
+    edges: { underlying: ENA }
+    proofs:
+      - { read: "asset() returns (address)", expect: ENA }
+  USDtb:
+    address: "0xC139190F447e929f090Edeb554D95AbB8b18aC1C"
+    name: "USDtb"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: ["usdtb"]
+    sources:
+      - "docs: https://docs.ethena.fi/solution-design/key-addresses"
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  minting:
+    address: "0xe3490297a08d6fC8Da46Edb7B6142E4F461b62D3"
+    category: minter
+    kind: ethena_minting
+    aliases: ["ethena minting", "EthenaMinting"]
+    note: "Mints and redeems USDe against signed RFQ orders"
+    sources:
+      - "docs: https://docs.ethena.fi/solution-design/key-addresses"
+    edges: { receipt: USDe }
+    proofs:
+      - { read: "usde() returns (address)", expect: USDe }
+  usdtb_psm:
+    address: "0x73E35C5c35A274E34AdE6EB13cC7f62aEE323728"
+    category: minter
+    kind: psm
+    aliases: ["USDtb PSM"]
+    sources:
+      - "docs: https://docs.ethena.fi/solution-design/key-addresses"
+    edges: { receipt: USDtb }
+    proofs:
+      - { read: "asset() returns (address)", expect: USDtb }

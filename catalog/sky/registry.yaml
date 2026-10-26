@@ -1,0 +1,153 @@
+contracts:
+  SKY:
+    address: "0x56072C95FAA701256059aa122697B133aDEd9279"
+    name: "SKY Governance Token"
+    category: governance
+    kind: erc20
+    decimals: 18
+    sources:
+      - "docs: https://chainlog.sky.money/"
+  MKR:
+    address: "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2"
+    name: "Maker"
+    category: governance
+    kind: erc20
+    decimals: 18
+    sources:
+      - "docs: https://chainlog.sky.money/"
+  sUSDS:
+    address: "0xa3931d71877C0E7a3148CB7Eb4463524FEc27fbD"
+    name: "Savings USDS"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["savings usds"]
+    sources:
+      - "docs: https://chainlog.sky.money/"
+    edges: { underlying: stablecoins.USDS }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDS }
+  stUSDS:
+    address: "0x99CD4Ec3f88A45940936F469E4bB72A2A701EEB9"
+    name: "Staked USDS"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["staked usds"]
+    sources:
+      - "docs: https://chainlog.sky.money/"
+    edges: { underlying: stablecoins.USDS }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDS }
+  sDAI:
+    address: "0x83F20F44975D03b1b09e64809B757c47f942BEeA"
+    name: "Savings Dai"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["savings dai"]
+    edges: { underlying: stablecoins.DAI }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.DAI }
+  dai_usds:
+    address: "0x3225737a9Bbb6473CB4a45b7244ACa2BeFdB276A"
+    category: adapter
+    kind: converter
+    aliases: ["DAI_USDS", "dai usds converter"]
+    note: "Converts DAI to USDS and back 1:1"
+    sources:
+      - "docs: https://chainlog.sky.money/"
+    edges: { underlying: stablecoins.DAI, receipt: stablecoins.USDS }
+    proofs:
+      - { read: "dai() returns (address)", expect: stablecoins.DAI }
+      - { read: "usds() returns (address)", expect: stablecoins.USDS }
+  mkr_sky:
+    address: "0xA1Ea1bA18E88C381C724a75F23a130420C403f9a"
+    category: adapter
+    kind: converter
+    aliases: ["MKR_SKY", "mkr sky converter"]
+    note: "Converts MKR to SKY"
+    sources:
+      - "docs: https://chainlog.sky.money/"
+    edges: { underlying: MKR, receipt: SKY }
+    proofs:
+      - { read: "mkr() returns (address)", expect: MKR }
+      - { read: "sky() returns (address)", expect: SKY }
+  lite_psm_usdc:
+    address: "0xf6e72Db5454dd049d0788e411b06CfAF16853042"
+    category: minter
+    kind: psm
+    aliases: ["MCD_LITE_PSM_USDC_A", "lite psm"]
+    note: "Swaps USDC and DAI 1:1"
+    sources:
+      - "docs: https://chainlog.sky.money/"
+    edges: { underlying: stablecoins.USDC, receipt: stablecoins.DAI }
+    proofs:
+      - { read: "gem() returns (address)", expect: stablecoins.USDC }
+      - { read: "dai() returns (address)", expect: stablecoins.DAI }
+  usds_psm_wrapper:
+    address: "0xA188EEC8F81263234dA3622A406892F3D630f98c"
+    category: minter
+    kind: psm_wrapper
+    aliases: ["WRAPPER_USDS_LITE_PSM_USDC_A", "usds psm"]
+    note: "Swaps USDC and USDS 1:1 through the lite PSM"
+    sources:
+      - "docs: https://chainlog.sky.money/"
+    edges: { underlying: stablecoins.USDC, receipt: stablecoins.USDS, reads_from: lite_psm_usdc }
+    proofs:
+      - { read: "psm() returns (address)", expect: lite_psm_usdc }
+      - { read: "usds() returns (address)", expect: stablecoins.USDS }
+      - { read: "gem() returns (address)", expect: stablecoins.USDC }
+  rewards_usds_sky:
+    address: "0x0650CAF159C5A49f711e8169D4336ECB9b950275"
+    category: staking
+    kind: staking_rewards
+    aliases: ["REWARDS_USDS_SKY", "usds sky rewards"]
+    note: "Stake USDS, earn SKY"
+    sources:
+      - "docs: https://chainlog.sky.money/"
+    edges: { underlying: stablecoins.USDS }
+    proofs:
+      - { read: "stakingToken() returns (address)", expect: stablecoins.USDS }
+      - { read: "rewardsToken() returns (address)", expect: SKY }
+  lockstake_engine:
+    address: "0xCe01C90dE7FD1bcFa39e237FE6D8D9F569e8A6a3"
+    category: staking
+    kind: lockstake
+    aliases: ["LOCKSTAKE_ENGINE", "staking engine"]
+    sources:
+      - "docs: https://chainlog.sky.money/"
+    edges: { underlying: SKY, receipt: lsSKY }
+    proofs:
+      - { read: "sky() returns (address)", expect: SKY }
+      - { read: "usds() returns (address)", expect: stablecoins.USDS }
+      - { read: "lssky() returns (address)", expect: lsSKY }
+  pause_proxy:
+    address: "0xBE8E3e3618f7474F8cB1d074A26afFef007E98FB"
+    category: timelock
+    kind: pause_proxy
+    aliases: ["MCD_PAUSE_PROXY"]
+    note: "Executes Sky governance spells"
+    sources:
+      - "docs: https://chainlog.sky.money/"
+  lsSKY:
+    address: "0xf9A9cfD3229E985B91F99Bc866d42938044FFa1C"
+    name: "LockstakeSky"
+    category: receipt
+    kind: erc20
+    decimals: 18
+    aliases: ["lockstake sky"]
+    sources:
+      - "docs: https://chainlog.sky.money/"
+  rewards_usds_spk:
+    address: "0x173e314C7635B45322cd8Cb14f44b312e079F3af"
+    category: staking
+    kind: staking_rewards
+    aliases: ["REWARDS_USDS_SPK", "usds spk rewards"]
+    note: "Stake USDS, earn SPK"
+    sources:
+      - "docs: https://chainlog.sky.money/"
+    edges: { underlying: stablecoins.USDS }
+    proofs:
+      - { read: "stakingToken() returns (address)", expect: stablecoins.USDS }
+      - { read: "rewardsToken() returns (address)", expect: spark.SPK }

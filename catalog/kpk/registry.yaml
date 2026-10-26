@@ -1,0 +1,325 @@
+contracts:
+  KPK_ETH_Prime:
+    address: "0xBb50A5341368751024ddf33385BA8cf61fE65FF9"
+    name: "KPK ETH Prime"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk eth prime"]
+    note: "Morpho Vault V2 on WETH"
+    edges: { underlying: weth.WETH, owner: owner_safe, admin: curator_eth_prime_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: weth.WETH }
+  KPK_EURC_Yield:
+    address: "0xa877D5bb0274dcCbA8556154A30E1Ca4021a275f"
+    name: "KPK EURC Yield"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk eurc yield"]
+    note: "Morpho Vault V2 on EURC"
+    edges: { underlying: stablecoins.EURC, owner: owner_safe, admin: curator_eurc_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.EURC }
+  KPK_USDC_Prime:
+    address: "0x4Ef53d2cAa51C447fdFEEedee8F07FD1962C9ee6"
+    name: "KPK USDC Prime"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk usdc prime"]
+    note: "Morpho Vault V2 on USDC"
+    edges: { underlying: stablecoins.USDC, owner: owner_safe, admin: curator_usdc_prime_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
+  KPK_USDC_Prime_Core:
+    address: "0x1a1985F50352b58090eb36425AfdFacbaC7806F4"
+    name: "KPK USDC Prime Core"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk usdc prime core"]
+    note: "Morpho Vault V2 on USDC"
+    edges: { underlying: stablecoins.USDC, owner: owner_safe, admin: curator_usdc_prime_core_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
+  KPK_USDC_Yield_RWA:
+    address: "0x7a72bcD2c3F7F7e4D6679170a0625bAB15D7DDa1"
+    name: "KPK USDC Yield RWA"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk usdc yield rwa"]
+    note: "Morpho Vault V2 on USDC"
+    edges: { underlying: stablecoins.USDC, owner: owner_safe, admin: curator_usdc_rwa_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
+  KPK_USDT_Prime:
+    address: "0x870F0BF29A25A40E7CC087cD5C53e70C11F2C8A8"
+    name: "KPK USDT Prime"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk usdt prime"]
+    note: "Morpho Vault V2 on USDT"
+    edges: { underlying: stablecoins.USDT, owner: owner_safe, admin: curator_usdt_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDT }
+  KPK_wARS_Yield:
+    address: "0xb5ce3CA2C774b72955C25875022FdD91f7a7B938"
+    name: "KPK wARS Yield"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk wars yield"]
+    note: "Morpho Vault V2 on wARS (Peso Argentino, 0x0DC4F92879B7670e5f4e4e6e3c801D229129D90D)"
+    edges: { owner: owner_safe, admin: curator_wars_safe }
+    proofs:
+      - { read: "owner() returns (address)", expect: owner_safe }
+      - { read: "curator() returns (address)", expect: curator_wars_safe }
+  kpk_ETH_Prime:
+    address: "0xd564F765F9aD3E7d2d6cA782100795a885e8e7C8"
+    name: "kpk ETH Prime"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk eth prime v1"]
+    note: "Morpho vault (MetaMorpho v1.1) on WETH"
+    edges: { underlying: weth.WETH, owner: vault_v1_owner_safe, admin: curator_eth_prime_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: weth.WETH }
+      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
+  kpk_ETH_Yield:
+    address: "0xc88eFFD6e74D55c78290892809955463468E982A"
+    name: "kpk ETH Yield"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk eth yield v1"]
+    note: "Morpho vault (MetaMorpho v1.1) on WETH"
+    edges: { underlying: weth.WETH, owner: vault_v1_owner_safe, admin: curator_eth_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: weth.WETH }
+      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
+  kpk_EURC_Yield:
+    address: "0x0c6aec603d48eBf1cECc7b247a2c3DA08b398DC1"
+    name: "kpk EURC Yield"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk eurc yield v1"]
+    note: "Morpho vault (MetaMorpho v1.1) on EURC"
+    edges: { underlying: stablecoins.EURC, owner: vault_v1_owner_safe, admin: curator_eurc_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.EURC }
+      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
+  kpk_USDC_Prime:
+    address: "0xe108fbc04852B5df72f9E44d7C29F47e7A993aDd"
+    name: "kpk USDC Prime"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk usdc prime v1"]
+    note: "Morpho vault (MetaMorpho v1.1) on USDC"
+    edges: { underlying: stablecoins.USDC, owner: vault_v1_owner_safe, admin: curator_usdc_prime_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
+      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
+  kpk_USDC_Yield:
+    address: "0x9178eBE0691593184c1D785a864B62a326cc3509"
+    name: "kpk USDC Yield"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk usdc yield v1"]
+    note: "Morpho vault (MetaMorpho v1.1) on USDC"
+    edges: { underlying: stablecoins.USDC, owner: vault_v1_owner_safe, admin: curator_usdc_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
+      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
+  kpk_USDT_Prime:
+    address: "0xdaD4e51d64c3B65A9d27aD9F3185B09449712065"
+    name: "kpk USDT Prime"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["kpk usdt prime v1"]
+    note: "Morpho vault (MetaMorpho v1.1) on USDT"
+    edges: { underlying: stablecoins.USDT, owner: vault_v1_owner_safe, admin: curator_usdt_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDT }
+      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
+  kpkUSDT:
+    address: "0xd4e95092a8f108728c49f32A30f30556896563b5"
+    name: "USDT Yield"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["usdt yield v1"]
+    note: "Morpho vault (MetaMorpho v1.1) on USDT"
+    edges: { underlying: stablecoins.USDT, owner: vault_v1_owner_safe, admin: curator_eth_prime_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDT }
+      - { read: "MORPHO() returns (address)", expect: morpho_vaults.morpho_blue }
+  vault_v1_owner_safe:
+    address: "0x354C92aF243d53A24feb3dFF20372Af7b7c47478"
+    category: multisig
+    kind: safe
+    note: "Safe, 5-of-8 at 2026-10-26; owner() and guardian() of the kpk Morpho v1 vaults"
+    proofs:
+      - { from: kpk_ETH_Prime, read: "owner() returns (address)", expect: $self }
+      - { from: kpk_ETH_Yield, read: "owner() returns (address)", expect: $self }
+      - { from: kpk_EURC_Yield, read: "owner() returns (address)", expect: $self }
+  curator_eth_prime_safe:
+    address: "0xC266b1181A80E84EDC2c6596718E88E8115c1eaa"
+    category: multisig
+    kind: safe
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_ETH_Prime, kpk_ETH_Prime, kpkUSDT"
+    proofs:
+      - { from: KPK_ETH_Prime, read: "curator() returns (address)", expect: $self }
+      - { from: kpk_ETH_Prime, read: "curator() returns (address)", expect: $self }
+      - { from: kpkUSDT, read: "curator() returns (address)", expect: $self }
+  curator_eurc_safe:
+    address: "0xd15f11B334e1e233127302E5F759C17DA1260df5"
+    category: multisig
+    kind: safe
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_EURC_Yield, kpk_EURC_Yield"
+    proofs:
+      - { from: KPK_EURC_Yield, read: "curator() returns (address)", expect: $self }
+      - { from: kpk_EURC_Yield, read: "curator() returns (address)", expect: $self }
+  curator_usdc_prime_safe:
+    address: "0xf8182E5827c06a47A985eC565A3bcd56437a97bE"
+    category: multisig
+    kind: safe
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDC_Prime, kpk_USDC_Prime"
+    proofs:
+      - { from: KPK_USDC_Prime, read: "curator() returns (address)", expect: $self }
+      - { from: kpk_USDC_Prime, read: "curator() returns (address)", expect: $self }
+  curator_usdc_prime_core_safe:
+    address: "0x7a2CE012Fe37dB488C24e31f5e38816cAd82b45E"
+    category: multisig
+    kind: safe
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDC_Prime_Core"
+    proofs:
+      - { from: KPK_USDC_Prime_Core, read: "curator() returns (address)", expect: $self }
+  curator_usdc_rwa_safe:
+    address: "0xFfbCF26270A90FCdAAF56AcF6e235730B04546c4"
+    category: multisig
+    kind: safe
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDC_Yield_RWA"
+    proofs:
+      - { from: KPK_USDC_Yield_RWA, read: "curator() returns (address)", expect: $self }
+  curator_usdt_safe:
+    address: "0x834e1c1ea40173B82106F9177646b66d96AE7De8"
+    category: multisig
+    kind: safe
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_USDT_Prime, kpk_USDT_Prime"
+    proofs:
+      - { from: KPK_USDT_Prime, read: "curator() returns (address)", expect: $self }
+      - { from: kpk_USDT_Prime, read: "curator() returns (address)", expect: $self }
+  curator_wars_safe:
+    address: "0xEaCFA855d172F1B40D9b04245960b2c12266C5f5"
+    category: multisig
+    kind: safe
+    note: "Safe, 2-of-5 at 2026-10-26; curator() of KPK_wARS_Yield"
+    proofs:
+      - { from: KPK_wARS_Yield, read: "curator() returns (address)", expect: $self }
+  KPK_ETH_Prime_adapter:
+    address: "0xbba5AA2F0c4E829E4A4933ab015e4fF4b454031F"
+    category: adapter
+    kind: morpho_market_v1_adapter_v2
+    note: "KPK_ETH_Prime's adapter into Morpho markets (adapters(0))"
+    edges: { owner: KPK_ETH_Prime, reads_from: morpho_vaults.morpho_blue }
+    proofs:
+      - { read: "parentVault() returns (address)", expect: KPK_ETH_Prime }
+      - { read: "factory() returns (address)", expect: morpho_vaults.market_v1_adapter_v2_factory }
+      - { read: "morpho() returns (address)", expect: morpho_vaults.morpho_blue }
+      - { from: KPK_ETH_Prime, read: "adapters(uint256 index) returns (address)", args: [0], expect: $self }
+  KPK_ETH_Yield_adapter:
+    address: "0xC0cf47D16a332F9e12E506E9A5C8B4bAf2A6F1f6"
+    category: adapter
+    kind: morpho_market_v1_adapter_v2
+    note: "KPK_ETH_Yield's adapter into Morpho markets (adapters(0))"
+    edges: { owner: KPK_ETH_Yield, reads_from: morpho_vaults.morpho_blue }
+    proofs:
+      - { read: "parentVault() returns (address)", expect: KPK_ETH_Yield }
+      - { read: "factory() returns (address)", expect: morpho_vaults.market_v1_adapter_v2_factory }
+      - { read: "morpho() returns (address)", expect: morpho_vaults.morpho_blue }
+      - { from: KPK_ETH_Yield, read: "adapters(uint256 index) returns (address)", args: [0], expect: $self }
+  KPK_EURC_Yield_adapter:
+    address: "0x4b484ba771456c71c820a3a8842a7672627F9bae"
+    category: adapter
+    kind: morpho_market_v1_adapter_v2
+    note: "KPK_EURC_Yield's adapter into Morpho markets (adapters(0))"
+    edges: { owner: KPK_EURC_Yield, reads_from: morpho_vaults.morpho_blue }
+    proofs:
+      - { read: "parentVault() returns (address)", expect: KPK_EURC_Yield }
+      - { read: "factory() returns (address)", expect: morpho_vaults.market_v1_adapter_v2_factory }
+      - { read: "morpho() returns (address)", expect: morpho_vaults.morpho_blue }
+      - { from: KPK_EURC_Yield, read: "adapters(uint256 index) returns (address)", args: [0], expect: $self }
+  KPK_USDC_Prime_adapter:
+    address: "0x1d511811ACA9d8817a3e50F29CadFf6243A02902"
+    category: adapter
+    kind: morpho_market_v1_adapter_v2
+    note: "KPK_USDC_Prime's adapter into Morpho markets (adapters(0))"
+    edges: { owner: KPK_USDC_Prime, reads_from: morpho_vaults.morpho_blue }
+    proofs:
+      - { read: "parentVault() returns (address)", expect: KPK_USDC_Prime }
+      - { read: "factory() returns (address)", expect: morpho_vaults.market_v1_adapter_v2_factory }
+      - { read: "morpho() returns (address)", expect: morpho_vaults.morpho_blue }
+      - { from: KPK_USDC_Prime, read: "adapters(uint256 index) returns (address)", args: [0], expect: $self }
+  KPK_USDC_Prime_Core_adapter:
+    address: "0x4498fb9E2f60BbCEA0e1702847ec0F1668011D71"
+    category: adapter
+    kind: morpho_market_v1_adapter_v2
+    note: "KPK_USDC_Prime_Core's adapter into Morpho markets (adapters(0))"
+    edges: { owner: KPK_USDC_Prime_Core, reads_from: morpho_vaults.morpho_blue }
+    proofs:
+      - { read: "parentVault() returns (address)", expect: KPK_USDC_Prime_Core }
+      - { read: "factory() returns (address)", expect: morpho_vaults.market_v1_adapter_v2_factory }
+      - { read: "morpho() returns (address)", expect: morpho_vaults.morpho_blue }
+      - { from: KPK_USDC_Prime_Core, read: "adapters(uint256 index) returns (address)", args: [0], expect: $self }
+  KPK_USDC_Yield_adapter:
+    address: "0x4f74895557bEa2dE5d51D8C06E944da92dbC8550"
+    category: adapter
+    kind: morpho_market_v1_adapter_v2
+    note: "KPK_USDC_Yield's adapter into Morpho markets (adapters(0))"
+    edges: { owner: KPK_USDC_Yield, reads_from: morpho_vaults.morpho_blue }
+    proofs:
+      - { read: "parentVault() returns (address)", expect: KPK_USDC_Yield }
+      - { read: "factory() returns (address)", expect: morpho_vaults.market_v1_adapter_v2_factory }
+      - { read: "morpho() returns (address)", expect: morpho_vaults.morpho_blue }
+      - { from: KPK_USDC_Yield, read: "adapters(uint256 index) returns (address)", args: [0], expect: $self }
+  KPK_USDC_Yield_RWA_adapter:
+    address: "0xab20EAfe1B5A1C045169b901D808fe573A81dEEB"
+    category: adapter
+    kind: morpho_market_v1_adapter_v2
+    note: "KPK_USDC_Yield_RWA's adapter into Morpho markets (adapters(0))"
+    edges: { owner: KPK_USDC_Yield_RWA, reads_from: morpho_vaults.morpho_blue }
+    proofs:
+      - { read: "parentVault() returns (address)", expect: KPK_USDC_Yield_RWA }
+      - { read: "factory() returns (address)", expect: morpho_vaults.market_v1_adapter_v2_factory }
+      - { read: "morpho() returns (address)", expect: morpho_vaults.morpho_blue }
+      - { from: KPK_USDC_Yield_RWA, read: "adapters(uint256 index) returns (address)", args: [0], expect: $self }
+  KPK_USDT_Prime_adapter:
+    address: "0x1DbF07A746a08B8bE86c673d56acbAeC9B50fe04"
+    category: adapter
+    kind: morpho_market_v1_adapter_v2
+    note: "KPK_USDT_Prime's adapter into Morpho markets (adapters(0))"
+    edges: { owner: KPK_USDT_Prime, reads_from: morpho_vaults.morpho_blue }
+    proofs:
+      - { read: "parentVault() returns (address)", expect: KPK_USDT_Prime }
+      - { read: "factory() returns (address)", expect: morpho_vaults.market_v1_adapter_v2_factory }
+      - { read: "morpho() returns (address)", expect: morpho_vaults.morpho_blue }
+      - { from: KPK_USDT_Prime, read: "adapters(uint256 index) returns (address)", args: [0], expect: $self }
+  KPK_wARS_Yield_adapter:
+    address: "0x3620c39C1269D6E31E5E76E9a2FA6AFe0E8B14D6"
+    category: adapter
+    kind: morpho_market_v1_adapter_v2
+    note: "KPK_wARS_Yield's adapter into Morpho markets (adapters(0))"
+    edges: { owner: KPK_wARS_Yield, reads_from: morpho_vaults.morpho_blue }
+    proofs:
+      - { read: "parentVault() returns (address)", expect: KPK_wARS_Yield }
+      - { read: "factory() returns (address)", expect: morpho_vaults.market_v1_adapter_v2_factory }
+      - { read: "morpho() returns (address)", expect: morpho_vaults.morpho_blue }
+      - { from: KPK_wARS_Yield, read: "adapters(uint256 index) returns (address)", args: [0], expect: $self }

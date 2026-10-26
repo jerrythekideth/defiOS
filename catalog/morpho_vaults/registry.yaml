@@ -1,0 +1,85 @@
+contracts:
+  MORPHO:
+    address: "0x58D97B57BB95320F9a05dC918Aef65434969c2B2"
+    name: "Morpho Token"
+    category: governance
+    kind: erc20
+    decimals: 18
+    sources:
+      - "docs: https://docs.morpho.org/get-started/resources/addresses/"
+  adaptive_curve_irm:
+    address: "0x870aC11D48B15DB9a138Cf899d20F13F79Ba00BC"
+    category: rate_model
+    kind: irm
+    aliases: ["AdaptiveCurveIrm"]
+    sources:
+      - "docs: https://docs.morpho.org/get-started/resources/addresses/"
+    edges: { reads_from: morpho_blue }
+    proofs:
+      - { read: "MORPHO() returns (address)", expect: morpho_blue }
+  metamorpho_factory_v1_1:
+    address: "0x1897A8997241C1cD4bD0698647e4EB7213535c24"
+    category: config
+    kind: factory
+    aliases: ["MetaMorphoV1_1Factory"]
+    sources:
+      - "docs: https://docs.morpho.org/get-started/resources/addresses/"
+    edges: { reads_from: morpho_blue }
+    proofs:
+      - { read: "MORPHO() returns (address)", expect: morpho_blue }
+  metamorpho_factory:
+    address: "0xA9c3D3a366466Fa809d1Ae982Fb2c46E5fC41101"
+    category: config
+    kind: factory
+    aliases: ["MetaMorphoFactory"]
+    sources:
+      - "docs: https://docs.morpho.org/get-started/resources/addresses/"
+    edges: { reads_from: morpho_blue }
+    proofs:
+      - { read: "MORPHO() returns (address)", expect: morpho_blue }
+  vault_v2_factory:
+    address: "0xA1D94F746dEfa1928926b84fB2596c06926C0405"
+    category: config
+    kind: factory
+    aliases: ["VaultV2Factory"]
+    sources:
+      - "docs: https://docs.morpho.org/get-started/resources/addresses/"
+  vault_v1_adapter_factory:
+    address: "0xD1B8E2dee25c2b89DCD2f98448a7ce87d6F63394"
+    category: config
+    kind: factory
+    aliases: ["MorphoVaultV1AdapterFactory"]
+    sources:
+      - "docs: https://docs.morpho.org/get-started/resources/addresses/"
+  market_v1_adapter_v2_factory:
+    address: "0x32BB1c0D48D8b1B3363e86eeB9A0300BAd61ccc1"
+    category: config
+    kind: factory
+    aliases: ["MorphoMarketV1AdapterV2Factory"]
+    sources:
+      - "docs: https://docs.morpho.org/get-started/resources/addresses/"
+  registry_list:
+    address: "0x3696c5eAe4a7Ffd04Ea163564571E9CD8Ed9364e"
+    category: config
+    kind: registry
+    aliases: ["MorphoRegistry"]
+    sources:
+      - "docs: https://docs.morpho.org/get-started/resources/addresses/"
+  public_allocator:
+    address: "0x00b8e1509398ED692C3F326CbAf1694F9A881e27"
+    category: adapter
+    kind: public_allocator
+    aliases: ["BluePublicAllocator"]
+    note: "Lets anyone move liquidity between a vault's markets within caps the vault set, for a fee"
+    sources:
+      - "docs: https://docs.morpho.org/get-started/resources/addresses/"
+  public_allocator_v1:
+    address: "0xfd32fA2ca22c76dD6E550706Ad913FC6CE91c75D"
+    category: adapter
+    kind: public_allocator
+    aliases: ["PublicAllocator"]
+    sources:
+      - "explorer: https://etherscan.io/address/0xfd32fA2ca22c76dD6E550706Ad913FC6CE91c75D#code"
+    edges: { reads_from: morpho_blue }
+    proofs:
+      - { read: "MORPHO() returns (address)", expect: morpho_blue }
