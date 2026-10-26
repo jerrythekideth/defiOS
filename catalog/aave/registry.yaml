@@ -1,0 +1,94 @@
+contracts:
+  executor_lvl1:
+    address: "0x5300A1a15135EA4dc7aD5a167152C01EFc9b192A"
+    category: timelock
+    kind: executor
+    aliases: ["EXECUTOR_LVL_1", "aave short executor"]
+    note: "Executes Aave governance payloads; ACL admin of the v3 markets"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/GovernanceV3Ethereum.sol"
+    proofs:
+      - { from: aave_v3.addresses_provider, read: "getACLAdmin() returns (address)", expect: $self }
+  executor_lvl2:
+    address: "0x17Dd33Ed0e3dD2a80E37489B8A63063161BE6957"
+    category: timelock
+    kind: executor
+    aliases: ["EXECUTOR_LVL_2", "aave long executor"]
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/GovernanceV3Ethereum.sol"
+  collector:
+    address: "0x464C71f6c2F760DdA6093dCB91C24c39e5d6e18c"
+    category: escrow
+    kind: treasury
+    aliases: ["aave collector", "aave treasury"]
+    note: "Aave DAO treasury; receives the v3 reserve factor"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: aave_v3.aEthWETH, read: "RESERVE_TREASURY_ADDRESS() returns (address)", expect: $self }
+  incentives_controller:
+    address: "0x8164Cc65827dcFe994AB23944CBC90e0aa80bFcb"
+    category: config
+    kind: rewards_controller
+    aliases: ["aave rewards controller"]
+    note: "Aave v3 RewardsController: claimRewards for aToken / debt token incentives"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: aave_v3.aEthWETH, read: "getIncentivesController() returns (address)", expect: $self }
+  AAVE:
+    address: "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9"
+    name: "Aave Token"
+    category: governance
+    kind: erc20
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  stkAAVE:
+    address: "0x4da27a545c0c5B758a6BA100e3a049001de870f5"
+    name: "Staked Aave"
+    category: staking
+    kind: staked_token
+    decimals: 18
+    aliases: ["staked aave"]
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveSafetyModule.sol"
+    edges: { underlying: AAVE }
+    proofs:
+      - { read: "STAKED_TOKEN() returns (address)", expect: AAVE }
+  sGho:
+    address: "0xE1753F2e00940cC31213dd92013cF019DFE4ca1d"
+    name: "sGho"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["sGHO", "savings gho"]
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/GhoEthereum.sol"
+    edges: { underlying: stablecoins.GHO }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.GHO }
+  gsm_usdc:
+    address: "0x3A3868898305f04beC7FEa77BecFf04C13444112"
+    category: minter
+    kind: gsm
+    aliases: ["GSM_USDC", "gho stability module usdc"]
+    note: "GHO Stability Module; its UNDERLYING_ASSET() is a wrapped Aave USDC token, not USDC itself"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/GhoEthereum.sol"
+    edges: { receipt: stablecoins.GHO }
+    proofs:
+      - { read: "GHO_TOKEN() returns (address)", expect: stablecoins.GHO }
+  gsm_usdt:
+    address: "0x882285E62656b9623AF136Ce3078c6BdCc33F5E3"
+    category: minter
+    kind: gsm
+    aliases: ["GSM_USDT", "gho stability module usdt"]
+    note: "GHO Stability Module; its UNDERLYING_ASSET() is a wrapped Aave USDT token, not USDT itself"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/GhoEthereum.sol"
+    edges: { receipt: stablecoins.GHO }
+    proofs:
+      - { read: "GHO_TOKEN() returns (address)", expect: stablecoins.GHO }

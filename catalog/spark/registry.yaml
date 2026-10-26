@@ -1,0 +1,624 @@
+contracts:
+  SPK:
+    address: "0xc20059e0317DE91738d13af027DfC4a50781b066"
+    name: "Spark"
+    category: governance
+    kind: erc20
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+  spark_proxy:
+    address: "0x3300f198988e4C9C63F75dF86De36421f06af8c4"
+    category: timelock
+    kind: sub_proxy
+    aliases: ["SPARK_PROXY"]
+    note: "Executes Spark governance spells; ACL admin of SparkLend"
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { from: addresses_provider, read: "getACLAdmin() returns (address)", expect: $self }
+  provider_registry:
+    address: "0x03cFa0C4622FF84E50E75062683F44c9587e6Cc1"
+    category: config
+    kind: addresses_provider_registry
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "getAddressesProvidersList() returns (address[])", expect: { contains: addresses_provider } }
+  addresses_provider:
+    address: "0x02C3eA4e34C0cBd694D2adFa2c690EECbC1793eE"
+    category: config
+    kind: addresses_provider
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { from: provider_registry, read: "getAddressesProvidersList() returns (address[])", expect: { contains: $self } }
+  pool:
+    address: "0xC13e21B648A5Ee794902342038FF3aDAB66BE987"
+    category: market
+    kind: aave_v3_pool
+    aliases: ["sparklend pool", "spark pool"]
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { reads_from: addresses_provider }
+    proofs:
+      - { from: addresses_provider, read: "getPool() returns (address)", expect: $self }
+  pool_configurator:
+    address: "0x542DBa469bdE58FAeE189ffB60C6b49CE60E0738"
+    category: config
+    kind: pool_configurator
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { from: addresses_provider, read: "getPoolConfigurator() returns (address)", expect: $self }
+  oracle:
+    address: "0x8105f69D9C41644c6A0803fDA7D03Aa70996cFD9"
+    category: oracle
+    kind: aave_oracle
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { from: addresses_provider, read: "getPriceOracle() returns (address)", expect: $self }
+  acl_manager:
+    address: "0xdA135Cd78A086025BcdC87B038a1C462032b510C"
+    category: config
+    kind: acl_manager
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { admin: spark_proxy }
+    proofs:
+      - { from: addresses_provider, read: "getACLManager() returns (address)", expect: $self }
+  data_provider:
+    address: "0xFc21d6d146E6086B8359705C8b28512a983db0cb"
+    category: config
+    kind: pool_data_provider
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { from: addresses_provider, read: "getPoolDataProvider() returns (address)", expect: $self }
+  weth_gateway:
+    address: "0xBD7D6a9ad7865463DE44B05F04559f65e3B11704"
+    category: adapter
+    kind: weth_gateway
+    aliases: ["spark weth gateway"]
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+      - "explorer: https://etherscan.io/address/0xBD7D6a9ad7865463DE44B05F04559f65e3B11704#code"
+    edges: { underlying: weth.WETH }
+  incentives_controller:
+    address: "0x4370D3b6C9588E02ce9D22e684387859c7Ff5b34"
+    category: config
+    kind: rewards_controller
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { from: spDAI, read: "getIncentivesController() returns (address)", expect: $self }
+  treasury:
+    address: "0x856900aa78e856a5df1a2665eE3a66b2487cD68f"
+    category: escrow
+    kind: treasury
+    aliases: ["spark collector"]
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { from: spDAI, read: "RESERVE_TREASURY_ADDRESS() returns (address)", expect: $self }
+  spark_rewards:
+    address: "0xbaf21A27622Db71041Bd336a573DDEdC8eB65122"
+    category: config
+    kind: merkle_rewards
+    aliases: ["SPARK_REWARDS"]
+    note: "Claim contract for Spark token rewards"
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+  spDAI:
+    address: "0x4DEDf26112B3Ec8eC46e7E31EA5e123490B05B8B"
+    name: "Spark DAI"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.DAI }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: stablecoins.DAI }
+  variableDebtDAI:
+    address: "0xf705d2B7e92B3F38e6ae7afaDAA2fEE110fE5914"
+    name: "Spark Variable Debt DAI"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.DAI }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: stablecoins.DAI }
+  spsDAI:
+    address: "0x78f897F0fE2d3B5690EbAe7f19862DEacedF10a7"
+    name: "Spark sDAI"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: sky.sDAI }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: sky.sDAI }
+  variableDebtsDAI:
+    address: "0xaBc57081C04D921388240393ec4088Aa47c6832B"
+    name: "Spark Variable Debt sDAI"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: sky.sDAI }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: sky.sDAI }
+  spUSDC:
+    address: "0x377C3bd93f2a2984E1E7bE6A5C22c525eD4A4815"
+    name: "Spark USDC"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: stablecoins.USDC }
+  variableDebtUSDC:
+    address: "0x7B70D04099CB9cfb1Db7B6820baDAfB4C5C70A67"
+    name: "Spark Variable Debt USDC"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: stablecoins.USDC }
+  spWETH:
+    address: "0x59cD1C87501baa753d0B5B5Ab5D8416A45cD71DB"
+    name: "Spark WETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: weth.WETH }
+  variableDebtWETH:
+    address: "0x2e7576042566f8D6990e07A1B61Ad1efd86Ae70d"
+    name: "Spark Variable Debt WETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: weth.WETH }
+  spwstETH:
+    address: "0x12B54025C112Aa61fAce2CDB7118740875A566E9"
+    name: "Spark wstETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: lido.wstETH }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: lido.wstETH }
+  variableDebtwstETH:
+    address: "0xd5c3E3B566a42A6110513Ac7670C1a86D76E13E6"
+    name: "Spark Variable Debt wstETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: lido.wstETH }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: lido.wstETH }
+  spWBTC:
+    address: "0x4197ba364AE6698015AE5c1468f54087602715b2"
+    name: "Spark WBTC"
+    category: receipt
+    kind: atoken
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  variableDebtWBTC:
+    address: "0xf6fEe3A8aC8040C3d6d81d9A4a168516Ec9B51D2"
+    name: "Spark Variable Debt WBTC"
+    category: debt
+    kind: variable_debt
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  spGNO:
+    address: "0x7b481aCC9fDADDc9af2cBEA1Ff2342CB1733E50F"
+    name: "Spark GNO"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  variableDebtGNO:
+    address: "0x57a2957651DA467fCD4104D749f2F3684784c25a"
+    name: "Spark Variable Debt GNO"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  sprETH:
+    address: "0x9985dF20D7e9103ECBCeb16a84956434B6f06ae8"
+    name: "Spark rETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  variableDebtrETH:
+    address: "0xBa2C8F2eA5B56690bFb8b709438F049e5Dd76B96"
+    name: "Spark Variable Debt rETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  spUSDT:
+    address: "0xe7dF13b8e3d6740fe17CBE928C7334243d86c92f"
+    name: "Spark USDT"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.USDT }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: stablecoins.USDT }
+  variableDebtUSDT:
+    address: "0x529b6158d1D2992E3129F7C69E81a7c677dc3B12"
+    name: "Spark Variable Debt USDT"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.USDT }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: stablecoins.USDT }
+  spweETH:
+    address: "0x3CFd5C0D4acAA8Faee335842e4f31159fc76B008"
+    name: "Spark weETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: etherfi.weETH }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: etherfi.weETH }
+  variableDebtweETH:
+    address: "0xc2bD6d2fEe70A0A73a33795BdbeE0368AeF5c766"
+    name: "Spark Variable Debt weETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: etherfi.weETH }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: etherfi.weETH }
+  spcbBTC:
+    address: "0xb3973D459df38ae57797811F2A1fd061DA1BC123"
+    name: "Spark cbBTC"
+    category: receipt
+    kind: atoken
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  variableDebtcbBTC:
+    address: "0x661fE667D2103eb52d3632a3eB2cAbd123F27938"
+    name: "Spark Variable Debt cbBTC"
+    category: debt
+    kind: variable_debt
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  spsUSDS:
+    address: "0x6715bc100A183cc65502F05845b589c1919ca3d3"
+    name: "Spark sUSDS"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: sky.sUSDS }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: sky.sUSDS }
+  variableDebtsUSDS:
+    address: "0x4e89b83f426fED3f2EF7Bb2d7eb5b53e288e1A13"
+    name: "Spark Variable Debt sUSDS"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: sky.sUSDS }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: sky.sUSDS }
+  spUSDS:
+    address: "0xC02aB1A5eaA8d1B114EF786D9bde108cD4364359"
+    name: "Spark USDS"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.USDS }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: stablecoins.USDS }
+  variableDebtUSDS:
+    address: "0x8c147debea24Fb98ade8dDa4bf142992928b449e"
+    name: "Spark Variable Debt USDS"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.USDS }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: stablecoins.USDS }
+  spLBTC:
+    address: "0xa9d4EcEBd48C282a70CfD3c469d6C8F178a5738E"
+    name: "Spark LBTC"
+    category: receipt
+    kind: atoken
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  variableDebtLBTC:
+    address: "0x096bdDFEE63F44A97cC6D2945539Ee7C8f94637D"
+    name: "Spark Variable Debt LBTC"
+    category: debt
+    kind: variable_debt
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  sptBTC:
+    address: "0xce6Ca9cDce00a2b0c0d1dAC93894f4Bd2c960567"
+    name: "Spark tBTC"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  variableDebttBTC:
+    address: "0x764591dC9ba21c1B92049331b80b6E2a2acF8B17"
+    name: "Spark Variable Debt tBTC"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  spezETH:
+    address: "0xB131cD463d83782d4DE33e00e35EF034F0869bA1"
+    name: "Spark ezETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  variableDebtezETH:
+    address: "0xB0B14Dd477E6159B4F3F210cF45F0954F57c0FAb"
+    name: "Spark Variable Debt ezETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  sprsETH:
+    address: "0x856f1Ea78361140834FDCd0dB0b08079e4A45062"
+    name: "Spark rsETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  variableDebtrsETH:
+    address: "0xc528F0C91CFAE4fd86A68F6Dfd4d7284707Bec68"
+    name: "Spark Variable Debt rsETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  spPYUSD:
+    address: "0x779224df1c756b4EDD899854F32a53E8c2B2ce5d"
+    name: "Spark PYUSD"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.PYUSD }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: stablecoins.PYUSD }
+  variableDebtPYUSD:
+    address: "0x3357D2DB7763D6Cd3a99f0763EbF87e0096D95f9"
+    name: "Spark Variable Debt PYUSD"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.PYUSD }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+      - { read: "UNDERLYING_ASSET_ADDRESS() returns (address)", expect: stablecoins.PYUSD }
+  spUSDG:
+    address: "0x6f335538257ef440F3c51e925a5C820f722a1F9F"
+    name: "Spark USDG"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  variableDebtUSDG:
+    address: "0x4Eb8Bf7d764D6B243a41c167dcF0E2A08C88ff3F"
+    name: "Spark Variable Debt USDG"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  spRLUSD:
+    address: "0x59275Fb72c8004F44BA44432e25082932Fd677f1"
+    name: "Spark RLUSD"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  variableDebtRLUSD:
+    address: "0x5cf1eaf763e8CE5F949bEa9a0Cd051e8db252D5B"
+    name: "Spark Variable Debt RLUSD"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  spETH:
+    address: "0xfE6eb3b609a7C8352A241f7F3A21CEA4e9209B8f"
+    name: "Spark Savings ETH"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["spark savings eth"]
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { read: "asset() returns (address)", expect: weth.WETH }
+  savings_spUSDC:
+    address: "0x28B3a8fb53B741A8Fd78c0fb9A6B2393d896a43d"
+    name: "Spark Savings USDC"
+    category: vault
+    kind: erc4626
+    decimals: 6
+    aliases: ["spUSDC", "spark savings usdc"]
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
+  savings_spUSDT:
+    address: "0xe2e7a17dFf93280dec073C995595155283e3C372"
+    name: "Spark Savings USDT"
+    category: vault
+    kind: erc4626
+    decimals: 6
+    aliases: ["spUSDT", "spark savings usdt"]
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.USDT }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDT }
+  savings_spPYUSD:
+    address: "0x80128DbB9f07b93DDE62A6daeadb69ED14a7D354"
+    name: "Spark Savings PYUSD"
+    category: vault
+    kind: erc4626
+    decimals: 6
+    aliases: ["spPYUSD", "spark savings pyusd"]
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.PYUSD }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.PYUSD }
+  sUSDC:
+    address: "0xBc65ad17c5C0a2A4D159fa5a503f4992c7B545FE"
+    name: "Spark USDC Vault"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["spark usdc vault"]
+    note: "USDC in, held as sUSDS through the USDS PSM wrapper"
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
+    edges: { underlying: stablecoins.USDC, reads_from: sky.sUSDS }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
+      - { read: "susds() returns (address)", expect: sky.sUSDS }
+      - { read: "psm() returns (address)", expect: sky.usds_psm_wrapper }
+  stSPK:
+    address: "0xc6132FAF04627c8d05d6E759FAbB331Ef2D8F8fD"
+    name: "Staked Spark"
+    category: staking
+    kind: staked_token
+    decimals: 18
+    aliases: ["staked spark"]
+    sources:
+      - "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"

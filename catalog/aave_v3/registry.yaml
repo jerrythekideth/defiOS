@@ -1,0 +1,1842 @@
+contracts:
+  provider_registry:
+    address: "0xbaA999AC55EAce41CcAE355c77809e68Bb345170"
+    category: config
+    kind: addresses_provider_registry
+    note: "Lists the PoolAddressesProvider of the Aave v3 markets on Ethereum"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { read: "getAddressesProvidersList() returns (address[])", expect: { contains: addresses_provider } }
+  prime_provider_registry:
+    address: "0xC6cAB8D39D93DC0Bd5986E7Ce5Bb956E30103A43"
+    category: config
+    kind: addresses_provider_registry
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { read: "getAddressesProvidersList() returns (address[])", expect: { contains: prime_addresses_provider } }
+  pool_configurator:
+    address: "0x64b761D848206f447Fe2dd461b0c635Ec39EbB27"
+    category: config
+    kind: pool_configurator
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: addresses_provider, read: "getPoolConfigurator() returns (address)", expect: $self }
+  oracle:
+    address: "0x54586bE62E3c3580375aE3723C145253060Ca0C2"
+    category: oracle
+    kind: aave_oracle
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: addresses_provider, read: "getPriceOracle() returns (address)", expect: $self }
+  acl_manager:
+    address: "0xc2aaCf6553D20d1e9d78E365AAba8032af9c85b0"
+    category: config
+    kind: acl_manager
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { admin: aave.executor_lvl1 }
+    proofs:
+      - { from: addresses_provider, read: "getACLManager() returns (address)", expect: $self }
+  data_provider:
+    address: "0x0a16f2FCC0D44FaE41cc54e079281D84A363bECD"
+    category: config
+    kind: pool_data_provider
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: addresses_provider, read: "getPoolDataProvider() returns (address)", expect: $self }
+  weth_gateway:
+    address: "0xd01607c3C5eCABa394D8be377a08590149325722"
+    category: adapter
+    kind: weth_gateway
+    aliases: ["aave core weth gateway"]
+    note: "Wraps ETH and supplies / repays / withdraws WETH on the pool"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { read: "POOL() returns (address)", expect: pool }
+  aEthWETH:
+    address: "0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8"
+    name: "Aave Ethereum WETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [weth.WETH], expect: $self }
+  variableDebtEthWETH:
+    address: "0xeA51d7853EEFb32b6ee06b1C12E6dcCA88Be0fFE"
+    name: "Aave Ethereum Variable Debt WETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [weth.WETH], expect: $self }
+  aEthwstETH:
+    address: "0x0B925eD163218f6662a35e0f0371Ac234f9E9371"
+    name: "Aave Ethereum wstETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: lido.wstETH }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [lido.wstETH], expect: $self }
+  variableDebtEthwstETH:
+    address: "0xC96113eED8cAB59cD8A66813bCB0cEb29F06D2e4"
+    name: "Aave Ethereum Variable Debt wstETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: lido.wstETH }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [lido.wstETH], expect: $self }
+  aEthWBTC:
+    address: "0x5Ee5bf7ae06D1Be5997A1A72006FE6C607eC6DE8"
+    name: "Aave Ethereum WBTC"
+    category: receipt
+    kind: atoken
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"], expect: $self }
+  variableDebtEthWBTC:
+    address: "0x40aAbEf1aa8f0eEc637E0E7d92fbfFB2F26A8b7B"
+    name: "Aave Ethereum Variable Debt WBTC"
+    category: debt
+    kind: variable_debt
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"], expect: $self }
+  aEthUSDC:
+    address: "0x98C23E9d8f34FEFb1B7BD6a91B7FF122F4e16F5c"
+    name: "Aave Ethereum USDC"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.USDC], expect: $self }
+  variableDebtEthUSDC:
+    address: "0x72E95b8931767C79bA4EeE721354d6E99a61D004"
+    name: "Aave Ethereum Variable Debt USDC"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.USDC], expect: $self }
+  aEthDAI:
+    address: "0x018008bfb33d285247A21d44E50697654f754e63"
+    name: "Aave Ethereum DAI"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.DAI }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.DAI], expect: $self }
+  variableDebtEthDAI:
+    address: "0xcF8d0c70c850859266f5C338b38F9D663181C314"
+    name: "Aave Ethereum Variable Debt DAI"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.DAI }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.DAI], expect: $self }
+  aEthLINK:
+    address: "0x5E8C8A7243651DB1384C0dDfDbE39761E8e7E51a"
+    name: "Aave Ethereum LINK"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x514910771AF9Ca656af840dff83E8264EcF986CA"], expect: $self }
+  variableDebtEthLINK:
+    address: "0x4228F8895C7dDA20227F6a5c6751b8Ebf19a6ba8"
+    name: "Aave Ethereum Variable Debt LINK"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x514910771AF9Ca656af840dff83E8264EcF986CA"], expect: $self }
+  aEthAAVE:
+    address: "0xA700b4eB416Be35b2911fd5Dee80678ff64fF6C9"
+    name: "Aave Ethereum AAVE"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: aave.AAVE }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [aave.AAVE], expect: $self }
+  variableDebtEthAAVE:
+    address: "0xBae535520Abd9f8C85E58929e0006A2c8B372F74"
+    name: "Aave Ethereum Variable Debt AAVE"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: aave.AAVE }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [aave.AAVE], expect: $self }
+  aEthcbETH:
+    address: "0x977b6fc5dE62598B08C85AC8Cf2b745874E8b78c"
+    name: "Aave Ethereum cbETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xBe9895146f7AF43049ca1c1AE358B0541Ea49704"], expect: $self }
+  variableDebtEthcbETH:
+    address: "0x0c91bcA95b5FE69164cE583A2ec9429A569798Ed"
+    name: "Aave Ethereum Variable Debt cbETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xBe9895146f7AF43049ca1c1AE358B0541Ea49704"], expect: $self }
+  aEthUSDT:
+    address: "0x23878914EFE38d27C4D67Ab83ed1b93A74D4086a"
+    name: "Aave Ethereum USDT"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.USDT }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.USDT], expect: $self }
+  variableDebtEthUSDT:
+    address: "0x6df1C1E379bC5a00a7b4C6e67A203333772f45A8"
+    name: "Aave Ethereum Variable Debt USDT"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.USDT }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.USDT], expect: $self }
+  aEthrETH:
+    address: "0xCc9EE9483f662091a1de4795249E24aC0aC2630f"
+    name: "Aave Ethereum rETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xae78736Cd615f374D3085123A210448E74Fc6393"], expect: $self }
+  variableDebtEthrETH:
+    address: "0xae8593DD575FE29A9745056aA91C4b746eee62C8"
+    name: "Aave Ethereum Variable Debt rETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xae78736Cd615f374D3085123A210448E74Fc6393"], expect: $self }
+  aEthLUSD:
+    address: "0x3Fe6a295459FAe07DF8A0ceCC36F37160FE86AA9"
+    name: "Aave Ethereum LUSD"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x5f98805A4E8be255a32880FDeC7F6728C6568bA0"], expect: $self }
+  variableDebtEthLUSD:
+    address: "0x33652e48e4B74D18520f11BfE58Edd2ED2cEc5A2"
+    name: "Aave Ethereum Variable Debt LUSD"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x5f98805A4E8be255a32880FDeC7F6728C6568bA0"], expect: $self }
+  aEthCRV:
+    address: "0x7B95Ec873268a6BFC6427e7a28e396Db9D0ebc65"
+    name: "Aave Ethereum CRV"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xD533a949740bb3306d119CC777fa900bA034cd52"], expect: $self }
+  variableDebtEthCRV:
+    address: "0x1b7D3F4b3c032a5AE656e30eeA4e8E1Ba376068F"
+    name: "Aave Ethereum Variable Debt CRV"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xD533a949740bb3306d119CC777fa900bA034cd52"], expect: $self }
+  aEthMKR:
+    address: "0x8A458A9dc9048e005d22849F470891b840296619"
+    name: "Aave Ethereum MKR"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: sky.MKR }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [sky.MKR], expect: $self }
+  variableDebtEthMKR:
+    address: "0x6Efc73E54E41b27d2134fF9f98F15550f30DF9B1"
+    name: "Aave Ethereum Variable Debt MKR"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: sky.MKR }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [sky.MKR], expect: $self }
+  aEthSNX:
+    address: "0xC7B4c17861357B8ABB91F25581E7263E08DCB59c"
+    name: "Aave Ethereum SNX"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F"], expect: $self }
+  variableDebtEthSNX:
+    address: "0x8d0de040e8aAd872eC3c33A3776dE9152D3c34ca"
+    name: "Aave Ethereum Variable Debt SNX"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F"], expect: $self }
+  aEthBAL:
+    address: "0x2516E7B3F76294e03C42AA4c5b5b4DCE9C436fB8"
+    name: "Aave Ethereum BAL"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xba100000625a3754423978a60c9317c58a424e3D"], expect: $self }
+  variableDebtEthBAL:
+    address: "0x3D3efceb4Ff0966D34d9545D3A2fa2dcdBf451f2"
+    name: "Aave Ethereum Variable Debt BAL"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xba100000625a3754423978a60c9317c58a424e3D"], expect: $self }
+  aEthUNI:
+    address: "0xF6D2224916DDFbbab6e6bd0D1B7034f4Ae0CaB18"
+    name: "Aave Ethereum UNI"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"], expect: $self }
+  variableDebtEthUNI:
+    address: "0xF64178Ebd2E2719F2B1233bCb5Ef6DB4bCc4d09a"
+    name: "Aave Ethereum Variable Debt UNI"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"], expect: $self }
+  aEthLDO:
+    address: "0x9A44fd41566876A39655f74971a3A6eA0a17a454"
+    name: "Aave Ethereum LDO"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: lido.LDO }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [lido.LDO], expect: $self }
+  variableDebtEthLDO:
+    address: "0xc30808705C01289A3D306ca9CAB081Ba9114eC82"
+    name: "Aave Ethereum Variable Debt LDO"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: lido.LDO }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [lido.LDO], expect: $self }
+  aEthENS:
+    address: "0x545bD6c032eFdde65A377A6719DEF2796C8E0f2e"
+    name: "Aave Ethereum ENS"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72"], expect: $self }
+  variableDebtEthENS:
+    address: "0xd180D7fdD4092f07428eFE801E17BC03576b3192"
+    name: "Aave Ethereum Variable Debt ENS"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72"], expect: $self }
+  aEth1INCH:
+    address: "0x71Aef7b30728b9BB371578f36c5A1f1502a5723e"
+    name: "Aave Ethereum 1INCH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x111111111117dC0aa78b770fA6A738034120C302"], expect: $self }
+  variableDebtEth1INCH:
+    address: "0xA38fCa8c6Bf9BdA52E76EB78f08CaA3BE7c5A970"
+    name: "Aave Ethereum Variable Debt 1INCH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x111111111117dC0aa78b770fA6A738034120C302"], expect: $self }
+  aEthFRAX:
+    address: "0xd4e245848d6E1220DBE62e155d89fa327E43CB06"
+    name: "Aave Ethereum FRAX"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x853d955aCEf822Db058eb8505911ED77F175b99e"], expect: $self }
+  variableDebtEthFRAX:
+    address: "0x88B8358F5BC87c2D7E116cCA5b65A9eEb2c5EA3F"
+    name: "Aave Ethereum Variable Debt FRAX"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x853d955aCEf822Db058eb8505911ED77F175b99e"], expect: $self }
+  aEthGHO:
+    address: "0x00907f9921424583e7ffBfEdf84F92B7B2Be4977"
+    name: "Aave Ethereum GHO"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.GHO }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.GHO], expect: $self }
+  variableDebtEthGHO:
+    address: "0x786dBff3f1292ae8F92ea68Cf93c30b34B1ed04B"
+    name: "Aave Ethereum Variable Debt GHO"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.GHO }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.GHO], expect: $self }
+  aEthRPL:
+    address: "0xB76CF92076adBF1D9C39294FA8e7A67579FDe357"
+    name: "Aave Ethereum RPL"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xD33526068D116cE69F19A9ee46F0bd304F21A51f"], expect: $self }
+  variableDebtEthRPL:
+    address: "0x8988ECA19D502fd8b9CCd03fA3bD20a6f599bc2A"
+    name: "Aave Ethereum Variable Debt RPL"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xD33526068D116cE69F19A9ee46F0bd304F21A51f"], expect: $self }
+  aEthsDAI:
+    address: "0x4C612E3B15b96Ff9A6faED838F8d07d479a8dD4c"
+    name: "Aave Ethereum sDAI"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: sky.sDAI }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [sky.sDAI], expect: $self }
+  variableDebtEthsDAI:
+    address: "0x8Db9D35e117d8b93C6Ca9b644b25BaD5d9908141"
+    name: "Aave Ethereum Variable Debt sDAI"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: sky.sDAI }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [sky.sDAI], expect: $self }
+  aEthSTG:
+    address: "0x1bA9843bD4327c6c77011406dE5fA8749F7E3479"
+    name: "Aave Ethereum STG"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xAf5191B0De278C7286d6C7CC6ab6BB8A73bA2Cd6"], expect: $self }
+  variableDebtEthSTG:
+    address: "0x655568bDd6168325EC7e58Bf39b21A856F906Dc2"
+    name: "Aave Ethereum Variable Debt STG"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xAf5191B0De278C7286d6C7CC6ab6BB8A73bA2Cd6"], expect: $self }
+  aEthKNC:
+    address: "0x5b502e3796385E1e9755d7043B9C945C3aCCeC9C"
+    name: "Aave Ethereum KNC"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xdeFA4e8a7bcBA345F687a2f1456F5Edd9CE97202"], expect: $self }
+  variableDebtEthKNC:
+    address: "0x253127Ffc04981cEA8932F406710661c2f2c3fD2"
+    name: "Aave Ethereum Variable Debt KNC"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xdeFA4e8a7bcBA345F687a2f1456F5Edd9CE97202"], expect: $self }
+  aEthFXS:
+    address: "0x82F9c5ad306BBa1AD0De49bB5FA6F01bf61085ef"
+    name: "Aave Ethereum FXS"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0"], expect: $self }
+  variableDebtEthFXS:
+    address: "0x68e9f0aD4e6f8F5DB70F6923d4d6d5b225B83b16"
+    name: "Aave Ethereum Variable Debt FXS"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0"], expect: $self }
+  aEthcrvUSD:
+    address: "0xb82fa9f31612989525992FCfBB09AB22Eff5c85A"
+    name: "Aave Ethereum crvUSD"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E"], expect: $self }
+  variableDebtEthcrvUSD:
+    address: "0x028f7886F3e937f8479efaD64f31B3fE1119857a"
+    name: "Aave Ethereum Variable Debt crvUSD"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E"], expect: $self }
+  aEthPYUSD:
+    address: "0x0C0d01AbF3e6aDfcA0989eBbA9d6e85dD58EaB1E"
+    name: "Aave Ethereum PYUSD"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.PYUSD }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.PYUSD], expect: $self }
+  variableDebtEthPYUSD:
+    address: "0x57B67e4DE077085Fd0AF2174e9c14871BE664546"
+    name: "Aave Ethereum Variable Debt PYUSD"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.PYUSD }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.PYUSD], expect: $self }
+  aEthweETH:
+    address: "0xBdfa7b7893081B35Fb54027489e2Bc7A38275129"
+    name: "Aave Ethereum weETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: etherfi.weETH }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [etherfi.weETH], expect: $self }
+  variableDebtEthweETH:
+    address: "0x77ad9BF13a52517AD698D65913e8D381300c8Bf3"
+    name: "Aave Ethereum Variable Debt weETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: etherfi.weETH }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [etherfi.weETH], expect: $self }
+  aEthosETH:
+    address: "0x927709711794F3De5DdBF1D176bEE2D55Ba13c21"
+    name: "Aave Ethereum osETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xf1C9acDc66974dFB6dEcB12aA385b9cD01190E38"], expect: $self }
+  variableDebtEthosETH:
+    address: "0x8838eefF2af391863E1Bb8b1dF563F86743a8470"
+    name: "Aave Ethereum Variable Debt osETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xf1C9acDc66974dFB6dEcB12aA385b9cD01190E38"], expect: $self }
+  aEthUSDe:
+    address: "0x4F5923Fc5FD4a93352581b38B7cD26943012DECF"
+    name: "Aave Ethereum USDe"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: ethena.USDe }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [ethena.USDe], expect: $self }
+  variableDebtEthUSDe:
+    address: "0x015396E1F286289aE23a762088E863b3ec465145"
+    name: "Aave Ethereum Variable Debt USDe"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: ethena.USDe }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [ethena.USDe], expect: $self }
+  aEthETHx:
+    address: "0x1c0E06a0b1A4c160c17545FF2A951bfcA57C0002"
+    name: "Aave Ethereum ETHx"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xA35b1B31Ce002FBF2058D22F30f95D405200A15b"], expect: $self }
+  variableDebtEthETHx:
+    address: "0x08a8Dc81AeA67F84745623aC6c72CDA3967aab8b"
+    name: "Aave Ethereum Variable Debt ETHx"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xA35b1B31Ce002FBF2058D22F30f95D405200A15b"], expect: $self }
+  aEthsUSDe:
+    address: "0x4579a27aF00A62C0EB156349f31B345c08386419"
+    name: "Aave Ethereum sUSDe"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: ethena.sUSDe }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [ethena.sUSDe], expect: $self }
+  variableDebtEthsUSDe:
+    address: "0xeFFDE9BFA8EC77c14C364055a200746d6e12BeD6"
+    name: "Aave Ethereum Variable Debt sUSDe"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: ethena.sUSDe }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [ethena.sUSDe], expect: $self }
+  aEthtBTC:
+    address: "0x10Ac93971cdb1F5c778144084242374473c350Da"
+    name: "Aave Ethereum tBTC"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x18084fbA666a33d37592fA2633fD49a74DD93a88"], expect: $self }
+  variableDebtEthtBTC:
+    address: "0xAC50890a80A2731eb1eA2e9B4F29569CeB06D960"
+    name: "Aave Ethereum Variable Debt tBTC"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x18084fbA666a33d37592fA2633fD49a74DD93a88"], expect: $self }
+  aEthcbBTC:
+    address: "0x5c647cE0Ae10658ec44FA4E11A51c96e94efd1Dd"
+    name: "Aave Ethereum cbBTC"
+    category: receipt
+    kind: atoken
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf"], expect: $self }
+  variableDebtEthcbBTC:
+    address: "0xeB284A70557EFe3591b9e6D9D720040E02c54a4d"
+    name: "Aave Ethereum Variable Debt cbBTC"
+    category: debt
+    kind: variable_debt
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf"], expect: $self }
+  aEthUSDS:
+    address: "0x32a6268f9Ba3642Dda7892aDd74f1D34469A4259"
+    name: "Aave Ethereum USDS"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.USDS }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.USDS], expect: $self }
+  variableDebtEthUSDS:
+    address: "0x490E0E6255bF65b43E2e02F7acB783c5e04572Ff"
+    name: "Aave Ethereum Variable Debt USDS"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.USDS }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.USDS], expect: $self }
+  aEthrsETH:
+    address: "0x2D62109243b87C4bA3EE7bA1D91B0dD0A074d7b1"
+    name: "Aave Ethereum rsETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7"], expect: $self }
+  variableDebtEthrsETH:
+    address: "0x6De3E52A1B7294A34e271a508082b1Ff4a37E30e"
+    name: "Aave Ethereum Variable Debt rsETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7"], expect: $self }
+  aEthLBTC:
+    address: "0x65906988ADEe75306021C417a1A3458040239602"
+    name: "Aave Ethereum LBTC"
+    category: receipt
+    kind: atoken
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x8236a87084f8B84306f72007F36F2618A5634494"], expect: $self }
+  variableDebtEthLBTC:
+    address: "0x68aeB290C7727D899B47c56d1c96AEAC475cD0dD"
+    name: "Aave Ethereum Variable Debt LBTC"
+    category: debt
+    kind: variable_debt
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x8236a87084f8B84306f72007F36F2618A5634494"], expect: $self }
+  aEtheBTC:
+    address: "0x5fefd7069a7D91d01f269DADE14526CCF3487810"
+    name: "Aave Ethereum eBTC"
+    category: receipt
+    kind: atoken
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x657e8C867D8B37dCC18fA4Caead9C45EB088C642"], expect: $self }
+  variableDebtEtheBTC:
+    address: "0x47eD0509e64615c0d5C6d39AF1B38D02Bc9fE58f"
+    name: "Aave Ethereum Variable Debt eBTC"
+    category: debt
+    kind: variable_debt
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x657e8C867D8B37dCC18fA4Caead9C45EB088C642"], expect: $self }
+  aEthRLUSD:
+    address: "0xFa82580c16A31D0c1bC632A36F82e83EfEF3Eec0"
+    name: "Aave Ethereum RLUSD"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x8292Bb45bf1Ee4d140127049757C2E0fF06317eD"], expect: $self }
+  variableDebtEthRLUSD:
+    address: "0xBdFe7aD7976d5d7E0965ea83a81Ca1bCfF7e84a9"
+    name: "Aave Ethereum Variable Debt RLUSD"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x8292Bb45bf1Ee4d140127049757C2E0fF06317eD"], expect: $self }
+  aEthPT_eUSDE_29MAY2025:
+    address: "0x4B0821e768Ed9039a70eD1E80E15E76a5bE5Df5F"
+    name: "Aave Ethereum PT_eUSDE_29MAY2025"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x50D2C7992b802Eef16c04FeADAB310f31866a545"], expect: $self }
+  variableDebtEthPT_eUSDE_29MAY2025:
+    address: "0x3c20fbFD32243Dd9899301C84bCe17413EeE0A0C"
+    name: "Aave Ethereum Variable Debt PT_eUSDE_29MAY2025"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x50D2C7992b802Eef16c04FeADAB310f31866a545"], expect: $self }
+  aEthPT_sUSDE_31JUL2025:
+    address: "0xDE6eF6CB4aBd3A473ffC2942eEf5D84536F8E864"
+    name: "Aave Ethereum PT_sUSDE_31JUL2025"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x3b3fB9C57858EF816833dC91565EFcd85D96f634"], expect: $self }
+  variableDebtEthPT_sUSDE_31JUL2025:
+    address: "0x8C6FeaF5d58BA1A6541F9c4aF685f62bFCBaC3b1"
+    name: "Aave Ethereum Variable Debt PT_sUSDE_31JUL2025"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x3b3fB9C57858EF816833dC91565EFcd85D96f634"], expect: $self }
+  aEthUSDtb:
+    address: "0xEc4ef66D4fCeEba34aBB4dE69dB391Bc5476ccc8"
+    name: "Aave Ethereum USDtb"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: ethena.USDtb }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [ethena.USDtb], expect: $self }
+  variableDebtEthUSDtb:
+    address: "0xeA85a065F87FE28Aa8Fbf0D6C7deC472b106252C"
+    name: "Aave Ethereum Variable Debt USDtb"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: ethena.USDtb }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [ethena.USDtb], expect: $self }
+  aEthPT_USDe_31JUL2025:
+    address: "0x312ffC57778CEfa11989733e6E08143E7E229c1c"
+    name: "Aave Ethereum PT_USDe_31JUL2025"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x917459337CaAC939D41d7493B3999f571D20D667"], expect: $self }
+  variableDebtEthPT_USDe_31JUL2025:
+    address: "0xd90DA2Df915B87fE1621A7F2201FbF4ff2cCA031"
+    name: "Aave Ethereum Variable Debt PT_USDe_31JUL2025"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x917459337CaAC939D41d7493B3999f571D20D667"], expect: $self }
+  aEthPT_eUSDe_14AUG2025:
+    address: "0x2eDff5AF94334fBd7C38ae318edf1c40e072b73B"
+    name: "Aave Ethereum PT_eUSDe_14AUG2025"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x14Bdc3A3AE09f5518b923b69489CBcAfB238e617"], expect: $self }
+  variableDebtEthPT_eUSDe_14AUG2025:
+    address: "0x22517fE16DEd08e52E7EA3423A2EA4995b1f1731"
+    name: "Aave Ethereum Variable Debt PT_eUSDe_14AUG2025"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x14Bdc3A3AE09f5518b923b69489CBcAfB238e617"], expect: $self }
+  aEtheUSDe:
+    address: "0x5F9190496e0DFC831C3bd307978de4a245E2F5cD"
+    name: "Aave Ethereum eUSDe"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x90D2af7d622ca3141efA4d8f1F24d86E5974Cc8F"], expect: $self }
+  variableDebtEtheUSDe:
+    address: "0x48351fCc9536dA440AE9471220F6dC921b0eB703"
+    name: "Aave Ethereum Variable Debt eUSDe"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x90D2af7d622ca3141efA4d8f1F24d86E5974Cc8F"], expect: $self }
+  aEthFBTC:
+    address: "0xcCA43ceF272c30415866914351fdfc3E881bb7c2"
+    name: "Aave Ethereum FBTC"
+    category: receipt
+    kind: atoken
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xC96dE26018A54D51c097160568752c4E3BD6C364"], expect: $self }
+  variableDebtEthFBTC:
+    address: "0x4A35FD7F93324Cc48bc12190D3F37493437b1Eff"
+    name: "Aave Ethereum Variable Debt FBTC"
+    category: debt
+    kind: variable_debt
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xC96dE26018A54D51c097160568752c4E3BD6C364"], expect: $self }
+  aEthEURC:
+    address: "0xAA6e91C82942aeAE040303Bf96c15a6dBcB82CA0"
+    name: "Aave Ethereum EURC"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.EURC }
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.EURC], expect: $self }
+  variableDebtEthEURC:
+    address: "0x6c82c66622Eb360FC973D3F492f9D8E9eA538b08"
+    name: "Aave Ethereum Variable Debt EURC"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    edges: { underlying: stablecoins.EURC }
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.EURC], expect: $self }
+  aEthPT_sUSDE_25SEP2025:
+    address: "0x5f4a0873a3A02f7C0CB0e13a1d4362a1AD90e751"
+    name: "Aave Ethereum PT_sUSDE_25SEP2025"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x9F56094C450763769BA0EA9Fe2876070c0fD5F77"], expect: $self }
+  variableDebtEthPT_sUSDE_25SEP2025:
+    address: "0xc9AD8Dd111e6384128146467aAf92B81EC422848"
+    name: "Aave Ethereum Variable Debt PT_sUSDE_25SEP2025"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x9F56094C450763769BA0EA9Fe2876070c0fD5F77"], expect: $self }
+  aEthPT_USDe_25SEP2025:
+    address: "0x38A5357Ce55c81add62aBc84Fb32981e2626ADEf"
+    name: "Aave Ethereum PT_USDe_25SEP2025"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xBC6736d346a5eBC0dEbc997397912CD9b8FAe10a"], expect: $self }
+  variableDebtEthPT_USDe_25SEP2025:
+    address: "0x0D8486E1CAbf3C9407B3DdA0cfc4d9C3101fB683"
+    name: "Aave Ethereum Variable Debt PT_USDe_25SEP2025"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xBC6736d346a5eBC0dEbc997397912CD9b8FAe10a"], expect: $self }
+  aEthtETH:
+    address: "0x481a2acf3A72ffDc602A9541896Ca1DB87f86cf7"
+    name: "Aave Ethereum tETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xD11c452fc99cF405034ee446803b6F6c1F6d5ED8"], expect: $self }
+  variableDebtEthtETH:
+    address: "0x7EC9Afe70f8FD603282eBAcbc9058A83623E2899"
+    name: "Aave Ethereum Variable Debt tETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xD11c452fc99cF405034ee446803b6F6c1F6d5ED8"], expect: $self }
+  aEthezETH:
+    address: "0x4E2a4d9B3DF7Aae73b418Bd39F3af9e148E3F479"
+    name: "Aave Ethereum ezETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xbf5495Efe5DB9ce00f80364C8B423567e58d2110"], expect: $self }
+  variableDebtEthezETH:
+    address: "0x730318dB7b830d324fC3fEDDB1d212Ec64bD3141"
+    name: "Aave Ethereum Variable Debt ezETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xbf5495Efe5DB9ce00f80364C8B423567e58d2110"], expect: $self }
+  aEthXAUt:
+    address: "0x8A2b6f94Ff3A89a03E8c02Ee92b55aF90c9454A2"
+    name: "Aave Ethereum XAUt"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x68749665FF8D2d112Fa859AA293F07A622782F38"], expect: $self }
+  variableDebtEthXAUt:
+    address: "0xa665bB258D2a732C170dFD505924214c0b1AC74F"
+    name: "Aave Ethereum Variable Debt XAUt"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x68749665FF8D2d112Fa859AA293F07A622782F38"], expect: $self }
+  aEthPT_sUSDe_27NOV2025:
+    address: "0x285866acB0d60105B4Ed350a463361c2d9afA0E2"
+    name: "Aave Ethereum PT_sUSDe_27NOV2025"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xe6A934089BBEe34F832060CE98848359883749B3"], expect: $self }
+  variableDebtEthPT_sUSDe_27NOV2025:
+    address: "0x690Df181701C11C53EA33bBF303C25834b66bD14"
+    name: "Aave Ethereum Variable Debt PT_sUSDe_27NOV2025"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xe6A934089BBEe34F832060CE98848359883749B3"], expect: $self }
+  aEthPT_USDe_27NOV2025:
+    address: "0x38C503a438185cDE29b5cF4dC1442FD6F074F1cc"
+    name: "Aave Ethereum PT_USDe_27NOV2025"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x62C6E813b9589C3631Ba0Cdb013acdB8544038B7"], expect: $self }
+  variableDebtEthPT_USDe_27NOV2025:
+    address: "0x2CE7e7b238985A8aD3863De03F200B245B0c1216"
+    name: "Aave Ethereum Variable Debt PT_USDe_27NOV2025"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x62C6E813b9589C3631Ba0Cdb013acdB8544038B7"], expect: $self }
+  aEthPT_USDE_5FEB_2026:
+    address: "0xE728577e9a1Fe7032bc309B4541F58f45443866e"
+    name: "Aave Ethereum PT_USDE_5FEB_2026"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x1F84a51296691320478c98b8d77f2Bbd17D34350"], expect: $self }
+  variableDebtEthPT_USDE_5FEB_2026:
+    address: "0x9D244A99801dc05cbC04183769c17056B8A1Ad53"
+    name: "Aave Ethereum Variable Debt PT_USDE_5FEB_2026"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x1F84a51296691320478c98b8d77f2Bbd17D34350"], expect: $self }
+  aEthPT_sUSDe_5FEB_2026:
+    address: "0xbe54767735fB7Acca2aa7E2d209a6f705073536D"
+    name: "Aave Ethereum PT_sUSDe_5FEB_2026"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xE8483517077afa11A9B07f849cee2552f040d7b2"], expect: $self }
+  variableDebtEthPT_sUSDe_5FEB_2026:
+    address: "0xA803414f84fCEF00e745bE7CC2A315908927f15D"
+    name: "Aave Ethereum Variable Debt PT_sUSDe_5FEB_2026"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xE8483517077afa11A9B07f849cee2552f040d7b2"], expect: $self }
+  aEthmUSD:
+    address: "0xAa0200d169fF3ba9385c12E073c5d1d30434AE7b"
+    name: "Aave Ethereum mUSD"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xacA92E438df0B2401fF60dA7E4337B687a2435DA"], expect: $self }
+  variableDebtEthmUSD:
+    address: "0xE35e6A0D3AbC28289f5d4C2d262a133Df936b98D"
+    name: "Aave Ethereum Variable Debt mUSD"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xacA92E438df0B2401fF60dA7E4337B687a2435DA"], expect: $self }
+  aEthsyrupUSDT:
+    address: "0x24Ab03a9a5Bc2C49E5523e8d915A3536ac38B91D"
+    name: "Aave Ethereum syrupUSDT"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x356B8d89c1e1239Cbbb9dE4815c39A1474d5BA7D"], expect: $self }
+  variableDebtEthsyrupUSDT:
+    address: "0xAEf73b04654931B94920a3D7AE62032b79fB6d0c"
+    name: "Aave Ethereum Variable Debt syrupUSDT"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x356B8d89c1e1239Cbbb9dE4815c39A1474d5BA7D"], expect: $self }
+  aEthUSDG:
+    address: "0x7c0477d085ECb607CF8429f3eC91Ae5E1e460F4F"
+    name: "Aave Ethereum USDG"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xe343167631d89B6Ffc58B88d6b7fB0228795491D"], expect: $self }
+  variableDebtEthUSDG:
+    address: "0x4f97B950a30321c181E974971E156E19fAD184A3"
+    name: "Aave Ethereum Variable Debt USDG"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xe343167631d89B6Ffc58B88d6b7fB0228795491D"], expect: $self }
+  aEthPT_USDe_7MAY2026:
+    address: "0xE036478Da9A7ed89b56FE39A06e1FC1a4b38D4Ea"
+    name: "Aave Ethereum PT_USDe_7MAY2026"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xAeBf0Bb9f57E89260d57f31AF34eB58657d96Ce0"], expect: $self }
+  variableDebtEthPT_USDe_7MAY2026:
+    address: "0x04142fc546D59838852873bba5C8827601A13FC8"
+    name: "Aave Ethereum Variable Debt PT_USDe_7MAY2026"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xAeBf0Bb9f57E89260d57f31AF34eB58657d96Ce0"], expect: $self }
+  aEthPT_sUSDe_7MAY2026:
+    address: "0x81b76ff3FeD28BA0B4a5D4c76Bd5C13Bd0641d86"
+    name: "Aave Ethereum PT_sUSDe_7MAY2026"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x3de0ff76E8b528C092d47b9DaC775931cef80F49"], expect: $self }
+  variableDebtEthPT_sUSDe_7MAY2026:
+    address: "0x762Edb8D79b97487F82093f85059e42EeEf61E9e"
+    name: "Aave Ethereum Variable Debt PT_sUSDe_7MAY2026"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x3de0ff76E8b528C092d47b9DaC775931cef80F49"], expect: $self }
+  aEthPT_srUSDe_2APR2026:
+    address: "0x1241ec22C9BdF16BA1Eb636F2a8de7e28A4343Cf"
+    name: "Aave Ethereum PT_srUSDe_2APR2026"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x9Bf45ab47747F4B4dD09B3C2c73953484b4eB375"], expect: $self }
+  variableDebtEthPT_srUSDe_2APR2026:
+    address: "0xacD3d3FaCeA0424984F662827B988f4581a3cE31"
+    name: "Aave Ethereum Variable Debt PT_srUSDe_2APR2026"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x9Bf45ab47747F4B4dD09B3C2c73953484b4eB375"], expect: $self }
+  aEthBTCb:
+    address: "0x12b70410D60f926558245f769059eA3Fc7A7353E"
+    name: "Aave Ethereum BTCb"
+    category: receipt
+    kind: atoken
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xB0F70C0bD6FD87dbEb7C10dC692a2a6106817072"], expect: $self }
+  variableDebtEthBTCb:
+    address: "0x6C67e666BB954d4bE23e9F1cE20e7E8699d29339"
+    name: "Aave Ethereum Variable Debt BTCb"
+    category: debt
+    kind: variable_debt
+    decimals: 8
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xB0F70C0bD6FD87dbEb7C10dC692a2a6106817072"], expect: $self }
+  aEthPT_srUSDe_25JUN2026:
+    address: "0xA78Eba24D89e70A03ddB7AC195A15E53315aA5b4"
+    name: "Aave Ethereum PT_srUSDe_25JUN2026"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x619D75E3b790eBC21c289f2805Bb7177A7D732E2"], expect: $self }
+  variableDebtEthPT_srUSDe_25JUN2026:
+    address: "0x9Ba896531F878Ed5f0A4F73E82d63bA7b424F910"
+    name: "Aave Ethereum Variable Debt PT_srUSDe_25JUN2026"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x619D75E3b790eBC21c289f2805Bb7177A7D732E2"], expect: $self }
+  aEthPT_USDG_28MAY2026:
+    address: "0xA9ecb0503075124cc0B786096849A331FBe9EE6D"
+    name: "Aave Ethereum PT_USDG_28MAY2026"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x9db38D74a0D29380899aD354121DfB521aDb0548"], expect: $self }
+  variableDebtEthPT_USDG_28MAY2026:
+    address: "0x1a83eCA2d3b0cea2595Fb11Ec60cb2D428217C2e"
+    name: "Aave Ethereum Variable Debt PT_USDG_28MAY2026"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x9db38D74a0D29380899aD354121DfB521aDb0548"], expect: $self }
+  aEthPT_srUSDe_22OCT2026:
+    address: "0x01E69a58ca3ddc695820ce6f66FBdf3fA55D0545"
+    name: "Aave Ethereum PT_srUSDe_22OCT2026"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x59bC9FaE5D62B19d4f8d07D758047aCb9EE19d34"], expect: $self }
+  variableDebtEthPT_srUSDe_22OCT2026:
+    address: "0x4Af166c6F2CF882f7B196E3625c3E8f2Fe2a8083"
+    name: "Aave Ethereum Variable Debt PT_srUSDe_22OCT2026"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+    proofs:
+      - { from: pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x59bC9FaE5D62B19d4f8d07D758047aCb9EE19d34"], expect: $self }
+  prime_addresses_provider:
+    address: "0xcfBf336fe147D643B9Cb705648500e101504B16d"
+    category: config
+    kind: addresses_provider
+    note: "Aave v3 Prime market PoolAddressesProvider"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { from: prime_provider_registry, read: "getAddressesProvidersList() returns (address[])", expect: { contains: $self } }
+  prime_pool:
+    address: "0x4e033931ad43597d96D6bcc25c280717730B58B1"
+    category: market
+    kind: aave_v3_pool
+    aliases: ["aave prime pool"]
+    note: "Aave v3 Prime market Pool"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { reads_from: prime_addresses_provider }
+    proofs:
+      - { from: prime_addresses_provider, read: "getPool() returns (address)", expect: $self }
+  prime_pool_configurator:
+    address: "0x342631c6CeFC9cfbf97b2fe4aa242a236e1fd517"
+    category: config
+    kind: pool_configurator
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { from: prime_addresses_provider, read: "getPoolConfigurator() returns (address)", expect: $self }
+  prime_oracle:
+    address: "0xE3C061981870C0C7b1f3C4F4bB36B95f1F260BE6"
+    category: oracle
+    kind: aave_oracle
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { from: prime_addresses_provider, read: "getPriceOracle() returns (address)", expect: $self }
+  prime_acl_manager:
+    address: "0x013E2C7567b6231e865BB9273F8c7656103611c0"
+    category: config
+    kind: acl_manager
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { admin: aave.executor_lvl1 }
+    proofs:
+      - { from: prime_addresses_provider, read: "getACLManager() returns (address)", expect: $self }
+  prime_data_provider:
+    address: "0xB85B2bFEbeC4F5f401dbf92ac147A3076391fCD5"
+    category: config
+    kind: pool_data_provider
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { from: prime_addresses_provider, read: "getPoolDataProvider() returns (address)", expect: $self }
+  prime_weth_gateway:
+    address: "0x3167C452fA3fa1e5C16bB83Bc0fde4519C464299"
+    category: adapter
+    kind: weth_gateway
+    aliases: ["aave prime weth gateway"]
+    note: "Wraps ETH and supplies / repays / withdraws WETH on the pool"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { read: "POOL() returns (address)", expect: prime_pool }
+  aEthLidowstETH:
+    address: "0xC035a7cf15375cE2706766804551791aD035E0C2"
+    name: "Aave Ethereum Lido wstETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: lido.wstETH }
+    proofs:
+      - { from: prime_pool, read: "getReserveAToken(address asset) returns (address)", args: [lido.wstETH], expect: $self }
+  variableDebtEthLidowstETH:
+    address: "0xE439edd2625772AA635B437C099C607B6eb7d35f"
+    name: "Aave Ethereum Lido Variable Debt wstETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: lido.wstETH }
+    proofs:
+      - { from: prime_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [lido.wstETH], expect: $self }
+  aEthLidoWETH:
+    address: "0xfA1fDbBD71B0aA16162D76914d69cD8CB3Ef92da"
+    name: "Aave Ethereum Lido WETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { from: prime_pool, read: "getReserveAToken(address asset) returns (address)", args: [weth.WETH], expect: $self }
+  variableDebtEthLidoWETH:
+    address: "0x91b7d78BF92db564221f6B5AeE744D1727d1Dd1e"
+    name: "Aave Ethereum Lido Variable Debt WETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { from: prime_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [weth.WETH], expect: $self }
+  aEthLidoUSDS:
+    address: "0x09AA30b182488f769a9824F15E6Ce58591Da4781"
+    name: "Aave Ethereum Lido USDS"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: stablecoins.USDS }
+    proofs:
+      - { from: prime_pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.USDS], expect: $self }
+  variableDebtEthLidoUSDS:
+    address: "0x2D9fe18b6c35FE439cC15D932cc5C943bf2d901E"
+    name: "Aave Ethereum Lido Variable Debt USDS"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: stablecoins.USDS }
+    proofs:
+      - { from: prime_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.USDS], expect: $self }
+  aEthLidoUSDC:
+    address: "0x2A1FBcb52Ed4d9b23daD17E1E8Aed4BB0E6079b8"
+    name: "Aave Ethereum Lido USDC"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { from: prime_pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.USDC], expect: $self }
+  variableDebtEthLidoUSDC:
+    address: "0xeD90dE2D824Ee766c6Fd22E90b12e598f681dc9F"
+    name: "Aave Ethereum Lido Variable Debt USDC"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { from: prime_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.USDC], expect: $self }
+  aEthLidoezETH:
+    address: "0x74e5664394998f13B07aF42446380ACef637969f"
+    name: "Aave Ethereum Lido ezETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { from: prime_pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xbf5495Efe5DB9ce00f80364C8B423567e58d2110"], expect: $self }
+  variableDebtEthLidoezETH:
+    address: "0x08e1bba76D27841dD91FAb4b3a636A0D5CF8c3E9"
+    name: "Aave Ethereum Lido Variable Debt ezETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { from: prime_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xbf5495Efe5DB9ce00f80364C8B423567e58d2110"], expect: $self }
+  aEthLidosUSDe:
+    address: "0xc2015641564a5914A17CB9A92eC8d8feCfa8f2D0"
+    name: "Aave Ethereum Lido sUSDe"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: ethena.sUSDe }
+    proofs:
+      - { from: prime_pool, read: "getReserveAToken(address asset) returns (address)", args: [ethena.sUSDe], expect: $self }
+  variableDebtEthLidosUSDe:
+    address: "0x2ABbAab3EF4e4A899d39e7EC996b5715E76b399a"
+    name: "Aave Ethereum Lido Variable Debt sUSDe"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: ethena.sUSDe }
+    proofs:
+      - { from: prime_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [ethena.sUSDe], expect: $self }
+  aEthLidoGHO:
+    address: "0x18eFE565A5373f430e2F809b97De30335B3ad96A"
+    name: "Aave Ethereum Lido GHO"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: stablecoins.GHO }
+    proofs:
+      - { from: prime_pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.GHO], expect: $self }
+  variableDebtEthLidoGHO:
+    address: "0x18577F0f4A0B2Ee6F4048dB51c7acd8699F97DB8"
+    name: "Aave Ethereum Lido Variable Debt GHO"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    edges: { underlying: stablecoins.GHO }
+    proofs:
+      - { from: prime_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.GHO], expect: $self }
+  aEthLidorsETH:
+    address: "0x56D919E7B25aA42F3F8a4BC77b8982048F2E84B4"
+    name: "Aave Ethereum Lido rsETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { from: prime_pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7"], expect: $self }
+  variableDebtEthLidorsETH:
+    address: "0x2c2163f120cf58631368981BC16e90190Bc6C644"
+    name: "Aave Ethereum Lido Variable Debt rsETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { from: prime_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7"], expect: $self }
+  aEthLidotETH:
+    address: "0xce8c60fd8390eFCc3Fc66A3f0bd64BEb969e750E"
+    name: "Aave Ethereum Lido tETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { from: prime_pool, read: "getReserveAToken(address asset) returns (address)", args: ["0xD11c452fc99cF405034ee446803b6F6c1F6d5ED8"], expect: $self }
+  variableDebtEthLidotETH:
+    address: "0xe7ea6125490ae4594aD9B44D05dFF9F2A4343134"
+    name: "Aave Ethereum Lido Variable Debt tETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
+    proofs:
+      - { from: prime_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0xD11c452fc99cF405034ee446803b6F6c1F6d5ED8"], expect: $self }
+  etherfi_addresses_provider:
+    address: "0xeBa440B438Ad808101d1c451C1C5322c90BEFCdA"
+    category: config
+    kind: addresses_provider
+    note: "Aave v3 EtherFi market PoolAddressesProvider"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    proofs:
+      - { from: provider_registry, read: "getAddressesProvidersList() returns (address[])", expect: { contains: $self } }
+  etherfi_pool:
+    address: "0x0AA97c284e98396202b6A04024F5E2c65026F3c0"
+    category: market
+    kind: aave_v3_pool
+    aliases: ["aave etherfi pool"]
+    note: "Aave v3 EtherFi market Pool"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    edges: { reads_from: etherfi_addresses_provider }
+    proofs:
+      - { from: etherfi_addresses_provider, read: "getPool() returns (address)", expect: $self }
+  etherfi_pool_configurator:
+    address: "0x8438F4D29D895d75C86BDC25360c25eF0607E65d"
+    category: config
+    kind: pool_configurator
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    proofs:
+      - { from: etherfi_addresses_provider, read: "getPoolConfigurator() returns (address)", expect: $self }
+  etherfi_oracle:
+    address: "0x43b64f28A678944E0655404B0B98E443851cC34F"
+    category: oracle
+    kind: aave_oracle
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    proofs:
+      - { from: etherfi_addresses_provider, read: "getPriceOracle() returns (address)", expect: $self }
+  etherfi_acl_manager:
+    address: "0x3cE8E2eb6501d4705477643E96881B1bef6A2DB3"
+    category: config
+    kind: acl_manager
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    edges: { admin: aave.executor_lvl1 }
+    proofs:
+      - { from: etherfi_addresses_provider, read: "getACLManager() returns (address)", expect: $self }
+  etherfi_data_provider:
+    address: "0x7c8509591f9693D21280d96e149a08A3bf69Cd0c"
+    category: config
+    kind: pool_data_provider
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    proofs:
+      - { from: etherfi_addresses_provider, read: "getPoolDataProvider() returns (address)", expect: $self }
+  etherfi_weth_gateway:
+    address: "0xf956B38F035dC9067fb827A512D3CF35202AB0Bc"
+    category: adapter
+    kind: weth_gateway
+    aliases: ["aave etherfi weth gateway"]
+    note: "Wraps ETH and supplies / repays / withdraws WETH on the pool"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { read: "POOL() returns (address)", expect: etherfi_pool }
+  aEthEtherFiweETH:
+    address: "0xbe1F842e7e0afd2c2322aae5d34bA899544b29db"
+    name: "Aave Ethereum EtherFi weETH"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    edges: { underlying: etherfi.weETH }
+    proofs:
+      - { from: etherfi_pool, read: "getReserveAToken(address asset) returns (address)", args: [etherfi.weETH], expect: $self }
+  variableDebtEthEtherFiweETH:
+    address: "0x16264412CB72F0d16A446f7D928Dd0D822810048"
+    name: "Aave Ethereum EtherFi Variable Debt weETH"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    edges: { underlying: etherfi.weETH }
+    proofs:
+      - { from: etherfi_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [etherfi.weETH], expect: $self }
+  aEthEtherFiUSDC:
+    address: "0x7380c583cDe4409eFF5DD3320D93a45D96B80E2e"
+    name: "Aave Ethereum EtherFi USDC"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { from: etherfi_pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.USDC], expect: $self }
+  variableDebtEthEtherFiUSDC:
+    address: "0x9355032d747f1e08F8720CD01950E652eE15cdB7"
+    name: "Aave Ethereum EtherFi Variable Debt USDC"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    edges: { underlying: stablecoins.USDC }
+    proofs:
+      - { from: etherfi_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.USDC], expect: $self }
+  aEthEtherFiPYUSD:
+    address: "0xdF7f48892244C6106EA784609f7de10AB36F9c7e"
+    name: "Aave Ethereum EtherFi PYUSD"
+    category: receipt
+    kind: atoken
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    edges: { underlying: stablecoins.PYUSD }
+    proofs:
+      - { from: etherfi_pool, read: "getReserveAToken(address asset) returns (address)", args: [stablecoins.PYUSD], expect: $self }
+  variableDebtEthEtherFiPYUSD:
+    address: "0xD2cf07dEE40d3D530D15b88d689f5cd97A31FC3D"
+    name: "Aave Ethereum EtherFi Variable Debt PYUSD"
+    category: debt
+    kind: variable_debt
+    decimals: 6
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    edges: { underlying: stablecoins.PYUSD }
+    proofs:
+      - { from: etherfi_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: [stablecoins.PYUSD], expect: $self }
+  aEthEtherFiFRAX:
+    address: "0x6914ECCf50837dC61b43ee478a9BD9B439648956"
+    name: "Aave Ethereum EtherFi FRAX"
+    category: receipt
+    kind: atoken
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    proofs:
+      - { from: etherfi_pool, read: "getReserveAToken(address asset) returns (address)", args: ["0x853d955aCEf822Db058eb8505911ED77F175b99e"], expect: $self }
+  variableDebtEthEtherFiFRAX:
+    address: "0xfd3aDA5AAbdc6531C7C2AC46c00eBf870f5a0E6B"
+    name: "Aave Ethereum EtherFi Variable Debt FRAX"
+    category: debt
+    kind: variable_debt
+    decimals: 18
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
+    proofs:
+      - { from: etherfi_pool, read: "getReserveVariableDebtToken(address asset) returns (address)", args: ["0x853d955aCEf822Db058eb8505911ED77F175b99e"], expect: $self }

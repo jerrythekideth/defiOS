@@ -1,0 +1,12 @@
+contracts:
+  EURC:
+    address: "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c"
+    name: "Euro Coin"
+    category: token
+    kind: erc20
+    decimals: 6
+    aliases: ["eurc", "euro coin"]
+    sources:
+      - "docs: https://developers.circle.com/stablecoins/eurc-contract-addresses"
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }

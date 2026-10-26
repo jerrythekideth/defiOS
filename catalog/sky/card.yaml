@@ -1,0 +1,14 @@
+protocol: sky
+name: Sky (USDS, DAI, sUSDS, PSM, staking)
+chain_id: 1
+status: draft
+reviewed: false
+adding: >
+  Sky's contracts are listed by name in its chainlog. Add one keyed by its onchain symbol()
+  (tokens) or the chainlog key in snake_case, with the chainlog key in `aliases`, and a
+  self-report proof (asset(), usds(), dai(), gem(), stakingToken(), ...) against a
+  contract already in the catalog.
+
+contracts: {}
+
+actions: {}

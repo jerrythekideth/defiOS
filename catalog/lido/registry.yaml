@@ -1,0 +1,25 @@
+contracts:
+  LidoLocator:
+    address: "0xC1d0b3DE6792Bf6b4b37EccdcC24e45978Cfd2Eb"
+    category: config
+    kind: locator
+    aliases: ["lido locator"]
+    note: "Lido's address directory: lido() is stETH, withdrawalQueue() is unstETH"
+    sources:
+      - "docs: https://docs.lido.fi/deployed-contracts/"
+    edges: { reads_from: stETH }
+    proofs:
+      - { from: stETH, read: "getLidoLocator() returns (address)", expect: $self }
+      - { read: "lido() returns (address)", expect: stETH }
+      - { read: "withdrawalQueue() returns (address)", expect: unstETH }
+  LDO:
+    address: "0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32"
+    name: "Lido DAO Token"
+    category: governance
+    kind: erc20
+    decimals: 18
+    aliases: ["lido dao token"]
+    sources:
+      - "docs: https://docs.lido.fi/deployed-contracts/"
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }

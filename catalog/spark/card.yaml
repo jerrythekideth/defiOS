@@ -1,0 +1,14 @@
+protocol: spark
+name: Spark (SparkLend and Spark savings vaults)
+chain_id: 1
+status: draft
+reviewed: false
+adding: >
+  SparkLend is an Aave v3 fork: a new reserve's spToken / variableDebt token is keyed by
+  its onchain symbol(), with POOL() = pool and UNDERLYING_ASSET_ADDRESS() = its
+  underlying as proofs (the underlying edge only when the token is catalogued). A Spark
+  savings vault is keyed by its symbol() with asset() as proof.
+
+contracts: {}
+
+actions: {}
