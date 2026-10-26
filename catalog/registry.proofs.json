@@ -1,7 +1,7 @@
 {
  "_meta": {
   "1": {
-   "block": 26277873,
+   "block": 26278019,
    "checked": "2026-10-26"
   }
  },
@@ -268,23 +268,6 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum PYUSD",
   "symbol": "aEthPYUSD"
- },
- "1:0x0c6aec603d48ebf1cecc7b247a2c3da08b398dc1": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.asset() == stablecoins.EURC",
-    "ok": true,
-    "got": "0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c"
-   },
-   {
-    "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-    "ok": true,
-    "got": "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
-   }
-  ],
-  "name": "kpk EURC Yield",
-  "symbol": "kpk_EURC_Yield"
  },
  "1:0x0c91bca95b5fe69164ce583a2ec9429a569798ed": {
   "code": true,
@@ -953,26 +936,6 @@
    }
   ],
   "implementation": "0xFF42Ce30054dcE7dc7C1282a9a497aa58eaBCe99"
- },
- "1:0x354c92af243d53a24feb3dff20372af7b7c47478": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "kpk_ETH_Prime.owner() == $self",
-    "ok": true,
-    "got": "0x354C92aF243d53A24feb3dFF20372Af7b7c47478"
-   },
-   {
-    "id": "kpk_ETH_Yield.owner() == $self",
-    "ok": true,
-    "got": "0x354C92aF243d53A24feb3dFF20372Af7b7c47478"
-   },
-   {
-    "id": "kpk_EURC_Yield.owner() == $self",
-    "ok": true,
-    "got": "0x354C92aF243d53A24feb3dFF20372Af7b7c47478"
-   }
-  ]
  },
  "1:0x3620c39c1269d6e31e5e76e9a2fa6afe0e8b14d6": {
   "code": true,
@@ -2578,11 +2541,6 @@
     "id": "KPK_USDT_Prime.curator() == $self",
     "ok": true,
     "got": "0x834e1c1ea40173B82106F9177646b66d96AE7De8"
-   },
-   {
-    "id": "kpk_USDT_Prime.curator() == $self",
-    "ok": true,
-    "got": "0x834e1c1ea40173B82106F9177646b66d96AE7De8"
    }
   ]
  },
@@ -2891,23 +2849,6 @@
     "got": "0x9008D19f58AAbD9eD0D60971565AA8510560ab41"
    }
   ]
- },
- "1:0x9178ebe0691593184c1d785a864b62a326cc3509": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.asset() == stablecoins.USDC",
-    "ok": true,
-    "got": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-   },
-   {
-    "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-    "ok": true,
-    "got": "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
-   }
-  ],
-  "name": "kpk USDC Yield",
-  "symbol": "kpk_USDC_Yield"
  },
  "1:0x91b7d78bf92db564221f6b5aee744d1727d1dd1e": {
   "code": true,
@@ -3882,16 +3823,6 @@
     "id": "KPK_ETH_Prime.curator() == $self",
     "ok": true,
     "got": "0xC266b1181A80E84EDC2c6596718E88E8115c1eaa"
-   },
-   {
-    "id": "kpk_ETH_Prime.curator() == $self",
-    "ok": true,
-    "got": "0xC266b1181A80E84EDC2c6596718E88E8115c1eaa"
-   },
-   {
-    "id": "kpkUSDT.curator() == $self",
-    "ok": true,
-    "got": "0xC266b1181A80E84EDC2c6596718E88E8115c1eaa"
    }
   ]
  },
@@ -3993,23 +3924,6 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum SNX",
   "symbol": "aEthSNX"
- },
- "1:0xc88effd6e74d55c78290892809955463468e982a": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.asset() == weth.WETH",
-    "ok": true,
-    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
-   },
-   {
-    "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-    "ok": true,
-    "got": "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
-   }
-  ],
-  "name": "kpk ETH Yield",
-  "symbol": "kpk_ETH_Yield"
  },
  "1:0xc92e8bdf79f0507f65a392b0ab4667716bfe0110": {
   "code": true,
@@ -4177,11 +4091,6 @@
     "id": "KPK_EURC_Yield.curator() == $self",
     "ok": true,
     "got": "0xd15f11B334e1e233127302E5F759C17DA1260df5"
-   },
-   {
-    "id": "kpk_EURC_Yield.curator() == $self",
-    "ok": true,
-    "got": "0xd15f11B334e1e233127302E5F759C17DA1260df5"
    }
   ]
  },
@@ -4227,40 +4136,6 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum FRAX",
   "symbol": "aEthFRAX"
- },
- "1:0xd4e95092a8f108728c49f32a30f30556896563b5": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.asset() == stablecoins.USDT",
-    "ok": true,
-    "got": "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-   },
-   {
-    "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-    "ok": true,
-    "got": "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
-   }
-  ],
-  "name": "USDT Yield",
-  "symbol": "kpkUSDT"
- },
- "1:0xd564f765f9ad3e7d2d6ca782100795a885e8e7c8": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.asset() == weth.WETH",
-    "ok": true,
-    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
-   },
-   {
-    "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-    "ok": true,
-    "got": "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
-   }
-  ],
-  "name": "kpk ETH Prime",
-  "symbol": "kpk_ETH_Prime"
  },
  "1:0xd5c3e3b566a42a6110513ac7670c1a86d76e13e6": {
   "code": true,
@@ -4347,23 +4222,6 @@
   "name": "Tether USD",
   "symbol": "USDT"
  },
- "1:0xdad4e51d64c3b65a9d27ad9f3185b09449712065": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.asset() == stablecoins.USDT",
-    "ok": true,
-    "got": "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-   },
-   {
-    "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-    "ok": true,
-    "got": "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
-   }
-  ],
-  "name": "kpk USDT Prime",
-  "symbol": "kpk_USDT_Prime"
- },
  "1:0xdbdc1ef57537e34680b898e1febd3d68c7389bcb": {
   "code": true,
   "proofs": [
@@ -4427,23 +4285,6 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum PT_USDe_7MAY2026",
   "symbol": "aEthPT_USDe_7MAY2026"
- },
- "1:0xe108fbc04852b5df72f9e44d7c29f47e7a993add": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.asset() == stablecoins.USDC",
-    "ok": true,
-    "got": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-   },
-   {
-    "id": "$self.MORPHO() == morpho_vaults.morpho_blue",
-    "ok": true,
-    "got": "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
-   }
-  ],
-  "name": "kpk USDC Prime",
-  "symbol": "kpk_USDC_Prime"
  },
  "1:0xe1753f2e00940cc31213dd92013cf019dfe4ca1d": {
   "code": true,
@@ -4821,11 +4662,6 @@
   "proofs": [
    {
     "id": "KPK_USDC_Prime.curator() == $self",
-    "ok": true,
-    "got": "0xf8182E5827c06a47A985eC565A3bcd56437a97bE"
-   },
-   {
-    "id": "kpk_USDC_Prime.curator() == $self",
     "ok": true,
     "got": "0xf8182E5827c06a47A985eC565A3bcd56437a97bE"
    }
