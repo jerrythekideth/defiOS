@@ -3,10 +3,8 @@ name: Morpho Vaults (MetaMorpho v1 / Vault v2, ERC-4626)
 chain_id: 1
 status: draft
 reviewed: false
-defi_kit: "morphoVaults/deposit targets=[<vault address | name | symbol>]"
 sources:
-  - "karpatkey/defi-kit sdk/src/protocols/morpho/vaults (deposit bundle, _ethInfo.ts vault list)"
-  - "karpatkey/defi-kit sdk/eth-sdk/abis/mainnet/morpho/vault.json (signatures)"
+  - "Morpho Vault V2 / MetaMorpho: ERC-4626 deposit / withdraw / redeem; asset() read onchain per vault"
 
 contracts:
   vault:
@@ -16,8 +14,9 @@ contracts:
     aliases: [morpho vault, metamorpho]
     note: >
       Which vault is a per-vault choice: set `morpho_vaults.vault` (and
-      `morpho_vaults.asset`) in defios.yaml book_vars. Pick it from defi-kit's
-      morpho/vaults/_ethInfo.ts list so a reviewed bundle exists for it.
+      `morpho_vaults.asset`) in defios.yaml book_vars. Use a vault that is a
+      registry record in its curator's card (e.g. kpk.KPK_ETH_Yield), so
+      `defios whois` can vouch for it.
   asset:
     address: $book.asset
     category: token

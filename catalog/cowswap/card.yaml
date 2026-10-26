@@ -3,11 +3,9 @@ name: CoW Swap (pre-signed orders via the CowswapOrderSigner)
 chain_id: 1
 status: draft
 reviewed: false
-defi_kit: "cowswap/swap sell=[…] buy=[…] feeAmountBp=0 appData=[…] (receiver pinned to the avatar; feeAmountBp caps signOrder feeAmountBP, default 0)"
 sources:
-  - "karpatkey/defi-kit sdk/eth-sdk/config.ts (contracts.mainnet.cowSwap)"
-  - "karpatkey/defi-kit sdk/src/protocols/cowSwap/actions.ts"
-  - "karpatkey/defi-kit sdk/eth-sdk/abis/mainnet/cowSwap/orderSigner.json (signatures)"
+  - "CowswapOrderSigner verified source (Sourcify): signOrder / unsignOrder, DELEGATECALL only, validTo < now + validDuration, feeAmount cap in bp"
+  - "onchain: order_signer.signing() == GPv2Settlement, GPv2Settlement.vaultRelayer() == relayer"
 
 contracts:
   order_signer:
@@ -21,6 +19,16 @@ contracts:
     category: spender
     kind: spender
     aliases: [cow relayer, GPv2VaultRelayer]
+    proofs:
+      - { from: settlement, read: "vaultRelayer() returns (address)", expect: $self }
+  settlement:
+    address: "0x9008D19f58AAbD9eD0D60971565AA8510560ab41"
+    category: market
+    kind: settlement
+    aliases: [GPv2Settlement, cow settlement]
+    note: "settles the orders; the pre-signature lives here. Not called directly"
+    proofs:
+      - { from: order_signer, read: "signing() returns (address)", expect: $self }
   composable_cow:
     address: "0xfdaFc9d1902f4e0b84f65F49f244b32b31013b74"
     category: adapter
@@ -71,4 +79,4 @@ notes: >
   This is the one place a delegatecall is expected: the role must give
   order_signer the DelegateCall execution option and nothing else should have it.
   Scope sellToken/buyToken to the vault's token list, pin receiver to the Avatar,
-  and cap feeAmountBP (defi-kit defaults to 0).
+  and cap feeAmountBP (0 is the safe default).

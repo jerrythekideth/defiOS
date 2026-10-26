@@ -2,8 +2,8 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26256926,
-   "checked": "2026-10-23"
+   "block": 26265522,
+   "checked": "2026-10-24"
   }
  },
  "protocols": {
@@ -174,6 +174,15 @@
     "redeem",
     "unstake"
    ]
+  },
+  "kpk": {
+   "name": "kpk (vault curator on Gearbox v3 and Morpho)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
   },
   "lido": {
    "name": "Lido (stETH, wstETH, withdrawal queue)",
@@ -365,6 +374,7 @@
     "protocol": "yo",
     "protocol_name": "Yo (yoETH, yoUSD)",
     "name": "yoUSD",
+    "title": null,
     "ref": "yo.yoUSD",
     "category": "vault",
     "kind": "erc4626_async_redeem",
@@ -391,6 +401,10 @@
      "implementation": "0xc84a6E01BFF58996540F1ABC22355A9DFE0d78DC",
      "admin": "0x12E81209d180fF0b3FBFbfe8fA9fFdb5990e1073"
     },
+    "onchain": {
+     "name": "yoUSD",
+     "symbol": "yoUSD"
+    },
     "note": "YoVault: requestRedeem pays instantly when liquid, otherwise an operator's fulfillRedeem pays the receiver"
    }
   ],
@@ -401,6 +415,7 @@
     "protocol": "threejane",
     "protocol_name": "3Jane (USD3 via the Helper, JANE rewards)",
     "name": "USD3",
+    "title": null,
     "ref": "threejane.USD3",
     "category": "vault",
     "kind": "erc4626",
@@ -426,6 +441,10 @@
     "proxy": {
      "implementation": "0xd1F1c3F485063712873285BF4ef25ab068f13893",
      "admin": "0x41C838664a9C64905537fF410333B9f5964cC596"
+    },
+    "onchain": {
+     "name": "USD3",
+     "symbol": "USD3"
     }
    }
   ],
@@ -436,6 +455,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "liquid_usd",
+    "title": null,
     "ref": "etherfi.liquid_usd",
     "category": "vault",
     "kind": "boring_vault",
@@ -447,14 +467,18 @@
     ],
     "status": "unverified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "one source (card); no onchain proof declared"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {
+     "name": "Ether.Fi Liquid USD",
+     "symbol": "liquidUSD"
+    },
     "note": "Veda BoringVault; share token and deposit spender (it pulls the asset)"
    }
   ],
@@ -465,6 +489,7 @@
     "protocol": "avant",
     "protocol_name": "Avant (avETH / savETH)",
     "name": "minting",
+    "title": null,
     "ref": "avant.minting",
     "category": "minter",
     "kind": "rfq_minting",
@@ -483,6 +508,7 @@
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {},
     "note": "AvantMintingV2; mint/redeem only callable by Avant (MINTER_ROLE / REDEEMER_ROLE)"
    }
   ],
@@ -493,6 +519,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "liquid_eth_queue",
+    "title": null,
     "ref": "etherfi.liquid_eth_queue",
     "category": "queue",
     "kind": "queue",
@@ -503,11 +530,11 @@
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: $self.boringVault() == liquid_eth"
+     "source card + onchain proof: $self.boringVault() == liquid_eth"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [
      {
@@ -515,7 +542,8 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {}
    }
   ],
   "1:0x0dabc0d9b270c9b0c4c77aaceaa712b56d0f9178": [
@@ -525,6 +553,7 @@
     "protocol": "noon",
     "protocol_name": "Noon (USN, sUSN with a withdrawal handler)",
     "name": "withdrawal_handler",
+    "title": null,
     "ref": "noon.withdrawal_handler",
     "category": "queue",
     "kind": "queue",
@@ -541,7 +570,8 @@
      "card: catalog/noon/card.yaml"
     ],
     "proofs": [],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {}
    }
   ],
   "1:0x1e33e98af620f1d563fcd3cfd3c75ace841204ef": [
@@ -551,6 +581,7 @@
     "protocol": "dialectic",
     "protocol_name": "Dialectic (DUSD, smDUSD security module)",
     "name": "DUSD",
+    "title": null,
     "ref": "dialectic.DUSD",
     "category": "token",
     "kind": "erc20",
@@ -567,7 +598,11 @@
      "card: catalog/dialectic/card.yaml"
     ],
     "proofs": [],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Dialectic USD",
+     "symbol": "DUSD"
+    }
    }
   ],
   "1:0x232128844e5af56fd4b3f8bf97e08ab477282ab5": [
@@ -577,6 +612,7 @@
     "protocol": "flying_tulip",
     "protocol_name": "Flying Tulip (ftUSD, sftUSD, ssftUSD, FT)",
     "name": "ssftUSD",
+    "title": null,
     "ref": "flying_tulip.ssftUSD",
     "category": "staking",
     "kind": "erc4626",
@@ -601,6 +637,10 @@
     ],
     "proxy": {
      "implementation": "0xD940d531b983557884B31fD915A1Df97bebe6e09"
+    },
+    "onchain": {
+     "name": "Stable Staked Flying Tulip USD",
+     "symbol": "ssftUSD"
     }
    }
   ],
@@ -611,6 +651,7 @@
     "protocol": "cowswap",
     "protocol_name": "CoW Swap (pre-signed orders via the CowswapOrderSigner)",
     "name": "order_signer",
+    "title": null,
     "ref": "cowswap.order_signer",
     "category": "adapter",
     "kind": "library_delegatecall",
@@ -621,14 +662,15 @@
     ],
     "status": "unverified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "one source (card); no onchain proof declared"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/cowswap/card.yaml"
+     "card: catalog/cowswap/card.yaml"
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {},
     "note": "called with DELEGATECALL from the Avatar so the Avatar pre-signs the order"
    }
   ],
@@ -639,6 +681,7 @@
     "protocol": "cctp",
     "protocol_name": "Circle CCTP v2 (bridge USDC)",
     "name": "token_messenger",
+    "title": null,
     "ref": "cctp.token_messenger",
     "category": "bridge",
     "kind": "bridge",
@@ -661,6 +704,7 @@
      "implementation": "0x555E272506C06e7E559d57418563742AFE363ec8",
      "admin": "0xa820A620F638114F3Eb45df87382383322dDBC49"
     },
+    "onchain": {},
     "note": "burns USDC pulled from msg.sender: approve the messenger"
    }
   ],
@@ -671,6 +715,7 @@
     "protocol": "liminal",
     "protocol_name": "Liminal (limUSD on HyperEVM, mainnet spoke)",
     "name": "keeper",
+    "title": null,
     "ref": "liminal.keeper",
     "category": "keeper",
     "kind": "keeper",
@@ -694,6 +739,7 @@
      }
     ],
     "proxy": {},
+    "onchain": {},
     "note": "Liminal's keeper EOA (the spoke's keeper()). Deposits are CCTP-minted to it on HyperEVM (domain 19); Liminal's backend then deposits into the vault and sends shares to the beneficiary named in hookData. Deposits trust this key until the shares arrive. The same key receives the ETH fee on mainnet"
    }
   ],
@@ -704,6 +750,7 @@
     "protocol": "threejane",
     "protocol_name": "3Jane (USD3 via the Helper, JANE rewards)",
     "name": "helper",
+    "title": null,
     "ref": "threejane.helper",
     "category": "router",
     "kind": "router",
@@ -731,6 +778,7 @@
      }
     ],
     "proxy": {},
+    "onchain": {},
     "note": "pulls USDC on deposit and USD3 on redeem: approve the helper"
    }
   ],
@@ -741,6 +789,7 @@
     "protocol": "aave_v3",
     "protocol_name": "Aave v3 (Ethereum core market)",
     "name": "addresses_provider",
+    "title": null,
     "ref": "aave_v3.addresses_provider",
     "category": "config",
     "kind": "registry",
@@ -765,6 +814,7 @@
      }
     ],
     "proxy": {},
+    "onchain": {},
     "note": "Aave's own registry for the market: getPool(), getPriceOracle(), getACLManager(). Not called by any action"
    }
   ],
@@ -775,6 +825,7 @@
     "protocol": "threejane",
     "protocol_name": "3Jane (USD3 via the Helper, JANE rewards)",
     "name": "JANE",
+    "title": null,
     "ref": "threejane.JANE",
     "category": "reward",
     "kind": "erc20",
@@ -792,6 +843,10 @@
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {
+     "name": "Jane",
+     "symbol": "JANE"
+    },
     "note": "rewards token; exit by selling on CoW"
    }
   ],
@@ -802,6 +857,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "liquid_usd_queue",
+    "title": null,
     "ref": "etherfi.liquid_usd_queue",
     "category": "queue",
     "kind": "queue",
@@ -811,11 +867,11 @@
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: $self.boringVault() == liquid_usd"
+     "source card + onchain proof: $self.boringVault() == liquid_usd"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [
      {
@@ -823,7 +879,8 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {}
    }
   ],
   "1:0x39ff6d21204b919441d17bef61d19181870835a2": [
@@ -833,6 +890,7 @@
     "protocol": "tokemak",
     "protocol_name": "Tokemak Autopilot (autoUSD via the AutopilotRouter)",
     "name": "router",
+    "title": null,
     "ref": "tokemak.router",
     "category": "router",
     "kind": "router",
@@ -857,6 +915,7 @@
      }
     ],
     "proxy": {},
+    "onchain": {},
     "note": "router redeem pulls autoUSD from msg.sender, so autoUSD is approved to the router"
    }
   ],
@@ -867,6 +926,7 @@
     "protocol": "yo",
     "protocol_name": "Yo (yoETH, yoUSD)",
     "name": "yoETH",
+    "title": null,
     "ref": "yo.yoETH",
     "category": "vault",
     "kind": "erc4626_async_redeem",
@@ -893,6 +953,10 @@
     "proxy": {
      "implementation": "0xc84a6E01BFF58996540F1ABC22355A9DFE0d78DC",
      "admin": "0xd460CF1f5D764acAD1c3276c549EE5f1BB671473"
+    },
+    "onchain": {
+     "name": "yoETH",
+     "symbol": "yoETH"
     }
    }
   ],
@@ -903,6 +967,7 @@
     "protocol": "strata",
     "protocol_name": "Strata (senior/junior tranches on USDe and NUSD)",
     "name": "srUSDe",
+    "title": null,
     "ref": "strata.srUSDe",
     "category": "vault",
     "kind": "tranche",
@@ -928,6 +993,10 @@
     "proxy": {
      "implementation": "0xE894055CA1c73648927e225f3Ca38Ed48E30210b",
      "admin": "0x30A17d6bcBDBF1579d6fBBA453aCf776D01fbb50"
+    },
+    "onchain": {
+     "name": "Strata Senior USDe",
+     "symbol": "srUSDe"
     }
    }
   ],
@@ -938,6 +1007,7 @@
     "protocol": "infinifi",
     "protocol_name": "infiniFi (iUSD, siUSD via the gateway)",
     "name": "gateway",
+    "title": null,
     "ref": "infinifi.gateway",
     "category": "router",
     "kind": "router",
@@ -959,6 +1029,7 @@
      "implementation": "0x750136aC021a7149F0EE38141d0bA920Cca1fC5D",
      "admin": "0x21071E0f9D600571Ffe47873e95fffF2FAc9141c"
     },
+    "onchain": {},
     "note": "pulls USDC / iUSD / siUSD from msg.sender: approve the gateway"
    }
   ],
@@ -969,6 +1040,7 @@
     "protocol": "stablecoins",
     "protocol_name": "Blue-chip USD stablecoins (token contracts only)",
     "name": "GHO",
+    "title": null,
     "ref": "stablecoins.GHO",
     "category": "token",
     "kind": "erc20",
@@ -990,7 +1062,11 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Gho Token",
+     "symbol": "GHO"
+    }
    }
   ],
   "1:0x4691c475be804fa85f91c2d6d0adf03114de3093": [
@@ -1000,6 +1076,7 @@
     "protocol": "re",
     "protocol_name": "Re (reUSD, insurance capital layer)",
     "name": "icl",
+    "title": null,
     "ref": "re.icl",
     "category": "vault",
     "kind": "vault",
@@ -1020,6 +1097,7 @@
     "proxy": {
      "implementation": "0x06d4ACC104b974cD99bF22e4572f48A051E59670"
     },
+    "onchain": {},
     "note": "pulls the deposit token from msg.sender; KYC-gated (the Vault must be whitelisted)"
    }
   ],
@@ -1030,6 +1108,7 @@
     "protocol": "infinifi",
     "protocol_name": "infiniFi (iUSD, siUSD via the gateway)",
     "name": "iUSD",
+    "title": null,
     "ref": "infinifi.iUSD",
     "category": "token",
     "kind": "erc20",
@@ -1046,7 +1125,11 @@
      "card: catalog/infinifi/card.yaml"
     ],
     "proofs": [],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "infiniFi USD",
+     "symbol": "iUSD"
+    }
    }
   ],
   "1:0x4c9edd5852cd905f086c759e8383e09bff1e68b3": [
@@ -1056,6 +1139,7 @@
     "protocol": "ethena",
     "protocol_name": "Ethena (USDe, sUSDe staking with cooldown)",
     "name": "USDe",
+    "title": null,
     "ref": "ethena.USDe",
     "category": "token",
     "kind": "erc20",
@@ -1078,7 +1162,11 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "USDe",
+     "symbol": "USDe"
+    }
    }
   ],
   "1:0x4de413a26fc24c3fc27cc983be70aa9c5c299387": [
@@ -1088,6 +1176,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "liquid_usd_teller",
+    "title": null,
     "ref": "etherfi.liquid_usd_teller",
     "category": "router",
     "kind": "teller",
@@ -1097,11 +1186,11 @@
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: $self.vault() == liquid_usd"
+     "source card + onchain proof: $self.vault() == liquid_usd"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [
      {
@@ -1109,7 +1198,8 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {}
    }
   ],
   "1:0x5086bf358635b81d8c47c66d1c8b9e567db70c72": [
@@ -1119,6 +1209,7 @@
     "protocol": "re",
     "protocol_name": "Re (reUSD, insurance capital layer)",
     "name": "reUSD",
+    "title": null,
     "ref": "re.reUSD",
     "category": "receipt",
     "kind": "erc20",
@@ -1137,7 +1228,49 @@
     "proofs": [],
     "proxy": {
      "implementation": "0xb5276c436F65913Cd5332DE745d04feDEb4a21D4"
+    },
+    "onchain": {
+     "name": "Re Protocol Deposit Token",
+     "symbol": "reUSD"
     }
+   }
+  ],
+  "1:0x5dbf760b4fd0cddde0366b33aeb338b2a6d77725": [
+   {
+    "chain_id": 1,
+    "address": "0x5dbf760b4fd0cDdDe0366b33aEb338b2A6d77725",
+    "protocol": "kpk",
+    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
+    "name": "KPK_ETH_Yield",
+    "title": "KPK ETH Yield",
+    "ref": "kpk.KPK_ETH_Yield",
+    "category": "vault",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "kpk eth yield",
+     "morpho kpk eth yield"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.asset() == weth.WETH"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/kpk/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.asset() == weth.WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "KPK ETH Yield",
+     "symbol": "KPK_ETH_Yield"
+    },
+    "note": "Morpho Vault V2 on WETH"
    }
   ],
   "1:0x5dd1a7a369e8273371d2dbf9d83356057088082c": [
@@ -1147,6 +1280,7 @@
     "protocol": "flying_tulip",
     "protocol_name": "Flying Tulip (ftUSD, sftUSD, ssftUSD, FT)",
     "name": "FT",
+    "title": null,
     "ref": "flying_tulip.FT",
     "category": "governance",
     "kind": "erc20",
@@ -1164,7 +1298,11 @@
      "card: catalog/flying_tulip/card.yaml"
     ],
     "proofs": [],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Flying Tulip",
+     "symbol": "FT"
+    }
    }
   ],
   "1:0x65a44528e8868166401ea08b549e19552af589db": [
@@ -1174,6 +1312,7 @@
     "protocol": "strata",
     "protocol_name": "Strata (senior/junior tranches on USDe and NUSD)",
     "name": "srNUSD",
+    "title": null,
     "ref": "strata.srNUSD",
     "category": "vault",
     "kind": "tranche",
@@ -1195,6 +1334,10 @@
      "implementation": "0x470B9D44674b4706bAD670DaBb75ccFDa90D2743",
      "admin": "0xBfA0344ee901C425F42039D203526cC26bC186fD"
     },
+    "onchain": {
+     "name": "Strata Senior NUSD",
+     "symbol": "srNUSD"
+    },
     "note": "NUSD market wound down after the 2026 sNUSD exploit; redeem only"
    }
   ],
@@ -1205,11 +1348,13 @@
     "protocol": "origin_arm",
     "protocol_name": "Origin ARM (Automated Redemption Managers)",
     "name": "MultiAssetARM",
+    "title": null,
     "ref": "origin_arm.MultiAssetARM",
     "category": "vault",
     "kind": "arm_lp_vault",
     "eoa": false,
     "aliases": [
+     "ARM-WETH",
      "multi asset arm",
      "origin multi-asset arm"
     ],
@@ -1225,6 +1370,10 @@
     "proxy": {
      "implementation": "0xe0Dba0eF9A1C7dF2a94386A3187e9360e1B2c1fb",
      "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F"
+    },
+    "onchain": {
+     "name": "WETH ARM",
+     "symbol": "ARM-WETH"
     }
    }
   ],
@@ -1235,6 +1384,7 @@
     "protocol": "flying_tulip",
     "protocol_name": "Flying Tulip (ftUSD, sftUSD, ssftUSD, FT)",
     "name": "curve_ft_ftusd",
+    "title": null,
     "ref": "flying_tulip.curve_ft_ftusd",
     "category": "market",
     "kind": "curve_pool",
@@ -1261,7 +1411,11 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Flying Tulip Pool",
+     "symbol": "FT/ftUSD"
+    }
    }
   ],
   "1:0x6b175474e89094c44da98b954eedeac495271d0f": [
@@ -1271,6 +1425,7 @@
     "protocol": "stablecoins",
     "protocol_name": "Blue-chip USD stablecoins (token contracts only)",
     "name": "DAI",
+    "title": null,
     "ref": "stablecoins.DAI",
     "category": "token",
     "kind": "erc20",
@@ -1292,7 +1447,11 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Dai Stablecoin",
+     "symbol": "DAI"
+    }
    }
   ],
   "1:0x6c3ea9036406852006290770bedfcaba0e23a0e8": [
@@ -1302,6 +1461,7 @@
     "protocol": "stablecoins",
     "protocol_name": "Blue-chip USD stablecoins (token contracts only)",
     "name": "PYUSD",
+    "title": null,
     "ref": "stablecoins.PYUSD",
     "category": "token",
     "kind": "erc20",
@@ -1324,7 +1484,11 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "PayPal USD",
+     "symbol": "PYUSD"
+    }
    }
   ],
   "1:0x7945e45c2f39be3a0cbf467f3fae982c17cb4bf7": [
@@ -1334,6 +1498,7 @@
     "protocol": "strata",
     "protocol_name": "Strata (senior/junior tranches on USDe and NUSD)",
     "name": "depositor_nusd",
+    "title": null,
     "ref": "strata.depositor_nusd",
     "category": "router",
     "kind": "router",
@@ -1352,6 +1517,7 @@
      "implementation": "0x22f92940c5d053CCbAE47F88Fb51752CC04CaBaA",
      "admin": "0x1aB502c0e1D4325773a01BdCc1AE57A79911F788"
     },
+    "onchain": {},
     "note": "NUSD TrancheDepositor; deposits into the NUSD tranches are off (market wound down)"
    }
   ],
@@ -1362,6 +1528,7 @@
     "protocol": "gearbox_v3",
     "protocol_name": "Gearbox v3 (lending pool + credit accounts)",
     "name": "credit_manager",
+    "title": null,
     "ref": "gearbox_v3.credit_manager",
     "category": "spender",
     "kind": "gearbox_credit_manager_v3",
@@ -1369,11 +1536,11 @@
     "aliases": [],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: $self.creditFacade() == credit_facade"
+     "source card + onchain proof: $self.creditFacade() == credit_facade"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/gearbox_v3/card.yaml"
+     "card: catalog/gearbox_v3/card.yaml"
     ],
     "proofs": [
      {
@@ -1382,6 +1549,9 @@
      }
     ],
     "proxy": {},
+    "onchain": {
+     "name": "Tier #I"
+    },
     "note": "spender for collateral approvals; not called directly"
    }
   ],
@@ -1392,6 +1562,7 @@
     "protocol": "strata",
     "protocol_name": "Strata (senior/junior tranches on USDe and NUSD)",
     "name": "depositor_usde",
+    "title": null,
     "ref": "strata.depositor_usde",
     "category": "router",
     "kind": "router",
@@ -1414,6 +1585,7 @@
      "implementation": "0x932a1d70A5E1c64a13dAa5a60564aCF5A2Ac0D11",
      "admin": "0x83eB1f36AAdB97c9B88A473d1a299F42124cE9E0"
     },
+    "onchain": {},
     "note": "proxy -> TrancheDepositor; pulls the asset from msg.sender, so it is the approve spender"
    }
   ],
@@ -1424,6 +1596,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "withdraw_request_nft",
+    "title": null,
     "ref": "etherfi.withdraw_request_nft",
     "category": "queue",
     "kind": "erc721_queue",
@@ -1434,16 +1607,52 @@
     ],
     "status": "unverified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "one source (card); no onchain proof declared"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [],
     "proxy": {
      "implementation": "0x41617D01362770ebAAC10311aB899FBc8a4E4A7E"
+    },
+    "onchain": {
+     "name": "Withdraw Request NFT",
+     "symbol": "WithdrawRequestNFT"
     }
+   }
+  ],
+  "1:0x7e43df1c1c5a2245858b60d4655fda83704e4171": [
+   {
+    "chain_id": 1,
+    "address": "0x7E43Df1c1c5A2245858b60D4655fDA83704e4171",
+    "protocol": "kpk",
+    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
+    "name": "curator_usdc_safe",
+    "title": null,
+    "ref": "kpk.curator_usdc_safe",
+    "category": "multisig",
+    "kind": "safe",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: KPK_USDC_Yield.curator() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/kpk/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "KPK_USDC_Yield.curator() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Safe, 2-of-5 at 2026-10-24 (owner_safe is one of its owners); curator() of KPK USDC Yield"
    }
   ],
   "1:0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0": [
@@ -1453,6 +1662,7 @@
     "protocol": "lido",
     "protocol_name": "Lido (stETH, wstETH, withdrawal queue)",
     "name": "wstETH",
+    "title": null,
     "ref": "lido.wstETH",
     "category": "token",
     "kind": "erc20",
@@ -1463,11 +1673,11 @@
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: $self.stETH() == stETH"
+     "source card + onchain proof: $self.stETH() == stETH"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/lido/card.yaml"
+     "card: catalog/lido/card.yaml"
     ],
     "proofs": [
      {
@@ -1479,7 +1689,11 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Wrapped liquid staked Ether 2.0",
+     "symbol": "wstETH"
+    }
    }
   ],
   "1:0x85b78aca6deae198fbf201c82daf6ca21942acc6": [
@@ -1489,6 +1703,7 @@
     "protocol": "origin_arm",
     "protocol_name": "Origin ARM (Automated Redemption Managers)",
     "name": "LidoARM",
+    "title": null,
     "ref": "origin_arm.LidoARM",
     "category": "vault",
     "kind": "arm_lp_vault",
@@ -1520,6 +1735,10 @@
      "implementation": "0x850da2E21F1F71479E2A307EDab114777D9F6217",
      "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F"
     },
+    "onchain": {
+     "name": "Lido ARM",
+     "symbol": "ARM-WETH-stETH"
+    },
     "note": "proxy; the ARM contract is also the LP token"
    }
   ],
@@ -1530,6 +1749,7 @@
     "protocol": "makina",
     "protocol_name": "Makina (Dialectic DETH)",
     "name": "DETH",
+    "title": null,
     "ref": "makina.DETH",
     "category": "receipt",
     "kind": "erc20",
@@ -1548,7 +1768,11 @@
      "card: catalog/makina/card.yaml"
     ],
     "proofs": [],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Dialectic ETH",
+     "symbol": "DETH"
+    }
    }
   ],
   "1:0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2": [
@@ -1558,6 +1782,7 @@
     "protocol": "aave_v3",
     "protocol_name": "Aave v3 (Ethereum core market)",
     "name": "pool",
+    "title": null,
     "ref": "aave_v3.pool",
     "category": "market",
     "kind": "lending_pool",
@@ -1586,6 +1811,7 @@
     "proxy": {
      "implementation": "0x728a138A4823392C2EFA55e028d434F526fE03CF"
     },
+    "onchain": {},
     "note": "Pool proxy; also the spender for supply/repay approvals"
    }
   ],
@@ -1596,6 +1822,7 @@
     "protocol": "flying_tulip",
     "protocol_name": "Flying Tulip (ftUSD, sftUSD, ssftUSD, FT)",
     "name": "session_manager",
+    "title": null,
     "ref": "flying_tulip.session_manager",
     "category": "router",
     "kind": "session_manager",
@@ -1611,6 +1838,7 @@
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {},
     "note": "createSession takes free token lists; not allowed for a Roles-operated vault"
    }
   ],
@@ -1621,6 +1849,7 @@
     "protocol": "lido",
     "protocol_name": "Lido (stETH, wstETH, withdrawal queue)",
     "name": "unstETH",
+    "title": null,
     "ref": "lido.unstETH",
     "category": "queue",
     "kind": "erc721_queue",
@@ -1632,11 +1861,11 @@
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: $self.STETH() == stETH"
+     "source card + onchain proof: $self.STETH() == stETH"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/lido/card.yaml"
+     "card: catalog/lido/card.yaml"
     ],
     "proofs": [
      {
@@ -1651,6 +1880,10 @@
     "proxy": {
      "implementation": "0xE42C659Dc09109566720EA8b2De186c2Be7D94D9",
      "admin": "0x3e40D73EB977Dc6a537aF587D48316feE66E9C8c"
+    },
+    "onchain": {
+     "name": "Lido: stETH Withdrawal NFT",
+     "symbol": "unstETH"
     }
    }
   ],
@@ -1661,6 +1894,7 @@
     "protocol": "re",
     "protocol_name": "Re (reUSD, insurance capital layer)",
     "name": "redemption_gateway",
+    "title": null,
     "ref": "re.redemption_gateway",
     "category": "router",
     "kind": "router",
@@ -1677,7 +1911,79 @@
      "card: catalog/re/card.yaml"
     ],
     "proofs": [],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {}
+   }
+  ],
+  "1:0x8b884f80b3b839f52b6ce168f133e7a5d1f0a537": [
+   {
+    "chain_id": 1,
+    "address": "0x8b884f80B3B839F52b6cE168f133e7a5D1f0A537",
+    "protocol": "kpk",
+    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
+    "name": "owner_safe",
+    "title": null,
+    "ref": "kpk.owner_safe",
+    "category": "multisig",
+    "kind": "safe",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: KPK_ETH_Yield.owner() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/kpk/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "KPK_ETH_Yield.owner() == $self",
+      "ok": true
+     },
+     {
+      "id": "KPK_USDC_Yield.owner() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Safe, 5-of-8 at 2026-10-24; owner() of both Morpho vaults"
+   }
+  ],
+  "1:0x9008d19f58aabd9ed0d60971565aa8510560ab41": [
+   {
+    "chain_id": 1,
+    "address": "0x9008D19f58AAbD9eD0D60971565AA8510560ab41",
+    "protocol": "cowswap",
+    "protocol_name": "CoW Swap (pre-signed orders via the CowswapOrderSigner)",
+    "name": "settlement",
+    "title": null,
+    "ref": "cowswap.settlement",
+    "category": "market",
+    "kind": "settlement",
+    "eoa": false,
+    "aliases": [
+     "GPv2Settlement",
+     "cow settlement"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: order_signer.signing() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/cowswap/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "order_signer.signing() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "settles the orders; the pre-signature lives here. Not called directly"
    }
   ],
   "1:0x92b10e02825986bac2375bdacafa3e89e3f612aa": [
@@ -1687,6 +1993,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "liquid_usd_solver",
+    "title": null,
     "ref": "etherfi.liquid_usd_solver",
     "category": "keeper",
     "kind": "solver",
@@ -1694,14 +2001,15 @@
     "aliases": [],
     "status": "unverified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "one source (card); no onchain proof declared"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {},
     "note": "BoringSolver; boringRedeemSolve / boringRedeemSelfSolve are not needed (Veda solves the queue)"
    }
   ],
@@ -1709,29 +2017,29 @@
    {
     "chain_id": 1,
     "address": "0x9396DCbf78fc526bb003665337C5E73b699571EF",
-    "protocol": "gearbox_v3",
-    "protocol_name": "Gearbox v3 (lending pool + credit accounts)",
-    "name": "kpkWETH_pool",
-    "ref": "gearbox_v3.kpkWETH_pool",
+    "protocol": "kpk",
+    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
+    "name": "kpkWETH",
+    "title": "WETH Market",
+    "ref": "kpk.kpkWETH",
     "category": "vault",
     "kind": "erc4626",
     "eoa": false,
     "aliases": [
-     "kpkWETH",
      "gearbox weth pool",
      "WETH Market"
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: credit_manager.pool() == $self"
+     "source card + onchain proof: gearbox_v3.credit_manager.pool() == $self"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/gearbox_v3/card.yaml"
+     "card: catalog/kpk/card.yaml"
     ],
     "proofs": [
      {
-      "id": "credit_manager.pool() == $self",
+      "id": "gearbox_v3.credit_manager.pool() == $self",
       "ok": true
      },
      {
@@ -1740,7 +2048,11 @@
      }
     ],
     "proxy": {},
-    "note": "the pool the credit manager borrows WETH from (credit_manager.pool()); not called by any action"
+    "onchain": {
+     "name": "WETH Market",
+     "symbol": "kpkWETH"
+    },
+    "note": "Gearbox v3 lending pool (WETH); the scyETH credit manager borrows from it. Not called by any action"
    }
   ],
   "1:0x9469470c9878bf3d6d0604831d9a3a366156f7ee": [
@@ -1750,6 +2062,7 @@
     "protocol": "avant",
     "protocol_name": "Avant (avETH / savETH)",
     "name": "avETH",
+    "title": null,
     "ref": "avant.avETH",
     "category": "token",
     "kind": "erc20",
@@ -1768,6 +2081,10 @@
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {
+     "name": "avETH",
+     "symbol": "avETH"
+    },
     "note": "AvantCoin; burnFrom spends allowance"
    }
   ],
@@ -1778,6 +2095,7 @@
     "protocol": "aave_v4",
     "protocol_name": "Aave v4 (Spoke, core hub)",
     "name": "spoke",
+    "title": null,
     "ref": "aave_v4.spoke",
     "category": "market",
     "kind": "lending_spoke",
@@ -1800,6 +2118,7 @@
      "implementation": "0xABd0E26FE17BDe4F1f1187Ed8aA80C274E03D8b5",
      "admin": "0xfFeAcCAd70f4393701272212dACD791c01957f7f"
     },
+    "onchain": {},
     "note": "TransparentUpgradeableProxy -> SpokeInstance. The Spoke pulls tokens from msg.sender, so it is the approve spender; withdraw and borrow pay msg.sender"
    }
   ],
@@ -1810,6 +2129,7 @@
     "protocol": "gearbox_v3",
     "protocol_name": "Gearbox v3 (lending pool + credit accounts)",
     "name": "credit_facade",
+    "title": null,
     "ref": "gearbox_v3.credit_facade",
     "category": "market",
     "kind": "gearbox_credit_facade_v3_10",
@@ -1822,11 +2142,11 @@
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: $self.creditManager() == credit_manager"
+     "source card + onchain proof: $self.creditManager() == credit_manager"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/gearbox_v3/card.yaml"
+     "card: catalog/gearbox_v3/card.yaml"
     ],
     "proofs": [
      {
@@ -1834,7 +2154,8 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {}
    }
   ],
   "1:0x9aa79c84b79816ab920bbce20f8f74557b514734": [
@@ -1844,6 +2165,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "liquid_eth_teller",
+    "title": null,
     "ref": "etherfi.liquid_eth_teller",
     "category": "router",
     "kind": "teller",
@@ -1854,11 +2176,11 @@
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: $self.vault() == liquid_eth"
+     "source card + onchain proof: $self.vault() == liquid_eth"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [
      {
@@ -1866,7 +2188,8 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {}
    }
   ],
   "1:0x9b74d3bd96f54de689cffdeb27ee34f68dff086d": [
@@ -1876,6 +2199,7 @@
     "protocol": "liminal",
     "protocol_name": "Liminal (limUSD on HyperEVM, mainnet spoke)",
     "name": "limUSD",
+    "title": null,
     "ref": "liminal.limUSD",
     "category": "receipt",
     "kind": "oft",
@@ -1896,6 +2220,10 @@
     "proxy": {
      "implementation": "0x0631AB29fE888205e3F7322983ba569e064fd23F",
      "admin": "0xf32e7353DBA967c426A6F54F9a3baC7DBd26eee4"
+    },
+    "onchain": {
+     "name": "limUSD",
+     "symbol": "limUSD"
     }
    }
   ],
@@ -1906,6 +2234,7 @@
     "protocol": "ethena",
     "protocol_name": "Ethena (USDe, sUSDe staking with cooldown)",
     "name": "sUSDe",
+    "title": null,
     "ref": "ethena.sUSDe",
     "category": "staking",
     "kind": "erc4626_cooldown",
@@ -1933,6 +2262,10 @@
      }
     ],
     "proxy": {},
+    "onchain": {
+     "name": "Staked USDe",
+     "symbol": "sUSDe"
+    },
     "note": "ERC-4626 with a cooldown: redeem/withdraw are disabled while cooldownDuration > 0; use cooldownShares then unstake"
    }
   ],
@@ -1943,6 +2276,7 @@
     "protocol": "stablecoins",
     "protocol_name": "Blue-chip USD stablecoins (token contracts only)",
     "name": "USDC",
+    "title": null,
     "ref": "stablecoins.USDC",
     "category": "token",
     "kind": "erc20",
@@ -1965,7 +2299,11 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "USD Coin",
+     "symbol": "USDC"
+    }
    }
   ],
   "1:0xa31deebb3680a3007120e74bcbdf4df36f042a40": [
@@ -1975,6 +2313,7 @@
     "protocol": "re",
     "protocol_name": "Re (reUSD, insurance capital layer)",
     "name": "instant_redemption",
+    "title": null,
     "ref": "re.instant_redemption",
     "category": "router",
     "kind": "redemption_module",
@@ -1992,6 +2331,7 @@
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {},
     "note": "pulls reUSD from the user: the reUSD approve spender for redeemInstant"
    }
   ],
@@ -2002,6 +2342,7 @@
     "protocol": "tokemak",
     "protocol_name": "Tokemak Autopilot (autoUSD via the AutopilotRouter)",
     "name": "autoUSD",
+    "title": null,
     "ref": "tokemak.autoUSD",
     "category": "vault",
     "kind": "erc4626",
@@ -2028,6 +2369,10 @@
     "proxy": {
      "implementation": "0xfB2eBdeDc38a7d19080E44ab1D621bc9AfAD0695",
      "admin": "0x84A317a45248d6d3f92F40102680fFEda2Ab95C0"
+    },
+    "onchain": {
+     "name": "Tokemak autoUSD",
+     "symbol": "autoUSD"
     }
    }
   ],
@@ -2035,27 +2380,26 @@
    {
     "chain_id": 1,
     "address": "0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64",
-    "protocol": "gearbox_v3",
-    "protocol_name": "Gearbox v3 (lending pool + credit accounts)",
-    "name": "kpkwstETH_pool",
-    "ref": "gearbox_v3.kpkwstETH_pool",
+    "protocol": "kpk",
+    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
+    "name": "kpkwstETH",
+    "title": "wstETH v3",
+    "ref": "kpk.kpkwstETH",
     "category": "vault",
     "kind": "erc4626",
     "eoa": false,
     "aliases": [
      "gearbox pool",
      "gearbox wstETH pool",
-     "kpk gearbox",
-     "kpkwstETH",
      "wstETH v3"
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: $self.asset() == lido.wstETH"
+     "source card + onchain proof: $self.asset() == lido.wstETH"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/gearbox_v3/card.yaml"
+     "card: catalog/kpk/card.yaml"
     ],
     "proofs": [
      {
@@ -2063,7 +2407,12 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "wstETH v3",
+     "symbol": "kpkwstETH"
+    },
+    "note": "Gearbox v3 lending pool (wstETH); the scyETH lend/withdraw target"
    }
   ],
   "1:0xaa48ecbc843cf7e9a29155d112b8cb27902bd23c": [
@@ -2073,6 +2422,7 @@
     "protocol": "flying_tulip",
     "protocol_name": "Flying Tulip (ftUSD, sftUSD, ssftUSD, FT)",
     "name": "mint_and_redeem",
+    "title": null,
     "ref": "flying_tulip.mint_and_redeem",
     "category": "minter",
     "kind": "router",
@@ -2093,6 +2443,7 @@
     "proxy": {
      "implementation": "0x8852B132B72613a16f1E3960978a3d45c0A7c3C6"
     },
+    "onchain": {},
     "note": "pulls USDC on mint and ftUSD on redeem (safeTransferFrom); redeem may queue part of it (returns queueId)"
    }
   ],
@@ -2103,6 +2454,7 @@
     "protocol": "upshift",
     "protocol_name": "Upshift (coreUSDC via the SwapRouter)",
     "name": "router",
+    "title": null,
     "ref": "upshift.router",
     "category": "router",
     "kind": "router",
@@ -2121,6 +2473,7 @@
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {},
     "note": "pulls the asset from msg.sender: approve the router"
    }
   ],
@@ -2131,6 +2484,7 @@
     "protocol": "lido",
     "protocol_name": "Lido (stETH, wstETH, withdrawal queue)",
     "name": "stETH",
+    "title": null,
     "ref": "lido.stETH",
     "category": "token",
     "kind": "erc20_rebasing",
@@ -2142,14 +2496,18 @@
     ],
     "status": "unverified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "one source (card); no onchain proof declared"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/lido/card.yaml"
+     "card: catalog/lido/card.yaml"
     ],
     "proofs": [],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Liquid staked Ether 2.0",
+     "symbol": "stETH"
+    }
    }
   ],
   "1:0xaeec321a209964aabfff539807ae882917e7b4db": [
@@ -2159,6 +2517,7 @@
     "protocol": "liminal",
     "protocol_name": "Liminal (limUSD on HyperEVM, mainnet spoke)",
     "name": "spoke",
+    "title": null,
     "ref": "liminal.spoke",
     "category": "bridge",
     "kind": "bridge",
@@ -2184,7 +2543,8 @@
     "proxy": {
      "implementation": "0xeC0D8f0023ED5A9DA4A82E8C833c85903Ec4ea4F",
      "admin": "0x849Fe95bC68b1a8Fc9d498C9b7f0259141C7c994"
-    }
+    },
+    "onchain": {}
    }
   ],
   "1:0xb8431779dd9d5753b5a7f66afa3c65abfd8c3fe1": [
@@ -2194,6 +2554,7 @@
     "protocol": "dialectic",
     "protocol_name": "Dialectic (DUSD, smDUSD security module)",
     "name": "smDUSD",
+    "title": null,
     "ref": "dialectic.smDUSD",
     "category": "staking",
     "kind": "security_module",
@@ -2214,6 +2575,10 @@
     "proxy": {
      "beacon": "0x49eE9b4865CBbF9ec8B142cdd4A5a65971F92542"
     },
+    "onchain": {
+     "name": "Security Module: Dialectic USD",
+     "symbol": "smDUSD"
+    },
     "note": "startCooldown mints a cooldown receipt NFT to `receiver`; redeem pays the receipt's current owner and requires msg.sender to own it"
    }
   ],
@@ -2224,6 +2589,7 @@
     "protocol": "morpho_vaults",
     "protocol_name": "Morpho Vaults (MetaMorpho v1 / Vault v2, ERC-4626)",
     "name": "morpho_blue",
+    "title": null,
     "ref": "morpho_vaults.morpho_blue",
     "category": "market",
     "kind": "core",
@@ -2231,14 +2597,15 @@
     "aliases": [],
     "status": "unverified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "one source (card); no onchain proof declared"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/morpho_vaults/card.yaml"
+     "card: catalog/morpho_vaults/card.yaml"
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {},
     "note": "Morpho Blue singleton; vaults allocate into it. Not called directly by a depositor."
    }
   ],
@@ -2249,6 +2616,7 @@
     "protocol": "weth",
     "protocol_name": "Wrapped Ether (WETH9)",
     "name": "WETH",
+    "title": null,
     "ref": "weth.WETH",
     "category": "token",
     "kind": "erc20",
@@ -2260,11 +2628,11 @@
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: aave_v3.pool.getReservesList() contains $self"
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/weth/card.yaml"
+     "card: catalog/weth/card.yaml"
     ],
     "proofs": [
      {
@@ -2272,7 +2640,11 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Wrapped Ether",
+     "symbol": "WETH"
+    }
    }
   ],
   "1:0xc58d044404d8b14e953c115e67823784dea53d8f": [
@@ -2282,6 +2654,7 @@
     "protocol": "strata",
     "protocol_name": "Strata (senior/junior tranches on USDe and NUSD)",
     "name": "jrUSDe",
+    "title": null,
     "ref": "strata.jrUSDe",
     "category": "vault",
     "kind": "tranche",
@@ -2307,6 +2680,10 @@
     "proxy": {
      "implementation": "0xe91869F96806b480dd61d57E17919068d35AC09C",
      "admin": "0x89d2573471dc0bF81C7c553FFFC1e31cE9e75Bf1"
+    },
+    "onchain": {
+     "name": "Strata Junior USDe",
+     "symbol": "jrUSDe"
     }
    }
   ],
@@ -2317,6 +2694,7 @@
     "protocol": "cowswap",
     "protocol_name": "CoW Swap (pre-signed orders via the CowswapOrderSigner)",
     "name": "gpv2_vault_relayer",
+    "title": null,
     "ref": "cowswap.gpv2_vault_relayer",
     "category": "spender",
     "kind": "spender",
@@ -2325,16 +2703,22 @@
      "cow relayer",
      "GPv2VaultRelayer"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "source card + onchain proof: settlement.vaultRelayer() == $self"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/cowswap/card.yaml"
+     "card: catalog/cowswap/card.yaml"
     ],
-    "proofs": [],
-    "proxy": {}
+    "proofs": [
+     {
+      "id": "settlement.vaultRelayer() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {}
    }
   ],
   "1:0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": [
@@ -2344,6 +2728,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "weETH",
+    "title": null,
     "ref": "etherfi.weETH",
     "category": "token",
     "kind": "erc20",
@@ -2355,11 +2740,11 @@
     ],
     "status": "verified",
     "why": [
-     "source defi-kit + onchain proof: aave_v3.pool.getReservesList() contains $self"
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [
      {
@@ -2369,6 +2754,10 @@
     ],
     "proxy": {
      "implementation": "0xA6Ca0607190d03CF16fe6F2865Cf40c3D160ccf3"
+    },
+    "onchain": {
+     "name": "Wrapped eETH",
+     "symbol": "weETH"
     }
    }
   ],
@@ -2379,6 +2768,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "deposit_adapter",
+    "title": null,
     "ref": "etherfi.deposit_adapter",
     "category": "adapter",
     "kind": "adapter",
@@ -2388,16 +2778,55 @@
     ],
     "status": "unverified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "one source (card); no onchain proof declared"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [],
     "proxy": {
      "implementation": "0xE774E19f087523EA316fCCb4B156169153f18b9d"
-    }
+    },
+    "onchain": {}
+   }
+  ],
+  "1:0xd5cce260e7a755ddf0fb9cdf06443d593aaeaa13": [
+   {
+    "chain_id": 1,
+    "address": "0xD5cCe260E7a755DDf0Fb9cdF06443d593AaeaA13",
+    "protocol": "kpk",
+    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
+    "name": "KPK_USDC_Yield",
+    "title": "KPK USDC Yield",
+    "ref": "kpk.KPK_USDC_Yield",
+    "category": "vault",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "kpk usdc yield",
+     "morpho kpk usdc yield"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.asset() == stablecoins.USDC"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/kpk/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.asset() == stablecoins.USDC",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "KPK USDC Yield",
+     "symbol": "KPK_USDC_Yield"
+    },
+    "note": "Morpho Vault V2 on USDC"
    }
   ],
   "1:0xda06ee2dacf9245aa80072a4407debdea0d7e341": [
@@ -2407,6 +2836,7 @@
     "protocol": "avant",
     "protocol_name": "Avant (avETH / savETH)",
     "name": "savETH",
+    "title": null,
     "ref": "avant.savETH",
     "category": "staking",
     "kind": "erc4626_with_cooldown",
@@ -2430,7 +2860,11 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Staked avETH",
+     "symbol": "savETH"
+    }
    }
   ],
   "1:0xda67b4284609d2d48e5d10cfac411572727dc1ed": [
@@ -2440,6 +2874,7 @@
     "protocol": "noon",
     "protocol_name": "Noon (USN, sUSN with a withdrawal handler)",
     "name": "USN",
+    "title": null,
     "ref": "noon.USN",
     "category": "token",
     "kind": "erc20",
@@ -2460,6 +2895,10 @@
     "proxy": {
      "implementation": "0x79FD7FE2a8EbcAE47798321b2AC97107dF3de229",
      "admin": "0x55f39512cb43111A13E8440ee3e3602e72628239"
+    },
+    "onchain": {
+     "name": "USN",
+     "symbol": "USN"
     }
    }
   ],
@@ -2470,6 +2909,7 @@
     "protocol": "stablecoins",
     "protocol_name": "Blue-chip USD stablecoins (token contracts only)",
     "name": "USDT",
+    "title": null,
     "ref": "stablecoins.USDT",
     "category": "token",
     "kind": "erc20",
@@ -2493,6 +2933,10 @@
      }
     ],
     "proxy": {},
+    "onchain": {
+     "name": "Tether USD",
+     "symbol": "USDT"
+    },
     "note": "USDT's approve() reverts when changing a non-zero allowance to another non-zero value; approve 0 first"
    }
   ],
@@ -2503,6 +2947,7 @@
     "protocol": "infinifi",
     "protocol_name": "infiniFi (iUSD, siUSD via the gateway)",
     "name": "siUSD",
+    "title": null,
     "ref": "infinifi.siUSD",
     "category": "staking",
     "kind": "erc4626",
@@ -2525,7 +2970,11 @@
       "ok": true
      }
     ],
-    "proxy": {}
+    "proxy": {},
+    "onchain": {
+     "name": "Staked infiniFi USD",
+     "symbol": "siUSD"
+    }
    }
   ],
   "1:0xdc035d45d973e3ec169d2276ddab16f1e407384f": [
@@ -2535,6 +2984,7 @@
     "protocol": "stablecoins",
     "protocol_name": "Blue-chip USD stablecoins (token contracts only)",
     "name": "USDS",
+    "title": null,
     "ref": "stablecoins.USDS",
     "category": "token",
     "kind": "erc20",
@@ -2559,6 +3009,10 @@
     ],
     "proxy": {
      "implementation": "0x1923DfeE706A8E78157416C29cBCCFDe7cdF4102"
+    },
+    "onchain": {
+     "name": "USDS Stablecoin",
+     "symbol": "USDS"
     }
    }
   ],
@@ -2569,6 +3023,7 @@
     "protocol": "noon",
     "protocol_name": "Noon (USN, sUSN with a withdrawal handler)",
     "name": "sUSN",
+    "title": null,
     "ref": "noon.sUSN",
     "category": "staking",
     "kind": "erc4626",
@@ -2594,7 +3049,43 @@
     "proxy": {
      "implementation": "0xeF2eA4250B7CE4D0aA9Ca70607ECeF278C6EAB15",
      "admin": "0x1908284b50EE152C9f00c8E65a81fc1C4520BD81"
+    },
+    "onchain": {
+     "name": "Staked USN",
+     "symbol": "sUSN"
     }
+   }
+  ],
+  "1:0xe5aec7d0e795456f90cebefba56470f0e5dfc075": [
+   {
+    "chain_id": 1,
+    "address": "0xE5aEC7D0E795456F90ceBefBa56470F0E5dfC075",
+    "protocol": "kpk",
+    "protocol_name": "kpk (vault curator on Gearbox v3 and Morpho)",
+    "name": "curator_eth_safe",
+    "title": null,
+    "ref": "kpk.curator_eth_safe",
+    "category": "multisig",
+    "kind": "safe",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: KPK_ETH_Yield.curator() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/kpk/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "KPK_ETH_Yield.curator() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Safe, 2-of-5 at 2026-10-24 (owner_safe is one of its owners); curator() of KPK ETH Yield"
    }
   ],
   "1:0xe9b725010a9e419412ed67d0fa5f3a5f40159d32": [
@@ -2604,6 +3095,7 @@
     "protocol": "upshift",
     "protocol_name": "Upshift (coreUSDC via the SwapRouter)",
     "name": "coreUSDC",
+    "title": null,
     "ref": "upshift.coreUSDC",
     "category": "vault",
     "kind": "tokenized_account",
@@ -2630,6 +3122,10 @@
      "implementation": "0xf2CD14F02B4fDc0D26681fBc7f60a11B8378f96D",
      "admin": "0xB5fBf201A35327Ddd89986FfA60CF5A675B2bDbc"
     },
+    "onchain": {
+     "name": "Upshift Core USDC",
+     "symbol": "coreUSDC"
+    },
     "note": "redeem is instant when lagDuration = 0, otherwise claimable later via claim()"
    }
   ],
@@ -2640,6 +3136,7 @@
     "protocol": "flying_tulip",
     "protocol_name": "Flying Tulip (ftUSD, sftUSD, ssftUSD, FT)",
     "name": "sftUSD",
+    "title": null,
     "ref": "flying_tulip.sftUSD",
     "category": "staking",
     "kind": "erc4626",
@@ -2664,6 +3161,10 @@
     ],
     "proxy": {
      "implementation": "0xEa95e4636BaDc00881f8f73A0623B0fe8627B6da"
+    },
+    "onchain": {
+     "name": "Staked Flying Tulip USD",
+     "symbol": "sftUSD"
     }
    }
   ],
@@ -2674,6 +3175,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "liquid_eth",
+    "title": null,
     "ref": "etherfi.liquid_eth",
     "category": "vault",
     "kind": "boring_vault",
@@ -2686,14 +3188,18 @@
     ],
     "status": "unverified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "one source (card); no onchain proof declared"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {
+     "name": "Ether.Fi Liquid ETH",
+     "symbol": "liquidETH"
+    },
     "note": "Veda BoringVault; also the share token and the spender for deposit approvals"
    }
   ],
@@ -2704,6 +3210,7 @@
     "protocol": "yo",
     "protocol_name": "Yo (yoETH, yoUSD)",
     "name": "gateway",
+    "title": null,
     "ref": "yo.gateway",
     "category": "router",
     "kind": "router",
@@ -2725,6 +3232,7 @@
      "implementation": "0x0cF9a84BB9E916229F3037dc079eF418B97bb0cF",
      "admin": "0xB3C902F8fA46d7985efaB885105ae2d7b4976827"
     },
+    "onchain": {},
     "note": "Yo's own deposit entry point; every vault/receiver param must be pinned"
    }
   ],
@@ -2735,6 +3243,7 @@
     "protocol": "threejane",
     "protocol_name": "3Jane (USD3 via the Helper, JANE rewards)",
     "name": "sUSD3",
+    "title": null,
     "ref": "threejane.sUSD3",
     "category": "staking",
     "kind": "erc4626_cooldown",
@@ -2760,6 +3269,10 @@
      "implementation": "0x6093d95f6C102163D19F5681E7D84997060BBAed",
      "admin": "0xecda55c32966B00592Ed3922E386063e1Bc752c2"
     },
+    "onchain": {
+     "name": "sUSD3",
+     "symbol": "sUSD3"
+    },
     "note": "hop = true deposits land here; no exit is scoped, so keep hop = false"
    }
   ],
@@ -2770,6 +3283,7 @@
     "protocol": "flying_tulip",
     "protocol_name": "Flying Tulip (ftUSD, sftUSD, ssftUSD, FT)",
     "name": "ftUSD",
+    "title": null,
     "ref": "flying_tulip.ftUSD",
     "category": "token",
     "kind": "erc20",
@@ -2789,6 +3303,10 @@
     "proofs": [],
     "proxy": {
      "implementation": "0xf47bb65Fb0886Be183dB541AfCE555345e3e1885"
+    },
+    "onchain": {
+     "name": "Flying Tulip USD",
+     "symbol": "ftUSD"
     }
    }
   ],
@@ -2799,6 +3317,7 @@
     "protocol": "origin_arm",
     "protocol_name": "Origin ARM (Automated Redemption Managers)",
     "name": "EtherFiARM",
+    "title": null,
     "ref": "origin_arm.EtherFiARM",
     "category": "vault",
     "kind": "arm_lp_vault",
@@ -2825,6 +3344,10 @@
     "proxy": {
      "implementation": "0x6DB596b66FED6a9994e09EeD70b6d210F01705E5",
      "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F"
+    },
+    "onchain": {
+     "name": "Ether.fi ARM",
+     "symbol": "ARM-WETH-eETH"
     }
    }
   ],
@@ -2835,6 +3358,7 @@
     "protocol": "etherfi",
     "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
     "name": "weeth_withdraw_adapter",
+    "title": null,
     "ref": "etherfi.weeth_withdraw_adapter",
     "category": "adapter",
     "kind": "adapter",
@@ -2844,16 +3368,17 @@
     ],
     "status": "unverified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "one source (card); no onchain proof declared"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/etherfi/card.yaml"
+     "card: catalog/etherfi/card.yaml"
     ],
     "proofs": [],
     "proxy": {
      "implementation": "0xbe386B1Fb51ffAcAE0522a5dA099371cd4a2AAeA"
-    }
+    },
+    "onchain": {}
    }
   ],
   "1:0xfc807058a352b61aeef6a38e2d0fc3990225e772": [
@@ -2863,6 +3388,7 @@
     "protocol": "strata",
     "protocol_name": "Strata (senior/junior tranches on USDe and NUSD)",
     "name": "jrNUSD",
+    "title": null,
     "ref": "strata.jrNUSD",
     "category": "vault",
     "kind": "tranche",
@@ -2884,6 +3410,10 @@
      "implementation": "0x0Ea5BdF736F84949563F1Ec66c79b9c047fb8965",
      "admin": "0xec45EBDd0278ffBC9ce5731DC8E3a34dc8674c07"
     },
+    "onchain": {
+     "name": "Strata Junior NUSD",
+     "symbol": "jrNUSD"
+    },
     "note": "junior NUSD tranche was written down to ~0 after the sNUSD exploit; redeem only"
    }
   ],
@@ -2894,6 +3424,7 @@
     "protocol": "cowswap",
     "protocol_name": "CoW Swap (pre-signed orders via the CowswapOrderSigner)",
     "name": "composable_cow",
+    "title": null,
     "ref": "cowswap.composable_cow",
     "category": "adapter",
     "kind": "twap",
@@ -2901,14 +3432,15 @@
     "aliases": [],
     "status": "unverified",
     "why": [
-     "one source (defi-kit); no onchain proof declared"
+     "one source (card); no onchain proof declared"
     ],
     "card_reviewed": false,
     "sources": [
-     "defi-kit: catalog/cowswap/card.yaml"
+     "card: catalog/cowswap/card.yaml"
     ],
     "proofs": [],
     "proxy": {},
+    "onchain": {},
     "note": "TWAP orders only; not used by the plain swap action"
    }
   ]
@@ -2957,11 +3489,32 @@
    "to_ref": "strata.jrUSDe"
   },
   {
+   "from": "1:0x7e43df1c1c5a2245858b60d4655fda83704e4171",
+   "relation": "admin_of",
+   "to": "1:0xd5cce260e7a755ddf0fb9cdf06443d593aaeaa13",
+   "from_ref": "kpk.curator_usdc_safe",
+   "to_ref": "kpk.KPK_USDC_Yield"
+  },
+  {
    "from": "1:0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
    "relation": "underlying_of",
    "to": "1:0xa9d17f6d3285208280a1fd9b94479c62e0aaba64",
    "from_ref": "lido.wstETH",
-   "to_ref": "gearbox_v3.kpkwstETH_pool"
+   "to_ref": "kpk.kpkwstETH"
+  },
+  {
+   "from": "1:0x8b884f80b3b839f52b6ce168f133e7a5d1f0a537",
+   "relation": "owner_of",
+   "to": "1:0x5dbf760b4fd0cddde0366b33aeb338b2a6d77725",
+   "from_ref": "kpk.owner_safe",
+   "to_ref": "kpk.KPK_ETH_Yield"
+  },
+  {
+   "from": "1:0x8b884f80b3b839f52b6ce168f133e7a5d1f0a537",
+   "relation": "owner_of",
+   "to": "1:0xd5cce260e7a755ddf0fb9cdf06443d593aaeaa13",
+   "from_ref": "kpk.owner_safe",
+   "to_ref": "kpk.KPK_USDC_Yield"
   },
   {
    "from": "1:0x9469470c9878bf3d6d0604831d9a3a366156f7ee",
@@ -2990,6 +3543,13 @@
    "to": "1:0xa7569a44f348d3d70d8ad5889e50f78e33d80d35",
    "from_ref": "stablecoins.USDC",
    "to_ref": "tokemak.autoUSD"
+  },
+  {
+   "from": "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+   "relation": "underlying_of",
+   "to": "1:0xd5cce260e7a755ddf0fb9cdf06443d593aaeaa13",
+   "from_ref": "stablecoins.USDC",
+   "to_ref": "kpk.KPK_USDC_Yield"
   },
   {
    "from": "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -3029,6 +3589,13 @@
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
    "relation": "underlying_of",
+   "to": "1:0x5dbf760b4fd0cddde0366b33aeb338b2a6d77725",
+   "from_ref": "weth.WETH",
+   "to_ref": "kpk.KPK_ETH_Yield"
+  },
+  {
+   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+   "relation": "underlying_of",
    "to": "1:0x85b78aca6deae198fbf201c82daf6ca21942acc6",
    "from_ref": "weth.WETH",
    "to_ref": "origin_arm.LidoARM"
@@ -3038,7 +3605,7 @@
    "relation": "underlying_of",
    "to": "1:0x9396dcbf78fc526bb003665337c5e73b699571ef",
    "from_ref": "weth.WETH",
-   "to_ref": "gearbox_v3.kpkWETH_pool"
+   "to_ref": "kpk.kpkWETH"
   },
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -3053,6 +3620,13 @@
    "to": "1:0xe24a3dc889621612422a64e6388927901608b91d",
    "from_ref": "noon.USN",
    "to_ref": "noon.sUSN"
+  },
+  {
+   "from": "1:0xe5aec7d0e795456f90cebefba56470f0e5dfc075",
+   "relation": "admin_of",
+   "to": "1:0x5dbf760b4fd0cddde0366b33aeb338b2a6d77725",
+   "from_ref": "kpk.curator_eth_safe",
+   "to_ref": "kpk.KPK_ETH_Yield"
   },
   {
    "from": "1:0xf0bb20865277abd641a307ece5ee04e79073416c",

@@ -43,7 +43,7 @@ def test_token_list_from_cards_and_config(agent_dir):
     vault.tokens = ["weth.WETH", "0x3333333333333333333333333333333333333333"]
     cat = Catalog.load(default_catalog_dir())
     names = {t["name"] for t in token_list(cat, ["lido", "gearbox_v3"], vault)}
-    assert {"lido.stETH", "lido.wstETH", "gearbox_v3.kpkwstETH_pool", "weth.WETH"} <= names
+    assert {"lido.stETH", "lido.wstETH", "kpk.kpkwstETH", "weth.WETH"} <= names
     assert "lido.unstETH" not in names                   # erc721 queue, not a token balance
     assert "0x3333333333333333333333333333333333333333" in names
 
@@ -55,7 +55,7 @@ def test_vault_balances_erc20_and_erc4626(agent_dir):
     b = vault_balances(cat, ["lido", "gearbox_v3"], vault, rpc)
     by = {t["name"]: t for t in b["tokens"]}
     assert by["lido.wstETH"]["value"] == 3.0 and by["lido.wstETH"]["symbol"] == "wstETH"
-    pool = by["gearbox_v3.kpkwstETH_pool"]
+    pool = by["kpk.kpkwstETH"]
     assert pool["value"] == 1.0 and pool["assets"]["value"] == 1.1 and pool["assets"]["asset_name"] == "lido.wstETH"
     assert b["native"]["value"] == 2.0
     lines = plain_balances(b)

@@ -1,0 +1,85 @@
+protocol: kpk
+name: kpk (vault curator on Gearbox v3 and Morpho)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "onchain, read 2026-10-24: name() / symbol() / asset() of each vault, owner() / curator() of the Morpho vaults, Safe getThreshold() / getOwners()"
+adding: >
+  A kpk vault is an instance of another protocol (a Gearbox v3 pool, a Morpho
+  vault). Add it here keyed by its onchain symbol(), with `name:` set to its
+  onchain name(), `category: vault`, `underlying` = asset(), and proofs:
+  asset() always; for Morpho, owner() / curator() proving the admin Safes
+  below; for a Gearbox pool, a credit manager's pool() when one borrows from it.
+  Actions stay in the protocol's card (gearbox_v3, morpho_vaults).
+
+contracts:
+  kpkwstETH:
+    address: "0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64"
+    name: "wstETH v3"
+    category: vault
+    kind: erc4626
+    decimals: 18           # Gearbox v3 pool shares use the underlying's decimals
+    aliases: [gearbox pool, gearbox wstETH pool, wstETH v3]
+    note: "Gearbox v3 lending pool (wstETH); the scyETH lend/withdraw target"
+    edges: { underlying: lido.wstETH }
+    proofs:
+      - { read: "asset() returns (address)", expect: lido.wstETH }
+  kpkWETH:
+    address: "0x9396DCbf78fc526bb003665337C5E73b699571EF"
+    name: "WETH Market"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: [gearbox weth pool, WETH Market]
+    note: "Gearbox v3 lending pool (WETH); the scyETH credit manager borrows from it. Not called by any action"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { from: gearbox_v3.credit_manager, read: "pool() returns (address)", expect: $self }
+      - { read: "asset() returns (address)", expect: weth.WETH }
+  KPK_ETH_Yield:
+    address: "0x5dbf760b4fd0cDdDe0366b33aEb338b2A6d77725"
+    name: "KPK ETH Yield"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: [kpk eth yield, morpho kpk eth yield]
+    note: "Morpho Vault V2 on WETH"
+    edges: { underlying: weth.WETH, owner: owner_safe, admin: curator_eth_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: weth.WETH }
+  KPK_USDC_Yield:
+    address: "0xD5cCe260E7a755DDf0Fb9cdF06443d593AaeaA13"
+    name: "KPK USDC Yield"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: [kpk usdc yield, morpho kpk usdc yield]
+    note: "Morpho Vault V2 on USDC"
+    edges: { underlying: stablecoins.USDC, owner: owner_safe, admin: curator_usdc_safe }
+    proofs:
+      - { read: "asset() returns (address)", expect: stablecoins.USDC }
+  owner_safe:
+    address: "0x8b884f80B3B839F52b6cE168f133e7a5D1f0A537"
+    category: multisig
+    kind: safe
+    note: "Safe, 5-of-8 at 2026-10-24; owner() of both Morpho vaults"
+    proofs:
+      - { from: KPK_ETH_Yield, read: "owner() returns (address)", expect: $self }
+      - { from: KPK_USDC_Yield, read: "owner() returns (address)", expect: $self }
+  curator_eth_safe:
+    address: "0xE5aEC7D0E795456F90ceBefBa56470F0E5dfC075"
+    category: multisig
+    kind: safe
+    note: "Safe, 2-of-5 at 2026-10-24 (owner_safe is one of its owners); curator() of KPK ETH Yield"
+    proofs:
+      - { from: KPK_ETH_Yield, read: "curator() returns (address)", expect: $self }
+  curator_usdc_safe:
+    address: "0x7E43Df1c1c5A2245858b60D4655fDA83704e4171"
+    category: multisig
+    kind: safe
+    note: "Safe, 2-of-5 at 2026-10-24 (owner_safe is one of its owners); curator() of KPK USDC Yield"
+    proofs:
+      - { from: KPK_USDC_Yield, read: "curator() returns (address)", expect: $self }
+
+actions: {}

@@ -27,7 +27,7 @@ from typing import Any
 
 from eth_abi import decode as abi_decode
 from eth_abi import encode as abi_encode
-from eth_utils import is_address, to_checksum_address
+from eth_utils import is_address, keccak, to_checksum_address
 
 from .catalog import Catalog, CardError, parse_signature
 from .chain import ChainError
@@ -62,11 +62,11 @@ EDGE_KEYS = {
 RELATIONS = {r for r, _ in EDGE_KEYS.values()} | {"upgrades"}
 
 # Who said this address is what. Independent = different kinds. `card` is the card
-# author (implicit on every record); hints are shown but never count toward `verified`.
-SOURCE_KINDS = {"card", "docs", "explorer", "address-book", "defi-kit", "kpk-nav", "payload", "audit", "hypernative"}
-HINT_KINDS = {"hypernative"}
+# author (implicit on every record).
+SOURCE_KINDS = {"card", "docs", "explorer", "address-book", "payload", "audit"}
 
 STATUSES = ("verified", "unverified", "conflict", "retired")
+TOKEN_LIKE = {"token", "receipt", "debt", "reward", "governance", "vault", "staking"}
 
 EIP1967 = {
     "implementation": "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
@@ -98,6 +98,7 @@ class Record:
     status_set: str | None  # `status:` written in the card (conflict / retired)
     note: str = ""
     eoa: bool = False  # a key-held account (keeper, multisig signer): code is a conflict, not its absence
+    title: str | None = None  # the contract's onchain name(), as written in the card
 
     @property
     def key(self) -> str:
@@ -123,13 +124,6 @@ class Proof:
 class Status:
     status: str
     why: list[str] = field(default_factory=list)
-
-
-def _card_source_kind(card) -> str:
-    """The implicit source of a card's records: `defi-kit` when the card itself was built from
-    defi-kit (so a defi-kit import is not counted as a second, independent source)."""
-    text = " ".join(str(s) for s in card.raw.get("sources") or [])
-    return "defi-kit" if "defi-kit" in text else "card"
 
 
 def _parse_source(s: str, where: str) -> tuple[str, str]:
@@ -158,7 +152,7 @@ class Registry:
         records, errors = [], []
         for proto, card in catalog.cards.items():
             card_chain = int(card.raw.get("chain_id") or 1)
-            implicit = (_card_source_kind(card), f"catalog/{proto}/card.yaml")
+            implicit = ("card", f"catalog/{proto}/card.yaml")
             for name, c in card.contracts.items():
                 c = c or {}
                 if "ref" in c:
@@ -192,7 +186,7 @@ class Registry:
                 records.append(Record(int(c.get("chain_id") or card_chain), addr, proto, name, cat, c.get("kind"),
                                       [str(a) for a in c.get("aliases") or []], sources,
                                       list(c.get("proofs") or []), edges, st, str(c.get("note") or ""),
-                                      bool(c.get("eoa"))))
+                                      bool(c.get("eoa")), c.get("name")))
         reg = cls(catalog, records, errors)
         for r in records:
             for k, refs in r.edges.items():
@@ -293,7 +287,7 @@ class Registry:
                 why.append(f"proof failed: {p.id} (got {r.get('got')})")
         if why:
             return Status("conflict", why)
-        kinds = sorted({k for k, _ in rec.sources if k not in HINT_KINDS})
+        kinds = sorted({k for k, _ in rec.sources})
         passed = [p.id for p in proofs if (ran.get(p.id) or {}).get("ok") is True]
         if len(kinds) >= 2:
             return Status("verified", [f"independent sources: {', '.join(kinds)}"])
@@ -335,7 +329,7 @@ class Registry:
         card = self.catalog.cards[rec.protocol].raw
         d = {
             "chain_id": rec.chain_id, "address": rec.address, "protocol": rec.protocol,
-            "protocol_name": card.get("name"), "name": rec.name, "ref": rec.ref,
+            "protocol_name": card.get("name"), "name": rec.name, "title": rec.title, "ref": rec.ref,
             "category": rec.category, "kind": rec.kind, "eoa": rec.eoa, "aliases": rec.aliases,
             "status": st.status, "why": st.why,
             "card_reviewed": bool(card.get("reviewed")),
@@ -343,6 +337,7 @@ class Registry:
             "proofs": [{"id": p.id, "ok": (({q["id"]: q for q in res.get("proofs") or []}.get(p.id)) or {}).get("ok")}
                        for p in self._proofs_or_none(rec)],
             "proxy": {k: res[k] for k in ("implementation", "admin", "beacon") if res.get(k)},
+            "onchain": {k: res[k] for k in ("name", "symbol") if res.get(k)},
             "actions": self.actions_touching(rec),
         }
         if rec.note:
@@ -396,6 +391,33 @@ def _word_to_addr(b: bytes) -> str | None:
     return to_checksum_address("0x" + b[12:32].hex())
 
 
+def _read_text(rpc, address: str, fn: str, block: int) -> str | None:
+    """ERC-20 name() / symbol(): a string, or a bytes32 for old tokens (MKR-style); None if absent."""
+    try:
+        raw = rpc.call_raw(address, keccak(text=f"{fn}()")[:4], block=block)
+    except ChainError:
+        return None
+    try:
+        v = abi_decode(["string"], raw)[0]
+    except Exception:
+        v = raw[:32].rstrip(b"\0").decode("utf-8", "ignore") if len(raw) == 32 else ""
+    v = v.strip().replace("\0", "")
+    return v[:64] or None
+
+
+def symbol_mismatches(reg: Registry, results: dict) -> list[str]:
+    """Token-like records whose onchain symbol() is neither their key nor one of their aliases."""
+    out = []
+    for r in reg.records:
+        sym = (results.get(r.key) or {}).get("symbol")
+        if not sym or r.category not in TOKEN_LIKE:
+            continue
+        names = {r.name.lower()} | {a.lower() for a in r.aliases}
+        if sym.lower() not in names:
+            out.append(f"{r.ref}: onchain symbol() is {sym!r}; use it as the key or add it to aliases")
+    return out
+
+
 def verify(reg: Registry, rpcs: dict[int, Any], chains: list[int] | None = None) -> dict:
     """Run code checks, EIP-1967 reads and every proof on the given chains. Returns the
     results map (record key -> result) with `_meta` = {chain: {block, checked}}."""
@@ -419,6 +441,11 @@ def verify(reg: Registry, rpcs: dict[int, Any], chains: list[int] | None = None)
                 a = _word_to_addr(rpc.get_storage_at(rec.address, slot, block))
                 if a:
                     res[name] = a
+            if res["code"]:
+                for fn in ("name", "symbol"):
+                    v = _read_text(rpc, rec.address, fn, block)
+                    if v:
+                        res[fn] = v
             for p in reg.proofs_of(rec):
                 pr: dict[str, Any] = {"id": p.id}
                 try:
@@ -463,7 +490,9 @@ def summarize_whois(res: dict) -> str:
         return f"{res['address']}: {res['verdict']}"
     lines = []
     for m in res["matches"]:
-        lines.append(f"{m['address']} on chain {m['chain_id']}: {m['protocol_name']} / {m['name']} "
+        onc = m.get("onchain") or {}
+        tag = f" [{onc.get('symbol')}{' · ' + onc['name'] if onc.get('name') else ''}]" if onc.get("symbol") else ""
+        lines.append(f"{m['address']} on chain {m['chain_id']}: {m['protocol_name']} / {m['name']}{tag} "
                      f"({m['category']}) — {m['status'].upper()}")
         for w in m["why"]:
             lines.append(f"  · {w}")
@@ -490,4 +519,5 @@ def summarize_verify(reg: Registry, results: dict, checked: list[str]) -> str:
     meta = results.get("_meta") or {}
     head = ", ".join(f"chain {c} @ block {meta[c]['block']}" for c in checked if c in meta) or "no chain checked"
     tally = ", ".join(f"{counts.get(s, 0)} {s}" for s in STATUSES)
-    return "\n".join([f"registry verify: {head}", f"  {len(reg.records)} records: {tally}", *bad])
+    warn = [f"  symbol: {w}" for w in symbol_mismatches(reg, results)]
+    return "\n".join([f"registry verify: {head}", f"  {len(reg.records)} records: {tally}", *bad, *warn])

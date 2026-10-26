@@ -3,23 +3,19 @@ name: Gearbox v3 (lending pool + credit accounts)
 chain_id: 1
 status: draft
 reviewed: false
-defi_kit: "gearbox/deposit targets=[0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64]"
 sources:
-  - "karpatkey/defi-kit sdk/src/protocols/gearbox/_ethInfo.ts (pool list, kpkwstETH)"
-  - "karpatkey/defi-kit sdk/eth-sdk/abis/mainnet/gearbox/vault.json (pool signatures)"
+  - "Gearbox v3 pools are ERC-4626 (deposit / withdraw / redeem, asset()); signatures matched against executed scyETH Roles permissions"
+  - "onchain: credit facade creditManager() <-> credit manager creditFacade(), credit manager pool()"
   - "operator review draft, 2026-10-14 (facade, credit manager)"
+adding: >
+  Pools are curated: register each one in its curator's card (see catalog/kpk),
+  keyed by its onchain symbol(), with `asset()` as a proof and `underlying` as an
+  edge, then add a local `{ ref: <curator>.<symbol> }` here if an action needs it.
+  A credit manager and its facade prove each other (creditManager() /
+  creditFacade()); the manager's pool() names the pool it borrows from.
 
 contracts:
-  kpkwstETH_pool:
-    address: "0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64"
-    category: vault
-    kind: erc4626
-    decimals: 18           # Gearbox v3 pool shares use the underlying's decimals
-    aliases: [gearbox pool, gearbox wstETH pool, kpk gearbox, kpkwstETH, wstETH v3]
-    defi_kit: "gearbox/deposit targets=[0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64]"
-    edges: { underlying: lido.wstETH }
-    proofs:
-      - { read: "asset() returns (address)", expect: lido.wstETH }
+  kpkwstETH: { ref: kpk.kpkwstETH }
   credit_facade:
     address: "0x9515AB9BB73A9642F1a93Ba7C2790e9d08227f9a"
     category: market
@@ -34,17 +30,6 @@ contracts:
     note: "spender for collateral approvals; not called directly"
     proofs:
       - { read: "creditFacade() returns (address)", expect: credit_facade }
-  kpkWETH_pool:
-    address: "0x9396DCbf78fc526bb003665337C5E73b699571EF"
-    category: vault
-    kind: erc4626
-    decimals: 18
-    aliases: [kpkWETH, gearbox weth pool, WETH Market]
-    note: "the pool the credit manager borrows WETH from (credit_manager.pool()); not called by any action"
-    edges: { underlying: weth.WETH }
-    proofs:
-      - { from: credit_manager, read: "pool() returns (address)", expect: $self }
-      - { read: "asset() returns (address)", expect: weth.WETH }
   wstETH: { ref: lido.wstETH }
   WETH: { ref: weth.WETH }
 
@@ -55,17 +40,17 @@ ui_routes_to_avoid:
 
 reads:
   - id: pool_shares
-    target: kpkwstETH_pool
+    target: kpkwstETH
     sig: "balanceOf(address account) returns (uint256)"
     args: [$AVATAR]
     decimals: 18
   - id: pool_max_redeem
-    target: kpkwstETH_pool
+    target: kpkwstETH
     sig: "maxRedeem(address owner) returns (uint256)"
     args: [$AVATAR]
     decimals: 18
   - id: pool_share_price
-    target: kpkwstETH_pool
+    target: kpkwstETH
     sig: "convertToAssets(uint256 shares) returns (uint256)"
     args: ["1000000000000000000"]
     decimals: 18
@@ -77,22 +62,22 @@ actions:
     calls:
       - target: wstETH
         sig: "approve(address spender, uint256 amount)"
-        args: { spender: kpkwstETH_pool, amount: $amount }
-      - target: kpkwstETH_pool
+        args: { spender: kpkwstETH, amount: $amount }
+      - target: kpkwstETH
         sig: "deposit(uint256 assets, address receiver)"
         args: { assets: $amount, receiver: $AVATAR }
-      - target: kpkwstETH_pool
+      - target: kpkwstETH
         alt: true
         sig: "depositWithReferral(uint256 assets, address receiver, uint256 referralCode)"
         args: { assets: $amount, receiver: $AVATAR, referralCode: 0 }
   withdraw:
     summary: "kpkwstETH shares -> wstETH"
-    input: kpkwstETH_pool
+    input: kpkwstETH
     calls:
-      - target: kpkwstETH_pool
+      - target: kpkwstETH
         sig: "redeem(uint256 shares, address receiver, address owner)"
         args: { shares: $shares, receiver: $AVATAR, owner: $AVATAR }
-      - target: kpkwstETH_pool
+      - target: kpkwstETH
         alt: true
         sig: "withdraw(uint256 assets, address receiver, address owner)"
         args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }

@@ -61,6 +61,24 @@ def test_role_lints(result):
     assert any(l.get("target_name") == "lido.stETH" for l in lint_codes(result, "delegatecall_not_needed"))
     dead = lint_codes(result, "known_dead")
     assert any("rescueTokens" in (l.get("function") or "") for l in dead)
-    assert any(l.get("spender", "").lower().startswith("0x5dbf760b") for l in
-               lint_codes(result, "approve_uncatalogued_spender"))
+    # the WETH approve spender 0x5dbf… is kpk.KPK_ETH_Yield: catalogued, so not flagged
+    assert not any(l.get("spender", "").lower().startswith("0x5dbf760b") for l in
+                   lint_codes(result, "approve_uncatalogued_spender"))
     assert lint_codes(result, "uncatalogued")  # the stand-in Avant mint selector
+
+
+def test_uncatalogued_approve_spender_is_flagged(role_state, tmp_path):
+    """Without the kpk card, the fixture's WETH approve to 0x5dbf… is an unknown spender."""
+    import shutil
+    cat_dir = tmp_path / "catalog"
+    shutil.copytree(ROOT / "catalog", cat_dir, ignore=shutil.ignore_patterns("kpk"))
+    adapter, st = role_state
+    vault = VaultConfig(name="t", chain_id=1, avatar=AVATAR, roles_modifier=ROLES, role_key="MANAGER_ROLE",
+                        operator=OPERATOR, book_vars={"gearbox_v3.credit_account": CREDIT_ACCOUNT,
+                                                       "cowswap.sell_token": "weth.WETH"})
+    cat = Catalog.load(cat_dir)
+    cat.cards["gearbox_v3"].contracts["kpkwstETH"] = {"address": "0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64",
+                                                      "kind": "erc4626", "decimals": 18}
+    res = run_check(cat, st, adapter, vault)
+    assert any(l.get("spender", "").lower().startswith("0x5dbf760b") for l in
+               lint_codes(res, "approve_uncatalogued_spender"))

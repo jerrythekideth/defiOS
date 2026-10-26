@@ -7,9 +7,8 @@ The catalog has two layers:
   onchain proofs, edges and a trust status.
 * **Cards**: what to *do* with it (`actions:`, see `SCHEMA.md`).
 
-Agents ask the registry first (`defios whois 0x…`). Monitoring tools
-(Envio HyperSync, Hypernative, …) and non-Python agents load the static export
-`catalog/index.json`.
+Agents ask the registry first (`defios whois 0x…`). Monitoring tools and
+non-Python agents load the static export `catalog/index.json`.
 
 ## Record fields (on a card contract)
 
@@ -17,6 +16,7 @@ Agents ask the registry first (`defios whois 0x…`). Monitoring tools
 contracts:
   sUSDe:
     address: "0x9D39A5DE30e57443BfF2A8307A4256c8797A3497"
+    name: "Staked USDe"          # optional: the contract's onchain name()
     category: staking            # closed list below; required
     chain_id: 1                  # optional; defaults to the card's chain_id
     kind: erc4626_cooldown       # interface hint the engine uses (open list, unchanged)
@@ -68,12 +68,18 @@ proxy slots.
 ### `sources`
 
 `"<kind>: <detail>"` with kind one of `card`, `docs`, `explorer`,
-`address-book`, `defi-kit`, `kpk-nav`, `payload`, `audit`, `hypernative`.
+`address-book`, `payload`, `audit`.
 
-Every record already has one implicit source: the card. Its kind is
-`defi-kit` when the card's own `sources:` cite defi-kit (lido, cowswap,
-gearbox_v3, morpho_vaults, weth), so a later defi-kit import is not counted
-twice. `hypernative` is a **hint**: shown, never counted toward `verified`.
+Every record already has one implicit source: the card itself. Sources are
+public only; anything private stays in the operator's own repo.
+
+### Onchain names
+
+`registry verify` also reads each contract's `name()` and `symbol()` and stores
+them with the proof results; `whois` shows them. A token or vault is keyed by
+its onchain `symbol()` (or lists it in `aliases`), and its `name:` field holds
+the onchain `name()`. `verify` lists every token-like record whose symbol is
+missing from its key and aliases.
 
 ### `proofs`
 
@@ -119,6 +125,5 @@ defios registry verify [--chain 1] [--no-write]
 defios registry export [--out -]
 ```
 
-Not yet built (next PRs): imports (defi-kit, KPK NAV adapters, Hypernative
-private overlay), `exposure <addr>` against a vault book, and the watchlist
-walk.
+Not yet built: `exposure <addr>` against a vault book, and the watchlist walk
+(admin Safes, oracles and dependencies reached through edges).

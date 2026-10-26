@@ -3,7 +3,7 @@
 * **Pool deposit receiver.** `pool.deposit(assets, receiver)` mints shares to
   `receiver`. If the role allows `deposit` without pinning `receiver` to the
   Avatar, a member can deposit the Vault's wstETH and send the shares anywhere.
-  defi-kit's `gearbox/deposit` bundle pins it (`c.avatar`).
+  Pin it to the Avatar.
 * **Credit account `calls[]`.** `openCreditAccount`, `multicall` and
   `closeCreditAccount` take an array of `(target, callData)` that the facade
   executes for the account. Pinning the account address is not enough; every
