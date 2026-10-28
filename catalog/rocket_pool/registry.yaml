@@ -1,0 +1,10 @@
+contracts:
+  rocket_storage:
+    address: "0x1d8f8f00cfa6758d7bE78336684788Fb0ee0Fa46"
+    category: config
+    kind: rocket_storage
+    aliases: [RocketStorage, rocket pool storage]
+    note: "Rocket Pool's address book: getAddress(keccak256('contract.address', name)) resolves every network contract"
+    sources:
+      - "docs: https://docs.rocketpool.net/overview/contracts-integrations"
+      - "explorer: verified source (RocketStorage)"

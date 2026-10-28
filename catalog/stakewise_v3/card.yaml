@@ -1,0 +1,106 @@
+protocol: stakewise_v3
+name: StakeWise v3 (Genesis vault, osETH)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "docs: https://docs.stakewise.io/"
+  - "explorer: verified source (EthGenesisVault, OsToken)"
+  - "osETH address: onchain proof (Aave v3 getReservesList() contains it)"
+adding: >
+  Every StakeWise v3 vault is its own contract with the same interface (deposit,
+  mintOsToken, burnOsToken, enterExitQueue, claimExitedAssets). Add a vault as
+  category staking, kind stakewise_vault, prove it with mevEscrow() (the shared
+  escrow for most vaults; vaults with an own escrow need another proof), and copy
+  the genesis_* actions. osETH is shared by all vaults.
+
+contracts:
+  osETH:
+    address: "0xf1C9acDc66974dFB6dEcB12aA385b9cD01190E38"
+    name: "Staked ETH"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [oseth, stakewise oseth]
+    note: "StakeWise's overcollateralized liquid staking token, minted against vault shares"
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  genesis_vault:
+    address: "0xAC0F906E433d58FA868F936E8A43230473652885"
+    category: staking
+    kind: stakewise_vault
+    aliases: [stakewise genesis, Genesis, EthGenesisVault]
+    note: "StakeWise's main ETH vault. deposit mints non-transferable vault shares; mintOsToken mints osETH against them"
+    proofs:
+      - { read: "mevEscrow() returns (address)", expect: shared_mev_escrow }
+
+reads:
+  - id: genesis_shares
+    target: genesis_vault
+    sig: "getShares(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: genesis_os_token_shares
+    target: genesis_vault
+    sig: "osTokenPositions(address user) returns (uint128)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: oseth_balance
+    target: osETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: genesis_state_update_required
+    target: genesis_vault
+    sig: "isStateUpdateRequired() returns (bool)"
+
+actions:
+  genesis_stake:
+    summary: "ETH -> Genesis vault shares, credited to the Vault"
+    input: ETH
+    defaults: { referrer: "0x0000000000000000000000000000000000000000" }
+    calls:
+      - target: genesis_vault
+        sig: "deposit(address receiver, address referrer)"
+        args: { receiver: $AVATAR, referrer: $referrer }
+        send: true
+        note: "referrer is a tag only. Reverts while isStateUpdateRequired() is true"
+  genesis_mint_oseth:
+    summary: "mint osETH against the Vault's Genesis shares; paid to the Vault"
+    input: osETH
+    defaults: { referrer: "0x0000000000000000000000000000000000000000" }
+    calls:
+      - target: genesis_vault
+        sig: "mintOsToken(address receiver, uint256 osTokenShares, address referrer)"
+        args: { receiver: $AVATAR, osTokenShares: $amount, referrer: $referrer }
+  genesis_burn_oseth:
+    summary: "burn the Vault's osETH to reduce its osETH position in the Genesis vault"
+    input: osETH
+    calls:
+      - target: genesis_vault
+        sig: "burnOsToken(uint128 osTokenShares)"
+        args: { osTokenShares: $amount }
+        note: "burns from msg.sender; needs no approval"
+  genesis_unstake:
+    summary: "Genesis vault shares -> exit queue position owned by the Vault"
+    calls:
+      - target: genesis_vault
+        sig: "enterExitQueue(uint256 shares, address receiver)"
+        args: { shares: $shares, receiver: $AVATAR }
+        note: "pass --param shares=<raw shares> (read genesis_shares); osETH minted against them must be burned first"
+  genesis_claim:
+    summary: "exited ETH -> the Vault"
+    calls:
+      - target: genesis_vault
+        sig: "claimExitedAssets(uint256 positionTicket, uint256 timestamp, uint256 exitQueueIndex)"
+        args: { positionTicket: $position_ticket, timestamp: $timestamp, exitQueueIndex: $exit_queue_index }
+        note: "pays the exit position's receiver (the Vault). Ticket and timestamp come from the ExitQueueEntered event; index from getExitQueueIndex(positionTicket)"
+
+not_needed:
+  - "depositAndMintOsToken: same as genesis_stake + genesis_mint_oseth in one call"
+  - "updateState(harvestParams): keepers call it; needed only if deposit reverts on isStateUpdateRequired (then add it explicitly)"
+  - "redeem / redeemOsToken / liquidateOsToken: other users' positions or emergency paths"
+
+notes: >
+  Exits take days (validator exits). Vault shares are not transferable; the position
+  is read with genesis_shares.

@@ -1,0 +1,230 @@
+protocol: fluid
+name: Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "docs: https://docs.fluid.instadapp.io/contracts/contracts.html"
+  - "address-book: github.com/Instadapp/fluid-contracts-public deployments"
+  - "explorer: verified source (fToken / fTokenNativeUnderlying, LendingFactory)"
+adding: >
+  Fluid lending fTokens are ERC-4626 vaults created by the LendingFactory;
+  lending_factory.allTokens() lists every one. Key a new fToken by its symbol()
+  (fGHO style), category vault, kind erc4626, decimals = asset decimals, with
+  proofs asset() == the underlying's card ref and lending_factory allTokens()
+  contains $self. Copy the deposit_usdc / withdraw_usdc / redeem_usdc actions
+  and swap the fToken and token. Fluid vaults (borrowing T1-T4 NFTs) are a
+  different product and are not covered by this card.
+
+contracts:
+  fUSDC:
+    address: "0x9Fb7b4477576Fe5B32be4C1843aFB1e55F251B33"
+    name: "Fluid USD Coin"
+    category: vault
+    kind: erc4626
+    decimals: 6
+    aliases: [fluid usdc]
+    note: "ERC-4626 share token and the spender for USDC deposits"
+    edges: { underlying: USDC }
+    proofs:
+      - { read: "asset() returns (address)", expect: USDC }
+      - { from: lending_factory, read: "allTokens() returns (address[])", expect: { contains: $self } }
+  fUSDT:
+    address: "0x5C20B550819128074FD538Edf79791733ccEdd18"
+    name: "Fluid Tether USD"
+    category: vault
+    kind: erc4626
+    decimals: 6
+    aliases: [fluid usdt]
+    note: "ERC-4626 share token and the spender for USDT deposits"
+    edges: { underlying: USDT }
+    proofs:
+      - { read: "asset() returns (address)", expect: USDT }
+      - { from: lending_factory, read: "allTokens() returns (address[])", expect: { contains: $self } }
+  fWETH:
+    address: "0x90551c1795392094FE6D29B758EcCD233cFAa260"
+    name: "Fluid Wrapped Ether"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: [fluid weth, fluid eth]
+    note: "ERC-4626 over WETH; also takes native ETH (depositNative / withdrawNative)"
+    edges: { underlying: WETH }
+    proofs:
+      - { read: "asset() returns (address)", expect: WETH }
+      - { from: lending_factory, read: "allTokens() returns (address[])", expect: { contains: $self } }
+  fwstETH:
+    address: "0x2411802D8BEA09be0aF8fD8D08314a63e706b29C"
+    name: "Fluid Wrapped liquid staked Ether 2.0"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: [fluid wsteth]
+    note: "ERC-4626 share token and the spender for wstETH deposits"
+    edges: { underlying: wstETH }
+    proofs:
+      - { read: "asset() returns (address)", expect: wstETH }
+      - { from: lending_factory, read: "allTokens() returns (address[])", expect: { contains: $self } }
+  USDC: { ref: stablecoins.USDC }
+  USDT: { ref: stablecoins.USDT }
+  WETH: { ref: weth.WETH }
+  wstETH: { ref: lido.wstETH }
+
+ui_routes_to_avoid:
+  - ui: "Fluid app deposit / withdraw with a swap or ETH wrap"
+    via: "Instadapp / Fluid DSA and aggregator routes"
+    why: "call the fToken's deposit / withdraw / redeem directly"
+
+reads:
+  - id: fusdc_shares
+    target: fUSDC
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 6
+  - id: fusdt_shares
+    target: fUSDT
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 6
+  - id: fweth_shares
+    target: fWETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: fwsteth_shares
+    target: fwstETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+
+actions:
+  deposit_usdc:
+    summary: "USDC -> fUSDC shares, minted to the Vault"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: fUSDC, amount: $amount }
+      - target: fUSDC
+        sig: "deposit(uint256 assets_, address receiver_)"
+        args: { assets_: $amount, receiver_: $AVATAR }
+  withdraw_usdc:
+    summary: "fUSDC -> USDC (amount in USDC), paid to the Vault"
+    input: USDC
+    calls:
+      - target: fUSDC
+        sig: "withdraw(uint256 assets_, address receiver_, address owner_)"
+        args: { assets_: $amount, receiver_: $AVATAR, owner_: $AVATAR }
+  redeem_usdc:
+    summary: "fUSDC shares -> USDC, paid to the Vault (use for a full exit)"
+    input: fUSDC
+    calls:
+      - target: fUSDC
+        sig: "redeem(uint256 shares_, address receiver_, address owner_)"
+        args: { shares_: $amount, receiver_: $AVATAR, owner_: $AVATAR }
+
+  deposit_usdt:
+    summary: "USDT -> fUSDT shares, minted to the Vault"
+    input: USDT
+    calls:
+      - target: USDT
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: fUSDT, amount: $amount }
+      - target: fUSDT
+        sig: "deposit(uint256 assets_, address receiver_)"
+        args: { assets_: $amount, receiver_: $AVATAR }
+  withdraw_usdt:
+    summary: "fUSDT -> USDT (amount in USDT), paid to the Vault"
+    input: USDT
+    calls:
+      - target: fUSDT
+        sig: "withdraw(uint256 assets_, address receiver_, address owner_)"
+        args: { assets_: $amount, receiver_: $AVATAR, owner_: $AVATAR }
+  redeem_usdt:
+    summary: "fUSDT shares -> USDT, paid to the Vault (use for a full exit)"
+    input: fUSDT
+    calls:
+      - target: fUSDT
+        sig: "redeem(uint256 shares_, address receiver_, address owner_)"
+        args: { shares_: $amount, receiver_: $AVATAR, owner_: $AVATAR }
+
+  deposit_weth:
+    summary: "WETH -> fWETH shares, minted to the Vault"
+    input: WETH
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: fWETH, amount: $amount }
+      - target: fWETH
+        sig: "deposit(uint256 assets_, address receiver_)"
+        args: { assets_: $amount, receiver_: $AVATAR }
+  withdraw_weth:
+    summary: "fWETH -> WETH (amount in WETH), paid to the Vault"
+    input: WETH
+    calls:
+      - target: fWETH
+        sig: "withdraw(uint256 assets_, address receiver_, address owner_)"
+        args: { assets_: $amount, receiver_: $AVATAR, owner_: $AVATAR }
+  redeem_weth:
+    summary: "fWETH shares -> WETH, paid to the Vault (use for a full exit)"
+    input: fWETH
+    calls:
+      - target: fWETH
+        sig: "redeem(uint256 shares_, address receiver_, address owner_)"
+        args: { shares_: $amount, receiver_: $AVATAR, owner_: $AVATAR }
+  deposit_eth:
+    summary: "ETH -> fWETH shares, minted to the Vault (no WETH wrap needed)"
+    input: ETH
+    calls:
+      - target: fWETH
+        sig: "depositNative(address receiver_)"
+        args: { receiver_: $AVATAR }
+        send: true
+  withdraw_eth:
+    summary: "fWETH -> ETH (amount in ETH), paid to the Vault"
+    input: WETH
+    calls:
+      - target: fWETH
+        sig: "withdrawNative(uint256 assets_, address receiver_, address owner_)"
+        args: { assets_: $amount, receiver_: $AVATAR, owner_: $AVATAR }
+  redeem_eth:
+    summary: "fWETH shares -> ETH, paid to the Vault (use for a full exit)"
+    input: fWETH
+    calls:
+      - target: fWETH
+        sig: "redeemNative(uint256 shares_, address receiver_, address owner_)"
+        args: { shares_: $amount, receiver_: $AVATAR, owner_: $AVATAR }
+
+  deposit_wsteth:
+    summary: "wstETH -> fwstETH shares, minted to the Vault"
+    input: wstETH
+    calls:
+      - target: wstETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: fwstETH, amount: $amount }
+      - target: fwstETH
+        sig: "deposit(uint256 assets_, address receiver_)"
+        args: { assets_: $amount, receiver_: $AVATAR }
+  withdraw_wsteth:
+    summary: "fwstETH -> wstETH (amount in wstETH), paid to the Vault"
+    input: wstETH
+    calls:
+      - target: fwstETH
+        sig: "withdraw(uint256 assets_, address receiver_, address owner_)"
+        args: { assets_: $amount, receiver_: $AVATAR, owner_: $AVATAR }
+  redeem_wsteth:
+    summary: "fwstETH shares -> wstETH, paid to the Vault (use for a full exit)"
+    input: fwstETH
+    calls:
+      - target: fwstETH
+        sig: "redeem(uint256 shares_, address receiver_, address owner_)"
+        args: { shares_: $amount, receiver_: $AVATAR, owner_: $AVATAR }
+
+not_needed:
+  - "mint(shares, receiver) and the overloads with minAmountOut / maxSharesBurn: deposit / withdraw / redeem cover the same flows"
+  - "fToken approvals: withdraw / redeem burn the Vault's own shares (owner_ = Vault), no allowance needed"
+
+notes: >
+  Every receiver_ / owner_ is the Vault. withdraw takes the underlying amount,
+  redeem takes shares (read balanceOf for a full exit). fUSDT deposits need a
+  USDT approve that starts from 0 (plan revokes to 0 after each use).

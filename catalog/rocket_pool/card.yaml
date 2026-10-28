@@ -1,0 +1,84 @@
+protocol: rocket_pool
+name: Rocket Pool (rETH liquid staking)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "docs: https://docs.rocketpool.net/overview/contracts-integrations"
+  - "explorer: verified source (RocketTokenRETH, RocketDepositPool)"
+  - "rETH address: onchain proof (Aave v3 getReservesList() contains it)"
+adding: >
+  Rocket Pool resolves every contract through RocketStorage
+  getAddress(keccak256("contract.address", <name>)). The deposit pool is replaced on
+  Rocket Pool upgrades: before trusting deposit_pool, compare it with
+  rocket_storage.getAddress(keccak256(abi.encodePacked("contract.address","rocketDepositPool")))
+  and update the record. rETH itself never moves.
+
+contracts:
+  rETH:
+    address: "0xae78736Cd615f374D3085123A210448E74Fc6393"
+    name: "Rocket Pool ETH"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [reth, rocket pool eth]
+    note: "rETH token; burn(rethAmount) redeems for ETH from the deposit pool / rETH collateral"
+    sources:
+      - "docs: https://docs.rocketpool.net/overview/contracts-integrations"
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  deposit_pool:
+    address: "0xCE15294273CFb9D9b628F4D61636623decDF4fdC"
+    category: staking
+    kind: rocket_deposit_pool
+    aliases: [rocketDepositPool, rocket pool deposit pool]
+    note: "deposit() payable mints rETH to msg.sender. Address changes on Rocket Pool upgrades (see adding)"
+    sources:
+      - "docs: https://docs.rocketpool.net/overview/contracts-integrations"
+      - "explorer: verified source (RocketDepositPool)"
+
+ui_routes_to_avoid:
+  - ui: "Rocket Pool app swap ETH <-> rETH"
+    via: "RocketSwapRouter swapTo / swapFrom (routes through Uniswap / Balancer)"
+    why: "a router; deposit into the deposit pool or burn rETH directly"
+
+reads:
+  - id: reth_balance
+    target: rETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: reth_exchange_rate
+    target: rETH
+    sig: "getExchangeRate() returns (uint256)"
+    decimals: 18
+  - id: reth_burn_liquidity
+    target: rETH
+    sig: "getTotalCollateral() returns (uint256)"
+    decimals: 18
+
+actions:
+  stake:
+    summary: "ETH -> rETH via the deposit pool"
+    input: ETH
+    calls:
+      - target: deposit_pool
+        sig: "deposit()"
+        send: true
+        note: "mints rETH to msg.sender (the Vault); reverts when the pool is full or below the minimum deposit"
+  burn:
+    summary: "rETH -> ETH at the protocol rate"
+    input: rETH
+    calls:
+      - target: rETH
+        sig: "burn(uint256 _rethAmount)"
+        args: { _rethAmount: $amount }
+        note: "pays ETH to msg.sender; reverts if rETH collateral + deposit pool excess is short (see reth_burn_liquidity)"
+
+not_needed:
+  - "RocketSwapRouter swapTo / swapFrom: DEX router, not needed for direct stake / burn"
+  - "node operator and minipool contracts"
+
+notes: >
+  stake and burn need no approvals. Large burns can fail when the protocol has little
+  free ETH; selling rETH on a DEX is then the exit (not covered here).
