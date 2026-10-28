@@ -1,8 +1,8 @@
 {
  "_meta": {
   "1": {
-   "block": 26278420,
-   "checked": "2026-10-26"
+   "block": 26292959,
+   "checked": "2026-10-28"
   }
  },
  "1:0x000000000022d473030f116ddee9f6b43ac78ba3": {
@@ -542,6 +542,18 @@
   "code": true,
   "proofs": []
  },
+ "1:0x18084fba666a33d37592fa2633fd49a74dd93a88": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "tBTC v2",
+  "symbol": "tBTC"
+ },
  "1:0x182b723a58739a9c974cfdb385ceadb237453c28": {
   "code": true,
   "proofs": [
@@ -814,6 +826,18 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt PT_eUSDe_14AUG2025",
   "symbol": "variableDebtEthPT_eUSDe_14AUG2025"
+ },
+ "1:0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "Wrapped BTC",
+  "symbol": "WBTC"
  },
  "1:0x232128844e5af56fd4b3f8bf97e08ab477282ab5": {
   "code": true,
@@ -2136,6 +2160,18 @@
   "name": "Re Protocol Deposit Token",
   "symbol": "reUSD"
  },
+ "1:0x514910771af9ca656af840dff83e8264ecf986ca": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "ChainLink Token",
+  "symbol": "LINK"
+ },
  "1:0x529b6158d1d2992e3129f7c69e81a7c677dc3b12": {
   "code": true,
   "proofs": [
@@ -2577,6 +2613,18 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt STG",
   "symbol": "variableDebtEthSTG"
+ },
+ "1:0x657e8c867d8b37dcc18fa4caead9c45eb088c642": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "ether.fi BTC",
+  "symbol": "eBTC"
  },
  "1:0x65906988adee75306021c417a1a3458040239602": {
   "code": true,
@@ -3358,6 +3406,33 @@
   "name": "Aave Ethereum PT_sUSDe_7MAY2026",
   "symbol": "aEthPT_sUSDe_7MAY2026"
  },
+ "1:0x8236a87084f8b84306f72007f36f2618a5634494": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0x072072317469ebB6C340a47e41561C9C3b782BD9",
+  "admin": "0xbae061C73876952aa2C5e483B74DfA785425f879",
+  "name": "Lombard Staked Bitcoin",
+  "symbol": "LBTC"
+ },
+ "1:0x8292bb45bf1ee4d140127049757c2e0ff06317ed": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0x9747a0d261c2d56Eb93f542068e5d1E23170fa9e",
+  "name": "RLUSD",
+  "symbol": "RLUSD"
+ },
  "1:0x82f9c5ad306bba1ad0de49bb5fa6f01bf61085ef": {
   "code": true,
   "proofs": [
@@ -3403,6 +3478,18 @@
    }
   ],
   "implementation": "0xFF42Ce30054dcE7dc7C1282a9a497aa58eaBCe99"
+ },
+ "1:0x853d955acef822db058eb8505911ed77f175b99e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "Frax",
+  "symbol": "FRAX"
  },
  "1:0x856900aa78e856a5df1a2665ee3a66b2487cd68f": {
   "code": true,
@@ -4112,6 +4199,20 @@
   ],
   "name": "USD Coin",
   "symbol": "USDC"
+ },
+ "1:0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0x7159107483e623707C18C6E06cBc095bd0717783",
+  "admin": "0xb61e0E39b6d4030C36A176f576aaBE44BF59Dc78",
+  "name": "rsETH",
+  "symbol": "rsETH"
  },
  "1:0xa188eec8f81263234da3622a406892f3d630f98c": {
   "code": true,
@@ -4991,6 +5092,18 @@
   "code": true,
   "proofs": []
  },
+ "1:0xbe9895146f7af43049ca1c1ae358b0541ea49704": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "Coinbase Wrapped Staked ETH",
+  "symbol": "cbETH"
+ },
  "1:0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7": {
   "code": true,
   "proofs": [
@@ -5000,6 +5113,20 @@
     "got": "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7"
    }
   ]
+ },
+ "1:0xbf5495efe5db9ce00f80364c8b423567e58d2110": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0x9bD289b14Dd6E0782aF82eEb3FCfeed4354CDA2C",
+  "admin": "0x91625601e2BbBEb7171C40c79FadBCFbFf6A1982",
+  "name": "Renzo Restaked ETH",
+  "symbol": "ezETH"
  },
  "1:0xbf98480425a29197e5d99d003017f63a1e595d02": {
   "code": true,
@@ -5378,6 +5505,18 @@
   "name": "Aave Ethereum Variable Debt PT_sUSDE_25SEP2025",
   "symbol": "variableDebtEthPT_sUSDE_25SEP2025"
  },
+ "1:0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "Coinbase Wrapped BTC",
+  "symbol": "cbBTC"
+ },
  "1:0xcbc72d92b2dc8187414f6734718563898740c0bc": {
   "code": true,
   "proofs": [
@@ -5571,6 +5710,19 @@
     "got": "0x2F50D538606Fa9EDD2B11E2446BEb18C9D5846bB"
    }
   ]
+ },
+ "1:0xd11c452fc99cf405034ee446803b6f6c1f6d5ed8": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0xD1A622566F277AA76c3C47A30469432AAec95E38",
+  "name": "Treehouse ETH",
+  "symbol": "tETH"
  },
  "1:0xd15f11b334e1e233127302e5f759c17da1260df5": {
   "code": true,
@@ -5902,6 +6054,19 @@
   "implementation": "0x1b992302652A92611DCd5090D1Cb388C6377f455",
   "name": "Spark Savings USDT",
   "symbol": "spUSDT"
+ },
+ "1:0xe343167631d89b6ffc58b88d6b7fb0228795491d": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0xFACd5ff359aDf87822374275699Dd518aAf9a65F",
+  "name": "Global Dollar",
+  "symbol": "USDG"
  },
  "1:0xe3490297a08d6fc8da46edb7b6142e4f461b62d3": {
   "code": true,

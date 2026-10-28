@@ -2,8 +2,8 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26278420,
-   "checked": "2026-10-26"
+   "block": 26292959,
+   "checked": "2026-10-28"
   }
  },
  "protocols": {
@@ -14,7 +14,16 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "claim_and_stake_stkaave_rewards",
+    "claim_stkaave_rewards",
+    "cooldown_stkaave",
+    "deposit_sgho",
+    "redeem_sgho",
+    "stake_aave",
+    "unstake_aave",
+    "withdraw_sgho"
+   ]
   },
   "aave_v3": {
    "name": "Aave v3 (Ethereum core market)",
@@ -25,13 +34,59 @@
    ],
    "actions": [
     "borrow",
+    "borrow_eth",
+    "borrow_other",
+    "claim_rewards",
+    "disable_collateral",
+    "disable_collateral_other",
+    "enable_collateral",
+    "enable_collateral_other",
+    "repay",
+    "repay_eth",
+    "repay_other",
+    "repay_with_atokens",
+    "repay_with_atokens_other",
+    "set_emode",
+    "supply",
+    "supply_eth",
+    "supply_other",
+    "withdraw",
+    "withdraw_eth",
+    "withdraw_other"
+   ]
+  },
+  "aave_v3_etherfi": {
+   "name": "Aave v3 EtherFi market (exit only)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [],
+   "actions": [
+    "claim_rewards",
+    "disable_collateral",
+    "repay",
+    "repay_with_atokens",
+    "withdraw"
+   ]
+  },
+  "aave_v3_prime": {
+   "name": "Aave v3 Prime market",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [],
+   "actions": [
+    "borrow",
+    "borrow_eth",
+    "claim_rewards",
     "disable_collateral",
     "enable_collateral",
     "repay",
+    "repay_eth",
     "repay_with_atokens",
     "set_emode",
     "supply",
-    "withdraw"
+    "supply_eth",
+    "withdraw",
+    "withdraw_eth"
    ]
   },
   "aave_v4": {
@@ -112,7 +167,14 @@
     1
    ],
    "actions": [
-    "bridge"
+    "bridge",
+    "bridge_to_arbitrum",
+    "bridge_to_avalanche",
+    "bridge_to_base",
+    "bridge_to_linea",
+    "bridge_to_optimism",
+    "bridge_to_polygon",
+    "bridge_to_unichain"
    ]
   },
   "convex": {
@@ -295,7 +357,16 @@
    ],
    "actions": [
     "deposit",
-    "withdraw"
+    "deposit_eurc",
+    "deposit_usdc",
+    "deposit_usdt",
+    "deposit_weth",
+    "redeem",
+    "withdraw",
+    "withdraw_eurc",
+    "withdraw_usdc",
+    "withdraw_usdt",
+    "withdraw_weth"
    ]
   },
   "noon": {
@@ -364,7 +435,27 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "claim_usds_sky",
+    "claim_usds_spk",
+    "dai_from_usds",
+    "deposit_sdai",
+    "deposit_stusds",
+    "deposit_susds",
+    "redeem_sdai",
+    "redeem_stusds",
+    "redeem_susds",
+    "stake_usds_sky",
+    "stake_usds_spk",
+    "unstake_usds_sky",
+    "unstake_usds_spk",
+    "usdc_from_usds",
+    "usds_from_dai",
+    "usds_from_usdc",
+    "withdraw_sdai",
+    "withdraw_stusds",
+    "withdraw_susds"
+   ]
   },
   "spark": {
    "name": "Spark (SparkLend and Spark savings vaults)",
@@ -373,7 +464,33 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "borrow",
+    "borrow_eth",
+    "claim_rewards",
+    "disable_collateral",
+    "enable_collateral",
+    "repay",
+    "repay_eth",
+    "repay_with_atokens",
+    "savings_deposit_eth",
+    "savings_deposit_pyusd",
+    "savings_deposit_usdc",
+    "savings_deposit_usdt",
+    "savings_redeem_eth",
+    "savings_redeem_pyusd",
+    "savings_redeem_usdc",
+    "savings_redeem_usdt",
+    "savings_withdraw_eth",
+    "savings_withdraw_pyusd",
+    "savings_withdraw_usdc",
+    "savings_withdraw_usdt",
+    "set_emode",
+    "supply",
+    "supply_eth",
+    "withdraw",
+    "withdraw_eth"
+   ]
   },
   "stablecoins": {
    "name": "Blue-chip USD stablecoins (token contracts only)",
@@ -424,6 +541,15 @@
     "redeem",
     "unstake"
    ]
+  },
+  "tokens": {
+   "name": "ERC-20 tokens with no card of their own",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
   },
   "upshift": {
    "name": "Upshift (coreUSDC via the SwapRouter)",
@@ -2083,6 +2209,42 @@
     "onchain": {}
    }
   ],
+  "1:0x18084fba666a33d37592fa2633fd49a74dd93a88": [
+   {
+    "chain_id": 1,
+    "address": "0x18084fbA666a33d37592fA2633fD49a74DD93a88",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "tBTC",
+    "title": "tBTC v2",
+    "ref": "tokens.tBTC",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "tbtc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "tBTC v2",
+     "symbol": "tBTC"
+    }
+   }
+  ],
   "1:0x182b723a58739a9c974cfdb385ceadb237453c28": [
    {
     "chain_id": 1,
@@ -2816,6 +2978,42 @@
     "onchain": {
      "name": "Aave Ethereum Variable Debt PT_eUSDe_14AUG2025",
      "symbol": "variableDebtEthPT_eUSDe_14AUG2025"
+    }
+   }
+  ],
+  "1:0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": [
+   {
+    "chain_id": 1,
+    "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "WBTC",
+    "title": "Wrapped BTC",
+    "ref": "tokens.WBTC",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "wbtc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Wrapped BTC",
+     "symbol": "WBTC"
     }
    }
   ],
@@ -6638,6 +6836,42 @@
     }
    }
   ],
+  "1:0x514910771af9ca656af840dff83e8264ecf986ca": [
+   {
+    "chain_id": 1,
+    "address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "LINK",
+    "title": "ChainLink Token",
+    "ref": "tokens.LINK",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "link"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "ChainLink Token",
+     "symbol": "LINK"
+    }
+   }
+  ],
   "1:0x529b6158d1d2992e3129f7c69e81a7c677dc3b12": [
    {
     "chain_id": 1,
@@ -7963,6 +8197,42 @@
     "onchain": {
      "name": "Aave Ethereum Variable Debt STG",
      "symbol": "variableDebtEthSTG"
+    }
+   }
+  ],
+  "1:0x657e8c867d8b37dcc18fa4caead9c45eb088c642": [
+   {
+    "chain_id": 1,
+    "address": "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "eBTC",
+    "title": "ether.fi BTC",
+    "ref": "tokens.eBTC",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "ebtc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "ether.fi BTC",
+     "symbol": "eBTC"
     }
    }
   ],
@@ -10234,6 +10504,83 @@
     }
    }
   ],
+  "1:0x8236a87084f8b84306f72007f36f2618a5634494": [
+   {
+    "chain_id": 1,
+    "address": "0x8236a87084f8B84306f72007F36F2618A5634494",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "LBTC",
+    "title": "Lombard Staked Bitcoin",
+    "ref": "tokens.LBTC",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "lbtc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x072072317469ebB6C340a47e41561C9C3b782BD9",
+     "admin": "0xbae061C73876952aa2C5e483B74DfA785425f879"
+    },
+    "onchain": {
+     "name": "Lombard Staked Bitcoin",
+     "symbol": "LBTC"
+    }
+   }
+  ],
+  "1:0x8292bb45bf1ee4d140127049757c2e0ff06317ed": [
+   {
+    "chain_id": 1,
+    "address": "0x8292Bb45bf1Ee4d140127049757C2E0fF06317eD",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "RLUSD",
+    "title": "RLUSD",
+    "ref": "tokens.RLUSD",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "rlusd"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x9747a0d261c2d56Eb93f542068e5d1E23170fa9e"
+    },
+    "onchain": {
+     "name": "RLUSD",
+     "symbol": "RLUSD"
+    }
+   }
+  ],
   "1:0x82f9c5ad306bba1ad0de49bb5fa6f01bf61085ef": [
    {
     "chain_id": 1,
@@ -10371,6 +10718,42 @@
      "implementation": "0xFF42Ce30054dcE7dc7C1282a9a497aa58eaBCe99"
     },
     "onchain": {}
+   }
+  ],
+  "1:0x853d955acef822db058eb8505911ed77f175b99e": [
+   {
+    "chain_id": 1,
+    "address": "0x853d955aCEf822Db058eb8505911ED77F175b99e",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "FRAX",
+    "title": "Frax",
+    "ref": "tokens.FRAX",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "frax"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Frax",
+     "symbol": "FRAX"
+    }
    }
   ],
   "1:0x856900aa78e856a5df1a2665ee3a66b2487cd68f": [
@@ -12505,6 +12888,45 @@
     "onchain": {
      "name": "USD Coin",
      "symbol": "USDC"
+    }
+   }
+  ],
+  "1:0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": [
+   {
+    "chain_id": 1,
+    "address": "0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "rsETH",
+    "title": "rsETH",
+    "ref": "tokens.rsETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "rseth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x7159107483e623707C18C6E06cBc095bd0717783",
+     "admin": "0xb61e0E39b6d4030C36A176f576aaBE44BF59Dc78"
+    },
+    "onchain": {
+     "name": "rsETH",
+     "symbol": "rsETH"
     }
    }
   ],
@@ -15086,6 +15508,42 @@
     "note": "Executes Sky governance spells"
    }
   ],
+  "1:0xbe9895146f7af43049ca1c1ae358b0541ea49704": [
+   {
+    "chain_id": 1,
+    "address": "0xBe9895146f7AF43049ca1c1AE358B0541Ea49704",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "cbETH",
+    "title": "Coinbase Wrapped Staked ETH",
+    "ref": "tokens.cbETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "cbeth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Coinbase Wrapped Staked ETH",
+     "symbol": "cbETH"
+    }
+   }
+  ],
   "1:0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7": [
    {
     "chain_id": 1,
@@ -15120,6 +15578,45 @@
     "proxy": {},
     "onchain": {},
     "note": "Curve pool (Curve.fi DAI/USDC/USDT); its LP token is the separate contract 3Crv"
+   }
+  ],
+  "1:0xbf5495efe5db9ce00f80364c8b423567e58d2110": [
+   {
+    "chain_id": 1,
+    "address": "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "ezETH",
+    "title": "Renzo Restaked ETH",
+    "ref": "tokens.ezETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "ezeth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x9bD289b14Dd6E0782aF82eEb3FCfeed4354CDA2C",
+     "admin": "0x91625601e2BbBEb7171C40c79FadBCFbFf6A1982"
+    },
+    "onchain": {
+     "name": "Renzo Restaked ETH",
+     "symbol": "ezETH"
+    }
    }
   ],
   "1:0xbf98480425a29197e5d99d003017f63a1e595d02": [
@@ -16150,6 +16647,42 @@
     }
    }
   ],
+  "1:0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": [
+   {
+    "chain_id": 1,
+    "address": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "cbBTC",
+    "title": "Coinbase Wrapped BTC",
+    "ref": "tokens.cbBTC",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "cbbtc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Coinbase Wrapped BTC",
+     "symbol": "cbBTC"
+    }
+   }
+  ],
   "1:0xcbc72d92b2dc8187414f6734718563898740c0bc": [
    {
     "chain_id": 1,
@@ -16714,6 +17247,44 @@
     "proxy": {},
     "onchain": {},
     "note": "mint(gauge) claims CRV emissions for a gauge deposit"
+   }
+  ],
+  "1:0xd11c452fc99cf405034ee446803b6f6c1f6d5ed8": [
+   {
+    "chain_id": 1,
+    "address": "0xD11c452fc99cF405034ee446803b6F6c1F6d5ED8",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "tETH",
+    "title": "Treehouse ETH",
+    "ref": "tokens.tETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "teth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xD1A622566F277AA76c3C47A30469432AAec95E38"
+    },
+    "onchain": {
+     "name": "Treehouse ETH",
+     "symbol": "tETH"
+    }
    }
   ],
   "1:0xd15f11b334e1e233127302e5f759c17da1260df5": [
@@ -17693,6 +18264,44 @@
     "onchain": {
      "name": "Spark Savings USDT",
      "symbol": "spUSDT"
+    }
+   }
+  ],
+  "1:0xe343167631d89b6ffc58b88d6b7fb0228795491d": [
+   {
+    "chain_id": 1,
+    "address": "0xe343167631d89B6Ffc58B88d6b7fB0228795491D",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "USDG",
+    "title": "Global Dollar",
+    "ref": "tokens.USDG",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "usdg"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xFACd5ff359aDf87822374275699Dd518aAf9a65F"
+    },
+    "onchain": {
+     "name": "Global Dollar",
+     "symbol": "USDG"
     }
    }
   ],

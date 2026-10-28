@@ -40,6 +40,133 @@ actions:
           same owners control there. Pin destinationDomain to the domains the
           vault really uses (an unknown domain strands funds, it does not steal them).
 
+  bridge_to_arbitrum:
+    summary: "USDC -> the same Vault address on Arbitrum (CCTP domain 3), Standard transfer, no fee"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: token_messenger, amount: $amount }
+      - target: token_messenger
+        sig: "depositForBurn(uint256 amount, uint32 destinationDomain, bytes32 mintRecipient, address burnToken, bytes32 destinationCaller, uint256 maxFee, uint32 minFinalityThreshold)"
+        args:
+          amount: $amount
+          destinationDomain: 3
+          mintRecipient: $AVATAR
+          burnToken: USDC
+          destinationCaller: "0x0000000000000000000000000000000000000000000000000000000000000000"
+          maxFee: 0
+          minFinalityThreshold: 2000
+        note: "the Vault address on Arbitrum must be a Safe the same owners control; Standard = 2000 (hard finality, ~15-20 min), fee 0 from Ethereum; the USDC is minted there once anyone relays the attestation (receiveMessage on the Arbitrum MessageTransmitter)"
+  bridge_to_base:
+    summary: "USDC -> the same Vault address on Base (CCTP domain 6), Standard transfer, no fee"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: token_messenger, amount: $amount }
+      - target: token_messenger
+        sig: "depositForBurn(uint256 amount, uint32 destinationDomain, bytes32 mintRecipient, address burnToken, bytes32 destinationCaller, uint256 maxFee, uint32 minFinalityThreshold)"
+        args:
+          amount: $amount
+          destinationDomain: 6
+          mintRecipient: $AVATAR
+          burnToken: USDC
+          destinationCaller: "0x0000000000000000000000000000000000000000000000000000000000000000"
+          maxFee: 0
+          minFinalityThreshold: 2000
+        note: "the Vault address on Base must be a Safe the same owners control; Standard = 2000 (hard finality, ~15-20 min), fee 0 from Ethereum; the USDC is minted there once anyone relays the attestation (receiveMessage on the Base MessageTransmitter)"
+  bridge_to_optimism:
+    summary: "USDC -> the same Vault address on OP Mainnet (CCTP domain 2), Standard transfer, no fee"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: token_messenger, amount: $amount }
+      - target: token_messenger
+        sig: "depositForBurn(uint256 amount, uint32 destinationDomain, bytes32 mintRecipient, address burnToken, bytes32 destinationCaller, uint256 maxFee, uint32 minFinalityThreshold)"
+        args:
+          amount: $amount
+          destinationDomain: 2
+          mintRecipient: $AVATAR
+          burnToken: USDC
+          destinationCaller: "0x0000000000000000000000000000000000000000000000000000000000000000"
+          maxFee: 0
+          minFinalityThreshold: 2000
+        note: "the Vault address on OP Mainnet must be a Safe the same owners control; Standard = 2000 (hard finality, ~15-20 min), fee 0 from Ethereum; the USDC is minted there once anyone relays the attestation (receiveMessage on the OP Mainnet MessageTransmitter)"
+  bridge_to_avalanche:
+    summary: "USDC -> the same Vault address on Avalanche C-Chain (CCTP domain 1), Standard transfer, no fee"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: token_messenger, amount: $amount }
+      - target: token_messenger
+        sig: "depositForBurn(uint256 amount, uint32 destinationDomain, bytes32 mintRecipient, address burnToken, bytes32 destinationCaller, uint256 maxFee, uint32 minFinalityThreshold)"
+        args:
+          amount: $amount
+          destinationDomain: 1
+          mintRecipient: $AVATAR
+          burnToken: USDC
+          destinationCaller: "0x0000000000000000000000000000000000000000000000000000000000000000"
+          maxFee: 0
+          minFinalityThreshold: 2000
+        note: "the Vault address on Avalanche C-Chain must be a Safe the same owners control; Standard = 2000 (hard finality, ~15-20 min), fee 0 from Ethereum; the USDC is minted there once anyone relays the attestation (receiveMessage on the Avalanche C-Chain MessageTransmitter)"
+  bridge_to_polygon:
+    summary: "USDC -> the same Vault address on Polygon PoS (CCTP domain 7), Standard transfer, no fee"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: token_messenger, amount: $amount }
+      - target: token_messenger
+        sig: "depositForBurn(uint256 amount, uint32 destinationDomain, bytes32 mintRecipient, address burnToken, bytes32 destinationCaller, uint256 maxFee, uint32 minFinalityThreshold)"
+        args:
+          amount: $amount
+          destinationDomain: 7
+          mintRecipient: $AVATAR
+          burnToken: USDC
+          destinationCaller: "0x0000000000000000000000000000000000000000000000000000000000000000"
+          maxFee: 0
+          minFinalityThreshold: 2000
+        note: "the Vault address on Polygon PoS must be a Safe the same owners control; Standard = 2000 (hard finality, ~15-20 min), fee 0 from Ethereum; the USDC is minted there once anyone relays the attestation (receiveMessage on the Polygon PoS MessageTransmitter)"
+  bridge_to_unichain:
+    summary: "USDC -> the same Vault address on Unichain (CCTP domain 10), Standard transfer, no fee"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: token_messenger, amount: $amount }
+      - target: token_messenger
+        sig: "depositForBurn(uint256 amount, uint32 destinationDomain, bytes32 mintRecipient, address burnToken, bytes32 destinationCaller, uint256 maxFee, uint32 minFinalityThreshold)"
+        args:
+          amount: $amount
+          destinationDomain: 10
+          mintRecipient: $AVATAR
+          burnToken: USDC
+          destinationCaller: "0x0000000000000000000000000000000000000000000000000000000000000000"
+          maxFee: 0
+          minFinalityThreshold: 2000
+        note: "the Vault address on Unichain must be a Safe the same owners control; Standard = 2000 (hard finality, ~15-20 min), fee 0 from Ethereum; the USDC is minted there once anyone relays the attestation (receiveMessage on the Unichain MessageTransmitter)"
+  bridge_to_linea:
+    summary: "USDC -> the same Vault address on Linea (CCTP domain 11), Standard transfer, no fee"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: token_messenger, amount: $amount }
+      - target: token_messenger
+        sig: "depositForBurn(uint256 amount, uint32 destinationDomain, bytes32 mintRecipient, address burnToken, bytes32 destinationCaller, uint256 maxFee, uint32 minFinalityThreshold)"
+        args:
+          amount: $amount
+          destinationDomain: 11
+          mintRecipient: $AVATAR
+          burnToken: USDC
+          destinationCaller: "0x0000000000000000000000000000000000000000000000000000000000000000"
+          maxFee: 0
+          minFinalityThreshold: 2000
+        note: "the Vault address on Linea must be a Safe the same owners control; Standard = 2000 (hard finality, ~15-20 min), fee 0 from Ethereum; the USDC is minted there once anyone relays the attestation (receiveMessage on the Linea MessageTransmitter)"
+
 dead_permissions:
   - target: token_messenger
     selector: "0x11cffb67"

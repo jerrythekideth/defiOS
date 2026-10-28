@@ -25,6 +25,35 @@ every byte. Humans sign.
 > default) and balance reads.
 > All cards are `status: draft`, `reviewed: false`.
 
+## Map for agents: where to find what
+
+Read [`AGENTS.md`](AGENTS.md) first (rules and flows). Then:
+
+| you need | look in |
+|---|---|
+| the action for a request ("supply USDC on Aave", "bridge USDC to Arbitrum") | [`catalog/ACTIONS.md`](catalog/ACTIONS.md): every card action on one page, with its input token, token list, required `--param`s and a one-line summary. Grep it, then open the card |
+| the exact calls of an action, its notes, what to read | `catalog/<card>/card.yaml` → `actions:` / `reads:` |
+| an address, or what an address is | `defios whois 0x…`; records live in `catalog/<card>/card.yaml` `contracts:` and `catalog/<card>/registry.yaml`; all of them in [`catalog/index.json`](catalog/index.json) |
+| a token (decimals, aliases) | the card that owns it: `stablecoins`, `weth`, `lido`, `ethena`, `etherfi`, … and [`catalog/tokens`](catalog/tokens/card.yaml) for the rest (WBTC, cbBTC, LINK, …) |
+| a curated vault or pool (kpkUSDC, kpkwstETH …) | the curator's card ([`catalog/kpk`](catalog/kpk)); the protocol card's actions take it with `--token` |
+| the card format | [`catalog/SCHEMA.md`](catalog/SCHEMA.md) (cards, actions), [`catalog/REGISTRY.md`](catalog/REGISTRY.md) (records, proofs, categories) |
+| how to add a protocol, market, vault or action | [`catalog/ADDING.md`](catalog/ADDING.md), then the card's own `adding:` field |
+
+Naming conventions in cards:
+
+* **One card per market** when a protocol has several: `aave_v3` (Core),
+  `aave_v3_prime`, `aave_v3_etherfi`, `spark` (SparkLend + Spark savings),
+  `aave_v4`. Protocol-wide contracts (governance, staking, GHO) sit in `aave`.
+* **Verb names** are plain: `supply`, `withdraw`, `borrow`, `repay`, `stake`,
+  `unstake`, `claim_rewards`, `deposit_<thing>`, `bridge_to_<chain>`.
+  `<verb>_eth` is the native-ETH route (WETH gateway); `<verb>_other` is the
+  same verb for the market's other tokens when `<verb>` holds the stablecoins.
+* **`--token` picks from `tokens:`**: a reserve on a lending market, or a vault
+  when the action also has `input:` (`morpho_vaults.deposit_usdc=1000 --token
+  KPK_USDC_Prime`: the amount is USDC, the vault is KPK_USDC_Prime).
+* **Exit-only cards** list only withdraw / repay actions (e.g. `aave_v3_etherfi`,
+  whose caps are closed).
+
 ## Quickstart
 
 ```bash
@@ -104,27 +133,34 @@ your-permissions/           public or private audit trail of permission batches
 | `defios propose --file calls.json [--send]` | M2: wraps engine-built calls in `execTransactionWithRole` (MultiSend when several), picks a non-colliding Operator nonce, computes the SafeTxHash, signs as a delegate; prints everything (dry run) unless `--send` posts it to the Safe Transaction Service. Never signs as an owner, never executes |
 | `defios catalog` | lists and validates cards |
 | `defios whois 0x…` | what an address is, and whether it is verified (see `catalog/REGISTRY.md`) |
-| `defios registry verify` / `export` | re-run onchain proofs; write `catalog/index.json` for non-Python consumers |
+| `defios registry verify` / `export` | re-run onchain proofs; write `catalog/index.json` (for non-Python consumers) and `catalog/ACTIONS.md` |
 
 Global options: `--root <agent repo>`, `--vault <name>`, `--format both|json|text`,
 `--logs-file <json>` (offline replay), `--offline` (ignore `RPC_URL`).
 
 ## Cards
 
-See [`catalog/SCHEMA.md`](catalog/SCHEMA.md). Cards (Ethereum mainnet):
+See [`catalog/SCHEMA.md`](catalog/SCHEMA.md); the full action list is
+[`catalog/ACTIONS.md`](catalog/ACTIONS.md) and `defios catalog` lists cards.
+Ethereum mainnet:
 
-* ETH: lido, gearbox_v3, morpho_vaults, cowswap, weth, avant, origin_arm,
-  etherfi (incl. Veda Liquid ETH and Liquid USD), yo (yoETH, yoUSD), makina.
-* Curators: kpk (Gearbox v3 pools, Morpho vaults, their admin Safes).
-* USD: stablecoins (USDC, USDT, DAI, USDS, GHO, PYUSD), ethena, aave_v3,
-  aave_v4, strata, dialectic, infinifi, tokemak, upshift, noon, re,
-  flying_tulip, threejane, cctp, liminal.
+* Lending: aave_v3 (Core), aave_v3_prime, aave_v3_etherfi, aave_v4, spark,
+  gearbox_v3, morpho_vaults.
+* ETH staking and restaking: lido, etherfi (incl. Veda Liquid ETH and Liquid
+  USD), weth.
+* Stables and savings: stablecoins, sky (USDS, sUSDS, sDAI, stUSDS, rewards),
+  ethena, aave (stkAAVE, sGho), avant, strata, dialectic, infinifi, tokemak,
+  upshift, noon, re, flying_tulip, threejane, yo, makina, origin_arm, liminal.
+* DEX, LP and yield trading: cowswap, curve, convex, balancer, balancer_v2,
+  balancer_v3, aura, pendle, permit2.
+* Bridges: cctp (Circle USDC).
+* Tokens with no protocol card of their own: tokens.
+* Curators: kpk (Gearbox v3 pools, Morpho Vault V2 vaults, their admin Safes).
 
 Every address is checked onchain where possible (`defios registry verify`):
 the protocol's own registry, or the contract reporting its counterpart
-(`asset()`, `pool()`, `owner()` …). Unknown ones are `TODO`. Curated vaults and
-pools live in their curator's card (e.g. `catalog/kpk`). How to add a protocol,
-pool or market: [`catalog/ADDING.md`](catalog/ADDING.md).
+(`asset()`, `pool()`, `owner()` …). Unknown ones are `TODO`. How to add a
+protocol, pool, market or action: [`catalog/ADDING.md`](catalog/ADDING.md).
 
 ## Development
 

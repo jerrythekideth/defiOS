@@ -37,6 +37,30 @@ contracts:
   PYUSD: { ref: stablecoins.PYUSD }
   USDe: { ref: ethena.USDe }
   sUSDe: { ref: ethena.sUSDe }
+  WETH: { ref: weth.WETH }
+  wstETH: { ref: lido.wstETH }
+  weETH: { ref: etherfi.weETH }
+  cbETH: { ref: tokens.cbETH }
+  WBTC: { ref: tokens.WBTC }
+  cbBTC: { ref: tokens.cbBTC }
+  LBTC: { ref: tokens.LBTC }
+  tBTC: { ref: tokens.tBTC }
+  eBTC: { ref: tokens.eBTC }
+  LINK: { ref: tokens.LINK }
+  AAVE: { ref: aave.AAVE }
+  LDO: { ref: lido.LDO }
+  tETH: { ref: tokens.tETH }
+  RLUSD: { ref: tokens.RLUSD }
+  USDtb: { ref: ethena.USDtb }
+  EURC: { ref: stablecoins.EURC }
+  USDG: { ref: tokens.USDG }
+  ezETH: { ref: tokens.ezETH }
+  rsETH: { ref: tokens.rsETH }
+  sDAI: { ref: sky.sDAI }
+  crvUSD: { ref: stablecoins.crvUSD }
+  FRAX: { ref: tokens.FRAX }
+  CRV: { ref: curve.CRV }
+  BAL: { ref: balancer.BAL }
 
 ui_routes_to_avoid:
   - ui: "Aave app ETH deposit / swap / repay-with-collateral"
@@ -111,6 +135,107 @@ actions:
       - target: pool
         sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"
         args: { asset: $token, useAsCollateral: false }
+  supply_other:
+    summary: "token -> receipt token (collateral when enabled), credited to the Vault"
+    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: pool, amount: $amount }
+      - target: pool
+        sig: "supply(address asset, uint256 amount, address onBehalfOf, uint16 referralCode)"
+        args: { asset: $token, amount: $amount, onBehalfOf: $AVATAR, referralCode: 0 }
+  withdraw_other:
+    summary: "receipt token -> token, paid to the Vault"
+    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, ezETH, rsETH, sDAI, crvUSD, FRAX, CRV, BAL]
+    calls:
+      - target: pool
+        sig: "withdraw(address asset, uint256 amount, address to)"
+        args: { asset: $token, amount: $amount, to: $AVATAR }
+  borrow_other:
+    summary: "borrow token at variable rate against the Vault's collateral; paid to the Vault"
+    tokens: [WETH, WBTC, cbBTC, tBTC, LINK, RLUSD, USDtb, EURC, USDG]
+    calls:
+      - target: pool
+        sig: "borrow(address asset, uint256 amount, uint256 interestRateMode, uint16 referralCode, address onBehalfOf)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2, referralCode: 0, onBehalfOf: $AVATAR }
+  repay_other:
+    summary: "repay the Vault's variable debt in token"
+    tokens: [WETH, WBTC, cbBTC, tBTC, LINK, RLUSD, USDtb, EURC, USDG]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: pool, amount: $amount }
+      - target: pool
+        sig: "repay(address asset, uint256 amount, uint256 interestRateMode, address onBehalfOf)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2, onBehalfOf: $AVATAR }
+  repay_with_atokens_other:
+    summary: "repay the Vault's debt in token with its receipt tokens of the same token (no approve)"
+    tokens: [WETH, WBTC, cbBTC, tBTC, LINK, RLUSD, USDtb, EURC, USDG]
+    calls:
+      - target: pool
+        sig: "repayWithATokens(address asset, uint256 amount, uint256 interestRateMode)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2 }
+  enable_collateral_other:
+    summary: "use a supplied token as collateral"
+    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG]
+    calls:
+      - target: pool
+        sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"
+        args: { asset: $token, useAsCollateral: true }
+  disable_collateral_other:
+    summary: "stop using a supplied token as collateral"
+    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, ezETH, rsETH, sDAI, crvUSD, FRAX, CRV, BAL]
+    calls:
+      - target: pool
+        sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"
+        args: { asset: $token, useAsCollateral: false }
+  supply_eth:
+    summary: "ETH -> aEthWETH (collateral) through the WETH gateway, credited to the Vault"
+    input: ETH
+    calls:
+      - target: weth_gateway
+        sig: "depositETH(address pool, address onBehalfOf, uint16 referralCode)"
+        args: { pool: pool, onBehalfOf: $AVATAR, referralCode: 0 }
+        send: true
+        note: "Aave's own WETH gateway (wraps ETH, supplies WETH); with WETH in the Vault use `supply` instead"
+  withdraw_eth:
+    summary: "aEthWETH -> ETH through the WETH gateway, paid to the Vault"
+    input: aEthWETH
+    calls:
+      - target: aEthWETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: weth_gateway, amount: $amount }
+      - target: weth_gateway
+        sig: "withdrawETH(address pool, uint256 amount, address to)"
+        args: { pool: pool, amount: $amount, to: $AVATAR }
+  borrow_eth:
+    summary: "borrow WETH at variable rate and receive it as ETH in the Vault"
+    input: weth.WETH
+    calls:
+      - target: variableDebtEthWETH
+        sig: "approveDelegation(address delegatee, uint256 amount)"
+        args: { delegatee: weth_gateway, amount: $amount }
+        note: "lets the gateway open the debt on the Vault; the gateway uses it up in the next call"
+      - target: weth_gateway
+        sig: "borrowETH(address pool, uint256 amount, uint16 referralCode)"
+        args: { pool: pool, amount: $amount, referralCode: 0 }
+  repay_eth:
+    summary: "repay the Vault's variable WETH debt with ETH through the WETH gateway"
+    input: ETH
+    calls:
+      - target: weth_gateway
+        sig: "repayETH(address pool, uint256 amount, address onBehalfOf)"
+        args: { pool: pool, amount: $amount, onBehalfOf: $AVATAR }
+        send: true
+        note: "ETH sent above the debt is refunded to the Vault"
+  claim_rewards:
+    summary: "claim one reward token accrued on one aToken / debt token, paid to the Vault"
+    calls:
+      - target: aave.incentives_controller
+        sig: "claimRewards(address[] assets, uint256 amount, address to, address reward)"
+        args: { assets: [$asset], amount: 115792089237316195423570985008687907853269984665640564039457584007913129639935, to: $AVATAR, reward: $reward }
+        note: "--param asset=<aToken or debt token> --param reward=<reward token>; amount = type(uint256).max claims all of it"
 
 not_needed:
   - "flashLoan / flashLoanSimple: interestRateMode 2 in flashLoan opens debt on onBehalfOf and sends the funds to any receiver; never allow it"

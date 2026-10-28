@@ -63,3 +63,87 @@ actions:
         alt: true
         sig: "withdraw(uint256 assets, address receiver, address onBehalf)"
         args: { assets: $amount, receiver: $AVATAR, onBehalf: $AVATAR }
+  # Named Morpho Vault V2 vaults: --token picks the vault, the amount is in the vault's asset
+  deposit_weth:
+    summary: "WETH -> shares of one of these WETH vaults, credited to the Vault"
+    input: weth.WETH
+    tokens: [kpk.KPK_ETH_Prime, kpk.KPK_ETH_Yield]
+    calls:
+      - target: weth.WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: $token, amount: $amount }
+      - target: $token
+        sig: "deposit(uint256 assets, address onBehalf)"
+        args: { assets: $amount, onBehalf: $AVATAR }
+  withdraw_weth:
+    summary: "vault shares -> an exact amount of WETH, paid to the Vault"
+    input: weth.WETH
+    tokens: [kpk.KPK_ETH_Prime, kpk.KPK_ETH_Yield]
+    calls:
+      - target: $token
+        sig: "withdraw(uint256 assets, address receiver, address onBehalf)"
+        args: { assets: $amount, receiver: $AVATAR, onBehalf: $AVATAR }
+  deposit_usdc:
+    summary: "USDC -> shares of one of these USDC vaults, credited to the Vault"
+    input: stablecoins.USDC
+    tokens: [kpk.KPK_USDC_Prime, kpk.KPK_USDC_Prime_Core, kpk.KPK_USDC_Yield, kpk.KPK_USDC_Yield_RWA]
+    calls:
+      - target: stablecoins.USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: $token, amount: $amount }
+      - target: $token
+        sig: "deposit(uint256 assets, address onBehalf)"
+        args: { assets: $amount, onBehalf: $AVATAR }
+  withdraw_usdc:
+    summary: "vault shares -> an exact amount of USDC, paid to the Vault"
+    input: stablecoins.USDC
+    tokens: [kpk.KPK_USDC_Prime, kpk.KPK_USDC_Prime_Core, kpk.KPK_USDC_Yield, kpk.KPK_USDC_Yield_RWA]
+    calls:
+      - target: $token
+        sig: "withdraw(uint256 assets, address receiver, address onBehalf)"
+        args: { assets: $amount, receiver: $AVATAR, onBehalf: $AVATAR }
+  deposit_usdt:
+    summary: "USDT -> shares of one of these USDT vaults, credited to the Vault"
+    input: stablecoins.USDT
+    tokens: [kpk.KPK_USDT_Prime]
+    calls:
+      - target: stablecoins.USDT
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: $token, amount: $amount }
+      - target: $token
+        sig: "deposit(uint256 assets, address onBehalf)"
+        args: { assets: $amount, onBehalf: $AVATAR }
+  withdraw_usdt:
+    summary: "vault shares -> an exact amount of USDT, paid to the Vault"
+    input: stablecoins.USDT
+    tokens: [kpk.KPK_USDT_Prime]
+    calls:
+      - target: $token
+        sig: "withdraw(uint256 assets, address receiver, address onBehalf)"
+        args: { assets: $amount, receiver: $AVATAR, onBehalf: $AVATAR }
+  deposit_eurc:
+    summary: "EURC -> shares of one of these EURC vaults, credited to the Vault"
+    input: stablecoins.EURC
+    tokens: [kpk.KPK_EURC_Yield]
+    calls:
+      - target: stablecoins.EURC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: $token, amount: $amount }
+      - target: $token
+        sig: "deposit(uint256 assets, address onBehalf)"
+        args: { assets: $amount, onBehalf: $AVATAR }
+  withdraw_eurc:
+    summary: "vault shares -> an exact amount of EURC, paid to the Vault"
+    input: stablecoins.EURC
+    tokens: [kpk.KPK_EURC_Yield]
+    calls:
+      - target: $token
+        sig: "withdraw(uint256 assets, address receiver, address onBehalf)"
+        args: { assets: $amount, receiver: $AVATAR, onBehalf: $AVATAR }
+  redeem:
+    summary: "an exact number of vault shares -> the vault's asset, paid to the Vault (amount in shares)"
+    tokens: [kpk.KPK_ETH_Prime, kpk.KPK_ETH_Yield, kpk.KPK_USDC_Prime, kpk.KPK_USDC_Prime_Core, kpk.KPK_USDC_Yield, kpk.KPK_USDC_Yield_RWA, kpk.KPK_USDT_Prime, kpk.KPK_EURC_Yield]
+    calls:
+      - target: $token
+        sig: "redeem(uint256 shares, address receiver, address onBehalf)"
+        args: { shares: $amount, receiver: $AVATAR, onBehalf: $AVATAR }
