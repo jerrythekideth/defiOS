@@ -91,16 +91,6 @@ each `--param` name must be given as `--param name=value`.
 | `unstake` | ankrETH |  |  | ankrETH -> ETH through the Ankr exit queue (paid to the Vault later) |
 | `flash_unstake` | ankrETH |  |  | ankrETH -> ETH instantly from the FlashUnstake pool (fee applies), paid to the Vault |
 
-## aura: Aura (Balancer LP boosting, auraBAL, vlAURA)
-
-| action | input | tokens | --param | does |
-|---|---|---|---|---|
-| `withdraw` |  | auraAave_GHO_USDT_USDC_vault, auraosETH_waWETH_vault, aurarETH_waEthWETH_vault |  | Aura pool stake -> its Balancer v3 BPT back to the Vault (unstake + unwrap, claims rewards) |
-| `claim` |  | auraAave_GHO_USDT_USDC_vault, auraosETH_waWETH_vault, aurarETH_waEthWETH_vault |  | BAL, AURA and extra rewards of one Aura pool -> the Vault |
-| `auraBAL_unstake` | auraBAL |  |  | auraBAL_rewards -> auraBAL back to the Vault (claims rewards) |
-| `auraBAL_claim` |  |  |  | rewards of auraBAL_rewards -> the Vault |
-| `stkauraBAL_redeem` | stkauraBAL |  |  | stkauraBAL -> auraBAL back to the Vault |
-
 ## avant: Avant (avETH / savETH)
 
 | action | input | tokens | --param | does |
@@ -111,26 +101,6 @@ each `--param` name must be given as `--param name=value`.
 | `instant_exit` |  |  |  | only works when Avant sets cooldownDuration == 0 |
 | `mint` |  |  |  | WETH -> avETH via Avant RFQ |
 | `redeem` |  |  |  | avETH -> WETH via Avant RFQ |
-
-## balancer_v3: Balancer v3 (Vault, routers, pools)
-
-| action | input | tokens | --param | does |
-|---|---|---|---|---|
-| `Aave_GHO_USDT_USDC_add_USDT` | USDT |  | min_bpt | USDT -> Aave_GHO_USDT_USDC BPT (single-sided; the router wraps it into the Aave wrapper), minted to the Vault |
-| `Aave_GHO_USDT_USDC_add_GHO` | GHO |  | min_bpt | GHO -> Aave_GHO_USDT_USDC BPT (single-sided; the router wraps it into the Aave wrapper), minted to the Vault |
-| `Aave_GHO_USDT_USDC_add_USDC` | USDC |  | min_bpt | USDC -> Aave_GHO_USDT_USDC BPT (single-sided; the router wraps it into the Aave wrapper), minted to the Vault |
-| `Aave_GHO_USDT_USDC_remove` | Aave_GHO_USDT_USDC |  | min0, min1, min2 | Aave_GHO_USDT_USDC BPT -> USDT, GHO and USDC in pool proportions (unwrapped by the router), paid to the Vault |
-| `osETH_waWETH_remove` | osETH_waWETH |  | min0, min1 | osETH_waWETH BPT -> waEthWETH and osETH in pool proportions, paid to the Vault |
-| `osETH_waWETH_remove_waEthWETH` | osETH_waWETH |  | min_out | osETH_waWETH BPT -> waEthWETH only, paid to the Vault |
-| `rETH_waEthWETH_remove` | rETH_waEthWETH |  | min0, min1 | rETH_waEthWETH BPT -> waEthWETH and rETH in pool proportions, paid to the Vault |
-| `rETH_waEthWETH_remove_waEthWETH` | rETH_waEthWETH |  | min_out | rETH_waEthWETH BPT -> waEthWETH only, paid to the Vault |
-| `waEthWETH_unwrap` | waEthWETH |  |  | waEthWETH -> WETH back to the Vault |
-| `Aave_GHO_USDT_USDC_stake` | Aave_GHO_USDT_USDC |  |  | Aave_GHO_USDT_USDC BPT -> Aave_GHO_USDT_USDC_gauge (earns BAL) |
-| `osETH_waWETH_stake` | osETH_waWETH |  |  | osETH_waWETH BPT -> osETH_waWETH_gauge (earns BAL) |
-| `rETH_waEthWETH_stake` | rETH_waEthWETH |  |  | rETH_waEthWETH BPT -> rETH_waEthWETH_gauge (earns BAL) |
-| `unstake` |  | Aave_GHO_USDT_USDC_gauge, osETH_waWETH_gauge, rETH_waEthWETH_gauge |  | gauge token -> its BPT back to the Vault |
-| `claim_bal` |  | Aave_GHO_USDT_USDC_gauge, osETH_waWETH_gauge, rETH_waEthWETH_gauge |  | BAL emissions of one gauge -> the Vault |
-| `claim_rewards` |  | Aave_GHO_USDT_USDC_gauge, osETH_waWETH_gauge, rETH_waEthWETH_gauge |  | extra (non-BAL) gauge rewards -> the Vault |
 
 ## cctp: Circle CCTP v2 (bridge USDC)
 
@@ -406,6 +376,24 @@ each `--param` name must be given as `--param name=value`.
 | action | input | tokens | --param | does |
 |---|---|---|---|---|
 | `buy_or_sell` |  |  |  | DETH is reached through CoW Swap today (see the cowswap card); direct mint/redeem needs the machine depositor address |
+
+## merkl: Merkl (reward distributor)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `claim` |  |  | claimable, proof, reward_token | claim one Merkl reward token; paid to the Vault |
+
+## morpho_markets: Morpho Blue markets (direct supply, borrow, collateral)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `supply` | the loanToken |  | market_id | loan token -> supply to market `market_id` (lend) |
+| `withdraw` | the loanToken |  | market_id | withdraw supplied loan token from market `market_id`; paid to the Vault |
+| `borrow` | the loanToken |  | market_id | borrow loan token from market `market_id` against the Vault's collateral; paid to the Vault |
+| `repay` | the loanToken |  | market_id | repay the Vault's debt in market `market_id` |
+| `supply_collateral` | the collateralToken |  | market_id | collateral token -> collateral of the Vault in market `market_id` |
+| `withdraw_collateral` | the collateralToken |  | market_id | withdraw the Vault's collateral from market `market_id`; paid to the Vault |
+| `accrue_interest` |  |  | market_id | accrue interest on market `market_id` (anyone may call it) |
 
 ## morpho_vaults: Morpho Vaults (MetaMorpho v1 / Vault v2, ERC-4626)
 

@@ -54,6 +54,13 @@ local `{ ref: <curator>.<symbol> }` when an action needs the pool. To make a new
 vault usable, add its key to the `tokens:` list of the matching action (e.g.
 `morpho_vaults.deposit_usdc`).
 
+**Morpho Blue markets** are not added to a card. Whitelist one by its id:
+`defios permit morpho_markets.supply morpho_markets.withdraw --param market_id=0x…`.
+The engine reads the market params onchain, checks them against the id, and
+refuses unless both tokens are verified catalog tokens (add a missing token
+first, below). Check the oracle, LLTV and liquidity before you whitelist: the
+role fixes which market, not whether it is a good one.
+
 **Tokens.** A token belongs to the card of the protocol that issues it (stETH
 in `lido`, sUSDe in `ethena`, GHO in `stablecoins`). A token with no card of its
 own (WBTC, cbBTC, LINK …) goes in `catalog/tokens`, proved by a market that
@@ -105,11 +112,13 @@ in the card's `actions:` (format in `SCHEMA.md`). Rules:
   `claim_rewards`, `bridge_to_arbitrum`). Extend a family with a suffix
   (`supply_other`, `supply_eth`) rather than changing an action that is
   already in use: a vault's role was built from it.
-* **Main entry point only**: the protocol's own pool, vault, staking or bridge
-  contract. No routers, zaps, aggregators, referral wrappers or UI helpers
-  unless they are the only way in (then say so in a `note:`), and never a
-  contract that runs arbitrary calldata. List the routes the UI uses instead in
-  `ui_routes_to_avoid`.
+* **The protocol's own contracts only**: its pool, vault, staking or bridge
+  contract, or its own router / gateway / teller when that is how the protocol
+  is entered. Record such a router in the protocol's card (`category: router`)
+  with a proof that ties it to the protocol (it reads the vault, or the vault
+  lists it). Never a third-party router, aggregator, zap or referral wrapper,
+  and never a contract that runs arbitrary calldata. List the routes the UI
+  uses instead in `ui_routes_to_avoid`.
 * **Signatures from verified source**, with parameter names. If you could not
   confirm one, set `verified_sig: false`.
 * **Every receiver is `$AVATAR`** (`receiver`, `to`, `onBehalfOf`, `owner`,

@@ -23,6 +23,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
 | file | where | what it answers |
 |---|---|---|
 | `catalog/ACTIONS.md` | DeFi_os (public), generated | Which card and action does this request map to? Its input token, token list, required `--param`s. Grep it first, then read the card. |
+| `catalog/TOKENS.md` | DeFi_os (public), generated | Is this token known and verified? Address, decimals, card, underlying. Only verified tokens go into a plan (`skills/defios-tokens/SKILL.md`). |
 | `catalog/<protocol>/card.yaml` | DeFi_os (public) | Which contract is "the gearbox pool"? Which exact calls make up "lend"? Which params must be the Vault? What to read? Which UI routes to avoid? |
 | `books/<vault>/book.yaml` | your agent repo, generated | What does the vault use and hold? Which actions are allowed / missing / unsafe right now? What is queued? |
 | `books/<vault>/role.lock.json` | your agent repo, generated | The full decoded role at a block. A snapshot for diffs. Never trust it on its own. |
@@ -36,10 +37,13 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
    (or `defios.yaml` for vault-specific instances). Every byte of calldata is
    encoded by the engine. If a card does not cover what the human wants, say so;
    do not improvise an address, a selector or an ABI.
-3. **Only card actions, only the direct path.** Call the permitted contract
-   directly. Never route through a UI router, aggregator, zap or referral
-   contract (see each card's `ui_routes_to_avoid`). Never use contracts that run
-   opaque bytecode (e.g. the Enso router).
+3. **Only card actions, only the contracts they name.** Call the contracts an
+   action targets, nothing else. A protocol's own router, gateway or teller is
+   fine when a card action targets it: it is a record of that protocol's card
+   (check `defios whois`). Never route through a third-party router,
+   aggregator, zap or referral contract, or anything in a card's
+   `ui_routes_to_avoid`. Never use contracts that run opaque bytecode (e.g. the
+   Enso router).
 4. **Plan, then propose.** Every transaction starts with `defios plan`: it
    builds the calls from the card and checks each one against the role. If it
    refuses (`missing` / `unsafe`), stop and explain its `why` lines. Show the
@@ -48,7 +52,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
    `plan` and `permit` also run the result on a local fork and refuse if
    anything reverts; show the human the Vault deltas and any open allowance.
    If the summary says "not simulated", run `defios simulate` before anyone
-   signs, or say plainly that it was not simulated.
+   signs, or say plainly that it was not simulated (`skills/defios-simulate/SKILL.md`).
 5. **Receivers are the Vault.** Every receiver / recipient / owner /
    onBehalfOf / to parameter is the Vault. No exceptions without the human's
    explicit, written OK in the conversation.

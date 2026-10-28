@@ -39,6 +39,7 @@ from eth_abi import decode as abi_decode
 from eth_abi import encode as abi_encode
 from eth_utils import is_address, to_checksum_address
 
+from . import lookups
 from .catalog import AVATAR, BuiltCall, CallBuilder, CardError, Catalog
 from .check import check_call
 from .config import VaultConfig
@@ -250,7 +251,11 @@ def _free_vars(spec: Any, out: set[str]) -> set[str]:
 
 
 def _param_value(catalog: Catalog, proto: str, v: Any, book_vars: dict) -> Any:
-    """--param values: ints, addresses from cards, or card contract refs. Never a free-form address."""
+    """--param values: ints, addresses from cards, or card contract refs (or lists of them, from an
+    --intent JSON). Never a free-form address. Hex that is not an address is an int; a bytesN param
+    gets it back as bytes when the call is encoded (Merkl proofs)."""
+    if isinstance(v, list):
+        return [_param_value(catalog, proto, x, book_vars) for x in v]
     if isinstance(v, bool):
         raise PlanError(f"param value {v!r} not supported")
     if isinstance(v, int):
@@ -359,6 +364,18 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
             tok = tok or input_tok
         amt_tok = input_tok if pick_from_list else tok
         vars_: dict[str, Any] = {}
+        # card lookups (a Morpho market from --param market_id): read onchain, checked, pinned
+        try:
+            vars_.update(lookups.resolve(catalog, proto, action, step.params, rpc, vault.book_vars))
+        except lookups.LookupFailed as e:
+            raise PlanError(f"{where}: {e}") from None
+        lk_tok = lookups.token_from(action, vars_)
+        if lk_tok:
+            ltok = resolve_token(catalog, lk_tok, vault.book_vars)
+            if tok and (tok["address"] or "").lower() != lk_tok.lower():
+                raise PlanError(f"{where}: the market's {action['token_from'].split('.')[-1]} is {ltok['ref']}, "
+                                f"not {tok['ref']}")
+            tok = amt_tok = ltok
         if action.get("tokens"):  # per-token action: $token is the chosen token, which must be in the list
             allowed = catalog.action_tokens(proto, action, vault.book_vars)
             names_ = ", ".join(str(r) for r in action["tokens"])
@@ -387,8 +404,10 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
             vars_["token"] = tok["address"]
         for k, v in (action.get("defaults") or {}).items():
             vars_.setdefault(k, _param_value(catalog, proto, v, vault.book_vars))
+        lookup_params = {lk.get("param") for lk in lookups.card_lookups(catalog, proto).values()}
         for k, v in step.params.items():
-            vars_[k] = _param_value(catalog, proto, v, vault.book_vars)
+            if k not in lookup_params:
+                vars_[k] = _param_value(catalog, proto, v, vault.book_vars)
         if raw is not None and any(c.get("send") for c in action.get("calls") or []):
             vars_["value"] = raw
         amounts = {raw: f"{step.amount} {amt_tok['symbol']}"} if raw is not None and amt_tok else {}
@@ -464,6 +483,10 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
                  "card_reviewed": bool(catalog.cards[proto].raw.get("reviewed")), "calls": step_calls}
         if via:
             s_out["resolved_from"] = step.ref
+        for lname, lid in (vars_.get("_lookup_ids") or {}).items():
+            s_out.setdefault("lookups", {})[lname] = {"id": lid, **{k.split(".", 1)[1]: (names.get(v.lower(), v) if
+                                                      isinstance(v, str) else v) for k, v in vars_.items()
+                                                      if k.startswith(lname + ".")}}
         if raw is not None and amt_tok:
             s_out["amount"] = {"human": step.amount, "raw": str(raw), "token": amt_tok["ref"],
                                "decimals": int(amt_tok["decimals"] if amt_tok["decimals"] is not None else NATIVE_DECIMALS)}

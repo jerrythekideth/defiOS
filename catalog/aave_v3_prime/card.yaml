@@ -95,6 +95,7 @@ actions:
       - target: pool
         sig: "setUserEMode(uint8 categoryId)"
         args: { categoryId: $category }
+        note: "--param category=<id>; ids and their risk parameters are read from the pool's e-mode getters; the role leaves the id free, it only changes the Vault's own position"
   supply_eth:
     summary: "ETH -> aEthLidoWETH (collateral when enabled) through the WETH gateway, credited to the Vault"
     input: ETH

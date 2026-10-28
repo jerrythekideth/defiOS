@@ -89,3 +89,7 @@ notes: >
   Reserve ids are per Spoke and per token; read them from the Spoke
   (getReserve / reserve count) before planning. The `tokens:` list only
   decides which token is approved; the role should pin onBehalfOf to the Vault.
+  `reserve_id` stays free in the role (any reserve of this Spoke): with
+  onBehalfOf pinned, a wrong id reverts or acts on another reserve of the
+  Vault's own position; it cannot send funds elsewhere. Check the id against
+  the token before planning.

@@ -13,6 +13,8 @@ contracts:
     kind: erc20_rebasing
     decimals: 18
     aliases: [steth, lido steth, staked ether]
+    proofs:
+      - { from: wstETH, read: "stETH() returns (address)", expect: $self }
   wstETH:
     address: "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"
     category: token
