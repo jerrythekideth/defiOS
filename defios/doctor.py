@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import shutil
 from typing import Any
 
 from .chain import ChainError, Rpc
@@ -25,6 +26,9 @@ def doctor(vault: VaultConfig, rpc: Rpc | None, logs_file: str | None = None) ->
         checks.append(_ok(False, "", "RPC_URL not set: doctor can only check config", "error"))
     if not (out["env"]["ETHERSCAN_API_KEY"] or out["env"]["RPC_URL"]):
         checks.append(_ok(False, "", "no log source: set ETHERSCAN_API_KEY or RPC_URL"))
+    checks.append(_ok(bool(shutil.which("anvil")), "anvil found: plan / permit are simulated on a fork",
+                      "anvil not installed (Foundry): plan / permit cannot simulate; nothing should be signed "
+                      "unsimulated", "warning"))
     if rpc is None:
         return out
 

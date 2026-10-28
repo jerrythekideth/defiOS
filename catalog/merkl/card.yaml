@@ -1,0 +1,60 @@
+protocol: merkl
+name: Merkl (reward distributor)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "verified source of the Distributor implementation (claim, claimed, claimRecipient, setClaimRecipient)"
+  - "addresses: onchain proofs in catalog/registry.proofs.json (DistributionCreator.distributor())"
+
+contracts:
+  distributor:
+    address: "0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae"
+    category: reward
+    kind: merkl_distributor
+    aliases: [merkl distributor, merkl]
+    note: "one contract holds every Merkl reward on this chain; upgradeable proxy"
+    proofs:
+      - { from: distribution_creator, read: "distributor() returns (address)", expect: $self }
+  distribution_creator:
+    address: "0x8BB4C975Ff3c250e0ceEA271728547f3802B36Fd"
+    category: config
+    kind: merkl_creator
+    aliases: [merkl distribution creator]
+    note: "where campaigns are created; not called by a vault"
+    proofs:
+      - { read: "distributor() returns (address)", expect: distributor }
+
+ui_routes_to_avoid:
+  - ui: "Merkl app 'claim and swap' / 'claim and deposit'"
+    via: "claimWithRecipient with callback data, or third-party zaps"
+    why: "callback datas run arbitrary calls on the recipient; use plain claim"
+
+actions:
+  claim:
+    summary: "claim one Merkl reward token; paid to the Vault"
+    calls:
+      - target: distributor
+        sig: "claim(address[] users, address[] tokens, uint256[] amounts, bytes32[][] proofs)"
+        args: { users: [$AVATAR], tokens: [$reward_token], amounts: [$claimable], proofs: [$proof] }
+        note: >
+          one token per call (users is pinned to [Vault], one element). reward_token, claimable
+          (cumulative raw amount from the Merkl API, not the amount still to claim) and proof
+          (bytes32[]) come from the API; give them as --intent params. tokens / amounts / proofs
+          stay free in the role: claim only pays `users`, so they cannot send anything elsewhere.
+
+not_needed:
+  - "setClaimRecipient: redirects the Vault's future rewards to another address"
+  - "claimWithRecipient: takes recipients and arbitrary callback datas"
+  - "toggleOperator: lets another address claim for the Vault"
+  - "disputeTree, updateTree, recoverERC20 and the other admin functions"
+
+notes: >
+  Merkl has no zero-argument "claim everything" call: every claim needs the
+  Vault's cumulative amount and Merkle proof per token, from
+  https://api.merkl.xyz/v4/users/<Vault>/rewards?chainId=1. Claim pays the user
+  (the Vault) unless the Vault set a claimRecipient for that token; `claimRecipient(Vault, token)`
+  on the distributor must be the zero address (a simulation shows the Vault
+  delta as 0 otherwise). A claim with a stale
+  proof reverts with InvalidProof (the tree updates a few times a day): fetch
+  again and re-plan. The reward token must be in the catalog for `plan` to take it.

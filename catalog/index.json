@@ -2,7 +2,7 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26293138,
+   "block": 26293727,
    "checked": "2026-10-28"
   }
  },
@@ -120,21 +120,6 @@
     "unstake"
    ]
   },
-  "aura": {
-   "name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-   "status": "draft",
-   "reviewed": false,
-   "chains": [
-    1
-   ],
-   "actions": [
-    "auraBAL_claim",
-    "auraBAL_unstake",
-    "claim",
-    "stkauraBAL_redeem",
-    "withdraw"
-   ]
-  },
   "avant": {
    "name": "Avant (avETH / savETH)",
    "status": "draft",
@@ -149,49 +134,6 @@
     "redeem",
     "stake",
     "unstake"
-   ]
-  },
-  "balancer": {
-   "name": "Balancer (BAL, emissions, veBAL)",
-   "status": "draft",
-   "reviewed": false,
-   "chains": [
-    1
-   ],
-   "actions": []
-  },
-  "balancer_v2": {
-   "name": "Balancer v2 (Vault)",
-   "status": "draft",
-   "reviewed": false,
-   "chains": [
-    1
-   ],
-   "actions": []
-  },
-  "balancer_v3": {
-   "name": "Balancer v3 (Vault, routers, pools)",
-   "status": "draft",
-   "reviewed": false,
-   "chains": [
-    1
-   ],
-   "actions": [
-    "Aave_GHO_USDT_USDC_add_GHO",
-    "Aave_GHO_USDT_USDC_add_USDC",
-    "Aave_GHO_USDT_USDC_add_USDT",
-    "Aave_GHO_USDT_USDC_remove",
-    "Aave_GHO_USDT_USDC_stake",
-    "claim_bal",
-    "claim_rewards",
-    "osETH_waWETH_remove",
-    "osETH_waWETH_remove_waEthWETH",
-    "osETH_waWETH_stake",
-    "rETH_waEthWETH_remove",
-    "rETH_waEthWETH_remove_waEthWETH",
-    "rETH_waEthWETH_stake",
-    "unstake",
-    "waEthWETH_unwrap"
    ]
   },
   "cctp": {
@@ -553,6 +495,32 @@
     "buy_or_sell"
    ]
   },
+  "merkl": {
+   "name": "Merkl (reward distributor)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": [
+    "claim"
+   ]
+  },
+  "morpho_markets": {
+   "name": "Morpho Blue markets (direct supply, borrow, collateral)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [],
+   "actions": [
+    "accrue_interest",
+    "borrow",
+    "repay",
+    "supply",
+    "supply_collateral",
+    "withdraw",
+    "withdraw_collateral"
+   ]
+  },
   "morpho_vaults": {
    "name": "Morpho Vaults (MetaMorpho v1 / Vault v2, ERC-4626)",
    "status": "draft",
@@ -634,15 +602,6 @@
     "stETH_30DEC2027_remove_liquidity",
     "stETH_30DEC2027_sell_pt"
    ]
-  },
-  "permit2": {
-   "name": "Permit2 (shared token approvals)",
-   "status": "draft",
-   "reviewed": false,
-   "chains": [
-    1
-   ],
-   "actions": []
   },
   "re": {
    "name": "Re (reUSD, insurance capital layer)",
@@ -874,43 +833,6 @@
   }
  },
  "deployments": {
-  "1:0x000000000022d473030f116ddee9f6b43ac78ba3": [
-   {
-    "chain_id": 1,
-    "address": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
-    "protocol": "permit2",
-    "protocol_name": "Permit2 (shared token approvals)",
-    "name": "Permit2",
-    "title": null,
-    "ref": "permit2.Permit2",
-    "category": "spender",
-    "kind": "permit2",
-    "eoa": false,
-    "aliases": [
-     "permit2",
-     "uniswap permit2"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, docs, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/permit2/registry.yaml",
-     "docs: https://docs.uniswap.org/contracts/v4/deployments",
-     "explorer: https://etherscan.io/address/0x000000000022D473030F116dDEE9F6B43aC78BA3#code"
-    ],
-    "proofs": [
-     {
-      "id": "balancer_v3.router.getPermit2() == $self",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {},
-    "note": "Shared token-approval contract; Balancer v3 routers pull tokens through it (approve Permit2, then Permit2.approve(token, router, amount, expiration))"
-   }
-  ],
   "1:0x0000000f2eb9f69274678c76222b35eec7588a65": [
    {
     "chain_id": 1,
@@ -987,46 +909,6 @@
      "name": "Aave Ethereum GHO",
      "symbol": "aEthGHO"
     }
-   }
-  ],
-  "1:0x00a7ba8ae7bca0b10a32ea1f8e2a1da980c6cad2": [
-   {
-    "chain_id": 1,
-    "address": "0x00A7BA8Ae7bca0B10A32Ea1f8e2a1Da980c6CAd2",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "auraBAL_rewards",
-    "title": null,
-    "ref": "aura.auraBAL_rewards",
-    "category": "staking",
-    "kind": "aura_base_reward_pool",
-    "eoa": false,
-    "aliases": [
-     "aurabal staking",
-     "aurabal rewards"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
-    ],
-    "proofs": [
-     {
-      "id": "booster.lockRewards() == $self",
-      "ok": true
-     },
-     {
-      "id": "$self.stakingToken() == auraBAL",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {},
-    "note": "auraBAL staking (BaseRewardPool); stkauraBAL compounds on top of it"
    }
   ],
   "1:0x00b8e1509398ed692c3f326cbaf1694f9a881e27": [
@@ -2019,57 +1901,6 @@
      "symbol": "cvxcrvCVXETH"
     },
     "note": "Convex pid 64 deposit token for curve.crvCVXETH"
-   }
-  ],
-  "1:0x0bfc9d54fc184518a81162f8fb99c2eaca081202": [
-   {
-    "chain_id": 1,
-    "address": "0x0bfc9d54Fc184518A81162F8fB99c2eACa081202",
-    "protocol": "balancer_v3",
-    "protocol_name": "Balancer v3 (Vault, routers, pools)",
-    "name": "waEthWETH",
-    "title": "Wrapped Aave Ethereum WETH",
-    "ref": "balancer_v3.waEthWETH",
-    "category": "vault",
-    "kind": "erc4626",
-    "eoa": false,
-    "aliases": [
-     "waWETH",
-     "aave static weth"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v3/registry.yaml",
-     "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol",
-     "explorer: https://etherscan.io/address/0x0bfc9d54Fc184518A81162F8fB99c2eACa081202#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.asset() == weth.WETH",
-      "ok": true
-     },
-     {
-      "id": "$self.aToken() == aave_v3.aEthWETH",
-      "ok": true
-     },
-     {
-      "id": "vault.getBufferAsset($self) == weth.WETH",
-      "ok": true
-     }
-    ],
-    "proxy": {
-     "implementation": "0x487c2C53c0866F0A73ae317bD1A28F63ADcD9aD1",
-     "admin": "0xD3cF979e676265e4f6379749DECe4708B9A22476"
-    },
-    "onchain": {
-     "name": "Wrapped Aave Ethereum WETH",
-     "symbol": "waEthWETH"
-    },
-    "note": "Aave v3 static aToken wrapper for WETH (ERC-4626); the WETH leg of osETH_waWETH and rETH_waEthWETH"
    }
   ],
   "1:0x0c0d01abf3e6adfca0989ebba9d6e85dd58eab1e": [
@@ -3220,45 +3051,6 @@
     "note": "Curve gauge for BTCGHOETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
    }
   ],
-  "1:0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3": [
-   {
-    "chain_id": 1,
-    "address": "0x1ea5870f7C037930CE1d5d8d9317c670e89e13E3",
-    "protocol": "balancer_v3",
-    "protocol_name": "Balancer v3 (Vault, routers, pools)",
-    "name": "rETH_waEthWETH",
-    "title": "Balancer rETH - Aave WETH",
-    "ref": "balancer_v3.rETH_waEthWETH",
-    "category": "market",
-    "kind": "balancer_v3_pool",
-    "eoa": false,
-    "aliases": [
-     "rETH-waEthWETH",
-     "balancer reth - aave weth"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v3/registry.yaml",
-     "explorer: https://etherscan.io/address/0x1ea5870f7C037930CE1d5d8d9317c670e89e13E3#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.getVault() == vault",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer rETH - Aave WETH",
-     "symbol": "rETH-waEthWETH"
-    },
-    "note": "Balancer v3 pool; the pool contract is also its BPT"
-   }
-  ],
   "1:0x1f98431c8ad98523631ae4a59f267346ea31f984": [
    {
     "chain_id": 1,
@@ -3292,53 +3084,6 @@
     "proxy": {},
     "onchain": {},
     "note": "creates pools; getPool(token0, token1, fee) finds one. Not called by any action"
-   }
-  ],
-  "1:0x20283cce209b29d19329e8ada47215a52188afdc": [
-   {
-    "chain_id": 1,
-    "address": "0x20283cce209b29D19329E8aDa47215a52188aFDc",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "aurarETH_waEthWETH_vault",
-    "title": "Balancer rETH - Aave WETH Aura Deposit Vault",
-    "ref": "aura.aurarETH_waEthWETH_vault",
-    "category": "staking",
-    "kind": "aura_reward_pool_4626",
-    "eoa": false,
-    "aliases": [
-     "aurarETH-waEthWETH-vault",
-     "aura pid 271 rewards"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "explorer: https://etherscan.io/address/0x20283cce209b29D19329E8aDa47215a52188aFDc#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.operator() == booster",
-      "ok": true
-     },
-     {
-      "id": "$self.stakingToken() == aurarETH_waEthWETH",
-      "ok": true
-     },
-     {
-      "id": "$self.asset() == balancer_v3.rETH_waEthWETH",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer rETH - Aave WETH Aura Deposit Vault",
-     "symbol": "aurarETH-waEthWETH-vault"
-    },
-    "note": "Aura pid 271 rewards (BaseRewardPool4626): getReward(), withdrawAndUnwrap() / redeem() back to the BPT"
    }
   ],
   "1:0x21e27a5e5513d6e65c4f830167390997aa84843a": [
@@ -3527,47 +3272,6 @@
      "name": "Aave Ethereum USDT",
      "symbol": "aEthUSDT"
     }
-   }
-  ],
-  "1:0x239e55f427d44c3cc793f49bfb507ebe76638a2b": [
-   {
-    "chain_id": 1,
-    "address": "0x239e55F427D44C3cc793f49bFB507ebe76638a2b",
-    "protocol": "balancer",
-    "protocol_name": "Balancer (BAL, emissions, veBAL)",
-    "name": "minter",
-    "title": null,
-    "ref": "balancer.minter",
-    "category": "minter",
-    "kind": "balancer_minter",
-    "eoa": false,
-    "aliases": [
-     "balancer minter",
-     "bal minter"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card, docs"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer/registry.yaml",
-     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
-     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json"
-    ],
-    "proofs": [
-     {
-      "id": "$self.getBalancerToken() == BAL",
-      "ok": true
-     },
-     {
-      "id": "$self.getGaugeController() == gauge_controller",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {},
-    "note": "mint(gauge) claims BAL emissions for a gauge deposit"
    }
   ],
   "1:0x23da9ade38e4477b23770ded512fd37b12381fab": [
@@ -5672,6 +5376,43 @@
     "onchain": {}
    }
   ],
+  "1:0x3ef3d8ba38ebe18db133cec108f4d14ce00dd9ae": [
+   {
+    "chain_id": 1,
+    "address": "0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae",
+    "protocol": "merkl",
+    "protocol_name": "Merkl (reward distributor)",
+    "name": "distributor",
+    "title": null,
+    "ref": "merkl.distributor",
+    "category": "reward",
+    "kind": "merkl_distributor",
+    "eoa": false,
+    "aliases": [
+     "merkl distributor",
+     "merkl"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: distribution_creator.distributor() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/merkl/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "distribution_creator.distributor() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x33CC998Fd4AF3b6be42BaC9a67fe97e9e275d2aE"
+    },
+    "onchain": {},
+    "note": "one contract holds every Merkl reward on this chain; upgradeable proxy"
+   }
+  ],
   "1:0x3f04b65ddbd87f9ce0a2e7eb24d80e7fb87625b5": [
    {
     "chain_id": 1,
@@ -5741,50 +5482,6 @@
      "symbol": "cvxweeth-ng"
     },
     "note": "Convex pid 355 deposit token for curve.weeth_ng"
-   }
-  ],
-  "1:0x3fa73f1e5d8a792c80f426fc8f84fbf7ce9bbcac": [
-   {
-    "chain_id": 1,
-    "address": "0x3Fa73f1E5d8A792C80F426fc8F84FBF7Ce9bBCAC",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "vlAURA",
-    "title": "Vote Locked Aura",
-    "ref": "aura.vlAURA",
-    "category": "staking",
-    "kind": "aura_locker",
-    "eoa": false,
-    "aliases": [
-     "vlaura",
-     "vote locked aura",
-     "auralocker"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
-    ],
-    "proofs": [
-     {
-      "id": "$self.stakingToken() == AURA",
-      "ok": true
-     },
-     {
-      "id": "$self.cvxCrv() == auraBAL",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Vote Locked Aura",
-     "symbol": "vlAURA"
-    },
-    "note": "AURA vote lock (16 weeks); processExpiredLocks(relock) to exit"
    }
   ],
   "1:0x3fe65692bfcd0e6cf84cb1e7d24108e434a7587e": [
@@ -6009,44 +5706,6 @@
      "name": "Aave Ethereum Variable Debt LINK",
      "symbol": "variableDebtEthLINK"
     }
-   }
-  ],
-  "1:0x42d0ed5c192f70e7a66bd17b71200856141e32a0": [
-   {
-    "chain_id": 1,
-    "address": "0x42D0Ed5C192f70e7A66bd17b71200856141e32A0",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "auraosETH_waWETH",
-    "title": "Balancer osETH-waWETH Aura Deposit",
-    "ref": "aura.auraosETH_waWETH",
-    "category": "receipt",
-    "kind": "aura_deposit_token",
-    "eoa": false,
-    "aliases": [
-     "auraosETH-waWETH"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "explorer: https://etherscan.io/address/0x42D0Ed5C192f70e7A66bd17b71200856141e32A0#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.operator() == booster",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer osETH-waWETH Aura Deposit",
-     "symbol": "auraosETH-waWETH"
-    },
-    "note": "Aura pid 260 deposit token for balancer_v3.osETH_waWETH (pool shut down: withdraw only)"
    }
   ],
   "1:0x4370d3b6c9588e02ce9d22e684387859c7ff5b34": [
@@ -7953,45 +7612,6 @@
     }
    }
   ],
-  "1:0x57c23c58b1d8c3292c15becf07c62c5c52457a42": [
-   {
-    "chain_id": 1,
-    "address": "0x57c23c58B1D8C3292c15BEcF07c62C5c52457A42",
-    "protocol": "balancer_v3",
-    "protocol_name": "Balancer v3 (Vault, routers, pools)",
-    "name": "osETH_waWETH",
-    "title": "Balancer osETH-waWETH",
-    "ref": "balancer_v3.osETH_waWETH",
-    "category": "market",
-    "kind": "balancer_v3_pool",
-    "eoa": false,
-    "aliases": [
-     "osETH-waWETH",
-     "balancer oseth-waweth"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v3/registry.yaml",
-     "explorer: https://etherscan.io/address/0x57c23c58B1D8C3292c15BEcF07c62C5c52457A42#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.getVault() == vault",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer osETH-waWETH",
-     "symbol": "osETH-waWETH"
-    },
-    "note": "Balancer v3 pool; the pool contract is also its BPT"
-   }
-  ],
   "1:0x57e114b691db790c35207b2e685d4a43181e6061": [
    {
     "chain_id": 1,
@@ -8321,50 +7941,6 @@
      "name": "Aave Ethereum cbBTC",
      "symbol": "aEthcbBTC"
     }
-   }
-  ],
-  "1:0x5c6ee304399dbdb9c8ef030ab642b10820db8f56": [
-   {
-    "chain_id": 1,
-    "address": "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56",
-    "protocol": "balancer",
-    "protocol_name": "Balancer (BAL, emissions, veBAL)",
-    "name": "B_80BAL_20WETH",
-    "title": "Balancer 80 BAL 20 WETH",
-    "ref": "balancer.B_80BAL_20WETH",
-    "category": "receipt",
-    "kind": "balancer_v2_bpt",
-    "eoa": false,
-    "aliases": [
-     "B-80BAL-20WETH",
-     "80bal-20weth",
-     "balancer 80 bal 20 weth"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, docs"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer/registry.yaml",
-     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html"
-    ],
-    "proofs": [
-     {
-      "id": "veBAL.token() == $self",
-      "ok": true
-     },
-     {
-      "id": "$self.getVault() == balancer_v2.vault",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer 80 BAL 20 WETH",
-     "symbol": "B-80BAL-20WETH"
-    },
-    "note": "80/20 BAL-WETH Balancer v2 pool token; the asset locked in veBAL"
    }
   ],
   "1:0x5cf1eaf763e8ce5f949bea9a0cd051e8db252d5b": [
@@ -8732,82 +8308,6 @@
     "proxy": {},
     "onchain": {},
     "note": "Curve's address index: get_address(id) returns the current contract for each id (7 = MetaRegistry)"
-   }
-  ],
-  "1:0x616e8bfa43f920657b3497dbf40d6b1a02d4608d": [
-   {
-    "chain_id": 1,
-    "address": "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "auraBAL",
-    "title": "Aura BAL",
-    "ref": "aura.auraBAL",
-    "category": "token",
-    "kind": "erc20",
-    "eoa": false,
-    "aliases": [
-     "aurabal",
-     "aura bal"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
-    ],
-    "proofs": [
-     {
-      "id": "bal_depositor.minter() == $self",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Aura BAL",
-     "symbol": "auraBAL"
-    }
-   }
-  ],
-  "1:0x62a66eb9abf7a788f48d0ce7c0c065df9e09da19": [
-   {
-    "chain_id": 1,
-    "address": "0x62A66eB9aBf7a788F48D0ce7C0C065df9e09dA19",
-    "protocol": "balancer_v3",
-    "protocol_name": "Balancer v3 (Vault, routers, pools)",
-    "name": "rETH_waEthWETH_gauge",
-    "title": "Balancer rETH-waEthWETH Gauge Deposit",
-    "ref": "balancer_v3.rETH_waEthWETH_gauge",
-    "category": "staking",
-    "kind": "balancer_gauge",
-    "eoa": false,
-    "aliases": [
-     "rETH-waEthWETH-gauge"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v3/registry.yaml",
-     "explorer: https://etherscan.io/address/0x62A66eB9aBf7a788F48D0ce7C0C065df9e09dA19#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.lp_token() == rETH_waEthWETH",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer rETH-waEthWETH Gauge Deposit",
-     "symbol": "rETH-waEthWETH-gauge"
-    },
-    "note": "Balancer gauge for rETH_waEthWETH: deposit the BPT to earn BAL (claim with balancer.minter.mint(gauge))"
    }
   ],
   "1:0x62b9c7356a2dc64a1969e19c23e4f579f9810aa7": [
@@ -9859,44 +9359,6 @@
      "name": "Spark USDG",
      "symbol": "spUSDG"
     }
-   }
-  ],
-  "1:0x70a1c01902dab7a45dca1098ca76a8314dd8adba": [
-   {
-    "chain_id": 1,
-    "address": "0x70A1c01902DAb7a45dcA1098Ca76A8314dd8aDbA",
-    "protocol": "balancer_v3",
-    "protocol_name": "Balancer v3 (Vault, routers, pools)",
-    "name": "osETH_waWETH_gauge",
-    "title": "Balancer osETH-waWETH Gauge Deposit",
-    "ref": "balancer_v3.osETH_waWETH_gauge",
-    "category": "staking",
-    "kind": "balancer_gauge",
-    "eoa": false,
-    "aliases": [
-     "osETH-waWETH-gauge"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v3/registry.yaml",
-     "explorer: https://etherscan.io/address/0x70A1c01902DAb7a45dcA1098Ca76A8314dd8aDbA#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.lp_token() == osETH_waWETH",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer osETH-waWETH Gauge Deposit",
-     "symbol": "osETH-waWETH-gauge"
-    },
-    "note": "Balancer gauge for osETH_waWETH: deposit the BPT to earn BAL (claim with balancer.minter.mint(gauge))"
    }
   ],
   "1:0x70ee0a6db4f5a2dc4d9c0b57be97b9987e75bafd": [
@@ -11669,45 +11131,6 @@
     }
    }
   ],
-  "1:0x85b2b559bc2d21104c4defdd6efca8a20343361d": [
-   {
-    "chain_id": 1,
-    "address": "0x85B2b559bC2D21104C4DEFdd6EFcA8A20343361D",
-    "protocol": "balancer_v3",
-    "protocol_name": "Balancer v3 (Vault, routers, pools)",
-    "name": "Aave_GHO_USDT_USDC",
-    "title": "Balancer Aave GHO/USDT/USDC",
-    "ref": "balancer_v3.Aave_GHO_USDT_USDC",
-    "category": "market",
-    "kind": "balancer_v3_pool",
-    "eoa": false,
-    "aliases": [
-     "Aave GHO/USDT/USDC",
-     "balancer aave gho/usdt/usdc"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v3/registry.yaml",
-     "explorer: https://etherscan.io/address/0x85B2b559bC2D21104C4DEFdd6EFcA8A20343361D#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.getVault() == vault",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer Aave GHO/USDT/USDC",
-     "symbol": "Aave GHO/USDT/USDC"
-    },
-    "note": "Balancer v3 pool; the pool contract is also its BPT"
-   }
-  ],
   "1:0x85b78aca6deae198fbf201c82daf6ca21942acc6": [
    {
     "chain_id": 1,
@@ -12375,6 +11798,42 @@
     "note": "Safe, 5-of-8 at 2026-10-24; owner() of both Morpho vaults"
    }
   ],
+  "1:0x8bb4c975ff3c250e0ceea271728547f3802b36fd": [
+   {
+    "chain_id": 1,
+    "address": "0x8BB4C975Ff3c250e0ceEA271728547f3802B36Fd",
+    "protocol": "merkl",
+    "protocol_name": "Merkl (reward distributor)",
+    "name": "distribution_creator",
+    "title": null,
+    "ref": "merkl.distribution_creator",
+    "category": "config",
+    "kind": "merkl_creator",
+    "eoa": false,
+    "aliases": [
+     "merkl distribution creator"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.distributor() == distributor"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/merkl/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.distributor() == distributor",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xe9DAc26794C857982455BC7e69f22573b0E9E492"
+    },
+    "onchain": {},
+    "note": "where campaigns are created; not called by a vault"
+   }
+  ],
   "1:0x8be3460a480c80728a8c4d7a5d5303c85ba7b3b9": [
    {
     "chain_id": 1,
@@ -12565,53 +12024,6 @@
      "name": "Aave Ethereum Variable Debt sDAI",
      "symbol": "variableDebtEthsDAI"
     }
-   }
-  ],
-  "1:0x8e89d41c563e6c3d9901ad75b75e2d8e140def04": [
-   {
-    "chain_id": 1,
-    "address": "0x8e89d41c563e6C3d9901ad75B75e2d8e140DEF04",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "auraAave_GHO_USDT_USDC_vault",
-    "title": "Balancer Aave GHO/USDT/USDC Aura Deposit Vault",
-    "ref": "aura.auraAave_GHO_USDT_USDC_vault",
-    "category": "staking",
-    "kind": "aura_reward_pool_4626",
-    "eoa": false,
-    "aliases": [
-     "auraAave GHO/USDT/USDC-vault",
-     "aura pid 246 rewards"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "explorer: https://etherscan.io/address/0x8e89d41c563e6C3d9901ad75B75e2d8e140DEF04#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.operator() == booster",
-      "ok": true
-     },
-     {
-      "id": "$self.stakingToken() == auraAave_GHO_USDT_USDC",
-      "ok": true
-     },
-     {
-      "id": "$self.asset() == balancer_v3.Aave_GHO_USDT_USDC",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer Aave GHO/USDT/USDC Aura Deposit Vault",
-     "symbol": "auraAave GHO/USDT/USDC-vault"
-    },
-    "note": "Aura pid 246 rewards (BaseRewardPool4626): getReward(), withdrawAndUnwrap() / redeem() back to the BPT"
    }
   ],
   "1:0x9008d19f58aabd9ed0d60971565aa8510560ab41": [
@@ -13201,53 +12613,6 @@
     }
    }
   ],
-  "1:0x994be003de5fd6e41d37c6948f405eb0759149e6": [
-   {
-    "chain_id": 1,
-    "address": "0x994BE003de5FD6E41d37c6948f405EB0759149e6",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "auraosETH_waWETH_vault",
-    "title": "Balancer osETH-waWETH Aura Deposit Vault",
-    "ref": "aura.auraosETH_waWETH_vault",
-    "category": "staking",
-    "kind": "aura_reward_pool_4626",
-    "eoa": false,
-    "aliases": [
-     "auraosETH-waWETH-vault",
-     "aura pid 260 rewards"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "explorer: https://etherscan.io/address/0x994BE003de5FD6E41d37c6948f405EB0759149e6#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.operator() == booster",
-      "ok": true
-     },
-     {
-      "id": "$self.stakingToken() == auraosETH_waWETH",
-      "ok": true
-     },
-     {
-      "id": "$self.asset() == balancer_v3.osETH_waWETH",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer osETH-waWETH Aura Deposit Vault",
-     "symbol": "auraosETH-waWETH-vault"
-    },
-    "note": "Aura pid 260 rewards (BaseRewardPool4626): getReward(), withdrawAndUnwrap() / redeem() back to the BPT"
-   }
-  ],
   "1:0x9985df20d7e9103ecbceb16a84956434b6f06ae8": [
    {
     "chain_id": 1,
@@ -13780,44 +13145,6 @@
     "note": "ERC-4626 share token and the spender for USDC deposits"
    }
   ],
-  "1:0x9fdd52efeb601e4bc78b89c6490505b8ac637e9f": [
-   {
-    "chain_id": 1,
-    "address": "0x9fdD52eFEb601E4Bc78b89C6490505B8aC637E9f",
-    "protocol": "balancer_v3",
-    "protocol_name": "Balancer v3 (Vault, routers, pools)",
-    "name": "Aave_GHO_USDT_USDC_gauge",
-    "title": "Balancer Aave GHO/USDT/USDC Gauge Deposit",
-    "ref": "balancer_v3.Aave_GHO_USDT_USDC_gauge",
-    "category": "staking",
-    "kind": "balancer_gauge",
-    "eoa": false,
-    "aliases": [
-     "Aave GHO/USDT/USDC-gauge"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v3/registry.yaml",
-     "explorer: https://etherscan.io/address/0x9fdD52eFEb601E4Bc78b89C6490505B8aC637E9f#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.lp_token() == Aave_GHO_USDT_USDC",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer Aave GHO/USDT/USDC Gauge Deposit",
-     "symbol": "Aave GHO/USDT/USDC-gauge"
-    },
-    "note": "Balancer gauge for Aave_GHO_USDT_USDC: deposit the BPT to earn BAL (claim with balancer.minter.mint(gauge))"
-   }
-  ],
   "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": [
    {
     "chain_id": 1,
@@ -14202,46 +13529,6 @@
      "name": "Savings USDS",
      "symbol": "sUSDS"
     }
-   }
-  ],
-  "1:0xa57b8d98dae62b26ec3bcc4a365338157060b234": [
-   {
-    "chain_id": 1,
-    "address": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "booster",
-    "title": null,
-    "ref": "aura.booster",
-    "category": "staking",
-    "kind": "aura_booster",
-    "eoa": false,
-    "aliases": [
-     "aura booster"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts",
-     "explorer: https://etherscan.io/address/0xA57b8d98dAE62B26Ec3bcC4a365338157060B234#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.crv() == balancer.BAL",
-      "ok": true
-     },
-     {
-      "id": "$self.minter() == AURA",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {},
-    "note": "Aura is winding down on mainnet: the Booster is shut down (isShutdown() = true) and pools are withdrawal-only. withdraw(pid, amount) still works; deposits revert"
    }
   ],
   "1:0xa665bb258d2a732c170dfd505924214c0b1ac74f": [
@@ -15074,47 +14361,6 @@
     "note": "Curve gauge for ETH_ETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
    }
   ],
-  "1:0xae563e3f8219521950555f5962419c8919758ea2": [
-   {
-    "chain_id": 1,
-    "address": "0xAE563E3f8219521950555F5962419C8919758Ea2",
-    "protocol": "balancer_v3",
-    "protocol_name": "Balancer v3 (Vault, routers, pools)",
-    "name": "router",
-    "title": null,
-    "ref": "balancer_v3.router",
-    "category": "router",
-    "kind": "balancer_v3_router",
-    "eoa": false,
-    "aliases": [
-     "balancer v3 router"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card, docs, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v3/registry.yaml",
-     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
-     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json",
-     "explorer: https://etherscan.io/address/0xAE563E3f8219521950555F5962419C8919758Ea2#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.getPermit2() == permit2.Permit2",
-      "ok": true
-     },
-     {
-      "id": "$self.getWeth() == weth.WETH",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {},
-    "note": "v3 Router (version 2): add/remove liquidity and swaps for a single pool; pulls tokens via Permit2"
-   }
-  ],
   "1:0xae78736cd615f374d3085123a210448e74fc6393": [
    {
     "chain_id": 1,
@@ -15171,15 +14417,20 @@
      "lido steth",
      "staked ether"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: wstETH.stETH() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/lido/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "wstETH.stETH() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {
      "name": "Liquid staked Ether 2.0",
@@ -15494,47 +14745,6 @@
     "proxy": {},
     "onchain": {},
     "note": "Convex pid 64 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
-   }
-  ],
-  "1:0xb21a277466e7db6934556a1ce12eb3f032815c8a": [
-   {
-    "chain_id": 1,
-    "address": "0xb21A277466e7dB6934556a1Ce12eb3F032815c8A",
-    "protocol": "balancer_v3",
-    "protocol_name": "Balancer v3 (Vault, routers, pools)",
-    "name": "composite_liquidity_router",
-    "title": null,
-    "ref": "balancer_v3.composite_liquidity_router",
-    "category": "router",
-    "kind": "balancer_v3_composite_liquidity_router",
-    "eoa": false,
-    "aliases": [
-     "balancer v3 composite liquidity router"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card, docs, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v3/registry.yaml",
-     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
-     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json",
-     "explorer: https://etherscan.io/address/0xb21A277466e7dB6934556a1Ce12eb3F032815c8A#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.getPermit2() == permit2.Permit2",
-      "ok": true
-     },
-     {
-      "id": "$self.getWeth() == weth.WETH",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {},
-    "note": "v3 CompositeLiquidityRouter (version 2): add/remove liquidity in underlying tokens for pools of ERC-4626 wrappers (waEthWETH, ...)"
    }
   ],
   "1:0xb253eff1104802b97ac7e3ac9fdd73aece295a2c": [
@@ -15874,72 +15084,32 @@
     "onchain": {}
    }
   ],
-  "1:0xb8db64dfde4bbead174a6cba756743dec72bbd20": [
-   {
-    "chain_id": 1,
-    "address": "0xB8Db64DFDe4bbead174a6CbA756743dEC72Bbd20",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "aurarETH_waEthWETH",
-    "title": "Balancer rETH - Aave WETH Aura Deposit",
-    "ref": "aura.aurarETH_waEthWETH",
-    "category": "receipt",
-    "kind": "aura_deposit_token",
-    "eoa": false,
-    "aliases": [
-     "aurarETH-waEthWETH"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "explorer: https://etherscan.io/address/0xB8Db64DFDe4bbead174a6CbA756743dEC72Bbd20#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.operator() == booster",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer rETH - Aave WETH Aura Deposit",
-     "symbol": "aurarETH-waEthWETH"
-    },
-    "note": "Aura pid 271 deposit token for balancer_v3.rETH_waEthWETH (pool shut down: withdraw only)"
-   }
-  ],
   "1:0xba100000625a3754423978a60c9317c58a424e3d": [
    {
     "chain_id": 1,
     "address": "0xba100000625a3754423978a60c9317c58a424e3D",
-    "protocol": "balancer",
-    "protocol_name": "Balancer (BAL, emissions, veBAL)",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
     "name": "BAL",
     "title": "Balancer",
-    "ref": "balancer.BAL",
+    "ref": "tokens.BAL",
     "category": "governance",
     "kind": "erc20",
     "eoa": false,
     "aliases": [
-     "bal",
-     "balancer"
+     "bal"
     ],
     "status": "verified",
     "why": [
-     "independent sources: card, docs"
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
     "card_reviewed": false,
     "sources": [
-     "card: catalog/balancer/registry.yaml",
-     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html"
+     "card: catalog/tokens/card.yaml"
     ],
     "proofs": [
      {
-      "id": "minter.getBalancerToken() == $self",
+      "id": "aave_v3.pool.getReservesList() contains $self",
       "ok": true
      }
     ],
@@ -15948,77 +15118,6 @@
      "name": "Balancer",
      "symbol": "BAL"
     }
-   }
-  ],
-  "1:0xba12222222228d8ba445958a75a0704d566bf2c8": [
-   {
-    "chain_id": 1,
-    "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
-    "protocol": "balancer_v2",
-    "protocol_name": "Balancer v2 (Vault)",
-    "name": "vault",
-    "title": null,
-    "ref": "balancer_v2.vault",
-    "category": "market",
-    "kind": "balancer_v2_vault",
-    "eoa": false,
-    "aliases": [
-     "balancer v2 vault",
-     "balancer vault v2"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card, docs, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v2/registry.yaml",
-     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
-     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json",
-     "explorer: https://etherscan.io/address/0xBA12222222228d8Ba445958a75a0704d566BF2C8#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.WETH() == weth.WETH",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {},
-    "note": "Single entry point for v2 pools: joinPool / exitPool / swap / batchSwap"
-   }
-  ],
-  "1:0xba1333333333a1ba1108e8412f11850a5c319ba9": [
-   {
-    "chain_id": 1,
-    "address": "0xbA1333333333a1BA1108E8412f11850A5C319bA9",
-    "protocol": "balancer_v3",
-    "protocol_name": "Balancer v3 (Vault, routers, pools)",
-    "name": "vault",
-    "title": null,
-    "ref": "balancer_v3.vault",
-    "category": "market",
-    "kind": "balancer_v3_vault",
-    "eoa": false,
-    "aliases": [
-     "balancer v3 vault",
-     "balancer vault v3"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card, docs, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer_v3/registry.yaml",
-     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
-     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json",
-     "explorer: https://etherscan.io/address/0xbA1333333333a1BA1108E8412f11850A5C319bA9#code"
-    ],
-    "proofs": [],
-    "proxy": {},
-    "onchain": {},
-    "note": "Holds every v3 pool's tokens; users go through the routers, not the vault"
    }
   ],
   "1:0xba2c8f2ea5b56690bfb8b709438f049e5dd76b96": [
@@ -16302,7 +15401,7 @@
     "proofs": [],
     "proxy": {},
     "onchain": {},
-    "note": "Morpho Blue singleton; vaults allocate into it. Not called directly by a depositor."
+    "note": "Morpho Blue singleton; vaults allocate into it. Direct market actions are in the morpho_markets card."
    }
   ],
   "1:0xbc65ad17c5c0a2a4d159fa5a503f4992c7b545fe": [
@@ -16988,43 +16087,6 @@
     }
    }
   ],
-  "1:0xc0c293ce456ff0ed870add98a0828dd4d2903dbf": [
-   {
-    "chain_id": 1,
-    "address": "0xC0c293ce456fF0ED870ADd98a0828Dd4d2903DBF",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "AURA",
-    "title": "Aura",
-    "ref": "aura.AURA",
-    "category": "governance",
-    "kind": "erc20",
-    "eoa": false,
-    "aliases": [
-     "aura"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
-    ],
-    "proofs": [
-     {
-      "id": "booster.minter() == $self",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Aura",
-     "symbol": "AURA"
-    }
-   }
-  ],
   "1:0xc0cf47d16a332f9e12e506e9a5c8b4baf2a6f1f6": [
    {
     "chain_id": 1,
@@ -17067,89 +16129,6 @@
     "proxy": {},
     "onchain": {},
     "note": "KPK_ETH_Yield's adapter into Morpho markets (adapters(0))"
-   }
-  ],
-  "1:0xc128468b7ce63ea702c1f104d55a2566b13d3abd": [
-   {
-    "chain_id": 1,
-    "address": "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD",
-    "protocol": "balancer",
-    "protocol_name": "Balancer (BAL, emissions, veBAL)",
-    "name": "gauge_controller",
-    "title": null,
-    "ref": "balancer.gauge_controller",
-    "category": "config",
-    "kind": "balancer_gauge_controller",
-    "eoa": false,
-    "aliases": [
-     "balancer gauge controller"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card, docs"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer/registry.yaml",
-     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
-     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json"
-    ],
-    "proofs": [
-     {
-      "id": "minter.getGaugeController() == $self",
-      "ok": true
-     },
-     {
-      "id": "$self.voting_escrow() == veBAL",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {}
-   }
-  ],
-  "1:0xc128a9954e6c874ea3d62ce62b468ba073093f25": [
-   {
-    "chain_id": 1,
-    "address": "0xC128a9954e6c874eA3d62ce62B468bA073093F25",
-    "protocol": "balancer",
-    "protocol_name": "Balancer (BAL, emissions, veBAL)",
-    "name": "veBAL",
-    "title": "Vote Escrowed Balancer BPT",
-    "ref": "balancer.veBAL",
-    "category": "staking",
-    "kind": "voting_escrow",
-    "eoa": false,
-    "aliases": [
-     "vebal",
-     "vote escrowed balancer bpt"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card, docs"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/balancer/registry.yaml",
-     "docs: https://docs.balancer.fi/developer-reference/contracts/deployment-addresses/mainnet.html",
-     "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json"
-    ],
-    "proofs": [
-     {
-      "id": "gauge_controller.voting_escrow() == $self",
-      "ok": true
-     },
-     {
-      "id": "$self.token() == B_80BAL_20WETH",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Vote Escrowed Balancer BPT",
-     "symbol": "veBAL"
-    },
-    "note": "B-80BAL-20WETH vote-escrow lock (non-transferable)"
    }
   ],
   "1:0xc139190f447e929f090edeb554d95abb8b18ac1c": [
@@ -20156,84 +19135,6 @@
     "note": "Safe, 2-of-5 at 2026-10-26; curator() of KPK_wARS_Yield"
    }
   ],
-  "1:0xead792b55340aa20181a80d6a16db6a0ecd1b827": [
-   {
-    "chain_id": 1,
-    "address": "0xeAd792B55340Aa20181A80d6a16db6A0ECd1b827",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "bal_depositor",
-    "title": null,
-    "ref": "aura.bal_depositor",
-    "category": "minter",
-    "kind": "aura_crv_depositor",
-    "eoa": false,
-    "aliases": [
-     "aura bal depositor",
-     "aurabal depositor"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
-    ],
-    "proofs": [
-     {
-      "id": "auraBAL.operator() == $self",
-      "ok": true
-     },
-     {
-      "id": "$self.crvBpt() == balancer.B_80BAL_20WETH",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {},
-    "note": "B-80BAL-20WETH in, auraBAL out (one way)"
-   }
-  ],
-  "1:0xeb12fbcb0a068720ee5f7816416a3ebfc3090a2b": [
-   {
-    "chain_id": 1,
-    "address": "0xeb12FBcb0a068720EE5F7816416a3Ebfc3090A2B",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "auraAave_GHO_USDT_USDC",
-    "title": "Balancer Aave GHO/USDT/USDC Aura Deposit",
-    "ref": "aura.auraAave_GHO_USDT_USDC",
-    "category": "receipt",
-    "kind": "aura_deposit_token",
-    "eoa": false,
-    "aliases": [
-     "auraAave GHO/USDT/USDC"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: card, explorer"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "explorer: https://etherscan.io/address/0xeb12FBcb0a068720EE5F7816416a3Ebfc3090A2B#code"
-    ],
-    "proofs": [
-     {
-      "id": "$self.operator() == booster",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Balancer Aave GHO/USDT/USDC Aura Deposit",
-     "symbol": "auraAave GHO/USDT/USDC"
-    },
-    "note": "Aura pid 246 deposit token for balancer_v3.Aave_GHO_USDT_USDC (pool shut down: withdraw only)"
-   }
-  ],
   "1:0xeb284a70557efe3591b9e6d9d720040e02c54a4d": [
    {
     "chain_id": 1,
@@ -21274,43 +20175,6 @@
     }
    }
   ],
-  "1:0xfaa2ed111b4f580fcb85c48e6dc6782dc5fcd7a6": [
-   {
-    "chain_id": 1,
-    "address": "0xfAA2eD111B4F580fCb85C48E6DC6782Dc5FCD7a6",
-    "protocol": "aura",
-    "protocol_name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
-    "name": "stkauraBAL",
-    "title": "Staked Aura BAL",
-    "ref": "aura.stkauraBAL",
-    "category": "vault",
-    "kind": "erc4626",
-    "eoa": false,
-    "aliases": [
-     "staked aura bal"
-    ],
-    "status": "verified",
-    "why": [
-     "independent sources: address-book, card"
-    ],
-    "card_reviewed": false,
-    "sources": [
-     "card: catalog/aura/registry.yaml",
-     "address-book: https://github.com/aurafinance/aura-contracts/blob/main/tasks/deploy/mainnet-config.ts"
-    ],
-    "proofs": [
-     {
-      "id": "$self.asset() == auraBAL",
-      "ok": true
-     }
-    ],
-    "proxy": {},
-    "onchain": {
-     "name": "Staked Aura BAL",
-     "symbol": "stkauraBAL"
-    }
-   }
-  ],
   "1:0xfb0a3cf9b019bfd8827443d131b235b3e0fc58d2": [
    {
     "chain_id": 1,
@@ -21665,20 +20529,6 @@
  },
  "edges": [
   {
-   "from": "1:0x000000000022d473030f116ddee9f6b43ac78ba3",
-   "relation": "spender_for",
-   "to": "1:0xae563e3f8219521950555f5962419c8919758ea2",
-   "from_ref": "permit2.Permit2",
-   "to_ref": "balancer_v3.router"
-  },
-  {
-   "from": "1:0x000000000022d473030f116ddee9f6b43ac78ba3",
-   "relation": "spender_for",
-   "to": "1:0xb21a277466e7db6934556a1ce12eb3f032815c8a",
-   "from_ref": "permit2.Permit2",
-   "to_ref": "balancer_v3.composite_liquidity_router"
-  },
-  {
    "from": "1:0x02950460e2b9529d0e00284a5fa2d7bdf3fa4d72",
    "relation": "underlying_of",
    "to": "1:0x04e80db3f84873e4132b221831af1045d27f140f",
@@ -21796,27 +20646,6 @@
    "to": "1:0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
    "from_ref": "kpk.KPK_USDT_Prime_adapter",
    "to_ref": "morpho_vaults.morpho_blue"
-  },
-  {
-   "from": "1:0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3",
-   "relation": "underlying_of",
-   "to": "1:0x20283cce209b29d19329e8ada47215a52188afdc",
-   "from_ref": "balancer_v3.rETH_waEthWETH",
-   "to_ref": "aura.aurarETH_waEthWETH_vault"
-  },
-  {
-   "from": "1:0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3",
-   "relation": "underlying_of",
-   "to": "1:0x62a66eb9abf7a788f48d0ce7c0c065df9e09da19",
-   "from_ref": "balancer_v3.rETH_waEthWETH",
-   "to_ref": "balancer_v3.rETH_waEthWETH_gauge"
-  },
-  {
-   "from": "1:0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3",
-   "relation": "underlying_of",
-   "to": "1:0xb8db64dfde4bbead174a6cba756743dec72bbd20",
-   "from_ref": "balancer_v3.rETH_waEthWETH",
-   "to_ref": "aura.aurarETH_waEthWETH"
   },
   {
    "from": "1:0x21e27a5e5513d6e65c4f830167390997aa84843a",
@@ -22120,27 +20949,6 @@
    "to_ref": "sky.lockstake_engine"
   },
   {
-   "from": "1:0x57c23c58b1d8c3292c15becf07c62c5c52457a42",
-   "relation": "underlying_of",
-   "to": "1:0x42d0ed5c192f70e7a66bd17b71200856141e32a0",
-   "from_ref": "balancer_v3.osETH_waWETH",
-   "to_ref": "aura.auraosETH_waWETH"
-  },
-  {
-   "from": "1:0x57c23c58b1d8c3292c15becf07c62c5c52457a42",
-   "relation": "underlying_of",
-   "to": "1:0x70a1c01902dab7a45dca1098ca76a8314dd8adba",
-   "from_ref": "balancer_v3.osETH_waWETH",
-   "to_ref": "balancer_v3.osETH_waWETH_gauge"
-  },
-  {
-   "from": "1:0x57c23c58b1d8c3292c15becf07c62c5c52457a42",
-   "relation": "underlying_of",
-   "to": "1:0x994be003de5fd6e41d37c6948f405eb0759149e6",
-   "from_ref": "balancer_v3.osETH_waWETH",
-   "to_ref": "aura.auraosETH_waWETH_vault"
-  },
-  {
    "from": "1:0x57e114b691db790c35207b2e685d4a43181e6061",
    "relation": "underlying_of",
    "to": "1:0x8be3460a480c80728a8c4d7a5d5303c85ba7b3b9",
@@ -22162,39 +20970,11 @@
    "to_ref": "aave_v3.variableDebtEthLDO"
   },
   {
-   "from": "1:0x5c6ee304399dbdb9c8ef030ab642b10820db8f56",
-   "relation": "underlying_of",
-   "to": "1:0x616e8bfa43f920657b3497dbf40d6b1a02d4608d",
-   "from_ref": "balancer.B_80BAL_20WETH",
-   "to_ref": "aura.auraBAL"
-  },
-  {
-   "from": "1:0x5c6ee304399dbdb9c8ef030ab642b10820db8f56",
-   "relation": "underlying_of",
-   "to": "1:0xc128a9954e6c874ea3d62ce62b468ba073093f25",
-   "from_ref": "balancer.B_80BAL_20WETH",
-   "to_ref": "balancer.veBAL"
-  },
-  {
    "from": "1:0x5dbf760b4fd0cddde0366b33aeb338b2a6d77725",
    "relation": "owner_of",
    "to": "1:0xc0cf47d16a332f9e12e506e9a5c8b4baf2a6f1f6",
    "from_ref": "kpk.KPK_ETH_Yield",
    "to_ref": "kpk.KPK_ETH_Yield_adapter"
-  },
-  {
-   "from": "1:0x616e8bfa43f920657b3497dbf40d6b1a02d4608d",
-   "relation": "underlying_of",
-   "to": "1:0x00a7ba8ae7bca0b10a32ea1f8e2a1da980c6cad2",
-   "from_ref": "aura.auraBAL",
-   "to_ref": "aura.auraBAL_rewards"
-  },
-  {
-   "from": "1:0x616e8bfa43f920657b3497dbf40d6b1a02d4608d",
-   "relation": "underlying_of",
-   "to": "1:0xfaa2ed111b4f580fcb85c48e6dc6782dc5fcd7a6",
-   "from_ref": "aura.auraBAL",
-   "to_ref": "aura.stkauraBAL"
   },
   {
    "from": "1:0x62b9c7356a2dc64a1969e19c23e4f579f9810aa7",
@@ -22482,27 +21262,6 @@
    "to": "1:0xabc57081c04d921388240393ec4088aa47c6832b",
    "from_ref": "sky.sDAI",
    "to_ref": "spark.variableDebtsDAI"
-  },
-  {
-   "from": "1:0x85b2b559bc2d21104c4defdd6efca8a20343361d",
-   "relation": "underlying_of",
-   "to": "1:0x8e89d41c563e6c3d9901ad75b75e2d8e140def04",
-   "from_ref": "balancer_v3.Aave_GHO_USDT_USDC",
-   "to_ref": "aura.auraAave_GHO_USDT_USDC_vault"
-  },
-  {
-   "from": "1:0x85b2b559bc2d21104c4defdd6efca8a20343361d",
-   "relation": "underlying_of",
-   "to": "1:0x9fdd52efeb601e4bc78b89c6490505b8ac637e9f",
-   "from_ref": "balancer_v3.Aave_GHO_USDT_USDC",
-   "to_ref": "balancer_v3.Aave_GHO_USDT_USDC_gauge"
-  },
-  {
-   "from": "1:0x85b2b559bc2d21104c4defdd6efca8a20343361d",
-   "relation": "underlying_of",
-   "to": "1:0xeb12fbcb0a068720ee5f7816416a3ebfc3090a2b",
-   "from_ref": "balancer_v3.Aave_GHO_USDT_USDC",
-   "to_ref": "aura.auraAave_GHO_USDT_USDC"
   },
   {
    "from": "1:0x870ac11d48b15db9a138cf899d20f13f79ba00bc",
@@ -23018,13 +21777,6 @@
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
    "relation": "underlying_of",
-   "to": "1:0x0bfc9d54fc184518a81162f8fb99c2eaca081202",
-   "from_ref": "weth.WETH",
-   "to_ref": "balancer_v3.waEthWETH"
-  },
-  {
-   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-   "relation": "underlying_of",
    "to": "1:0x2e7576042566f8d6990e07a1b61ad1efd86ae70d",
    "from_ref": "weth.WETH",
    "to_ref": "spark.variableDebtWETH"
@@ -23154,13 +21906,6 @@
    "to": "1:0xfe6eb3b609a7c8352a241f7f3a21cea4e9209b8f",
    "from_ref": "weth.WETH",
    "to_ref": "spark.spETH"
-  },
-  {
-   "from": "1:0xc0c293ce456ff0ed870add98a0828dd4d2903dbf",
-   "relation": "underlying_of",
-   "to": "1:0x3fa73f1e5d8a792c80f426fc8f84fbf7ce9bbcac",
-   "from_ref": "aura.AURA",
-   "to_ref": "aura.vlAURA"
   },
   {
    "from": "1:0xc0cf47d16a332f9e12e506e9a5c8b4baf2a6f1f6",

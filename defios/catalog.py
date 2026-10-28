@@ -350,7 +350,7 @@ class Catalog:
 class Pin:
     path: str  # e.g. "receiver", "order.receiver"
     expected: list[str]  # allowed addresses (checksum)
-    kind: str  # "avatar" | "contract" | "set" | "book" | "literal"
+    kind: str  # "avatar" | "contract" | "set" | "book" | "literal" | "lookup"
 
 
 @dataclass
@@ -378,6 +378,18 @@ class BuiltCall:
     def label(self) -> str:
         sig = self.sig.name if self.sig else self.raw.get("sig", "?")
         return f"{self.target_ref}.{sig}"
+
+
+def _fixed_bytes(v: Any, t: str) -> Any:
+    """A plan var for a bytesN (or bytesN[]...) param: ints from --param hex become N bytes."""
+    if isinstance(v, list) and t.endswith("]"):
+        return [_fixed_bytes(x, t[: t.rfind("[")]) for x in v]
+    if isinstance(v, int) and t.startswith("bytes") and t[5:].isdigit():
+        n = int(t[5:])
+        if v < 0 or v >= 1 << (8 * n):
+            raise CardError(f"value does not fit {t}")
+        return v.to_bytes(n, "big")
+    return v
 
 
 def _sample(t: str, comps: list[Param]) -> Any:
@@ -443,7 +455,15 @@ class CallBuilder:
                 return a
             if spec.startswith("$"):
                 if spec[1:] in vars_:
-                    return vars_[spec[1:]]
+                    if spec[1:] in vars_.get("_pinned", ()) and p.is_tuple and not p.is_array:
+                        # a looked-up value (Morpho market params): every address field must match it
+                        for c, v in zip(p.components, vars_[spec[1:]]):
+                            if c.type == "address":
+                                pins.append(Pin(f"{path}.{c.name}", [v], "lookup"))
+                    return _fixed_bytes(vars_[spec[1:]], t)
+                if spec[1:].split(".", 1)[0] in (self.catalog.cards[protocol].raw.get("lookups") or {}):
+                    lk = self.catalog.cards[protocol].raw["lookups"][spec[1:].split(".", 1)[0]]
+                    raise CardError(f"{spec} is looked up onchain from --param {lk.get('param')}; not given")
                 bv = self.book_vars.get(f"{protocol}.{spec[1:]}")
                 if bv is not None:  # sample value for checks, e.g. cowswap.sell_token
                     if t == "address":
@@ -499,7 +519,7 @@ class CallBuilder:
             if call["target"] == TOKEN:
                 bc.target = vars_.get("token")
                 if not bc.target:
-                    bc.error = "target $token: no token chosen (the action's `tokens:` list, or --token)"
+                    bc.error = "target $token: no token chosen (the action's `tokens:` list, --token, or its lookup)"
                     return bc
             else:
                 bc.target = self.catalog.resolve_contract(call["target"], protocol, self.book_vars)
@@ -633,6 +653,20 @@ def validate_card(catalog: Catalog, card: Card) -> list[str]:
         d = c.get("decimals")
         if d is not None and (not isinstance(d, int) or isinstance(d, bool) or not 0 <= d <= 77):
             errs.append(f"{card.protocol}.{name}: decimals must be an integer 0..77, got {d!r}")
+    for lname, lk in (raw.get("lookups") or {}).items():
+        lk = lk or {}
+        for k in ("param", "target", "read"):
+            if k not in lk:
+                errs.append(f"{card.protocol} lookup {lname}: missing `{k}`")
+        try:
+            sig = parse_signature(lk.get("read") or "")
+            outs = {p.name for p in sig.outputs}
+            for f in lk.get("tokens") or []:
+                if f not in outs:
+                    errs.append(f"{card.protocol} lookup {lname}: token field {f!r} not in the read's outputs")
+            catalog.resolve_contract(lk.get("target", ""), card.protocol)
+        except CardError as e:
+            errs.append(f"{card.protocol} lookup {lname}: {e}")
     for aname, action in card.actions.items():
         action = action or {}
         inp = action.get("input")
@@ -649,8 +683,11 @@ def validate_card(catalog: Catalog, card: Card) -> list[str]:
             for ref in toks or []:
                 if not catalog.is_contract_ref(str(ref), card.protocol):
                     errs.append(f"{card.protocol}.{aname}: token {ref!r} is not a contract of a card")
-        if any(c.get("target") == TOKEN for c in action.get("calls") or []) and not toks:
-            errs.append(f"{card.protocol}.{aname}: target $token needs a `tokens:` list")
+        tf = action.get("token_from")
+        if tf is not None and str(tf).split(".", 1)[0] not in (raw.get("lookups") or {}):
+            errs.append(f"{card.protocol}.{aname}: token_from {tf!r} is not a field of a card lookup")
+        if any(c.get("target") == TOKEN for c in action.get("calls") or []) and not toks and not tf:
+            errs.append(f"{card.protocol}.{aname}: target $token needs a `tokens:` list or `token_from`")
         used_vars: set[str] = set()
 
         def _vars(spec):

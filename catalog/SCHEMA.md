@@ -29,6 +29,7 @@ how to add a protocol, pool or market.
 | `contracts` | yes | map of contract name → contract (see below) |
 | `ui_routes_to_avoid` | no | list of `{ui, via, why}`: routes the official UI uses that the agent must not |
 | `reads` | no | list of reads (see below) |
+| `lookups` | no | values read onchain from an id the human gives (see "Lookups") |
 | `actions` | yes | map of action name → action (see below) |
 | `dead_permissions` | no | functions that can never succeed for a vault (admin-only, operator-only) |
 | `not_needed` | no | plain-language list of permissions people add but do not need |
@@ -115,6 +116,7 @@ Action keys used by `defios plan` (all optional):
 | `input` | contract (in this card, or `card.contract`) or `ETH` that `--amount` is denominated in; its `decimals` convert the human amount. `$amount` / `$shares` get the raw value; for `send:` calls the ETH value is the amount |
 | `defaults` | plan-time values for free `$vars` (e.g. `referral: "0x0…0"`). Any other free `$var` must be given with `--param`: plan never fills one with a check sample |
 | `tokens` | the action works on any one of these tokens (contracts of cards). `$token` in a call's `target` or args is that token; `plan` needs `--token` (one of the list); `check` checks the action once per token and reports `tokens: {USDC: allowed, …}` (status `partial` when only some pass). As an arg, `$token` is pinned to the whole list. With `input:` set as well, `$token` is a vault or pool from the list and the amount stays in the `input` token (`morpho_vaults.deposit_usdc=1000 --token KPK_USDC_Prime`) |
+| `token_from` | `<lookup>.<field>` (e.g. `market.loanToken`): that looked-up address is the action's `$token` (approve target, amount decimals, revoke). Used instead of `tokens:` |
 | `approvals` | `keep` when the spender pulls after the transaction (a CoW settlement, a relayer filling a signed order). Otherwise `plan` ends the batch with `approve(spender, 0)` for every approval it made, so no allowance stays open |
 
 `plan` emits each required call (approves included) or, if the role rejects
@@ -142,6 +144,31 @@ Arg value specs:
 **Rule:** every `receiver`, `recipient`, `owner`, `onBehalfOf`, `to`,
 `beneficiary`, `controller` (and similar) parameter must be pinned to `$AVATAR`
 (or listed under `free:` with a reason). The test suite enforces this.
+
+## Lookups
+
+Some protocols name an instance by an id instead of an address: a Morpho Blue
+market is `bytes32 id = keccak256(abi.encode(marketParams))`. The card does not
+list them; the human gives the id and the engine reads the rest.
+
+```yaml
+lookups:
+  market:
+    param: market_id          # --param market_id=0x… on plan and permit
+    target: morpho_blue
+    read: "idToMarketParams(bytes32 id) returns (address loanToken, address collateralToken, address oracle, address irm, uint256 lltv)"
+    id: keccak                # keccak256(abi.encode(result)) must equal the id
+    tokens: [loanToken, collateralToken]   # must be verified tokens of the catalog
+```
+
+`$market` in an action's args is then the whole tuple and `$market.<field>`
+one field. It is **pinned**: `permit` writes an EqualTo on every field, and
+`check` tests hostile variants of its address fields. `plan` and `permit`
+refuse when the id is not given, there is no `RPC_URL`, the read returns zeros,
+the hash does not match, or a token field is not a verified catalog token.
+Running `permit` again with another id adds that market to an Or of pinned
+markets. `check` without the id reports `unresolved`; `plan` still checks every
+call against the role.
 
 ## Dead permissions
 

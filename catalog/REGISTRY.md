@@ -59,7 +59,7 @@ registry records until they have a fixed address.
 
 An ERC-4626 vault is `vault` (or `staking`), not `receipt`, because the
 vault contract is its own share token. Shared infrastructure (Chainlink, Safe,
-Permit2, CCTP) goes in its own card, not inside the protocols that use it.
+CCTP, Merkl) goes in its own card, not inside the protocols that use it.
 
 ### `edges`
 

@@ -32,10 +32,12 @@ SAFE_API_KEY, PROPOSER_PRIVATE_KEY for a delegate key) and `books/` (generated).
 | what is 0x… / is this address ours / an alert names an address | `defios --format text whois 0x… [--chain N]` | quote protocol, contract and status; act only on `verified`; `unknown` = not in the registry, never guess |
 | review this permission .json | `defios decode file.json` | list each change in plain words; flag `PASS[NONE]`, unpinned receivers, delegatecall |
 | something is broken | `defios doctor` | report failing checks |
+| a token: address, decimals, is it real | grep `catalog/TOKENS.md`; details in `skills/defios-tokens/SKILL.md` | only the Verified section goes into a plan |
 | which action does X | grep `catalog/ACTIONS.md` (card, action, input, tokens, `--param`s), then read that card's action and notes | never invent an action the list does not have |
 | do X (lend, stake, wrap, …) | `defios plan <card or alias>.<action>=<amount> [more steps] [--token T]` | show each call's `line`, the warnings; if REFUSED, explain each `why` and stop |
 | add the permission to do X | `defios permit <card>.<action> [--token T]` | show each `+` change with its condition and why; the JSON goes to the human for the Vault queue (never propose it); if REFUSED, explain each line and stop |
-| will this work? / simulate it | `defios simulate --calls calls.json` (or `--batch file.json`, both to try a permission batch then a plan) | report each revert in plain words, the Vault's token deltas and any allowance left open; never propose something that reverted |
+| will this work? / simulate it | `defios simulate --calls calls.json` (or `--batch file.json`, both to try a permission batch then a plan) | report each revert in plain words, the Vault's token deltas and any allowance left open; never propose something that reverted. Nothing is signed unsimulated: `skills/defios-simulate/SKILL.md` |
+| rewards to claim (Merkl) | `skills/defios-merkl/SKILL.md` (API -> `merkl.claim` per token) | only verified reward tokens; claim pays the Vault |
 | queue this transaction | `defios propose --file calls.json` (dry run) | show calls, nonce, SafeTxHash, warnings/problems; wait for the human's yes |
 | (after the human's yes) | `defios propose --file calls.json --send` | give the Safe app link + nonce; humans sign there |
 
@@ -46,7 +48,8 @@ when you need to parse the output.
 
 1. Sync (or `state`) before answering; never answer from an old book.
 2. Addresses only from cards / defios.yaml; calldata only from the engine.
-3. Direct path only; never UI routers or aggregators.
+3. Only the contracts a card action targets (a protocol's own router or
+   gateway counts); never third-party routers, aggregators or UI routes.
 4. Receivers are always the Vault.
 5. Permission changes = Tx Builder JSON for the human to propose on the Vault.
 6. End every answer with a short plain-language summary.

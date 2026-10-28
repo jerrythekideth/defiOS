@@ -1,0 +1,114 @@
+protocol: morpho_markets
+name: Morpho Blue markets (direct supply, borrow, collateral)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "verified source of Morpho Blue (MarketParams, supply/withdraw/borrow/repay/supplyCollateral/withdrawCollateral/accrueInterest, idToMarketParams)"
+adding: |
+  Markets are not listed here: a Morpho Blue market is whitelisted by its id
+  (bytes32, from the Morpho app URL or `CreateMarket` events). Pass it as
+  `--param market_id=0x…` to `defios permit` and `defios plan`. The engine
+  reads `idToMarketParams(id)` from Morpho Blue, checks that
+  keccak256(abi.encode(params)) is the id, refuses unless the loan and
+  collateral tokens are verified tokens of the catalog (catalog/TOKENS.md),
+  and pins all five fields (loanToken, collateralToken, oracle, irm, lltv)
+  in the role. Running `permit` again with another id adds that market to
+  the whitelist (an Or of pinned markets); markets already allowed keep working.
+  Before whitelisting, check the market's oracle, LLTV and liquidity: the role
+  only fixes which market, not whether it is a good one.
+
+contracts:
+  morpho_blue: { ref: morpho_vaults.morpho_blue }
+
+lookups:
+  market:
+    param: market_id
+    target: morpho_blue
+    read: "idToMarketParams(bytes32 id) returns (address loanToken, address collateralToken, address oracle, address irm, uint256 lltv)"
+    id: keccak
+    tokens: [loanToken, collateralToken]
+
+ui_routes_to_avoid:
+  - ui: "Morpho app supply / borrow / repay"
+    via: "Morpho bundler (multicall) contracts"
+    why: "bundler calls take arbitrary bytes[]; call Morpho Blue directly"
+
+actions:
+  supply:
+    summary: "loan token -> supply to market `market_id` (lend)"
+    token_from: market.loanToken
+    defaults: { by_shares: 0 }
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: morpho_blue, amount: $amount }
+      - target: morpho_blue
+        sig: "supply((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, uint256 shares, address onBehalf, bytes data)"
+        args: { marketParams: $market, assets: $amount, shares: $by_shares, onBehalf: $AVATAR, data: "0x" }
+        note: "exactly one of assets / shares is non-zero; data must be empty (no callback)"
+  withdraw:
+    summary: "withdraw supplied loan token from market `market_id`; paid to the Vault"
+    token_from: market.loanToken
+    defaults: { by_shares: 0 }
+    calls:
+      - target: morpho_blue
+        sig: "withdraw((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, uint256 shares, address onBehalf, address receiver)"
+        args: { marketParams: $market, assets: $amount, shares: $by_shares, onBehalf: $AVATAR, receiver: $AVATAR }
+        note: "full exit: --amount 0 --param by_shares=<supplyShares from position(id, Vault)>"
+  borrow:
+    summary: "borrow loan token from market `market_id` against the Vault's collateral; paid to the Vault"
+    token_from: market.loanToken
+    defaults: { by_shares: 0 }
+    calls:
+      - target: morpho_blue
+        sig: "borrow((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, uint256 shares, address onBehalf, address receiver)"
+        args: { marketParams: $market, assets: $amount, shares: $by_shares, onBehalf: $AVATAR, receiver: $AVATAR }
+  repay:
+    summary: "repay the Vault's debt in market `market_id`"
+    token_from: market.loanToken
+    defaults: { by_shares: 0 }
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: morpho_blue, amount: $amount }
+      - target: morpho_blue
+        sig: "repay((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, uint256 shares, address onBehalf, bytes data)"
+        args: { marketParams: $market, assets: $amount, shares: $by_shares, onBehalf: $AVATAR, data: "0x" }
+        note: "repaying by assets can leave dust; a full repay by shares needs an approve above the debt"
+  supply_collateral:
+    summary: "collateral token -> collateral of the Vault in market `market_id`"
+    token_from: market.collateralToken
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: morpho_blue, amount: $amount }
+      - target: morpho_blue
+        sig: "supplyCollateral((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, address onBehalf, bytes data)"
+        args: { marketParams: $market, assets: $amount, onBehalf: $AVATAR, data: "0x" }
+  withdraw_collateral:
+    summary: "withdraw the Vault's collateral from market `market_id`; paid to the Vault"
+    token_from: market.collateralToken
+    calls:
+      - target: morpho_blue
+        sig: "withdrawCollateral((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams, uint256 assets, address onBehalf, address receiver)"
+        args: { marketParams: $market, assets: $amount, onBehalf: $AVATAR, receiver: $AVATAR }
+  accrue_interest:
+    summary: "accrue interest on market `market_id` (anyone may call it)"
+    calls:
+      - target: morpho_blue
+        sig: "accrueInterest((address loanToken, address collateralToken, address oracle, address irm, uint256 lltv) marketParams)"
+        args: { marketParams: $market }
+
+not_needed:
+  - "setAuthorization / setAuthorizationWithSig: would let another address manage the Vault's positions"
+  - "liquidate, flashLoan: need a callback contract; not for a Safe"
+  - "createMarket: markets are used, not created"
+
+notes: >
+  Every call pins `marketParams` to the market looked up from `market_id`
+  (all five fields), onBehalf and receiver to the Vault, and `data` to empty
+  bytes (no callback). `amount` and `by_shares` stay free: they only size the
+  Vault's own position. Morpho Blue is a singleton, so one approve spender
+  covers every market. Read a position with `position(id, Vault)` and a
+  market's totals with `market(id)` on Morpho Blue.

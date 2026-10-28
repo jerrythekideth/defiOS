@@ -60,7 +60,7 @@ contracts:
   crvUSD: { ref: stablecoins.crvUSD }
   FRAX: { ref: tokens.FRAX }
   CRV: { ref: curve.CRV }
-  BAL: { ref: balancer.BAL }
+  BAL: { ref: tokens.BAL }
   rETH: { ref: rocket_pool.rETH }
   osETH: { ref: stakewise_v3.osETH }
   ETHx: { ref: stader.ETHx }
@@ -124,6 +124,7 @@ actions:
       - target: pool
         sig: "setUserEMode(uint8 categoryId)"
         args: { categoryId: $category }
+        note: "--param category=<id>; ids and their risk parameters are read from the pool's e-mode getters; the role leaves the id free, it only changes the Vault's own position"
   enable_collateral:
     summary: "use a supplied token as collateral"
     tokens: [USDC, USDT, DAI, USDS, GHO, PYUSD, USDe, sUSDe]

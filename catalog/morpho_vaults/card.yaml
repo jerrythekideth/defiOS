@@ -25,7 +25,7 @@ contracts:
     address: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
     category: market
     kind: core
-    note: "Morpho Blue singleton; vaults allocate into it. Not called directly by a depositor."
+    note: "Morpho Blue singleton; vaults allocate into it. Direct market actions are in the morpho_markets card."
 
 ui_routes_to_avoid:
   - ui: "Morpho app deposit"

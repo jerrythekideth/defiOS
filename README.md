@@ -34,7 +34,7 @@ Read [`AGENTS.md`](AGENTS.md) first (rules and flows). Then:
 | the action for a request ("supply USDC on Aave", "bridge USDC to Arbitrum") | [`catalog/ACTIONS.md`](catalog/ACTIONS.md): every card action on one page, with its input token, token list, required `--param`s and a one-line summary. Grep it, then open the card |
 | the exact calls of an action, its notes, what to read | `catalog/<card>/card.yaml` → `actions:` / `reads:` |
 | an address, or what an address is | `defios whois 0x…`; records live in `catalog/<card>/card.yaml` `contracts:` and `catalog/<card>/registry.yaml`; all of them in [`catalog/index.json`](catalog/index.json) |
-| a token (decimals, aliases) | the card that owns it: `stablecoins`, `weth`, `lido`, `ethena`, `etherfi`, … and [`catalog/tokens`](catalog/tokens/card.yaml) for the rest (WBTC, cbBTC, LINK, …) |
+| a token (address, decimals, verified or not) | [`catalog/TOKENS.md`](catalog/TOKENS.md) (generated whitelist; how to use it: [`skills/defios-tokens`](skills/defios-tokens/SKILL.md)), then the card that owns it: `stablecoins`, `weth`, `lido`, `ethena`, `etherfi`, … and [`catalog/tokens`](catalog/tokens/card.yaml) for the rest (WBTC, cbBTC, LINK, …) |
 | a curated vault or pool (kpkUSDC, kpkwstETH …) | the curator's card ([`catalog/kpk`](catalog/kpk)); the protocol card's actions take it with `--token` |
 | the card format | [`catalog/SCHEMA.md`](catalog/SCHEMA.md) (cards, actions), [`catalog/REGISTRY.md`](catalog/REGISTRY.md) (records, proofs, categories) |
 | how to add a protocol, market, vault or action | [`catalog/ADDING.md`](catalog/ADDING.md), then the card's own `adding:` field |
@@ -71,7 +71,7 @@ defios --format text check
 ```
 
 Point your agent at `AGENTS.md` (the manual and rules) and, for OpenClaw or
-Claude Code, at `skills/defios/SKILL.md`.
+Claude Code, at `skills/defios/SKILL.md` (and `skills/defios-tokens`, `skills/defios-simulate`, `skills/defios-merkl` for tokens, simulation and Merkl rewards).
 
 Optional MCP server exposing the same functions as tools:
 `pip install -e "DeFi_os[mcp]"` then `DEFIOS_ROOT=/path/to/agent-repo python -m defios.mcp`.
@@ -81,7 +81,7 @@ Optional MCP server exposing the same functions as tools:
 ```
 DeFi_os/                    public · this repo · no user data
 ├── AGENTS.md               the agent manual and rules
-├── skills/defios/          AgentSkills-format skill (OpenClaw, Claude Code)
+├── skills/                 AgentSkills-format skills (OpenClaw, Claude Code): defios, defios-tokens, defios-simulate, defios-merkl
 ├── catalog/<protocol>/     card.yaml (+ NOTES.md): public protocol facts
 ├── defios/                 Python engine: roles/ (v2 adapter, v3 slot), sync, check, doctor, cli, mcp,
 │                           plan (intent -> calls.json), tx (MultiSend + execTransactionWithRole),
@@ -133,7 +133,7 @@ your-permissions/           public or private audit trail of permission batches
 | `defios propose --file calls.json [--send]` | M2: wraps engine-built calls in `execTransactionWithRole` (MultiSend when several), picks a non-colliding Operator nonce, computes the SafeTxHash, signs as a delegate; prints everything (dry run) unless `--send` posts it to the Safe Transaction Service. Never signs as an owner, never executes |
 | `defios catalog` | lists and validates cards |
 | `defios whois 0x…` | what an address is, and whether it is verified (see `catalog/REGISTRY.md`) |
-| `defios registry verify` / `export` | re-run onchain proofs; write `catalog/index.json` (for non-Python consumers) and `catalog/ACTIONS.md` |
+| `defios registry verify` / `export` | re-run onchain proofs; write `catalog/index.json` (for non-Python consumers), `catalog/ACTIONS.md` and `catalog/TOKENS.md` |
 
 Global options: `--root <agent repo>`, `--vault <name>`, `--format both|json|text`,
 `--logs-file <json>` (offline replay), `--offline` (ignore `RPC_URL`).
@@ -151,8 +151,7 @@ Ethereum mainnet:
 * Stables and savings: stablecoins, sky (USDS, sUSDS, sDAI, stUSDS, rewards),
   ethena, aave (stkAAVE, sGho), avant, strata, dialectic, infinifi, tokemak,
   upshift, noon, re, flying_tulip, threejane, yo, makina, origin_arm, liminal.
-* DEX, LP and yield trading: cowswap, uniswap_v3, curve, convex, balancer, balancer_v2,
-  balancer_v3, aura, pendle, permit2.
+* DEX, LP and yield trading: cowswap, uniswap_v3, curve, convex, pendle.
 * Bridges: cctp (Circle USDC).
 * Tokens with no protocol card of their own: tokens.
 * Curators: kpk (Gearbox v3 pools, Morpho Vault V2 vaults, their admin Safes).

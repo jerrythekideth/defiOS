@@ -235,8 +235,8 @@ def registry_verify(ctx, chains, write, directory):
     """
     def go():
         from .chain import Rpc, env
-        from .registry import (ACTIONS_FILE, INDEX_FILE, PROOFS_FILE, RegistryError, dump, merge_results,
-                               summarize_verify, verify)
+        from .registry import (ACTIONS_FILE, INDEX_FILE, PROOFS_FILE, TOKENS_FILE, RegistryError, dump,
+                               merge_results, summarize_verify, verify)
         try:
             d, reg, old = _registry(directory)
         except RegistryError as e:
@@ -253,6 +253,7 @@ def registry_verify(ctx, chains, write, directory):
             (d / PROOFS_FILE).write_text(dump(results))
             (d / INDEX_FILE).write_text(dump(reg.export_index(results)))
             (d / ACTIONS_FILE).write_text(reg.actions_md())
+            (d / TOKENS_FILE).write_text(reg.tokens_md(results))
         checked = [str(c) for c in rpcs]
         res = {"checked": checked, "statuses": {r.ref: reg.status(r, results).status for r in reg.records},
                "written": [str(d / PROOFS_FILE), str(d / INDEX_FILE)] if write else []}
@@ -266,8 +267,8 @@ def registry_verify(ctx, chains, write, directory):
 @click.option("--out", default=None, help="Where to write (default catalog/index.json; '-' = stdout).")
 @click.option("--dir", "directory", default=None, type=click.Path(file_okay=False), help="Catalog directory.")
 def registry_export(out, directory):
-    """Write the static index.json (deployments, status, edges) and ACTIONS.md. Offline."""
-    from .registry import ACTIONS_FILE, INDEX_FILE, RegistryError, dump
+    """Write the static index.json (deployments, status, edges), ACTIONS.md and TOKENS.md. Offline."""
+    from .registry import ACTIONS_FILE, INDEX_FILE, TOKENS_FILE, RegistryError, dump
     try:
         d, reg, results = _registry(directory)
     except RegistryError as e:
@@ -282,7 +283,8 @@ def registry_export(out, directory):
     click.echo(f"wrote {path}", err=True)
     if not out:
         (d / ACTIONS_FILE).write_text(reg.actions_md())
-        click.echo(f"wrote {d / ACTIONS_FILE}", err=True)
+        (d / TOKENS_FILE).write_text(reg.tokens_md(results))
+        click.echo(f"wrote {d / ACTIONS_FILE} and {d / TOKENS_FILE}", err=True)
 
 
 @main.command()
@@ -394,6 +396,8 @@ def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe, keep_a
 @click.option("--token", "tokens", multiple=True, help="Limit actions with a `tokens:` list to these tokens (repeatable). "
               "Default: every token the card lists.")
 @click.option("--with-optional", is_flag=True, help="Also permit the actions' optional / alternative calls.")
+@click.option("--param", "params", multiple=True, help="Lookup id, name=value (e.g. market_id=0x… for a Morpho "
+              "market): the looked-up value is pinned in the role.")
 @click.option("--replace", is_flag=True, help="Overwrite stored scopes that differ from the card (or are looser "
               "than it) instead of refusing. Whatever stops working is listed.")
 @click.option("--description", default=None, help="Batch description shown in the Safe Transaction Builder.")
@@ -402,12 +406,13 @@ def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe, keep_a
 @click.option("--no-simulate", is_flag=True, help="Skip the anvil fork run (done by default when RPC_URL and anvil "
               "are available).")
 @click.pass_context
-def permit(ctx, actions, tokens, with_optional, replace, description, out, no_simulate):
+def permit(ctx, actions, tokens, with_optional, params, replace, description, out, no_simulate):
     """Build the Roles permission batch that lets the Operator run card ACTIONS.
 
     \b
     ACTIONS are <card>.<action> or <alias>.<action>:
       defios permit aave_v3.supply aave_v3.withdraw --token USDC --token USDT
+      defios permit morpho_markets.supply morpho_markets.withdraw --param market_id=0x…
     Conditions come from the card; the batch is merged with the live role (existing
     approve spenders are kept) and checked on a copy of it: every call allowed, hostile
     variants rejected, nothing that works today broken, no new high lint.
@@ -422,9 +427,16 @@ def permit(ctx, actions, tokens, with_optional, replace, description, out, no_si
         from .plan import PlanError, role_for_plan
         cfg, vault, catalog, rpc = _setup(ctx)
         try:
+            extra = {}
+            for kv in params:
+                k, eq, v = kv.partition("=")
+                if not eq or not k.strip():
+                    raise PermitError(f"--param {kv!r}: expected name=value")
+                extra[k.strip()] = v.strip()
             state, adapter, source = role_for_plan(cfg, vault, ctx.obj["logs_file"], rpc)
             res = run(catalog, state, adapter, vault, list(actions), tokens=list(tokens) or None,
-                      with_optional=with_optional, replace=replace, description=description, role_source=source)
+                      with_optional=with_optional, replace=replace, description=description, role_source=source,
+                      params=extra, rpc=rpc)
         except (PermitError, PlanError, CardError) as e:
             raise ConfigError(str(e)) from e
         if res["ok"] and res.get("batch"):

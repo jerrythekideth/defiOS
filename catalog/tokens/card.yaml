@@ -136,5 +136,14 @@ contracts:
     aliases: [link]
     proofs:
       - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  BAL:
+    address: "0xba100000625a3754423978a60c9317c58a424e3D"
+    name: "Balancer"
+    category: governance
+    kind: erc20
+    decimals: 18
+    aliases: [bal]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
 
 actions: {}

@@ -99,6 +99,18 @@ def _any_of(p: Param, addrs: list[str]) -> Condition:
     return leaves[0] if len(leaves) == 1 else Condition(AbiType.NONE, Operator.OR, b"", leaves)
 
 
+def _pinned(p: Param, value: Any, path: str) -> Condition:
+    """EqualTo on every leaf of a looked-up value (a whole tuple, e.g. Morpho MarketParams)."""
+    if p.is_tuple and not p.is_array:
+        return Condition(AbiType.TUPLE, Operator.MATCHES, b"",
+                         [_pinned(c, v, f"{path}.{c.name}") for c, v in zip(p.components, value)])
+    if p.type == "address":
+        return _addr_eq(p, value)
+    if p.is_array:
+        raise PermitError(f"{path}: cannot pin an array from a lookup")
+    return _eq(p, value)
+
+
 class ConditionBuilder:
     def __init__(self, catalog: Catalog, avatar: str, book_vars: dict | None = None):
         self.catalog = catalog
@@ -115,8 +127,10 @@ class ConditionBuilder:
                               f"in defios.yaml book_vars)")
         return a
 
-    def param(self, spec: Any, p: Param, proto: str, path: str, tokens: list[str]) -> Condition:
+    def param(self, spec: Any, p: Param, proto: str, path: str, tokens: list[str],
+              vars_: dict | None = None) -> Condition:
         t = p.type
+        vars_ = vars_ or {}
         if spec is None:
             return _pass(p)
         if isinstance(spec, bool) or isinstance(spec, int):
@@ -130,7 +144,12 @@ class ConditionBuilder:
                 return _any_of(p, tokens)
             if spec.startswith("$book."):
                 return _addr_eq(p, self._resolve(spec, proto, path))
+            if spec.startswith("$") and spec[1:] in vars_.get("_pinned", ()):
+                return _pinned(p, vars_[spec[1:]], path)  # a looked-up value (Morpho market): pinned field by field
             if spec.startswith("$"):
+                if spec[1:].split(".", 1)[0] in (self.catalog.cards[proto].raw.get("lookups") or {}):
+                    lk = self.catalog.cards[proto].raw["lookups"][spec[1:].split(".", 1)[0]]
+                    raise PermitError(f"{path}: {spec} must be pinned; pass --param {lk.get('param')}=<id>")
                 return _pass(p)  # free variable: the agent picks it per transaction
             if t in ("address", "bytes32") and (is_address(spec) or self.catalog.is_contract_ref(spec, proto)):
                 return _addr_eq(p, self._resolve(spec, proto, path))
@@ -146,19 +165,20 @@ class ConditionBuilder:
             addrs = [self.avatar if r == AVATAR else self._resolve(r, proto, path) for r in spec["one_of"]]
             return _any_of(p, addrs)
         if isinstance(spec, dict) and p.is_tuple and not p.is_array:
-            kids = [self.param(spec.get(c.name), c, proto, f"{path}.{c.name}", tokens) for c in p.components]
+            kids = [self.param(spec.get(c.name), c, proto, f"{path}.{c.name}", tokens, vars_) for c in p.components]
             if all(_pure_pass(k) for k in kids):
                 return _pass(p)
             return Condition(AbiType.TUPLE, Operator.MATCHES, b"", kids)
         if isinstance(spec, list) and p.is_array:
             ep = Param(p.name, p.base, p.components)
-            kids = [self.param(s, ep, proto, f"{path}[{i}]", tokens) for i, s in enumerate(spec)]
+            kids = [self.param(s, ep, proto, f"{path}[{i}]", tokens, vars_) for i, s in enumerate(spec)]
             if all(_pure_pass(k) for k in kids):
                 return _pass(p)
             return Condition(AbiType.ARRAY, Operator.MATCHES, b"", kids)  # exact length, element by element
         raise PermitError(f"{path}: unsupported arg spec {spec!r} for type {t}")
 
-    def call(self, proto: str, aname: str, i: int, call: dict, tokens: list[str]) -> tuple[Condition | None, int]:
+    def call(self, proto: str, aname: str, i: int, call: dict, tokens: list[str],
+             vars_: dict | None = None) -> tuple[Condition | None, int]:
         """(root condition or None for allowFunction, execution options) for one card call."""
         where = f"{proto}.{aname}[{i}]"
         if call.get("calls_params"):
@@ -166,7 +186,7 @@ class ConditionBuilder:
                               f"this card could not restrict them")
         sig = parse_signature(call["sig"])
         args = call.get("args") or {}
-        kids = [self.param(args.get(p.name), p, proto, f"{where}.{p.name}", tokens) for p in sig.params]
+        kids = [self.param(args.get(p.name), p, proto, f"{where}.{p.name}", tokens, vars_) for p in sig.params]
         while kids and _pure_pass(kids[-1]):
             kids.pop()  # trailing free params need no node (zodiac-roles-sdk does the same)
         opts = ExecutionOptions.NONE
@@ -219,6 +239,22 @@ def _addr_leaves(c: Condition, avatar_word: bytes) -> list[bytes] | None:
     return None
 
 
+def _pinned_leaves(c: Condition) -> bool:
+    """Every leaf is an EqualTo (nothing free inside)."""
+    if c.operator == Operator.MATCHES:
+        return bool(c.children) and all(_pinned_leaves(k) for k in c.children)
+    return c.operator in (Operator.EQUAL_TO, Operator.EQUAL_TO_AVATAR)
+
+
+def _tuple_alts(c: Condition) -> list[Condition] | None:
+    """A fully pinned tuple, or an Or of them, as a list of alternatives; None otherwise."""
+    alts = c.children if c.operator == Operator.OR else [c]
+    if alts and all(a.param_type == AbiType.TUPLE and a.operator == Operator.MATCHES and _pinned_leaves(a)
+                    for a in alts):
+        return list(alts)
+    return None
+
+
 def same(a: Condition | None, b: Condition | None, avatar: str) -> bool:
     if a is None or b is None:
         return a is b
@@ -245,6 +281,17 @@ def merge(old: Condition, new: Condition, avatar: str) -> tuple[Condition | None
     if len(diff) > 1:
         return None, f"params {diff} differ"
     i = diff[0]
+    to, tn = _tuple_alts(ko[i]), _tuple_alts(kn[i])
+    if to is not None and tn is not None:  # whitelists of fully pinned tuples (Morpho markets): union
+        have = {_key(x, aw) for x in to}
+        add = [x for x in tn if _key(x, aw) not in have]
+        if not add:
+            return old, "same"
+        alts = to + add
+        ko[i] = Condition(AbiType.NONE, Operator.OR, b"", alts)
+        while ko and _pure_pass(ko[-1]):
+            ko.pop()
+        return Condition(AbiType.CALLDATA, Operator.MATCHES, b"", ko), f"param {i}: added {len(add)} tuple(s)"
     lo, ln = _addr_leaves(ko[i], aw), _addr_leaves(kn[i], aw)
     if lo is None or ln is None:
         return None, f"param {i} differs and is not an address set"
@@ -365,7 +412,9 @@ def _statuses(res: dict) -> dict[tuple[str, str], str]:
 
 def permit(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: VaultConfig, refs: list[str], *,
            tokens: list[str] | None = None, with_optional: bool = False, replace: bool = False,
-           description: str | None = None, role_source: str | None = None) -> dict:
+           description: str | None = None, role_source: str | None = None, params: dict | None = None,
+           rpc=None) -> dict:
+    from . import lookups
     from .plan import PlanError, resolve_action
     cb = ConditionBuilder(catalog, vault.avatar, vault.book_vars)
     builder = CallBuilder(catalog, vault.avatar, vault.book_vars)
@@ -381,6 +430,16 @@ def permit(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vau
             protos.append(proto)
         action = catalog.cards[proto].actions[aname] or {}
         toks = _selected_tokens(catalog, proto, aname, action, tokens, vault.book_vars)
+        try:
+            lk_vars = lookups.resolve(catalog, proto, action, params or {}, rpc, vault.book_vars)
+        except lookups.LookupFailed as e:
+            raise PermitError(f"{proto}.{aname}: {e}") from None
+        if lookups.token_from(action, lk_vars):
+            toks = [lookups.token_from(action, lk_vars)]
+        for lname, lid in (lk_vars.get("_lookup_ids") or {}).items():
+            notes.append(f"{proto}.{aname}: {lname} {lid} pinned field by field: "
+                         + ", ".join(f"{k.split('.', 1)[1]}={v}" for k, v in lk_vars.items()
+                                     if k.startswith(lname + ".")))
         for i, call in enumerate(action.get("calls") or []):
             if "sig" not in call:
                 notes.append(f"{proto}.{aname}[{i}]: {call.get('sign') or call.get('external') or call.get('note')} "
@@ -390,11 +449,11 @@ def permit(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vau
                 notes.append(f"{proto}.{aname}[{i}] {call['sig'].split('(')[0]} is optional; skipped "
                              f"(--with-optional adds it)")
                 continue
-            cond, opts = cb.call(proto, aname, i, call, toks)
+            cond, opts = cb.call(proto, aname, i, call, toks, lk_vars)
             sig = parse_signature(call["sig"])
             label = f"{proto}.{aname}[{i}]"
             for tok in (toks or [None]):
-                bc = builder.build(proto, aname, i, call, {"token": tok, "_tokens": toks} if tok else {})
+                bc = builder.build(proto, aname, i, call, {**lk_vars, **({"token": tok, "_tokens": toks} if tok else {})})
                 if bc.error:
                     raise PermitError(f"{label}: {bc.error}")
                 key = (bc.target.lower(), sig.selector)

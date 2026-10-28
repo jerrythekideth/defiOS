@@ -1,19 +1,9 @@
 {
  "_meta": {
   "1": {
-   "block": 26293138,
+   "block": 26293727,
    "checked": "2026-10-28"
   }
- },
- "1:0x000000000022d473030f116ddee9f6b43ac78ba3": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "balancer_v3.router.getPermit2() == $self",
-    "ok": true,
-    "got": "0x000000000022D473030F116dDEE9F6B43aC78BA3"
-   }
-  ]
  },
  "1:0x0000000f2eb9f69274678c76222b35eec7588a65": {
   "code": true,
@@ -41,21 +31,6 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum GHO",
   "symbol": "aEthGHO"
- },
- "1:0x00a7ba8ae7bca0b10a32ea1f8e2a1da980c6cad2": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "booster.lockRewards() == $self",
-    "ok": true,
-    "got": "0x00A7BA8Ae7bca0B10A32Ea1f8e2a1Da980c6CAd2"
-   },
-   {
-    "id": "$self.stakingToken() == auraBAL",
-    "ok": true,
-    "got": "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d"
-   }
-  ]
  },
  "1:0x00b8e1509398ed692c3f326cbaf1694f9a881e27": {
   "code": true,
@@ -387,30 +362,6 @@
   ],
   "name": "Curve CVX-ETH Convex Deposit",
   "symbol": "cvxcrvCVXETH"
- },
- "1:0x0bfc9d54fc184518a81162f8fb99c2eaca081202": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.asset() == weth.WETH",
-    "ok": true,
-    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
-   },
-   {
-    "id": "$self.aToken() == aave_v3.aEthWETH",
-    "ok": true,
-    "got": "0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8"
-   },
-   {
-    "id": "vault.getBufferAsset($self) == weth.WETH",
-    "ok": true,
-    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
-   }
-  ],
-  "implementation": "0x487c2C53c0866F0A73ae317bD1A28F63ADcD9aD1",
-  "admin": "0xD3cF979e676265e4f6379749DECe4708B9A22476",
-  "name": "Wrapped Aave Ethereum WETH",
-  "symbol": "waEthWETH"
  },
  "1:0x0c0d01abf3e6adfca0989ebba9d6e85dd58eab1e": {
   "code": true,
@@ -806,18 +757,6 @@
   "name": "Curve.fi BTCGHOETH Gauge Deposit",
   "symbol": "BTCGHOETH-gauge"
  },
- "1:0x1ea5870f7c037930ce1d5d8d9317c670e89e13e3": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.getVault() == vault",
-    "ok": true,
-    "got": "0xbA1333333333a1BA1108E8412f11850A5C319bA9"
-   }
-  ],
-  "name": "Balancer rETH - Aave WETH",
-  "symbol": "rETH-waEthWETH"
- },
  "1:0x1f98431c8ad98523631ae4a59f267346ea31f984": {
   "code": true,
   "proofs": [
@@ -827,28 +766,6 @@
     "got": "0x1F98431c8aD98523631AE4a59f267346ea31F984"
    }
   ]
- },
- "1:0x20283cce209b29d19329e8ada47215a52188afdc": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.operator() == booster",
-    "ok": true,
-    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
-   },
-   {
-    "id": "$self.stakingToken() == aurarETH_waEthWETH",
-    "ok": true,
-    "got": "0xB8Db64DFDe4bbead174a6CbA756743dEC72Bbd20"
-   },
-   {
-    "id": "$self.asset() == balancer_v3.rETH_waEthWETH",
-    "ok": true,
-    "got": "0x1ea5870f7C037930CE1d5d8d9317c670e89e13E3"
-   }
-  ],
-  "name": "Balancer rETH - Aave WETH Aura Deposit Vault",
-  "symbol": "aurarETH-waEthWETH-vault"
  },
  "1:0x21e27a5e5513d6e65c4f830167390997aa84843a": {
   "code": true,
@@ -912,21 +829,6 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum USDT",
   "symbol": "aEthUSDT"
- },
- "1:0x239e55f427d44c3cc793f49bfb507ebe76638a2b": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.getBalancerToken() == BAL",
-    "ok": true,
-    "got": "0xba100000625a3754423978a60c9317c58a424e3D"
-   },
-   {
-    "id": "$self.getGaugeController() == gauge_controller",
-    "ok": true,
-    "got": "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
-   }
-  ]
  },
  "1:0x23da9ade38e4477b23770ded512fd37b12381fab": {
   "code": true,
@@ -1649,6 +1551,17 @@
   "implementation": "0x21414E68da7658b5B2d9C04B06a1f03055763087",
   "admin": "0xA28c08f165116587D4F3E708743B4dEe155c5E64"
  },
+ "1:0x3ef3d8ba38ebe18db133cec108f4d14ce00dd9ae": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "distribution_creator.distributor() == $self",
+    "ok": true,
+    "got": "0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae"
+   }
+  ],
+  "implementation": "0x33CC998Fd4AF3b6be42BaC9a67fe97e9e275d2aE"
+ },
  "1:0x3f04b65ddbd87f9ce0a2e7eb24d80e7fb87625b5": {
   "code": true,
   "proofs": [],
@@ -1666,23 +1579,6 @@
   ],
   "name": "weETH/WETH-ng Convex Deposit",
   "symbol": "cvxweeth-ng"
- },
- "1:0x3fa73f1e5d8a792c80f426fc8f84fbf7ce9bbcac": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.stakingToken() == AURA",
-    "ok": true,
-    "got": "0xC0c293ce456fF0ED870ADd98a0828Dd4d2903DBF"
-   },
-   {
-    "id": "$self.cvxCrv() == auraBAL",
-    "ok": true,
-    "got": "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d"
-   }
-  ],
-  "name": "Vote Locked Aura",
-  "symbol": "vlAURA"
  },
  "1:0x3fe65692bfcd0e6cf84cb1e7d24108e434a7587e": {
   "code": true,
@@ -1762,18 +1658,6 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt LINK",
   "symbol": "variableDebtEthLINK"
- },
- "1:0x42d0ed5c192f70e7a66bd17b71200856141e32a0": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.operator() == booster",
-    "ok": true,
-    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
-   }
-  ],
-  "name": "Balancer osETH-waWETH Aura Deposit",
-  "symbol": "auraosETH-waWETH"
  },
  "1:0x4370d3b6c9588e02ce9d22e684387859c7ff5b34": {
   "code": true,
@@ -2445,18 +2329,6 @@
   "name": "Aave Ethereum Variable Debt PYUSD",
   "symbol": "variableDebtEthPYUSD"
  },
- "1:0x57c23c58b1d8c3292c15becf07c62c5c52457a42": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.getVault() == vault",
-    "ok": true,
-    "got": "0xbA1333333333a1BA1108E8412f11850A5C319bA9"
-   }
-  ],
-  "name": "Balancer osETH-waWETH",
-  "symbol": "osETH-waWETH"
- },
  "1:0x57e114b691db790c35207b2e685d4a43181e6061": {
   "code": true,
   "proofs": [],
@@ -2570,23 +2442,6 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum cbBTC",
   "symbol": "aEthcbBTC"
- },
- "1:0x5c6ee304399dbdb9c8ef030ab642b10820db8f56": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "veBAL.token() == $self",
-    "ok": true,
-    "got": "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56"
-   },
-   {
-    "id": "$self.getVault() == balancer_v2.vault",
-    "ok": true,
-    "got": "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
-   }
-  ],
-  "name": "Balancer 80 BAL 20 WETH",
-  "symbol": "B-80BAL-20WETH"
  },
  "1:0x5cf1eaf763e8ce5f949bea9a0cd051e8db252d5b": {
   "code": true,
@@ -2704,30 +2559,6 @@
  "1:0x5ffe7fb82894076ecb99a30d6a32e969e6e35e98": {
   "code": true,
   "proofs": []
- },
- "1:0x616e8bfa43f920657b3497dbf40d6b1a02d4608d": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "bal_depositor.minter() == $self",
-    "ok": true,
-    "got": "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d"
-   }
-  ],
-  "name": "Aura BAL",
-  "symbol": "auraBAL"
- },
- "1:0x62a66eb9abf7a788f48d0ce7c0c065df9e09da19": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.lp_token() == rETH_waEthWETH",
-    "ok": true,
-    "got": "0x1ea5870f7C037930CE1d5d8d9317c670e89e13E3"
-   }
-  ],
-  "name": "Balancer rETH-waEthWETH Gauge Deposit",
-  "symbol": "rETH-waEthWETH-gauge"
  },
  "1:0x62b9c7356a2dc64a1969e19c23e4f579f9810aa7": {
   "code": true,
@@ -3093,18 +2924,6 @@
   "implementation": "0x6175ddEc3B9b38c88157C10A01ed4A3fa8639cC6",
   "name": "Spark USDG",
   "symbol": "spUSDG"
- },
- "1:0x70a1c01902dab7a45dca1098ca76a8314dd8adba": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.lp_token() == osETH_waWETH",
-    "ok": true,
-    "got": "0x57c23c58B1D8C3292c15BEcF07c62C5c52457A42"
-   }
-  ],
-  "name": "Balancer osETH-waWETH Gauge Deposit",
-  "symbol": "osETH-waWETH-gauge"
  },
  "1:0x70ee0a6db4f5a2dc4d9c0b57be97b9987e75bafd": {
   "code": true,
@@ -3711,18 +3530,6 @@
   "name": "Spark rsETH",
   "symbol": "sprsETH"
  },
- "1:0x85b2b559bc2d21104c4defdd6efca8a20343361d": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.getVault() == vault",
-    "ok": true,
-    "got": "0xbA1333333333a1BA1108E8412f11850A5C319bA9"
-   }
-  ],
-  "name": "Balancer Aave GHO/USDT/USDC",
-  "symbol": "Aave GHO/USDT/USDC"
- },
  "1:0x85b78aca6deae198fbf201c82daf6ca21942acc6": {
   "code": true,
   "proofs": [
@@ -3938,6 +3745,17 @@
    }
   ]
  },
+ "1:0x8bb4c975ff3c250e0ceea271728547f3802b36fd": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.distributor() == distributor",
+    "ok": true,
+    "got": "0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae"
+   }
+  ],
+  "implementation": "0xe9DAc26794C857982455BC7e69f22573b0E9E492"
+ },
  "1:0x8be3460a480c80728a8c4d7a5d5303c85ba7b3b9": {
   "code": true,
   "proofs": [
@@ -4008,28 +3826,6 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt sDAI",
   "symbol": "variableDebtEthsDAI"
- },
- "1:0x8e89d41c563e6c3d9901ad75b75e2d8e140def04": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.operator() == booster",
-    "ok": true,
-    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
-   },
-   {
-    "id": "$self.stakingToken() == auraAave_GHO_USDT_USDC",
-    "ok": true,
-    "got": "0xeb12FBcb0a068720EE5F7816416a3Ebfc3090A2B"
-   },
-   {
-    "id": "$self.asset() == balancer_v3.Aave_GHO_USDT_USDC",
-    "ok": true,
-    "got": "0x85B2b559bC2D21104C4DEFdd6EFcA8A20343361D"
-   }
-  ],
-  "name": "Balancer Aave GHO/USDT/USDC Aura Deposit Vault",
-  "symbol": "auraAave GHO/USDT/USDC-vault"
  },
  "1:0x9008d19f58aabd9ed0d60971565aa8510560ab41": {
   "code": true,
@@ -4219,28 +4015,6 @@
   "name": "Aave Ethereum USDC",
   "symbol": "aEthUSDC"
  },
- "1:0x994be003de5fd6e41d37c6948f405eb0759149e6": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.operator() == booster",
-    "ok": true,
-    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
-   },
-   {
-    "id": "$self.stakingToken() == auraosETH_waWETH",
-    "ok": true,
-    "got": "0x42D0Ed5C192f70e7A66bd17b71200856141e32A0"
-   },
-   {
-    "id": "$self.asset() == balancer_v3.osETH_waWETH",
-    "ok": true,
-    "got": "0x57c23c58B1D8C3292c15BEcF07c62C5c52457A42"
-   }
-  ],
-  "name": "Balancer osETH-waWETH Aura Deposit Vault",
-  "symbol": "auraosETH-waWETH-vault"
- },
  "1:0x9985df20d7e9103ecbceb16a84956434b6f06ae8": {
   "code": true,
   "proofs": [
@@ -4422,18 +4196,6 @@
   "name": "Fluid USD Coin",
   "symbol": "fUSDC"
  },
- "1:0x9fdd52efeb601e4bc78b89c6490505b8ac637e9f": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.lp_token() == Aave_GHO_USDT_USDC",
-    "ok": true,
-    "got": "0x85B2b559bC2D21104C4DEFdd6EFcA8A20343361D"
-   }
-  ],
-  "name": "Balancer Aave GHO/USDT/USDC Gauge Deposit",
-  "symbol": "Aave GHO/USDT/USDC-gauge"
- },
  "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": {
   "code": true,
   "proofs": [
@@ -4566,21 +4328,6 @@
   "implementation": "0x4e7991e5C547ce825BdEb665EE14a3274f9F61e0",
   "name": "Savings USDS",
   "symbol": "sUSDS"
- },
- "1:0xa57b8d98dae62b26ec3bcc4a365338157060b234": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.crv() == balancer.BAL",
-    "ok": true,
-    "got": "0xba100000625a3754423978a60c9317c58a424e3D"
-   },
-   {
-    "id": "$self.minter() == AURA",
-    "ok": true,
-    "got": "0xC0c293ce456fF0ED870ADd98a0828Dd4d2903DBF"
-   }
-  ]
  },
  "1:0xa665bb258d2a732c170dfd505924214c0b1ac74f": {
   "code": true,
@@ -4872,21 +4619,6 @@
   "name": "Curve.fi ETH+ETH Gauge Deposit",
   "symbol": "ETH+ETH-gauge"
  },
- "1:0xae563e3f8219521950555f5962419c8919758ea2": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.getPermit2() == permit2.Permit2",
-    "ok": true,
-    "got": "0x000000000022D473030F116dDEE9F6B43aC78BA3"
-   },
-   {
-    "id": "$self.getWeth() == weth.WETH",
-    "ok": true,
-    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
-   }
-  ]
- },
  "1:0xae78736cd615f374d3085123a210448e74fc6393": {
   "code": true,
   "proofs": [
@@ -4901,7 +4633,13 @@
  },
  "1:0xae7ab96520de3a18e5e111b5eaab095312d7fe84": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "wstETH.stETH() == $self",
+    "ok": true,
+    "got": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+   }
+  ],
   "name": "Liquid staked Ether 2.0",
   "symbol": "stETH"
  },
@@ -5018,21 +4756,6 @@
     "id": "$self.stakingToken() == cvxcrvCVXETH",
     "ok": true,
     "got": "0x0bC857f97c0554d1d0D602b56F2EEcE682016fBA"
-   }
-  ]
- },
- "1:0xb21a277466e7db6934556a1ce12eb3f032815c8a": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.getPermit2() == permit2.Permit2",
-    "ok": true,
-    "got": "0x000000000022D473030F116dDEE9F6B43aC78BA3"
-   },
-   {
-    "id": "$self.getWeth() == weth.WETH",
-    "ok": true,
-    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
    }
   ]
  },
@@ -5153,43 +4876,17 @@
    }
   ]
  },
- "1:0xb8db64dfde4bbead174a6cba756743dec72bbd20": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.operator() == booster",
-    "ok": true,
-    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
-   }
-  ],
-  "name": "Balancer rETH - Aave WETH Aura Deposit",
-  "symbol": "aurarETH-waEthWETH"
- },
  "1:0xba100000625a3754423978a60c9317c58a424e3d": {
   "code": true,
   "proofs": [
    {
-    "id": "minter.getBalancerToken() == $self",
+    "id": "aave_v3.pool.getReservesList() contains $self",
     "ok": true,
-    "got": "0xba100000625a3754423978a60c9317c58a424e3D"
+    "got": "67 addresses"
    }
   ],
   "name": "Balancer",
   "symbol": "BAL"
- },
- "1:0xba12222222228d8ba445958a75a0704d566bf2c8": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.WETH() == weth.WETH",
-    "ok": true,
-    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
-   }
-  ]
- },
- "1:0xba1333333333a1ba1108e8412f11850a5c319ba9": {
-  "code": true,
-  "proofs": []
  },
  "1:0xba2c8f2ea5b56690bfb8b709438f049e5dd76b96": {
   "code": true,
@@ -5522,18 +5219,6 @@
   "name": "Aave Ethereum Lido wstETH",
   "symbol": "aEthLidowstETH"
  },
- "1:0xc0c293ce456ff0ed870add98a0828dd4d2903dbf": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "booster.minter() == $self",
-    "ok": true,
-    "got": "0xC0c293ce456fF0ED870ADd98a0828Dd4d2903DBF"
-   }
-  ],
-  "name": "Aura",
-  "symbol": "AURA"
- },
  "1:0xc0cf47d16a332f9e12e506e9a5c8b4baf2a6f1f6": {
   "code": true,
   "proofs": [
@@ -5558,38 +5243,6 @@
     "got": "0xC0cf47D16a332F9e12E506E9A5C8B4bAf2A6F1f6"
    }
   ]
- },
- "1:0xc128468b7ce63ea702c1f104d55a2566b13d3abd": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "minter.getGaugeController() == $self",
-    "ok": true,
-    "got": "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
-   },
-   {
-    "id": "$self.voting_escrow() == veBAL",
-    "ok": true,
-    "got": "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
-   }
-  ]
- },
- "1:0xc128a9954e6c874ea3d62ce62b468ba073093f25": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "gauge_controller.voting_escrow() == $self",
-    "ok": true,
-    "got": "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
-   },
-   {
-    "id": "$self.token() == B_80BAL_20WETH",
-    "ok": true,
-    "got": "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56"
-   }
-  ],
-  "name": "Vote Escrowed Balancer BPT",
-  "symbol": "veBAL"
  },
  "1:0xc139190f447e929f090edeb554d95abb8b18ac1c": {
   "code": true,
@@ -6620,33 +6273,6 @@
    }
   ]
  },
- "1:0xead792b55340aa20181a80d6a16db6a0ecd1b827": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "auraBAL.operator() == $self",
-    "ok": true,
-    "got": "0xeAd792B55340Aa20181A80d6a16db6A0ECd1b827"
-   },
-   {
-    "id": "$self.crvBpt() == balancer.B_80BAL_20WETH",
-    "ok": true,
-    "got": "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56"
-   }
-  ]
- },
- "1:0xeb12fbcb0a068720ee5f7816416a3ebfc3090a2b": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.operator() == booster",
-    "ok": true,
-    "got": "0xA57b8d98dAE62B26Ec3bcC4a365338157060B234"
-   }
-  ],
-  "name": "Balancer Aave GHO/USDT/USDC Aura Deposit",
-  "symbol": "auraAave GHO/USDT/USDC"
- },
  "1:0xeb284a70557efe3591b9e6d9d720040e02c54a4d": {
   "code": true,
   "proofs": [
@@ -6985,18 +6611,6 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum RLUSD",
   "symbol": "aEthRLUSD"
- },
- "1:0xfaa2ed111b4f580fcb85c48e6dc6782dc5fcd7a6": {
-  "code": true,
-  "proofs": [
-   {
-    "id": "$self.asset() == auraBAL",
-    "ok": true,
-    "got": "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d"
-   }
-  ],
-  "name": "Staked Aura BAL",
-  "symbol": "stkauraBAL"
  },
  "1:0xfb0a3cf9b019bfd8827443d131b235b3e0fc58d2": {
   "code": true,
