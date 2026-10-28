@@ -1,8 +1,8 @@
 {
  "_meta": {
   "1": {
-   "block": 26278420,
-   "checked": "2026-10-26"
+   "block": 26293021,
+   "checked": "2026-10-28"
   }
  },
  "1:0x000000000022d473030f116ddee9f6b43ac78ba3": {
@@ -387,6 +387,30 @@
   ],
   "name": "Curve CVX-ETH Convex Deposit",
   "symbol": "cvxcrvCVXETH"
+ },
+ "1:0x0bfc9d54fc184518a81162f8fb99c2eaca081202": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   },
+   {
+    "id": "$self.aToken() == aave_v3.aEthWETH",
+    "ok": true,
+    "got": "0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8"
+   },
+   {
+    "id": "vault.getBufferAsset($self) == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ],
+  "implementation": "0x487c2C53c0866F0A73ae317bD1A28F63ADcD9aD1",
+  "admin": "0xD3cF979e676265e4f6379749DECe4708B9A22476",
+  "name": "Wrapped Aave Ethereum WETH",
+  "symbol": "waEthWETH"
  },
  "1:0x0c0d01abf3e6adfca0989ebba9d6e85dd58eab1e": {
   "code": true,

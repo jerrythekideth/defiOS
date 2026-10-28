@@ -8,7 +8,175 @@ adding: >
   CompositeLiquidityRouter (both pull via Permit2). A pool is keyed by its BPT symbol()
   (sanitized, symbol in `aliases`) with getVault() = vault as proof; its gauge is
   `<pool key>_gauge` with lp_token() as proof.
+  Adds go Token -> Permit2 (ERC20 approve) -> Permit2.approve(token, router) ->
+  router; removes need a direct BPT approve to the router. Only one token+router pair
+  per Permit2.approve can be permitted until the engine merges two address params, so
+  the waEthWETH pools have exits only. BAL is claimed via balancer.minter.mint(gauge).
+sources:
+  - "docs: https://docs.balancer.fi"
+  - "explorer: verified source (Router, CompositeLiquidityRouter, pools, gauges)"
+  - "address-book: https://github.com/balancer/balancer-deployments/blob/master/addresses/mainnet.json"
 
 contracts: {}
 
-actions: {}
+actions:
+  Aave_GHO_USDT_USDC_add_USDT:
+    summary: "USDT -> Aave_GHO_USDT_USDC BPT (single-sided; the router wraps it into the Aave wrapper), minted to the Vault"
+    input: stablecoins.USDT
+    defaults: { none: 0, expiry: 4102444800 }
+    calls:
+      - target: stablecoins.USDT
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: permit2.Permit2, amount: $amount }
+      - target: permit2.Permit2
+        sig: "approve(address token, address spender, uint160 amount, uint48 expiration)"
+        args: { token: stablecoins.USDT, spender: composite_liquidity_router, amount: $amount, expiration: $expiry }
+      - target: composite_liquidity_router
+        sig: "addLiquidityUnbalancedToERC4626Pool(address pool, bool[] wrapUnderlying, uint256[] exactAmountsIn, uint256 minBptAmountOut, bool wethIsEth, bytes userData)"
+        args: { pool: Aave_GHO_USDT_USDC, wrapUnderlying: [true, true, true], exactAmountsIn: [$amount, $none, $none], minBptAmountOut: $min_bpt, wethIsEth: false, userData: "0x" }
+    note: "min_bpt is raw (18 decimals); pool tokens in order: waEthUSDT, waEthLidoGHO, waEthUSDC. BPT goes to msg.sender (the Vault). the router pulls through Permit2: the plan approves Permit2 for the exact amount (reset to 0 after) and gives the router a Permit2 allowance of the same amount, which the add spends"
+  Aave_GHO_USDT_USDC_add_GHO:
+    summary: "GHO -> Aave_GHO_USDT_USDC BPT (single-sided; the router wraps it into the Aave wrapper), minted to the Vault"
+    input: stablecoins.GHO
+    defaults: { none: 0, expiry: 4102444800 }
+    calls:
+      - target: stablecoins.GHO
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: permit2.Permit2, amount: $amount }
+      - target: permit2.Permit2
+        sig: "approve(address token, address spender, uint160 amount, uint48 expiration)"
+        args: { token: stablecoins.GHO, spender: composite_liquidity_router, amount: $amount, expiration: $expiry }
+      - target: composite_liquidity_router
+        sig: "addLiquidityUnbalancedToERC4626Pool(address pool, bool[] wrapUnderlying, uint256[] exactAmountsIn, uint256 minBptAmountOut, bool wethIsEth, bytes userData)"
+        args: { pool: Aave_GHO_USDT_USDC, wrapUnderlying: [true, true, true], exactAmountsIn: [$none, $amount, $none], minBptAmountOut: $min_bpt, wethIsEth: false, userData: "0x" }
+    note: "min_bpt is raw (18 decimals); pool tokens in order: waEthUSDT, waEthLidoGHO, waEthUSDC. BPT goes to msg.sender (the Vault). the router pulls through Permit2: the plan approves Permit2 for the exact amount (reset to 0 after) and gives the router a Permit2 allowance of the same amount, which the add spends"
+  Aave_GHO_USDT_USDC_add_USDC:
+    summary: "USDC -> Aave_GHO_USDT_USDC BPT (single-sided; the router wraps it into the Aave wrapper), minted to the Vault"
+    input: stablecoins.USDC
+    defaults: { none: 0, expiry: 4102444800 }
+    calls:
+      - target: stablecoins.USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: permit2.Permit2, amount: $amount }
+      - target: permit2.Permit2
+        sig: "approve(address token, address spender, uint160 amount, uint48 expiration)"
+        args: { token: stablecoins.USDC, spender: composite_liquidity_router, amount: $amount, expiration: $expiry }
+      - target: composite_liquidity_router
+        sig: "addLiquidityUnbalancedToERC4626Pool(address pool, bool[] wrapUnderlying, uint256[] exactAmountsIn, uint256 minBptAmountOut, bool wethIsEth, bytes userData)"
+        args: { pool: Aave_GHO_USDT_USDC, wrapUnderlying: [true, true, true], exactAmountsIn: [$none, $none, $amount], minBptAmountOut: $min_bpt, wethIsEth: false, userData: "0x" }
+    note: "min_bpt is raw (18 decimals); pool tokens in order: waEthUSDT, waEthLidoGHO, waEthUSDC. BPT goes to msg.sender (the Vault). the router pulls through Permit2: the plan approves Permit2 for the exact amount (reset to 0 after) and gives the router a Permit2 allowance of the same amount, which the add spends"
+  Aave_GHO_USDT_USDC_remove:
+    summary: "Aave_GHO_USDT_USDC BPT -> USDT, GHO and USDC in pool proportions (unwrapped by the router), paid to the Vault"
+    input: Aave_GHO_USDT_USDC
+    calls:
+      - target: Aave_GHO_USDT_USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: composite_liquidity_router, amount: $amount }
+      - target: composite_liquidity_router
+        sig: "removeLiquidityProportionalFromERC4626Pool(address pool, bool[] unwrapWrapped, uint256 exactBptAmountIn, uint256[] minAmountsOut, bool wethIsEth, bytes userData)"
+        args: { pool: Aave_GHO_USDT_USDC, unwrapWrapped: [true, true, true], exactBptAmountIn: $amount, minAmountsOut: [$min0, $min1, $min2], wethIsEth: false, userData: "0x" }
+    note: "--param min0 (USDT, 6 dec) min1 (GHO, 18 dec) min2 (USDC, 6 dec), raw. The router burns the BPT from msg.sender, so it needs a BPT allowance (exact, reset after)"
+  osETH_waWETH_remove:
+    summary: "osETH_waWETH BPT -> waEthWETH and osETH in pool proportions, paid to the Vault"
+    input: osETH_waWETH
+    calls:
+      - target: osETH_waWETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "removeLiquidityProportional(address pool, uint256 exactBptAmountIn, uint256[] minAmountsOut, bool wethIsEth, bytes userData)"
+        args: { pool: osETH_waWETH, exactBptAmountIn: $amount, minAmountsOut: [$min0, $min1], wethIsEth: false, userData: "0x" }
+    note: "--param min0 (waEthWETH) min1 (osETH), raw. osETH has no card record yet; unwrap waEthWETH with waEthWETH_unwrap"
+  osETH_waWETH_remove_waEthWETH:
+    summary: "osETH_waWETH BPT -> waEthWETH only, paid to the Vault"
+    input: osETH_waWETH
+    calls:
+      - target: osETH_waWETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "removeLiquiditySingleTokenExactIn(address pool, uint256 exactBptAmountIn, address tokenOut, uint256 minAmountOut, bool wethIsEth, bytes userData)"
+        args: { pool: osETH_waWETH, exactBptAmountIn: $amount, tokenOut: waEthWETH, minAmountOut: $min_out, wethIsEth: false, userData: "0x" }
+    note: "--param min_out (raw waEthWETH, at least 1: an all-zero minimum reverts AllZeroInputs)"
+  rETH_waEthWETH_remove:
+    summary: "rETH_waEthWETH BPT -> waEthWETH and rETH in pool proportions, paid to the Vault"
+    input: rETH_waEthWETH
+    calls:
+      - target: rETH_waEthWETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "removeLiquidityProportional(address pool, uint256 exactBptAmountIn, uint256[] minAmountsOut, bool wethIsEth, bytes userData)"
+        args: { pool: rETH_waEthWETH, exactBptAmountIn: $amount, minAmountsOut: [$min0, $min1], wethIsEth: false, userData: "0x" }
+    note: "--param min0 (waEthWETH) min1 (rETH), raw. rETH has no card record yet; unwrap waEthWETH with waEthWETH_unwrap"
+  rETH_waEthWETH_remove_waEthWETH:
+    summary: "rETH_waEthWETH BPT -> waEthWETH only, paid to the Vault"
+    input: rETH_waEthWETH
+    calls:
+      - target: rETH_waEthWETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "removeLiquiditySingleTokenExactIn(address pool, uint256 exactBptAmountIn, address tokenOut, uint256 minAmountOut, bool wethIsEth, bytes userData)"
+        args: { pool: rETH_waEthWETH, exactBptAmountIn: $amount, tokenOut: waEthWETH, minAmountOut: $min_out, wethIsEth: false, userData: "0x" }
+    note: "--param min_out (raw waEthWETH, at least 1: an all-zero minimum reverts AllZeroInputs)"
+  waEthWETH_unwrap:
+    summary: "waEthWETH -> WETH back to the Vault"
+    input: waEthWETH
+    calls:
+      - target: waEthWETH
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+  Aave_GHO_USDT_USDC_stake:
+    summary: "Aave_GHO_USDT_USDC BPT -> Aave_GHO_USDT_USDC_gauge (earns BAL)"
+    input: Aave_GHO_USDT_USDC
+    calls:
+      - target: Aave_GHO_USDT_USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: Aave_GHO_USDT_USDC_gauge, amount: $amount }
+      - target: Aave_GHO_USDT_USDC_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  osETH_waWETH_stake:
+    summary: "osETH_waWETH BPT -> osETH_waWETH_gauge (earns BAL)"
+    input: osETH_waWETH
+    calls:
+      - target: osETH_waWETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: osETH_waWETH_gauge, amount: $amount }
+      - target: osETH_waWETH_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  rETH_waEthWETH_stake:
+    summary: "rETH_waEthWETH BPT -> rETH_waEthWETH_gauge (earns BAL)"
+    input: rETH_waEthWETH
+    calls:
+      - target: rETH_waEthWETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: rETH_waEthWETH_gauge, amount: $amount }
+      - target: rETH_waEthWETH_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  unstake:
+    summary: "gauge token -> its BPT back to the Vault"
+    tokens: [Aave_GHO_USDT_USDC_gauge, osETH_waWETH_gauge, rETH_waEthWETH_gauge]
+    calls:
+      - target: $token
+        sig: "withdraw(uint256 _value)"
+        args: { _value: $amount }
+    note: "--token <pool>_gauge; amount in gauge tokens (1:1 with the BPT)"
+  claim_bal:
+    summary: "BAL emissions of one gauge -> the Vault"
+    tokens: [Aave_GHO_USDT_USDC_gauge, osETH_waWETH_gauge, rETH_waEthWETH_gauge]
+    calls:
+      - target: balancer.minter
+        sig: "mint(address gauge)"
+        args: { gauge: $token }
+    note: "--token <pool>_gauge; BAL is minted to msg.sender (the Vault)"
+  claim_rewards:
+    summary: "extra (non-BAL) gauge rewards -> the Vault"
+    tokens: [Aave_GHO_USDT_USDC_gauge, osETH_waWETH_gauge, rETH_waEthWETH_gauge]
+    calls:
+      - target: $token
+        sig: "claim_rewards()"
+    note: "--token <pool>_gauge; pays every reward token of the gauge to msg.sender"

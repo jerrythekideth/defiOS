@@ -112,3 +112,19 @@ contracts:
     edges: { underlying: rETH_waEthWETH }
     proofs:
       - { read: "lp_token() returns (address)", expect: rETH_waEthWETH }
+  waEthWETH:
+    address: "0x0bfc9d54Fc184518A81162F8fB99c2eACa081202"
+    name: "Wrapped Aave Ethereum WETH"
+    category: vault
+    kind: erc4626
+    decimals: 18
+    aliases: ["waWETH", "aave static weth"]
+    note: "Aave v3 static aToken wrapper for WETH (ERC-4626); the WETH leg of osETH_waWETH and rETH_waEthWETH"
+    sources:
+      - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+      - "explorer: https://etherscan.io/address/0x0bfc9d54Fc184518A81162F8fB99c2eACa081202#code"
+    edges: { underlying: weth.WETH }
+    proofs:
+      - { read: "asset() returns (address)", expect: weth.WETH }
+      - { read: "aToken() returns (address)", expect: aave_v3.aEthWETH }
+      - { from: vault, read: "getBufferAsset(address wrappedToken) returns (address)", args: [$self], expect: weth.WETH }

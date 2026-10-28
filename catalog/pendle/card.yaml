@@ -9,7 +9,245 @@ adding: >
   (sanitized, symbol in `aliases`) and prove each other (SY(), YT(), PT(), factory()).
   The SY's yieldToken() is its underlying edge. Markets expire: keep expired ones only
   while a vault still holds PT, YT or LP.
+  Actions are per market `<asset>_<expiry>_<verb>`. Underlying <-> SY is the SY's own
+  deposit / redeem; PT and LP go through the router's *Simple and SY-only functions,
+  which take no swap data and no off-chain guess. Selling PT needs swapExactPtForSy,
+  whose limit-order struct is pinned to limitRouter 0 and optData 0x.
+sources:
+  - "docs: https://docs.pendle.finance/Developers/Contracts/PendleRouter"
+  - "explorer: verified source (PendleRouterV4 facets ActionSimple, ActionSwapPTV3, ActionAddRemoveLiqV3, ActionMiscV3; SY, market)"
+  - "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
 
 contracts: {}
 
-actions: {}
+actions:
+  stETH_30DEC2027_mint_sy:
+    summary: "wstETH -> SY_stETH (the market's SY), minted to the Vault"
+    input: lido.wstETH
+    calls:
+      - target: lido.wstETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: SY_stETH, amount: $amount }
+      - target: SY_stETH
+        sig: "deposit(address receiver, address tokenIn, uint256 amountTokenToDeposit, uint256 minSharesOut)"
+        args: { receiver: $AVATAR, tokenIn: lido.wstETH, amountTokenToDeposit: $amount, minSharesOut: $min_sy }
+    note: "--param min_sy (raw, 18 dec). Direct SY call, no router"
+  stETH_30DEC2027_redeem_sy:
+    summary: "SY_stETH -> wstETH back to the Vault"
+    input: SY_stETH
+    calls:
+      - target: SY_stETH
+        sig: "redeem(address receiver, uint256 amountSharesToRedeem, address tokenOut, uint256 minTokenOut, bool burnFromInternalBalance)"
+        args: { receiver: $AVATAR, amountSharesToRedeem: $amount, tokenOut: lido.wstETH, minTokenOut: $min_out, burnFromInternalBalance: false }
+    note: "--param min_out (raw wstETH)"
+  stETH_30DEC2027_buy_pt:
+    summary: "SY_stETH -> PT_stETH_30DEC2027 on market_stETH_30DEC2027, paid to the Vault"
+    input: SY_stETH
+    calls:
+      - target: SY_stETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "swapExactSyForPtSimple(address receiver, address market, uint256 exactSyIn, uint256 minPtOut)"
+        args: { receiver: $AVATAR, market: market_stETH_30DEC2027, exactSyIn: $amount, minPtOut: $min_pt }
+    note: "--param min_pt (raw). Start from wstETH with stETH_30DEC2027_mint_sy first. The Simple variant: no off-chain guess, no limit orders, no swap data"
+  stETH_30DEC2027_sell_pt:
+    summary: "PT_stETH_30DEC2027 -> SY_stETH on market_stETH_30DEC2027 before expiry, paid to the Vault"
+    input: PT_stETH_30DEC2027
+    calls:
+      - target: PT_stETH_30DEC2027
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "swapExactPtForSy(address receiver, address market, uint256 exactPtIn, uint256 minSyOut, (address limitRouter, uint256 epsSkipMarket, ((uint256 salt, uint256 expiry, uint256 nonce, uint8 orderType, address token, address YT, address maker, address receiver, uint256 makingAmount, uint256 lnImpliedRate, uint256 failSafeRate, bytes permit) order, bytes signature, uint256 makingAmount)[] normalFills, ((uint256 salt, uint256 expiry, uint256 nonce, uint8 orderType, address token, address YT, address maker, address receiver, uint256 makingAmount, uint256 lnImpliedRate, uint256 failSafeRate, bytes permit) order, bytes signature, uint256 makingAmount)[] flashFills, bytes optData) limit)"
+        args: { receiver: $AVATAR, market: market_stETH_30DEC2027, exactPtIn: $amount, minSyOut: $min_sy, limit: { limitRouter: "0x0000000000000000000000000000000000000000", epsSkipMarket: 0, normalFills: [], flashFills: [], optData: "0x" } }
+    note: "--param min_sy (raw). No Simple variant exists for PT -> SY; limitRouter is pinned to zero (no limit-order fills; any fill would call address 0 and revert). Then stETH_30DEC2027_redeem_sy"
+  stETH_30DEC2027_redeem_pt:
+    summary: "PT_stETH_30DEC2027 -> SY_stETH at maturity (after expiry), paid to the Vault"
+    input: PT_stETH_30DEC2027
+    calls:
+      - target: PT_stETH_30DEC2027
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "redeemPyToSy(address receiver, address YT, uint256 netPyIn, uint256 minSyOut)"
+        args: { receiver: $AVATAR, YT: YT_stETH_30DEC2027, netPyIn: $amount, minSyOut: $min_sy }
+    note: "--param min_sy (raw). Reverts before expiry (it would need the matching YT). Then stETH_30DEC2027_redeem_sy"
+  stETH_30DEC2027_add_liquidity:
+    summary: "SY_stETH -> market_stETH_30DEC2027 LP (single-sided), minted to the Vault"
+    input: SY_stETH
+    calls:
+      - target: SY_stETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "addLiquiditySingleSySimple(address receiver, address market, uint256 netSyIn, uint256 minLpOut)"
+        args: { receiver: $AVATAR, market: market_stETH_30DEC2027, netSyIn: $amount, minLpOut: $min_lp }
+    note: "--param min_lp (raw). Before expiry only"
+  stETH_30DEC2027_remove_liquidity:
+    summary: "market_stETH_30DEC2027 LP -> SY_stETH and PT_stETH_30DEC2027 in pool proportions, paid to the Vault"
+    input: market_stETH_30DEC2027
+    calls:
+      - target: market_stETH_30DEC2027
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "removeLiquidityDualSyAndPt(address receiver, address market, uint256 netLpToRemove, uint256 minSyOut, uint256 minPtOut)"
+        args: { receiver: $AVATAR, market: market_stETH_30DEC2027, netLpToRemove: $amount, minSyOut: $min_sy, minPtOut: $min_pt }
+    note: "--param min_sy min_pt (raw). Works before and after expiry; then stETH_30DEC2027_sell_pt or stETH_30DEC2027_redeem_pt"
+  sUSDE_26NOV2026_mint_sy:
+    summary: "sUSDe -> SY_sUSDE (the market's SY), minted to the Vault"
+    input: ethena.sUSDe
+    calls:
+      - target: ethena.sUSDe
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: SY_sUSDE, amount: $amount }
+      - target: SY_sUSDE
+        sig: "deposit(address receiver, address tokenIn, uint256 amountTokenToDeposit, uint256 minSharesOut)"
+        args: { receiver: $AVATAR, tokenIn: ethena.sUSDe, amountTokenToDeposit: $amount, minSharesOut: $min_sy }
+    note: "--param min_sy (raw, 18 dec). Direct SY call, no router"
+  sUSDE_26NOV2026_redeem_sy:
+    summary: "SY_sUSDE -> sUSDe back to the Vault"
+    input: SY_sUSDE
+    calls:
+      - target: SY_sUSDE
+        sig: "redeem(address receiver, uint256 amountSharesToRedeem, address tokenOut, uint256 minTokenOut, bool burnFromInternalBalance)"
+        args: { receiver: $AVATAR, amountSharesToRedeem: $amount, tokenOut: ethena.sUSDe, minTokenOut: $min_out, burnFromInternalBalance: false }
+    note: "--param min_out (raw sUSDe)"
+  sUSDE_26NOV2026_buy_pt:
+    summary: "SY_sUSDE -> PT_sUSDE_26NOV2026 on market_sUSDE_26NOV2026, paid to the Vault"
+    input: SY_sUSDE
+    calls:
+      - target: SY_sUSDE
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "swapExactSyForPtSimple(address receiver, address market, uint256 exactSyIn, uint256 minPtOut)"
+        args: { receiver: $AVATAR, market: market_sUSDE_26NOV2026, exactSyIn: $amount, minPtOut: $min_pt }
+    note: "--param min_pt (raw). Start from sUSDe with sUSDE_26NOV2026_mint_sy first. The Simple variant: no off-chain guess, no limit orders, no swap data"
+  sUSDE_26NOV2026_sell_pt:
+    summary: "PT_sUSDE_26NOV2026 -> SY_sUSDE on market_sUSDE_26NOV2026 before expiry, paid to the Vault"
+    input: PT_sUSDE_26NOV2026
+    calls:
+      - target: PT_sUSDE_26NOV2026
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "swapExactPtForSy(address receiver, address market, uint256 exactPtIn, uint256 minSyOut, (address limitRouter, uint256 epsSkipMarket, ((uint256 salt, uint256 expiry, uint256 nonce, uint8 orderType, address token, address YT, address maker, address receiver, uint256 makingAmount, uint256 lnImpliedRate, uint256 failSafeRate, bytes permit) order, bytes signature, uint256 makingAmount)[] normalFills, ((uint256 salt, uint256 expiry, uint256 nonce, uint8 orderType, address token, address YT, address maker, address receiver, uint256 makingAmount, uint256 lnImpliedRate, uint256 failSafeRate, bytes permit) order, bytes signature, uint256 makingAmount)[] flashFills, bytes optData) limit)"
+        args: { receiver: $AVATAR, market: market_sUSDE_26NOV2026, exactPtIn: $amount, minSyOut: $min_sy, limit: { limitRouter: "0x0000000000000000000000000000000000000000", epsSkipMarket: 0, normalFills: [], flashFills: [], optData: "0x" } }
+    note: "--param min_sy (raw). No Simple variant exists for PT -> SY; limitRouter is pinned to zero (no limit-order fills; any fill would call address 0 and revert). Then sUSDE_26NOV2026_redeem_sy"
+  sUSDE_26NOV2026_redeem_pt:
+    summary: "PT_sUSDE_26NOV2026 -> SY_sUSDE at maturity (after expiry), paid to the Vault"
+    input: PT_sUSDE_26NOV2026
+    calls:
+      - target: PT_sUSDE_26NOV2026
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "redeemPyToSy(address receiver, address YT, uint256 netPyIn, uint256 minSyOut)"
+        args: { receiver: $AVATAR, YT: YT_sUSDE_26NOV2026, netPyIn: $amount, minSyOut: $min_sy }
+    note: "--param min_sy (raw). Reverts before expiry (it would need the matching YT). Then sUSDE_26NOV2026_redeem_sy"
+  sUSDE_26NOV2026_add_liquidity:
+    summary: "SY_sUSDE -> market_sUSDE_26NOV2026 LP (single-sided), minted to the Vault"
+    input: SY_sUSDE
+    calls:
+      - target: SY_sUSDE
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "addLiquiditySingleSySimple(address receiver, address market, uint256 netSyIn, uint256 minLpOut)"
+        args: { receiver: $AVATAR, market: market_sUSDE_26NOV2026, netSyIn: $amount, minLpOut: $min_lp }
+    note: "--param min_lp (raw). Before expiry only"
+  sUSDE_26NOV2026_remove_liquidity:
+    summary: "market_sUSDE_26NOV2026 LP -> SY_sUSDE and PT_sUSDE_26NOV2026 in pool proportions, paid to the Vault"
+    input: market_sUSDE_26NOV2026
+    calls:
+      - target: market_sUSDE_26NOV2026
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "removeLiquidityDualSyAndPt(address receiver, address market, uint256 netLpToRemove, uint256 minSyOut, uint256 minPtOut)"
+        args: { receiver: $AVATAR, market: market_sUSDE_26NOV2026, netLpToRemove: $amount, minSyOut: $min_sy, minPtOut: $min_pt }
+    note: "--param min_sy min_pt (raw). Works before and after expiry; then sUSDE_26NOV2026_sell_pt or sUSDE_26NOV2026_redeem_pt"
+  sUSDS_26NOV2026_mint_sy:
+    summary: "sUSDS -> SY_sUSDS (the market's SY), minted to the Vault"
+    input: sky.sUSDS
+    calls:
+      - target: sky.sUSDS
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: SY_sUSDS, amount: $amount }
+      - target: SY_sUSDS
+        sig: "deposit(address receiver, address tokenIn, uint256 amountTokenToDeposit, uint256 minSharesOut)"
+        args: { receiver: $AVATAR, tokenIn: sky.sUSDS, amountTokenToDeposit: $amount, minSharesOut: $min_sy }
+    note: "--param min_sy (raw, 18 dec). Direct SY call, no router"
+  sUSDS_26NOV2026_redeem_sy:
+    summary: "SY_sUSDS -> sUSDS back to the Vault"
+    input: SY_sUSDS
+    calls:
+      - target: SY_sUSDS
+        sig: "redeem(address receiver, uint256 amountSharesToRedeem, address tokenOut, uint256 minTokenOut, bool burnFromInternalBalance)"
+        args: { receiver: $AVATAR, amountSharesToRedeem: $amount, tokenOut: sky.sUSDS, minTokenOut: $min_out, burnFromInternalBalance: false }
+    note: "--param min_out (raw sUSDS)"
+  sUSDS_26NOV2026_buy_pt:
+    summary: "SY_sUSDS -> PT_sUSDS_26NOV2026 on market_sUSDS_26NOV2026, paid to the Vault"
+    input: SY_sUSDS
+    calls:
+      - target: SY_sUSDS
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "swapExactSyForPtSimple(address receiver, address market, uint256 exactSyIn, uint256 minPtOut)"
+        args: { receiver: $AVATAR, market: market_sUSDS_26NOV2026, exactSyIn: $amount, minPtOut: $min_pt }
+    note: "--param min_pt (raw). Start from sUSDS with sUSDS_26NOV2026_mint_sy first. The Simple variant: no off-chain guess, no limit orders, no swap data"
+  sUSDS_26NOV2026_sell_pt:
+    summary: "PT_sUSDS_26NOV2026 -> SY_sUSDS on market_sUSDS_26NOV2026 before expiry, paid to the Vault"
+    input: PT_sUSDS_26NOV2026
+    calls:
+      - target: PT_sUSDS_26NOV2026
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "swapExactPtForSy(address receiver, address market, uint256 exactPtIn, uint256 minSyOut, (address limitRouter, uint256 epsSkipMarket, ((uint256 salt, uint256 expiry, uint256 nonce, uint8 orderType, address token, address YT, address maker, address receiver, uint256 makingAmount, uint256 lnImpliedRate, uint256 failSafeRate, bytes permit) order, bytes signature, uint256 makingAmount)[] normalFills, ((uint256 salt, uint256 expiry, uint256 nonce, uint8 orderType, address token, address YT, address maker, address receiver, uint256 makingAmount, uint256 lnImpliedRate, uint256 failSafeRate, bytes permit) order, bytes signature, uint256 makingAmount)[] flashFills, bytes optData) limit)"
+        args: { receiver: $AVATAR, market: market_sUSDS_26NOV2026, exactPtIn: $amount, minSyOut: $min_sy, limit: { limitRouter: "0x0000000000000000000000000000000000000000", epsSkipMarket: 0, normalFills: [], flashFills: [], optData: "0x" } }
+    note: "--param min_sy (raw). No Simple variant exists for PT -> SY; limitRouter is pinned to zero (no limit-order fills; any fill would call address 0 and revert). Then sUSDS_26NOV2026_redeem_sy"
+  sUSDS_26NOV2026_redeem_pt:
+    summary: "PT_sUSDS_26NOV2026 -> SY_sUSDS at maturity (after expiry), paid to the Vault"
+    input: PT_sUSDS_26NOV2026
+    calls:
+      - target: PT_sUSDS_26NOV2026
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "redeemPyToSy(address receiver, address YT, uint256 netPyIn, uint256 minSyOut)"
+        args: { receiver: $AVATAR, YT: YT_sUSDS_26NOV2026, netPyIn: $amount, minSyOut: $min_sy }
+    note: "--param min_sy (raw). Reverts before expiry (it would need the matching YT). Then sUSDS_26NOV2026_redeem_sy"
+  sUSDS_26NOV2026_add_liquidity:
+    summary: "SY_sUSDS -> market_sUSDS_26NOV2026 LP (single-sided), minted to the Vault"
+    input: SY_sUSDS
+    calls:
+      - target: SY_sUSDS
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "addLiquiditySingleSySimple(address receiver, address market, uint256 netSyIn, uint256 minLpOut)"
+        args: { receiver: $AVATAR, market: market_sUSDS_26NOV2026, netSyIn: $amount, minLpOut: $min_lp }
+    note: "--param min_lp (raw). Before expiry only"
+  sUSDS_26NOV2026_remove_liquidity:
+    summary: "market_sUSDS_26NOV2026 LP -> SY_sUSDS and PT_sUSDS_26NOV2026 in pool proportions, paid to the Vault"
+    input: market_sUSDS_26NOV2026
+    calls:
+      - target: market_sUSDS_26NOV2026
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "removeLiquidityDualSyAndPt(address receiver, address market, uint256 netLpToRemove, uint256 minSyOut, uint256 minPtOut)"
+        args: { receiver: $AVATAR, market: market_sUSDS_26NOV2026, netLpToRemove: $amount, minSyOut: $min_sy, minPtOut: $min_pt }
+    note: "--param min_sy min_pt (raw). Works before and after expiry; then sUSDS_26NOV2026_sell_pt or sUSDS_26NOV2026_redeem_pt"
+  claim:
+    summary: "PENDLE and other LP rewards of one market -> the Vault"
+    tokens: [market_stETH_30DEC2027, market_sUSDE_26NOV2026, market_sUSDS_26NOV2026]
+    calls:
+      - target: $token
+        sig: "redeemRewards(address user)"
+        args: { user: $AVATAR }
+    note: "--token market_<asset>_<expiry>; pays every reward token of the market to the Vault"
