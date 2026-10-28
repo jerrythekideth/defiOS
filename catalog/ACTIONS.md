@@ -91,6 +91,16 @@ each `--param` name must be given as `--param name=value`.
 | `unstake` | ankrETH |  |  | ankrETH -> ETH through the Ankr exit queue (paid to the Vault later) |
 | `flash_unstake` | ankrETH |  |  | ankrETH -> ETH instantly from the FlashUnstake pool (fee applies), paid to the Vault |
 
+## aura: Aura (Balancer LP boosting, auraBAL, vlAURA)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `withdraw` |  | auraAave_GHO_USDT_USDC_vault, auraosETH_waWETH_vault, aurarETH_waEthWETH_vault |  | Aura pool stake -> its Balancer v3 BPT back to the Vault (unstake + unwrap, claims rewards) |
+| `claim` |  | auraAave_GHO_USDT_USDC_vault, auraosETH_waWETH_vault, aurarETH_waEthWETH_vault |  | BAL, AURA and extra rewards of one Aura pool -> the Vault |
+| `auraBAL_unstake` | auraBAL |  |  | auraBAL_rewards -> auraBAL back to the Vault (claims rewards) |
+| `auraBAL_claim` |  |  |  | rewards of auraBAL_rewards -> the Vault |
+| `stkauraBAL_redeem` | stkauraBAL |  |  | stkauraBAL -> auraBAL back to the Vault |
+
 ## avant: Avant (avETH / savETH)
 
 | action | input | tokens | --param | does |
@@ -101,6 +111,26 @@ each `--param` name must be given as `--param name=value`.
 | `instant_exit` |  |  |  | only works when Avant sets cooldownDuration == 0 |
 | `mint` |  |  |  | WETH -> avETH via Avant RFQ |
 | `redeem` |  |  |  | avETH -> WETH via Avant RFQ |
+
+## balancer_v3: Balancer v3 (Vault, routers, pools)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `Aave_GHO_USDT_USDC_add_USDT` | USDT |  | min_bpt | USDT -> Aave_GHO_USDT_USDC BPT (single-sided; the router wraps it into the Aave wrapper), minted to the Vault |
+| `Aave_GHO_USDT_USDC_add_GHO` | GHO |  | min_bpt | GHO -> Aave_GHO_USDT_USDC BPT (single-sided; the router wraps it into the Aave wrapper), minted to the Vault |
+| `Aave_GHO_USDT_USDC_add_USDC` | USDC |  | min_bpt | USDC -> Aave_GHO_USDT_USDC BPT (single-sided; the router wraps it into the Aave wrapper), minted to the Vault |
+| `Aave_GHO_USDT_USDC_remove` | Aave_GHO_USDT_USDC |  | min0, min1, min2 | Aave_GHO_USDT_USDC BPT -> USDT, GHO and USDC in pool proportions (unwrapped by the router), paid to the Vault |
+| `osETH_waWETH_remove` | osETH_waWETH |  | min0, min1 | osETH_waWETH BPT -> waEthWETH and osETH in pool proportions, paid to the Vault |
+| `osETH_waWETH_remove_waEthWETH` | osETH_waWETH |  | min_out | osETH_waWETH BPT -> waEthWETH only, paid to the Vault |
+| `rETH_waEthWETH_remove` | rETH_waEthWETH |  | min0, min1 | rETH_waEthWETH BPT -> waEthWETH and rETH in pool proportions, paid to the Vault |
+| `rETH_waEthWETH_remove_waEthWETH` | rETH_waEthWETH |  | min_out | rETH_waEthWETH BPT -> waEthWETH only, paid to the Vault |
+| `waEthWETH_unwrap` | waEthWETH |  |  | waEthWETH -> WETH back to the Vault |
+| `Aave_GHO_USDT_USDC_stake` | Aave_GHO_USDT_USDC |  |  | Aave_GHO_USDT_USDC BPT -> Aave_GHO_USDT_USDC_gauge (earns BAL) |
+| `osETH_waWETH_stake` | osETH_waWETH |  |  | osETH_waWETH BPT -> osETH_waWETH_gauge (earns BAL) |
+| `rETH_waEthWETH_stake` | rETH_waEthWETH |  |  | rETH_waEthWETH BPT -> rETH_waEthWETH_gauge (earns BAL) |
+| `unstake` |  | Aave_GHO_USDT_USDC_gauge, osETH_waWETH_gauge, rETH_waEthWETH_gauge |  | gauge token -> its BPT back to the Vault |
+| `claim_bal` |  | Aave_GHO_USDT_USDC_gauge, osETH_waWETH_gauge, rETH_waEthWETH_gauge |  | BAL emissions of one gauge -> the Vault |
+| `claim_rewards` |  | Aave_GHO_USDT_USDC_gauge, osETH_waWETH_gauge, rETH_waEthWETH_gauge |  | extra (non-BAL) gauge rewards -> the Vault |
 
 ## cctp: Circle CCTP v2 (bridge USDC)
 
@@ -133,12 +163,142 @@ each `--param` name must be given as `--param name=value`.
 | `cusdtv3_repay` | USDT |  |  | repay the Vault's USDT debt in the USDT market |
 | `claim_rewards` |  |  |  | accrued COMP rewards of one Comet -> the Vault |
 
+## convex: Convex (Curve LP boosting, cvxCRV, CVX)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `3Crv_deposit` | 3Crv |  |  | curve.3Crv -> Convex pid 9, staked in cvx3Crv_rewards (earns CRV + CVX) |
+| `3Crv_withdraw` | cvx3Crv |  |  | cvx3Crv_rewards -> curve.3Crv back to the Vault (unstake + unwrap, claims rewards) |
+| `3Crv_claim` |  |  |  | CRV, CVX and extra rewards of cvx3Crv_rewards -> the Vault |
+| `steCRV_deposit` | steCRV |  |  | curve.steCRV -> Convex pid 25, staked in cvxsteCRV_rewards (earns CRV + CVX) |
+| `steCRV_withdraw` | cvxsteCRV |  |  | cvxsteCRV_rewards -> curve.steCRV back to the Vault (unstake + unwrap, claims rewards) |
+| `steCRV_claim` |  |  |  | CRV, CVX and extra rewards of cvxsteCRV_rewards -> the Vault |
+| `crvCVXETH_deposit` | crvCVXETH |  |  | curve.crvCVXETH -> Convex pid 64, staked in cvxcrvCVXETH_rewards (earns CRV + CVX) |
+| `crvCVXETH_withdraw` | cvxcrvCVXETH |  |  | cvxcrvCVXETH_rewards -> curve.crvCVXETH back to the Vault (unstake + unwrap, claims rewards) |
+| `crvCVXETH_claim` |  |  |  | CRV, CVX and extra rewards of cvxcrvCVXETH_rewards -> the Vault |
+| `stETH_ng_f_deposit` | stETH_ng_f |  |  | curve.stETH_ng_f -> Convex pid 177, staked in cvxstETH_ng_f_rewards (earns CRV + CVX) |
+| `stETH_ng_f_withdraw` | cvxstETH_ng_f |  |  | cvxstETH_ng_f_rewards -> curve.stETH_ng_f back to the Vault (unstake + unwrap, claims rewards) |
+| `stETH_ng_f_claim` |  |  |  | CRV, CVX and extra rewards of cvxstETH_ng_f_rewards -> the Vault |
+| `crvUSDUSDT_f_deposit` | crvUSDUSDT_f |  |  | curve.crvUSDUSDT_f -> Convex pid 179, staked in cvxcrvUSDUSDT_f_rewards (earns CRV + CVX) |
+| `crvUSDUSDT_f_withdraw` | cvxcrvUSDUSDT_f |  |  | cvxcrvUSDUSDT_f_rewards -> curve.crvUSDUSDT_f back to the Vault (unstake + unwrap, claims rewards) |
+| `crvUSDUSDT_f_claim` |  |  |  | CRV, CVX and extra rewards of cvxcrvUSDUSDT_f_rewards -> the Vault |
+| `crvUSDUSDC_f_deposit` | crvUSDUSDC_f |  |  | curve.crvUSDUSDC_f -> Convex pid 182, staked in cvxcrvUSDUSDC_f_rewards (earns CRV + CVX) |
+| `crvUSDUSDC_f_withdraw` | cvxcrvUSDUSDC_f |  |  | cvxcrvUSDUSDC_f_rewards -> curve.crvUSDUSDC_f back to the Vault (unstake + unwrap, claims rewards) |
+| `crvUSDUSDC_f_claim` |  |  |  | CRV, CVX and extra rewards of cvxcrvUSDUSDC_f_rewards -> the Vault |
+| `crvUSDTWBTCWETH_deposit` | crvUSDTWBTCWETH |  |  | curve.crvUSDTWBTCWETH -> Convex pid 188, staked in cvxcrvUSDTWBTCWETH_rewards (earns CRV + CVX) |
+| `crvUSDTWBTCWETH_withdraw` | cvxcrvUSDTWBTCWETH |  |  | cvxcrvUSDTWBTCWETH_rewards -> curve.crvUSDTWBTCWETH back to the Vault (unstake + unwrap, claims rewards) |
+| `crvUSDTWBTCWETH_claim` |  |  |  | CRV, CVX and extra rewards of cvxcrvUSDTWBTCWETH_rewards -> the Vault |
+| `osETH_rETH_deposit` | osETH_rETH |  |  | curve.osETH_rETH -> Convex pid 268, staked in cvxosETH_rETH_rewards (earns CRV + CVX) |
+| `osETH_rETH_withdraw` | cvxosETH_rETH |  |  | cvxosETH_rETH_rewards -> curve.osETH_rETH back to the Vault (unstake + unwrap, claims rewards) |
+| `osETH_rETH_claim` |  |  |  | CRV, CVX and extra rewards of cvxosETH_rETH_rewards -> the Vault |
+| `weeth_ng_deposit` | weeth_ng |  |  | curve.weeth_ng -> Convex pid 355, staked in cvxweeth_ng_rewards (earns CRV + CVX) |
+| `weeth_ng_withdraw` | cvxweeth_ng |  |  | cvxweeth_ng_rewards -> curve.weeth_ng back to the Vault (unstake + unwrap, claims rewards) |
+| `weeth_ng_claim` |  |  |  | CRV, CVX and extra rewards of cvxweeth_ng_rewards -> the Vault |
+| `BTCGHOETH_deposit` | BTCGHOETH |  |  | curve.BTCGHOETH -> Convex pid 409, staked in cvxBTCGHOETH_rewards (earns CRV + CVX) |
+| `BTCGHOETH_withdraw` | cvxBTCGHOETH |  |  | cvxBTCGHOETH_rewards -> curve.BTCGHOETH back to the Vault (unstake + unwrap, claims rewards) |
+| `BTCGHOETH_claim` |  |  |  | CRV, CVX and extra rewards of cvxBTCGHOETH_rewards -> the Vault |
+| `RLUSD_USDC_deposit` | RLUSD_USDC |  |  | curve.RLUSD_USDC -> Convex pid 443, staked in cvxRLUSD_USDC_rewards (earns CRV + CVX) |
+| `RLUSD_USDC_withdraw` | cvxRLUSD_USDC |  |  | cvxRLUSD_USDC_rewards -> curve.RLUSD_USDC back to the Vault (unstake + unwrap, claims rewards) |
+| `RLUSD_USDC_claim` |  |  |  | CRV, CVX and extra rewards of cvxRLUSD_USDC_rewards -> the Vault |
+| `OETH_WETH_deposit` | OETH_WETH |  |  | curve.OETH_WETH -> Convex pid 451, staked in cvxOETH_WETH_rewards (earns CRV + CVX) |
+| `OETH_WETH_withdraw` | cvxOETH_WETH |  |  | cvxOETH_WETH_rewards -> curve.OETH_WETH back to the Vault (unstake + unwrap, claims rewards) |
+| `OETH_WETH_claim` |  |  |  | CRV, CVX and extra rewards of cvxOETH_WETH_rewards -> the Vault |
+| `ETH_ETH_deposit` | ETH_ETH |  |  | curve.ETH_ETH -> Convex pid 470, staked in cvxETH_ETH_rewards (earns CRV + CVX) |
+| `ETH_ETH_withdraw` | cvxETH_ETH |  |  | cvxETH_ETH_rewards -> curve.ETH_ETH back to the Vault (unstake + unwrap, claims rewards) |
+| `ETH_ETH_claim` |  |  |  | CRV, CVX and extra rewards of cvxETH_ETH_rewards -> the Vault |
+| `cvx_stake` | CVX |  |  | CVX -> cvx_rewards (single staking, earns cvxCRV) |
+| `cvx_unstake` | CVX |  |  | cvx_rewards -> CVX back to the Vault (claims rewards) |
+| `cvx_claim` |  |  |  | cvxCRV rewards of cvx_rewards -> the Vault |
+| `crv_to_cvxcrv` | CRV |  |  | CRV -> cvxCRV through crv_depositor (one way: there is no redeem, exit is a market sale) |
+| `cvxcrv_stake` | cvxCRV |  |  | cvxCRV -> stkCvxCrv (staked cvxCRV, earns CRV / 3CRV / CVX) |
+| `cvxcrv_unstake` | stkCvxCrv |  |  | stkCvxCrv -> cvxCRV back to the Vault |
+| `cvxcrv_claim` |  |  |  | stkCvxCrv rewards -> the Vault |
+
 ## cowswap: CoW Swap (pre-signed orders via the CowswapOrderSigner)
 
 | action | input | tokens | --param | does |
 |---|---|---|---|---|
 | `swap` |  |  | buy_token, min_out, sell_token | sell token -> buy token via a pre-signed CoW order, proceeds to the Avatar |
 | `cancel` |  |  | buy_token, sell_token | withdraw a pre-signed order |
+
+## curve: Curve (pools, gauges, CRV, veCRV)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `steth_pool_add_ETH` | ETH |  | min_lp | ETH -> steCRV (single-sided add to steth_pool), minted to the Vault |
+| `steth_pool_add_stETH` | stETH |  | min_lp | stETH -> steCRV (single-sided add to steth_pool), minted to the Vault |
+| `steth_pool_remove_one` | steCRV |  | i, min_out | steCRV -> one coin of steth_pool (pick it with i), paid to the Vault |
+| `steth_pool_remove` | steCRV |  | min0, min1 | steCRV -> every coin of steth_pool in pool proportions, paid to the Vault |
+| `steth_pool_stake` | steCRV |  |  | steCRV -> steCRV_gauge (stake the LP in its gauge to earn CRV) |
+| `threepool_add_DAI` | DAI |  | min_lp | DAI -> 3Crv (single-sided add to threepool), minted to the Vault |
+| `threepool_add_USDC` | USDC |  | min_lp | USDC -> 3Crv (single-sided add to threepool), minted to the Vault |
+| `threepool_add_USDT` | USDT |  | min_lp | USDT -> 3Crv (single-sided add to threepool), minted to the Vault |
+| `threepool_remove_one` | 3Crv |  | i, min_out | 3Crv -> one coin of threepool (pick it with i), paid to the Vault |
+| `threepool_remove` | 3Crv |  | min0, min1, min2 | 3Crv -> every coin of threepool in pool proportions, paid to the Vault |
+| `threepool_stake` | 3Crv |  |  | 3Crv -> 3Crv_gauge (stake the LP in its gauge to earn CRV) |
+| `cvxeth_pool_add_WETH` | WETH |  | min_lp | WETH -> crvCVXETH (single-sided add to cvxeth_pool), minted to the Vault |
+| `cvxeth_pool_add_CVX` | CVX |  | min_lp | CVX -> crvCVXETH (single-sided add to cvxeth_pool), minted to the Vault |
+| `cvxeth_pool_remove_one` | crvCVXETH |  | i, min_out | crvCVXETH -> one coin of cvxeth_pool (pick it with i), paid to the Vault |
+| `cvxeth_pool_remove` | crvCVXETH |  | min0, min1 | crvCVXETH -> every coin of cvxeth_pool in pool proportions, paid to the Vault |
+| `cvxeth_pool_stake` | crvCVXETH |  |  | crvCVXETH -> crvCVXETH_gauge (stake the LP in its gauge to earn CRV) |
+| `osETH_rETH_remove_one` | osETH_rETH |  | i, min_out | osETH_rETH -> one coin of osETH_rETH (pick it with i), paid to the Vault |
+| `osETH_rETH_remove` | osETH_rETH |  | min0, min1 | osETH_rETH -> every coin of osETH_rETH in pool proportions, paid to the Vault |
+| `osETH_rETH_stake` | osETH_rETH |  |  | osETH_rETH -> osETH_rETH_gauge (stake the LP in its gauge to earn CRV) |
+| `ETH_ETH_add_WETH` | WETH |  | min_lp | WETH -> ETH_ETH (single-sided add to ETH_ETH), minted to the Vault |
+| `ETH_ETH_remove_one` | ETH_ETH |  | i, min_out | ETH_ETH -> one coin of ETH_ETH (pick it with i), paid to the Vault |
+| `ETH_ETH_remove` | ETH_ETH |  | min0, min1 | ETH_ETH -> every coin of ETH_ETH in pool proportions, paid to the Vault |
+| `ETH_ETH_stake` | ETH_ETH |  |  | ETH_ETH -> ETH_ETH_gauge (stake the LP in its gauge to earn CRV) |
+| `stETH_ng_f_add_ETH` | ETH |  | min_lp | ETH -> stETH_ng_f (single-sided add to stETH_ng_f), minted to the Vault |
+| `stETH_ng_f_add_stETH` | stETH |  | min_lp | stETH -> stETH_ng_f (single-sided add to stETH_ng_f), minted to the Vault |
+| `stETH_ng_f_remove_one` | stETH_ng_f |  | i, min_out | stETH_ng_f -> one coin of stETH_ng_f (pick it with i), paid to the Vault |
+| `stETH_ng_f_remove` | stETH_ng_f |  | min0, min1 | stETH_ng_f -> every coin of stETH_ng_f in pool proportions, paid to the Vault |
+| `stETH_ng_f_stake` | stETH_ng_f |  |  | stETH_ng_f -> stETH_ng_f_gauge (stake the LP in its gauge to earn CRV) |
+| `OETH_WETH_add_WETH` | WETH |  | min_lp | WETH -> OETH_WETH (single-sided add to OETH_WETH), minted to the Vault |
+| `OETH_WETH_remove_one` | OETH_WETH |  | i, min_out | OETH_WETH -> one coin of OETH_WETH (pick it with i), paid to the Vault |
+| `OETH_WETH_remove` | OETH_WETH |  | min0, min1 | OETH_WETH -> every coin of OETH_WETH in pool proportions, paid to the Vault |
+| `OETH_WETH_stake` | OETH_WETH |  |  | OETH_WETH -> OETH_WETH_gauge (stake the LP in its gauge to earn CRV) |
+| `weeth_ng_add_WETH` | WETH |  | min_lp | WETH -> weeth_ng (single-sided add to weeth_ng), minted to the Vault |
+| `weeth_ng_add_weETH` | weETH |  | min_lp | weETH -> weeth_ng (single-sided add to weeth_ng), minted to the Vault |
+| `weeth_ng_remove_one` | weeth_ng |  | i, min_out | weeth_ng -> one coin of weeth_ng (pick it with i), paid to the Vault |
+| `weeth_ng_remove` | weeth_ng |  | min0, min1 | weeth_ng -> every coin of weeth_ng in pool proportions, paid to the Vault |
+| `weeth_ng_stake` | weeth_ng |  |  | weeth_ng -> weeth_ng_gauge (stake the LP in its gauge to earn CRV) |
+| `crvUSDUSDT_f_add_USDT` | USDT |  | min_lp | USDT -> crvUSDUSDT_f (single-sided add to crvUSDUSDT_f), minted to the Vault |
+| `crvUSDUSDT_f_add_crvUSD` | crvUSD |  | min_lp | crvUSD -> crvUSDUSDT_f (single-sided add to crvUSDUSDT_f), minted to the Vault |
+| `crvUSDUSDT_f_remove_one` | crvUSDUSDT_f |  | i, min_out | crvUSDUSDT_f -> one coin of crvUSDUSDT_f (pick it with i), paid to the Vault |
+| `crvUSDUSDT_f_remove` | crvUSDUSDT_f |  | min0, min1 | crvUSDUSDT_f -> every coin of crvUSDUSDT_f in pool proportions, paid to the Vault |
+| `crvUSDUSDT_f_stake` | crvUSDUSDT_f |  |  | crvUSDUSDT_f -> crvUSDUSDT_f_gauge (stake the LP in its gauge to earn CRV) |
+| `crvUSDUSDC_f_add_USDC` | USDC |  | min_lp | USDC -> crvUSDUSDC_f (single-sided add to crvUSDUSDC_f), minted to the Vault |
+| `crvUSDUSDC_f_add_crvUSD` | crvUSD |  | min_lp | crvUSD -> crvUSDUSDC_f (single-sided add to crvUSDUSDC_f), minted to the Vault |
+| `crvUSDUSDC_f_remove_one` | crvUSDUSDC_f |  | i, min_out | crvUSDUSDC_f -> one coin of crvUSDUSDC_f (pick it with i), paid to the Vault |
+| `crvUSDUSDC_f_remove` | crvUSDUSDC_f |  | min0, min1 | crvUSDUSDC_f -> every coin of crvUSDUSDC_f in pool proportions, paid to the Vault |
+| `crvUSDUSDC_f_stake` | crvUSDUSDC_f |  |  | crvUSDUSDC_f -> crvUSDUSDC_f_gauge (stake the LP in its gauge to earn CRV) |
+| `crvUSDTWBTCWETH_add_USDT` | USDT |  | min_lp | USDT -> crvUSDTWBTCWETH (single-sided add to crvUSDTWBTCWETH), minted to the Vault |
+| `crvUSDTWBTCWETH_add_WETH` | WETH |  | min_lp | WETH -> crvUSDTWBTCWETH (single-sided add to crvUSDTWBTCWETH), minted to the Vault |
+| `crvUSDTWBTCWETH_remove_one` | crvUSDTWBTCWETH |  | i, min_out | crvUSDTWBTCWETH -> one coin of crvUSDTWBTCWETH (pick it with i), paid to the Vault |
+| `crvUSDTWBTCWETH_remove` | crvUSDTWBTCWETH |  | min0, min1, min2 | crvUSDTWBTCWETH -> every coin of crvUSDTWBTCWETH in pool proportions, paid to the Vault |
+| `crvUSDTWBTCWETH_stake` | crvUSDTWBTCWETH |  |  | crvUSDTWBTCWETH -> crvUSDTWBTCWETH_gauge (stake the LP in its gauge to earn CRV) |
+| `BTCGHOETH_add_GHO` | GHO |  | min_lp | GHO -> BTCGHOETH (single-sided add to BTCGHOETH), minted to the Vault |
+| `BTCGHOETH_add_WETH` | WETH |  | min_lp | WETH -> BTCGHOETH (single-sided add to BTCGHOETH), minted to the Vault |
+| `BTCGHOETH_remove_one` | BTCGHOETH |  | i, min_out | BTCGHOETH -> one coin of BTCGHOETH (pick it with i), paid to the Vault |
+| `BTCGHOETH_remove` | BTCGHOETH |  | min0, min1, min2 | BTCGHOETH -> every coin of BTCGHOETH in pool proportions, paid to the Vault |
+| `BTCGHOETH_stake` | BTCGHOETH |  |  | BTCGHOETH -> BTCGHOETH_gauge (stake the LP in its gauge to earn CRV) |
+| `USDeUSDC_add_USDe` | USDe |  | min_lp | USDe -> USDeUSDC (single-sided add to USDeUSDC), minted to the Vault |
+| `USDeUSDC_add_USDC` | USDC |  | min_lp | USDC -> USDeUSDC (single-sided add to USDeUSDC), minted to the Vault |
+| `USDeUSDC_remove_one` | USDeUSDC |  | i, min_out | USDeUSDC -> one coin of USDeUSDC (pick it with i), paid to the Vault |
+| `USDeUSDC_remove` | USDeUSDC |  | min0, min1 | USDeUSDC -> every coin of USDeUSDC in pool proportions, paid to the Vault |
+| `USDeUSDC_stake` | USDeUSDC |  |  | USDeUSDC -> USDeUSDC_gauge (stake the LP in its gauge to earn CRV) |
+| `MtEthena_add_sDAI` | sDAI |  | min_lp | sDAI -> MtEthena (single-sided add to MtEthena), minted to the Vault |
+| `MtEthena_add_sUSDe` | sUSDe |  | min_lp | sUSDe -> MtEthena (single-sided add to MtEthena), minted to the Vault |
+| `MtEthena_remove_one` | MtEthena |  | i, min_out | MtEthena -> one coin of MtEthena (pick it with i), paid to the Vault |
+| `MtEthena_remove` | MtEthena |  | min0, min1 | MtEthena -> every coin of MtEthena in pool proportions, paid to the Vault |
+| `MtEthena_stake` | MtEthena |  |  | MtEthena -> MtEthena_gauge (stake the LP in its gauge to earn CRV) |
+| `RLUSD_USDC_add_USDC` | USDC |  | min_lp | USDC -> RLUSD_USDC (single-sided add to RLUSD_USDC), minted to the Vault |
+| `RLUSD_USDC_remove_one` | RLUSD_USDC |  | i, min_out | RLUSD_USDC -> one coin of RLUSD_USDC (pick it with i), paid to the Vault |
+| `RLUSD_USDC_remove` | RLUSD_USDC |  | min0, min1 | RLUSD_USDC -> every coin of RLUSD_USDC in pool proportions, paid to the Vault |
+| `RLUSD_USDC_stake` | RLUSD_USDC |  |  | RLUSD_USDC -> RLUSD_USDC_gauge (stake the LP in its gauge to earn CRV) |
+| `unstake` |  | steCRV_gauge, 3Crv_gauge, crvCVXETH_gauge, osETH_rETH_gauge, ETH_ETH_gauge, stETH_ng_f_gauge, OETH_WETH_gauge, weeth_ng_gauge, crvUSDUSDT_f_gauge, crvUSDUSDC_f_gauge, crvUSDTWBTCWETH_gauge, BTCGHOETH_gauge, USDeUSDC_gauge, MtEthena_gauge, RLUSD_USDC_gauge |  | gauge token -> its Curve LP (unstake), back to the Vault |
+| `claim_crv` |  | steCRV_gauge, 3Crv_gauge, crvCVXETH_gauge, osETH_rETH_gauge, ETH_ETH_gauge, stETH_ng_f_gauge, OETH_WETH_gauge, weeth_ng_gauge, crvUSDUSDT_f_gauge, crvUSDUSDC_f_gauge, crvUSDTWBTCWETH_gauge, BTCGHOETH_gauge, USDeUSDC_gauge, MtEthena_gauge, RLUSD_USDC_gauge |  | CRV emissions of one gauge -> the Vault |
+| `claim_rewards` |  | steCRV_gauge, crvCVXETH_gauge, osETH_rETH_gauge, ETH_ETH_gauge, stETH_ng_f_gauge, OETH_WETH_gauge, weeth_ng_gauge, crvUSDUSDT_f_gauge, crvUSDUSDC_f_gauge, crvUSDTWBTCWETH_gauge, BTCGHOETH_gauge, USDeUSDC_gauge, MtEthena_gauge, RLUSD_USDC_gauge |  | extra (non-CRV) gauge rewards -> the Vault |
 
 ## dialectic: Dialectic (DUSD, smDUSD security module)
 
@@ -281,6 +441,33 @@ each `--param` name must be given as `--param name=value`.
 | `exit_etherfi_arm` |  |  | request_id | EtherFiARM shares -> WETH (request, then claim) |
 | `lp_multi_asset_arm` |  |  |  | WETH -> MultiAssetARM LP shares |
 | `exit_multi_asset_arm` |  |  | request_id | MultiAssetARM shares -> WETH (request, then claim) |
+
+## pendle: Pendle (router, PT / YT / SY, markets)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `stETH_30DEC2027_mint_sy` | wstETH |  | min_sy | wstETH -> SY_stETH (the market's SY), minted to the Vault |
+| `stETH_30DEC2027_redeem_sy` | SY_stETH |  | min_out | SY_stETH -> wstETH back to the Vault |
+| `stETH_30DEC2027_buy_pt` | SY_stETH |  | min_pt | SY_stETH -> PT_stETH_30DEC2027 on market_stETH_30DEC2027, paid to the Vault |
+| `stETH_30DEC2027_sell_pt` | PT_stETH_30DEC2027 |  | min_sy | PT_stETH_30DEC2027 -> SY_stETH on market_stETH_30DEC2027 before expiry, paid to the Vault |
+| `stETH_30DEC2027_redeem_pt` | PT_stETH_30DEC2027 |  | min_sy | PT_stETH_30DEC2027 -> SY_stETH at maturity (after expiry), paid to the Vault |
+| `stETH_30DEC2027_add_liquidity` | SY_stETH |  | min_lp | SY_stETH -> market_stETH_30DEC2027 LP (single-sided), minted to the Vault |
+| `stETH_30DEC2027_remove_liquidity` | market_stETH_30DEC2027 |  | min_pt, min_sy | market_stETH_30DEC2027 LP -> SY_stETH and PT_stETH_30DEC2027 in pool proportions, paid to the Vault |
+| `sUSDE_26NOV2026_mint_sy` | sUSDe |  | min_sy | sUSDe -> SY_sUSDE (the market's SY), minted to the Vault |
+| `sUSDE_26NOV2026_redeem_sy` | SY_sUSDE |  | min_out | SY_sUSDE -> sUSDe back to the Vault |
+| `sUSDE_26NOV2026_buy_pt` | SY_sUSDE |  | min_pt | SY_sUSDE -> PT_sUSDE_26NOV2026 on market_sUSDE_26NOV2026, paid to the Vault |
+| `sUSDE_26NOV2026_sell_pt` | PT_sUSDE_26NOV2026 |  | min_sy | PT_sUSDE_26NOV2026 -> SY_sUSDE on market_sUSDE_26NOV2026 before expiry, paid to the Vault |
+| `sUSDE_26NOV2026_redeem_pt` | PT_sUSDE_26NOV2026 |  | min_sy | PT_sUSDE_26NOV2026 -> SY_sUSDE at maturity (after expiry), paid to the Vault |
+| `sUSDE_26NOV2026_add_liquidity` | SY_sUSDE |  | min_lp | SY_sUSDE -> market_sUSDE_26NOV2026 LP (single-sided), minted to the Vault |
+| `sUSDE_26NOV2026_remove_liquidity` | market_sUSDE_26NOV2026 |  | min_pt, min_sy | market_sUSDE_26NOV2026 LP -> SY_sUSDE and PT_sUSDE_26NOV2026 in pool proportions, paid to the Vault |
+| `sUSDS_26NOV2026_mint_sy` | sUSDS |  | min_sy | sUSDS -> SY_sUSDS (the market's SY), minted to the Vault |
+| `sUSDS_26NOV2026_redeem_sy` | SY_sUSDS |  | min_out | SY_sUSDS -> sUSDS back to the Vault |
+| `sUSDS_26NOV2026_buy_pt` | SY_sUSDS |  | min_pt | SY_sUSDS -> PT_sUSDS_26NOV2026 on market_sUSDS_26NOV2026, paid to the Vault |
+| `sUSDS_26NOV2026_sell_pt` | PT_sUSDS_26NOV2026 |  | min_sy | PT_sUSDS_26NOV2026 -> SY_sUSDS on market_sUSDS_26NOV2026 before expiry, paid to the Vault |
+| `sUSDS_26NOV2026_redeem_pt` | PT_sUSDS_26NOV2026 |  | min_sy | PT_sUSDS_26NOV2026 -> SY_sUSDS at maturity (after expiry), paid to the Vault |
+| `sUSDS_26NOV2026_add_liquidity` | SY_sUSDS |  | min_lp | SY_sUSDS -> market_sUSDS_26NOV2026 LP (single-sided), minted to the Vault |
+| `sUSDS_26NOV2026_remove_liquidity` | market_sUSDS_26NOV2026 |  | min_pt, min_sy | market_sUSDS_26NOV2026 LP -> SY_sUSDS and PT_sUSDS_26NOV2026 in pool proportions, paid to the Vault |
+| `claim` |  | market_stETH_30DEC2027, market_sUSDE_26NOV2026, market_sUSDS_26NOV2026 |  | PENDLE and other LP rewards of one market -> the Vault |
 
 ## re: Re (reUSD, insurance capital layer)
 

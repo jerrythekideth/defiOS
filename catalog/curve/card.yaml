@@ -9,7 +9,736 @@ adding: >
   become _, the symbol goes in `aliases`), with get_lp_token(pool) from meta_registry
   as proof. Old pools whose LP is a separate token get two records (pool + LP).
   A gauge is `<lp key>_gauge` with lp_token() and meta_registry get_gauge(pool) as proofs.
+  Actions are per pool: `<lp key>_add_<COIN>` (single-sided add_liquidity with the
+  coin's slot set, the other slots 0), `_remove_one`, `_remove`, `_stake`; unstake /
+  claims take a gauge with --token. Use the receiver-less overloads: the engine models
+  fixed-size arrays (uint256[N]) as dynamic, so params after one cannot be pinned.
+  A coin without a card record gets no add action until it has one.
+sources:
+  - "docs: https://docs.curve.fi"
+  - "explorer: verified source (each pool, gauge and the Minter; signatures copied from the verified ABI)"
 
 contracts: {}
 
-actions: {}
+actions:
+  steth_pool_add_ETH:
+    summary: "ETH -> steCRV (single-sided add to steth_pool), minted to the Vault"
+    input: ETH
+    defaults: { none: 0 }
+    calls:
+      - target: steth_pool
+        sig: "add_liquidity(uint256[2] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$amount, $none], min_mint_amount: $min_lp }
+        send: true
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = ETH, 1 = stETH; LP is minted to msg.sender (the Vault)"
+  steth_pool_add_stETH:
+    summary: "stETH -> steCRV (single-sided add to steth_pool), minted to the Vault"
+    input: lido.stETH
+    defaults: { none: 0 }
+    calls:
+      - target: lido.stETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: steth_pool, amount: $amount }
+      - target: steth_pool
+        sig: "add_liquidity(uint256[2] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$none, $amount], min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = ETH, 1 = stETH; LP is minted to msg.sender (the Vault)"
+  steth_pool_remove_one:
+    summary: "steCRV -> one coin of steth_pool (pick it with i), paid to the Vault"
+    input: steCRV
+    calls:
+      - target: steth_pool
+        sig: "remove_liquidity_one_coin(uint256 _token_amount, int128 i, uint256 _min_amount)"
+        args: { _token_amount: $amount, i: $i, _min_amount: $min_out }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = ETH, 1 = stETH; i of ETH pays native ETH"
+  steth_pool_remove:
+    summary: "steCRV -> every coin of steth_pool in pool proportions, paid to the Vault"
+    input: steCRV
+    calls:
+      - target: steth_pool
+        sig: "remove_liquidity(uint256 _amount, uint256[2] _min_amounts)"
+        args: { _amount: $amount, _min_amounts: [$min0, $min1] }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = ETH, 1 = stETH"
+  steth_pool_stake:
+    summary: "steCRV -> steCRV_gauge (stake the LP in its gauge to earn CRV)"
+    input: steCRV
+    calls:
+      - target: steCRV
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: steCRV_gauge, amount: $amount }
+      - target: steCRV_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  threepool_add_DAI:
+    summary: "DAI -> 3Crv (single-sided add to threepool), minted to the Vault"
+    input: stablecoins.DAI
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.DAI
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: threepool, amount: $amount }
+      - target: threepool
+        sig: "add_liquidity(uint256[3] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$amount, $none, $none], min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = DAI, 1 = USDC, 2 = USDT; LP is minted to msg.sender (the Vault)"
+  threepool_add_USDC:
+    summary: "USDC -> 3Crv (single-sided add to threepool), minted to the Vault"
+    input: stablecoins.USDC
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: threepool, amount: $amount }
+      - target: threepool
+        sig: "add_liquidity(uint256[3] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$none, $amount, $none], min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = DAI, 1 = USDC, 2 = USDT; LP is minted to msg.sender (the Vault)"
+  threepool_add_USDT:
+    summary: "USDT -> 3Crv (single-sided add to threepool), minted to the Vault"
+    input: stablecoins.USDT
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.USDT
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: threepool, amount: $amount }
+      - target: threepool
+        sig: "add_liquidity(uint256[3] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$none, $none, $amount], min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = DAI, 1 = USDC, 2 = USDT; LP is minted to msg.sender (the Vault)"
+  threepool_remove_one:
+    summary: "3Crv -> one coin of threepool (pick it with i), paid to the Vault"
+    input: 3Crv
+    calls:
+      - target: threepool
+        sig: "remove_liquidity_one_coin(uint256 _token_amount, int128 i, uint256 min_amount)"
+        args: { _token_amount: $amount, i: $i, min_amount: $min_out }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = DAI, 1 = USDC, 2 = USDT"
+  threepool_remove:
+    summary: "3Crv -> every coin of threepool in pool proportions, paid to the Vault"
+    input: 3Crv
+    calls:
+      - target: threepool
+        sig: "remove_liquidity(uint256 _amount, uint256[3] min_amounts)"
+        args: { _amount: $amount, min_amounts: [$min0, $min1, $min2] }
+    note: "--param min0=.. min2=.. (raw minimum per coin); coins: 0 = DAI, 1 = USDC, 2 = USDT"
+  threepool_stake:
+    summary: "3Crv -> 3Crv_gauge (stake the LP in its gauge to earn CRV)"
+    input: 3Crv
+    calls:
+      - target: 3Crv
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: 3Crv_gauge, amount: $amount }
+      - target: 3Crv_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  cvxeth_pool_add_WETH:
+    summary: "WETH -> crvCVXETH (single-sided add to cvxeth_pool), minted to the Vault"
+    input: weth.WETH
+    defaults: { none: 0 }
+    calls:
+      - target: weth.WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: cvxeth_pool, amount: $amount }
+      - target: cvxeth_pool
+        sig: "add_liquidity(uint256[2] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$amount, $none], min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = WETH, 1 = CVX; LP is minted to msg.sender (the Vault)"
+  cvxeth_pool_add_CVX:
+    summary: "CVX -> crvCVXETH (single-sided add to cvxeth_pool), minted to the Vault"
+    input: convex.CVX
+    defaults: { none: 0 }
+    calls:
+      - target: convex.CVX
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: cvxeth_pool, amount: $amount }
+      - target: cvxeth_pool
+        sig: "add_liquidity(uint256[2] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$none, $amount], min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = WETH, 1 = CVX; LP is minted to msg.sender (the Vault)"
+  cvxeth_pool_remove_one:
+    summary: "crvCVXETH -> one coin of cvxeth_pool (pick it with i), paid to the Vault"
+    input: crvCVXETH
+    calls:
+      - target: cvxeth_pool
+        sig: "remove_liquidity_one_coin(uint256 token_amount, uint256 i, uint256 min_amount)"
+        args: { token_amount: $amount, i: $i, min_amount: $min_out }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = WETH, 1 = CVX"
+  cvxeth_pool_remove:
+    summary: "crvCVXETH -> every coin of cvxeth_pool in pool proportions, paid to the Vault"
+    input: crvCVXETH
+    calls:
+      - target: cvxeth_pool
+        sig: "remove_liquidity(uint256 _amount, uint256[2] min_amounts)"
+        args: { _amount: $amount, min_amounts: [$min0, $min1] }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = WETH, 1 = CVX"
+  cvxeth_pool_stake:
+    summary: "crvCVXETH -> crvCVXETH_gauge (stake the LP in its gauge to earn CRV)"
+    input: crvCVXETH
+    calls:
+      - target: crvCVXETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crvCVXETH_gauge, amount: $amount }
+      - target: crvCVXETH_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  osETH_rETH_remove_one:
+    summary: "osETH_rETH -> one coin of osETH_rETH (pick it with i), paid to the Vault"
+    input: osETH_rETH
+    calls:
+      - target: osETH_rETH
+        sig: "remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received, address _receiver)"
+        args: { _burn_amount: $amount, i: $i, _min_received: $min_out, _receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = osETH, 1 = rETH"
+  osETH_rETH_remove:
+    summary: "osETH_rETH -> every coin of osETH_rETH in pool proportions, paid to the Vault"
+    input: osETH_rETH
+    calls:
+      - target: osETH_rETH
+        sig: "remove_liquidity(uint256 _burn_amount, uint256[] _min_amounts, address _receiver)"
+        args: { _burn_amount: $amount, _min_amounts: [$min0, $min1], _receiver: $AVATAR }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = osETH, 1 = rETH"
+  osETH_rETH_stake:
+    summary: "osETH_rETH -> osETH_rETH_gauge (stake the LP in its gauge to earn CRV)"
+    input: osETH_rETH
+    calls:
+      - target: osETH_rETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: osETH_rETH_gauge, amount: $amount }
+      - target: osETH_rETH_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  ETH_ETH_add_WETH:
+    summary: "WETH -> ETH_ETH (single-sided add to ETH_ETH), minted to the Vault"
+    input: weth.WETH
+    defaults: { none: 0 }
+    calls:
+      - target: weth.WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: ETH_ETH, amount: $amount }
+      - target: ETH_ETH
+        sig: "add_liquidity(uint256[] _amounts, uint256 _min_mint_amount, address _receiver)"
+        args: { _amounts: [$none, $amount], _min_mint_amount: $min_lp, _receiver: $AVATAR }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = ETH+, 1 = WETH"
+  ETH_ETH_remove_one:
+    summary: "ETH_ETH -> one coin of ETH_ETH (pick it with i), paid to the Vault"
+    input: ETH_ETH
+    calls:
+      - target: ETH_ETH
+        sig: "remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received, address _receiver)"
+        args: { _burn_amount: $amount, i: $i, _min_received: $min_out, _receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = ETH+, 1 = WETH"
+  ETH_ETH_remove:
+    summary: "ETH_ETH -> every coin of ETH_ETH in pool proportions, paid to the Vault"
+    input: ETH_ETH
+    calls:
+      - target: ETH_ETH
+        sig: "remove_liquidity(uint256 _burn_amount, uint256[] _min_amounts, address _receiver)"
+        args: { _burn_amount: $amount, _min_amounts: [$min0, $min1], _receiver: $AVATAR }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = ETH+, 1 = WETH"
+  ETH_ETH_stake:
+    summary: "ETH_ETH -> ETH_ETH_gauge (stake the LP in its gauge to earn CRV)"
+    input: ETH_ETH
+    calls:
+      - target: ETH_ETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: ETH_ETH_gauge, amount: $amount }
+      - target: ETH_ETH_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  stETH_ng_f_add_ETH:
+    summary: "ETH -> stETH_ng_f (single-sided add to stETH_ng_f), minted to the Vault"
+    input: ETH
+    defaults: { none: 0 }
+    calls:
+      - target: stETH_ng_f
+        sig: "add_liquidity(uint256[2] _amounts, uint256 _min_mint_amount)"
+        args: { _amounts: [$amount, $none], _min_mint_amount: $min_lp }
+        send: true
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = ETH, 1 = stETH; LP is minted to msg.sender (the Vault)"
+  stETH_ng_f_add_stETH:
+    summary: "stETH -> stETH_ng_f (single-sided add to stETH_ng_f), minted to the Vault"
+    input: lido.stETH
+    defaults: { none: 0 }
+    calls:
+      - target: lido.stETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: stETH_ng_f, amount: $amount }
+      - target: stETH_ng_f
+        sig: "add_liquidity(uint256[2] _amounts, uint256 _min_mint_amount)"
+        args: { _amounts: [$none, $amount], _min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = ETH, 1 = stETH; LP is minted to msg.sender (the Vault)"
+  stETH_ng_f_remove_one:
+    summary: "stETH_ng_f -> one coin of stETH_ng_f (pick it with i), paid to the Vault"
+    input: stETH_ng_f
+    calls:
+      - target: stETH_ng_f
+        sig: "remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received, address _receiver)"
+        args: { _burn_amount: $amount, i: $i, _min_received: $min_out, _receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = ETH, 1 = stETH; i of ETH pays native ETH"
+  stETH_ng_f_remove:
+    summary: "stETH_ng_f -> every coin of stETH_ng_f in pool proportions, paid to the Vault"
+    input: stETH_ng_f
+    calls:
+      - target: stETH_ng_f
+        sig: "remove_liquidity(uint256 _burn_amount, uint256[2] _min_amounts)"
+        args: { _burn_amount: $amount, _min_amounts: [$min0, $min1] }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = ETH, 1 = stETH"
+  stETH_ng_f_stake:
+    summary: "stETH_ng_f -> stETH_ng_f_gauge (stake the LP in its gauge to earn CRV)"
+    input: stETH_ng_f
+    calls:
+      - target: stETH_ng_f
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: stETH_ng_f_gauge, amount: $amount }
+      - target: stETH_ng_f_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  OETH_WETH_add_WETH:
+    summary: "WETH -> OETH_WETH (single-sided add to OETH_WETH), minted to the Vault"
+    input: weth.WETH
+    defaults: { none: 0 }
+    calls:
+      - target: weth.WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: OETH_WETH, amount: $amount }
+      - target: OETH_WETH
+        sig: "add_liquidity(uint256[] _amounts, uint256 _min_mint_amount, address _receiver)"
+        args: { _amounts: [$none, $amount], _min_mint_amount: $min_lp, _receiver: $AVATAR }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = OETH, 1 = WETH"
+  OETH_WETH_remove_one:
+    summary: "OETH_WETH -> one coin of OETH_WETH (pick it with i), paid to the Vault"
+    input: OETH_WETH
+    calls:
+      - target: OETH_WETH
+        sig: "remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received, address _receiver)"
+        args: { _burn_amount: $amount, i: $i, _min_received: $min_out, _receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = OETH, 1 = WETH"
+  OETH_WETH_remove:
+    summary: "OETH_WETH -> every coin of OETH_WETH in pool proportions, paid to the Vault"
+    input: OETH_WETH
+    calls:
+      - target: OETH_WETH
+        sig: "remove_liquidity(uint256 _burn_amount, uint256[] _min_amounts, address _receiver)"
+        args: { _burn_amount: $amount, _min_amounts: [$min0, $min1], _receiver: $AVATAR }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = OETH, 1 = WETH"
+  OETH_WETH_stake:
+    summary: "OETH_WETH -> OETH_WETH_gauge (stake the LP in its gauge to earn CRV)"
+    input: OETH_WETH
+    calls:
+      - target: OETH_WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: OETH_WETH_gauge, amount: $amount }
+      - target: OETH_WETH_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  weeth_ng_add_WETH:
+    summary: "WETH -> weeth_ng (single-sided add to weeth_ng), minted to the Vault"
+    input: weth.WETH
+    defaults: { none: 0 }
+    calls:
+      - target: weth.WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: weeth_ng, amount: $amount }
+      - target: weeth_ng
+        sig: "add_liquidity(uint256[] _amounts, uint256 _min_mint_amount, address _receiver)"
+        args: { _amounts: [$amount, $none], _min_mint_amount: $min_lp, _receiver: $AVATAR }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = WETH, 1 = weETH"
+  weeth_ng_add_weETH:
+    summary: "weETH -> weeth_ng (single-sided add to weeth_ng), minted to the Vault"
+    input: etherfi.weETH
+    defaults: { none: 0 }
+    calls:
+      - target: etherfi.weETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: weeth_ng, amount: $amount }
+      - target: weeth_ng
+        sig: "add_liquidity(uint256[] _amounts, uint256 _min_mint_amount, address _receiver)"
+        args: { _amounts: [$none, $amount], _min_mint_amount: $min_lp, _receiver: $AVATAR }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = WETH, 1 = weETH"
+  weeth_ng_remove_one:
+    summary: "weeth_ng -> one coin of weeth_ng (pick it with i), paid to the Vault"
+    input: weeth_ng
+    calls:
+      - target: weeth_ng
+        sig: "remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received, address _receiver)"
+        args: { _burn_amount: $amount, i: $i, _min_received: $min_out, _receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = WETH, 1 = weETH"
+  weeth_ng_remove:
+    summary: "weeth_ng -> every coin of weeth_ng in pool proportions, paid to the Vault"
+    input: weeth_ng
+    calls:
+      - target: weeth_ng
+        sig: "remove_liquidity(uint256 _burn_amount, uint256[] _min_amounts, address _receiver)"
+        args: { _burn_amount: $amount, _min_amounts: [$min0, $min1], _receiver: $AVATAR }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = WETH, 1 = weETH"
+  weeth_ng_stake:
+    summary: "weeth_ng -> weeth_ng_gauge (stake the LP in its gauge to earn CRV)"
+    input: weeth_ng
+    calls:
+      - target: weeth_ng
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: weeth_ng_gauge, amount: $amount }
+      - target: weeth_ng_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  crvUSDUSDT_f_add_USDT:
+    summary: "USDT -> crvUSDUSDT_f (single-sided add to crvUSDUSDT_f), minted to the Vault"
+    input: stablecoins.USDT
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.USDT
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crvUSDUSDT_f, amount: $amount }
+      - target: crvUSDUSDT_f
+        sig: "add_liquidity(uint256[2] _amounts, uint256 _min_mint_amount)"
+        args: { _amounts: [$amount, $none], _min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = USDT, 1 = crvUSD; LP is minted to msg.sender (the Vault)"
+  crvUSDUSDT_f_add_crvUSD:
+    summary: "crvUSD -> crvUSDUSDT_f (single-sided add to crvUSDUSDT_f), minted to the Vault"
+    input: stablecoins.crvUSD
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.crvUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crvUSDUSDT_f, amount: $amount }
+      - target: crvUSDUSDT_f
+        sig: "add_liquidity(uint256[2] _amounts, uint256 _min_mint_amount)"
+        args: { _amounts: [$none, $amount], _min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = USDT, 1 = crvUSD; LP is minted to msg.sender (the Vault)"
+  crvUSDUSDT_f_remove_one:
+    summary: "crvUSDUSDT_f -> one coin of crvUSDUSDT_f (pick it with i), paid to the Vault"
+    input: crvUSDUSDT_f
+    calls:
+      - target: crvUSDUSDT_f
+        sig: "remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received, address _receiver)"
+        args: { _burn_amount: $amount, i: $i, _min_received: $min_out, _receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = USDT, 1 = crvUSD"
+  crvUSDUSDT_f_remove:
+    summary: "crvUSDUSDT_f -> every coin of crvUSDUSDT_f in pool proportions, paid to the Vault"
+    input: crvUSDUSDT_f
+    calls:
+      - target: crvUSDUSDT_f
+        sig: "remove_liquidity(uint256 _burn_amount, uint256[2] _min_amounts)"
+        args: { _burn_amount: $amount, _min_amounts: [$min0, $min1] }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = USDT, 1 = crvUSD"
+  crvUSDUSDT_f_stake:
+    summary: "crvUSDUSDT_f -> crvUSDUSDT_f_gauge (stake the LP in its gauge to earn CRV)"
+    input: crvUSDUSDT_f
+    calls:
+      - target: crvUSDUSDT_f
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crvUSDUSDT_f_gauge, amount: $amount }
+      - target: crvUSDUSDT_f_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  crvUSDUSDC_f_add_USDC:
+    summary: "USDC -> crvUSDUSDC_f (single-sided add to crvUSDUSDC_f), minted to the Vault"
+    input: stablecoins.USDC
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crvUSDUSDC_f, amount: $amount }
+      - target: crvUSDUSDC_f
+        sig: "add_liquidity(uint256[2] _amounts, uint256 _min_mint_amount)"
+        args: { _amounts: [$amount, $none], _min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = USDC, 1 = crvUSD; LP is minted to msg.sender (the Vault)"
+  crvUSDUSDC_f_add_crvUSD:
+    summary: "crvUSD -> crvUSDUSDC_f (single-sided add to crvUSDUSDC_f), minted to the Vault"
+    input: stablecoins.crvUSD
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.crvUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crvUSDUSDC_f, amount: $amount }
+      - target: crvUSDUSDC_f
+        sig: "add_liquidity(uint256[2] _amounts, uint256 _min_mint_amount)"
+        args: { _amounts: [$none, $amount], _min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = USDC, 1 = crvUSD; LP is minted to msg.sender (the Vault)"
+  crvUSDUSDC_f_remove_one:
+    summary: "crvUSDUSDC_f -> one coin of crvUSDUSDC_f (pick it with i), paid to the Vault"
+    input: crvUSDUSDC_f
+    calls:
+      - target: crvUSDUSDC_f
+        sig: "remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received, address _receiver)"
+        args: { _burn_amount: $amount, i: $i, _min_received: $min_out, _receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = USDC, 1 = crvUSD"
+  crvUSDUSDC_f_remove:
+    summary: "crvUSDUSDC_f -> every coin of crvUSDUSDC_f in pool proportions, paid to the Vault"
+    input: crvUSDUSDC_f
+    calls:
+      - target: crvUSDUSDC_f
+        sig: "remove_liquidity(uint256 _burn_amount, uint256[2] _min_amounts)"
+        args: { _burn_amount: $amount, _min_amounts: [$min0, $min1] }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = USDC, 1 = crvUSD"
+  crvUSDUSDC_f_stake:
+    summary: "crvUSDUSDC_f -> crvUSDUSDC_f_gauge (stake the LP in its gauge to earn CRV)"
+    input: crvUSDUSDC_f
+    calls:
+      - target: crvUSDUSDC_f
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crvUSDUSDC_f_gauge, amount: $amount }
+      - target: crvUSDUSDC_f_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  crvUSDTWBTCWETH_add_USDT:
+    summary: "USDT -> crvUSDTWBTCWETH (single-sided add to crvUSDTWBTCWETH), minted to the Vault"
+    input: stablecoins.USDT
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.USDT
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crvUSDTWBTCWETH, amount: $amount }
+      - target: crvUSDTWBTCWETH
+        sig: "add_liquidity(uint256[3] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$amount, $none, $none], min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = USDT, 1 = WBTC, 2 = WETH; LP is minted to msg.sender (the Vault)"
+  crvUSDTWBTCWETH_add_WETH:
+    summary: "WETH -> crvUSDTWBTCWETH (single-sided add to crvUSDTWBTCWETH), minted to the Vault"
+    input: weth.WETH
+    defaults: { none: 0 }
+    calls:
+      - target: weth.WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crvUSDTWBTCWETH, amount: $amount }
+      - target: crvUSDTWBTCWETH
+        sig: "add_liquidity(uint256[3] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$none, $none, $amount], min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = USDT, 1 = WBTC, 2 = WETH; LP is minted to msg.sender (the Vault)"
+  crvUSDTWBTCWETH_remove_one:
+    summary: "crvUSDTWBTCWETH -> one coin of crvUSDTWBTCWETH (pick it with i), paid to the Vault"
+    input: crvUSDTWBTCWETH
+    calls:
+      - target: crvUSDTWBTCWETH
+        sig: "remove_liquidity_one_coin(uint256 token_amount, uint256 i, uint256 min_amount, bool use_eth, address receiver)"
+        args: { token_amount: $amount, i: $i, min_amount: $min_out, use_eth: false, receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = USDT, 1 = WBTC, 2 = WETH"
+  crvUSDTWBTCWETH_remove:
+    summary: "crvUSDTWBTCWETH -> every coin of crvUSDTWBTCWETH in pool proportions, paid to the Vault"
+    input: crvUSDTWBTCWETH
+    calls:
+      - target: crvUSDTWBTCWETH
+        sig: "remove_liquidity(uint256 _amount, uint256[3] min_amounts)"
+        args: { _amount: $amount, min_amounts: [$min0, $min1, $min2] }
+    note: "--param min0=.. min2=.. (raw minimum per coin); coins: 0 = USDT, 1 = WBTC, 2 = WETH"
+  crvUSDTWBTCWETH_stake:
+    summary: "crvUSDTWBTCWETH -> crvUSDTWBTCWETH_gauge (stake the LP in its gauge to earn CRV)"
+    input: crvUSDTWBTCWETH
+    calls:
+      - target: crvUSDTWBTCWETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crvUSDTWBTCWETH_gauge, amount: $amount }
+      - target: crvUSDTWBTCWETH_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  BTCGHOETH_add_GHO:
+    summary: "GHO -> BTCGHOETH (single-sided add to BTCGHOETH), minted to the Vault"
+    input: stablecoins.GHO
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.GHO
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: BTCGHOETH, amount: $amount }
+      - target: BTCGHOETH
+        sig: "add_liquidity(uint256[3] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$amount, $none, $none], min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = GHO, 1 = cbBTC, 2 = WETH; LP is minted to msg.sender (the Vault)"
+  BTCGHOETH_add_WETH:
+    summary: "WETH -> BTCGHOETH (single-sided add to BTCGHOETH), minted to the Vault"
+    input: weth.WETH
+    defaults: { none: 0 }
+    calls:
+      - target: weth.WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: BTCGHOETH, amount: $amount }
+      - target: BTCGHOETH
+        sig: "add_liquidity(uint256[3] amounts, uint256 min_mint_amount)"
+        args: { amounts: [$none, $none, $amount], min_mint_amount: $min_lp }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = GHO, 1 = cbBTC, 2 = WETH; LP is minted to msg.sender (the Vault)"
+  BTCGHOETH_remove_one:
+    summary: "BTCGHOETH -> one coin of BTCGHOETH (pick it with i), paid to the Vault"
+    input: BTCGHOETH
+    calls:
+      - target: BTCGHOETH
+        sig: "remove_liquidity_one_coin(uint256 token_amount, uint256 i, uint256 min_amount, bool use_eth, address receiver)"
+        args: { token_amount: $amount, i: $i, min_amount: $min_out, use_eth: false, receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = GHO, 1 = cbBTC, 2 = WETH"
+  BTCGHOETH_remove:
+    summary: "BTCGHOETH -> every coin of BTCGHOETH in pool proportions, paid to the Vault"
+    input: BTCGHOETH
+    calls:
+      - target: BTCGHOETH
+        sig: "remove_liquidity(uint256 _amount, uint256[3] min_amounts)"
+        args: { _amount: $amount, min_amounts: [$min0, $min1, $min2] }
+    note: "--param min0=.. min2=.. (raw minimum per coin); coins: 0 = GHO, 1 = cbBTC, 2 = WETH"
+  BTCGHOETH_stake:
+    summary: "BTCGHOETH -> BTCGHOETH_gauge (stake the LP in its gauge to earn CRV)"
+    input: BTCGHOETH
+    calls:
+      - target: BTCGHOETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: BTCGHOETH_gauge, amount: $amount }
+      - target: BTCGHOETH_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  USDeUSDC_add_USDe:
+    summary: "USDe -> USDeUSDC (single-sided add to USDeUSDC), minted to the Vault"
+    input: ethena.USDe
+    defaults: { none: 0 }
+    calls:
+      - target: ethena.USDe
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: USDeUSDC, amount: $amount }
+      - target: USDeUSDC
+        sig: "add_liquidity(uint256[] _amounts, uint256 _min_mint_amount, address _receiver)"
+        args: { _amounts: [$amount, $none], _min_mint_amount: $min_lp, _receiver: $AVATAR }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = USDe, 1 = USDC"
+  USDeUSDC_add_USDC:
+    summary: "USDC -> USDeUSDC (single-sided add to USDeUSDC), minted to the Vault"
+    input: stablecoins.USDC
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: USDeUSDC, amount: $amount }
+      - target: USDeUSDC
+        sig: "add_liquidity(uint256[] _amounts, uint256 _min_mint_amount, address _receiver)"
+        args: { _amounts: [$none, $amount], _min_mint_amount: $min_lp, _receiver: $AVATAR }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = USDe, 1 = USDC"
+  USDeUSDC_remove_one:
+    summary: "USDeUSDC -> one coin of USDeUSDC (pick it with i), paid to the Vault"
+    input: USDeUSDC
+    calls:
+      - target: USDeUSDC
+        sig: "remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received, address _receiver)"
+        args: { _burn_amount: $amount, i: $i, _min_received: $min_out, _receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = USDe, 1 = USDC"
+  USDeUSDC_remove:
+    summary: "USDeUSDC -> every coin of USDeUSDC in pool proportions, paid to the Vault"
+    input: USDeUSDC
+    calls:
+      - target: USDeUSDC
+        sig: "remove_liquidity(uint256 _burn_amount, uint256[] _min_amounts, address _receiver)"
+        args: { _burn_amount: $amount, _min_amounts: [$min0, $min1], _receiver: $AVATAR }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = USDe, 1 = USDC"
+  USDeUSDC_stake:
+    summary: "USDeUSDC -> USDeUSDC_gauge (stake the LP in its gauge to earn CRV)"
+    input: USDeUSDC
+    calls:
+      - target: USDeUSDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: USDeUSDC_gauge, amount: $amount }
+      - target: USDeUSDC_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  MtEthena_add_sDAI:
+    summary: "sDAI -> MtEthena (single-sided add to MtEthena), minted to the Vault"
+    input: sky.sDAI
+    defaults: { none: 0 }
+    calls:
+      - target: sky.sDAI
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: MtEthena, amount: $amount }
+      - target: MtEthena
+        sig: "add_liquidity(uint256[] _amounts, uint256 _min_mint_amount, address _receiver)"
+        args: { _amounts: [$amount, $none], _min_mint_amount: $min_lp, _receiver: $AVATAR }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = sDAI, 1 = sUSDe"
+  MtEthena_add_sUSDe:
+    summary: "sUSDe -> MtEthena (single-sided add to MtEthena), minted to the Vault"
+    input: ethena.sUSDe
+    defaults: { none: 0 }
+    calls:
+      - target: ethena.sUSDe
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: MtEthena, amount: $amount }
+      - target: MtEthena
+        sig: "add_liquidity(uint256[] _amounts, uint256 _min_mint_amount, address _receiver)"
+        args: { _amounts: [$none, $amount], _min_mint_amount: $min_lp, _receiver: $AVATAR }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = sDAI, 1 = sUSDe"
+  MtEthena_remove_one:
+    summary: "MtEthena -> one coin of MtEthena (pick it with i), paid to the Vault"
+    input: MtEthena
+    calls:
+      - target: MtEthena
+        sig: "remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received, address _receiver)"
+        args: { _burn_amount: $amount, i: $i, _min_received: $min_out, _receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = sDAI, 1 = sUSDe"
+  MtEthena_remove:
+    summary: "MtEthena -> every coin of MtEthena in pool proportions, paid to the Vault"
+    input: MtEthena
+    calls:
+      - target: MtEthena
+        sig: "remove_liquidity(uint256 _burn_amount, uint256[] _min_amounts, address _receiver)"
+        args: { _burn_amount: $amount, _min_amounts: [$min0, $min1], _receiver: $AVATAR }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = sDAI, 1 = sUSDe"
+  MtEthena_stake:
+    summary: "MtEthena -> MtEthena_gauge (stake the LP in its gauge to earn CRV)"
+    input: MtEthena
+    calls:
+      - target: MtEthena
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: MtEthena_gauge, amount: $amount }
+      - target: MtEthena_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  RLUSD_USDC_add_USDC:
+    summary: "USDC -> RLUSD_USDC (single-sided add to RLUSD_USDC), minted to the Vault"
+    input: stablecoins.USDC
+    defaults: { none: 0 }
+    calls:
+      - target: stablecoins.USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: RLUSD_USDC, amount: $amount }
+      - target: RLUSD_USDC
+        sig: "add_liquidity(uint256[] _amounts, uint256 _min_mint_amount, address _receiver)"
+        args: { _amounts: [$amount, $none], _min_mint_amount: $min_lp, _receiver: $AVATAR }
+    note: "min_lp (raw, 18 decimals) = calc_token_amount minus your slippage; coins: 0 = USDC, 1 = RLUSD"
+  RLUSD_USDC_remove_one:
+    summary: "RLUSD_USDC -> one coin of RLUSD_USDC (pick it with i), paid to the Vault"
+    input: RLUSD_USDC
+    calls:
+      - target: RLUSD_USDC
+        sig: "remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received, address _receiver)"
+        args: { _burn_amount: $amount, i: $i, _min_received: $min_out, _receiver: $AVATAR }
+    note: "--param i=<coin index> min_out=<raw units of that coin>; coins: 0 = USDC, 1 = RLUSD"
+  RLUSD_USDC_remove:
+    summary: "RLUSD_USDC -> every coin of RLUSD_USDC in pool proportions, paid to the Vault"
+    input: RLUSD_USDC
+    calls:
+      - target: RLUSD_USDC
+        sig: "remove_liquidity(uint256 _burn_amount, uint256[] _min_amounts, address _receiver)"
+        args: { _burn_amount: $amount, _min_amounts: [$min0, $min1], _receiver: $AVATAR }
+    note: "--param min0=.. min1=.. (raw minimum per coin); coins: 0 = USDC, 1 = RLUSD"
+  RLUSD_USDC_stake:
+    summary: "RLUSD_USDC -> RLUSD_USDC_gauge (stake the LP in its gauge to earn CRV)"
+    input: RLUSD_USDC
+    calls:
+      - target: RLUSD_USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: RLUSD_USDC_gauge, amount: $amount }
+      - target: RLUSD_USDC_gauge
+        sig: "deposit(uint256 _value)"
+        args: { _value: $amount }
+  unstake:
+    summary: "gauge token -> its Curve LP (unstake), back to the Vault"
+    tokens: [steCRV_gauge, 3Crv_gauge, crvCVXETH_gauge, osETH_rETH_gauge, ETH_ETH_gauge, stETH_ng_f_gauge, OETH_WETH_gauge, weeth_ng_gauge, crvUSDUSDT_f_gauge, crvUSDUSDC_f_gauge, crvUSDTWBTCWETH_gauge, BTCGHOETH_gauge, USDeUSDC_gauge, MtEthena_gauge, RLUSD_USDC_gauge]
+    calls:
+      - target: $token
+        sig: "withdraw(uint256 _value)"
+        args: { _value: $amount }
+    note: "--token <gauge>; the amount is in gauge tokens (1:1 with the LP). Unclaimed CRV stays claimable with claim_crv"
+  claim_crv:
+    summary: "CRV emissions of one gauge -> the Vault"
+    tokens: [steCRV_gauge, 3Crv_gauge, crvCVXETH_gauge, osETH_rETH_gauge, ETH_ETH_gauge, stETH_ng_f_gauge, OETH_WETH_gauge, weeth_ng_gauge, crvUSDUSDT_f_gauge, crvUSDUSDC_f_gauge, crvUSDTWBTCWETH_gauge, BTCGHOETH_gauge, USDeUSDC_gauge, MtEthena_gauge, RLUSD_USDC_gauge]
+    calls:
+      - target: minter
+        sig: "mint(address gauge_addr)"
+        args: { gauge_addr: $token }
+    note: "--token <gauge>; CRV is minted to msg.sender (the Vault)"
+  claim_rewards:
+    summary: "extra (non-CRV) gauge rewards -> the Vault"
+    tokens: [steCRV_gauge, crvCVXETH_gauge, osETH_rETH_gauge, ETH_ETH_gauge, stETH_ng_f_gauge, OETH_WETH_gauge, weeth_ng_gauge, crvUSDUSDT_f_gauge, crvUSDUSDC_f_gauge, crvUSDTWBTCWETH_gauge, BTCGHOETH_gauge, USDeUSDC_gauge, MtEthena_gauge, RLUSD_USDC_gauge]
+    calls:
+      - target: $token
+        sig: "claim_rewards()"
+    note: "--token <gauge>; pays every reward token of the gauge to msg.sender. 3Crv_gauge has no extra rewards"

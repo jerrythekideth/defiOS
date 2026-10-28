@@ -2,7 +2,7 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26292959,
+   "block": 26293138,
    "checked": "2026-10-28"
   }
  },
@@ -127,7 +127,13 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "auraBAL_claim",
+    "auraBAL_unstake",
+    "claim",
+    "stkauraBAL_redeem",
+    "withdraw"
+   ]
   },
   "avant": {
    "name": "Avant (avETH / savETH)",
@@ -170,7 +176,23 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "Aave_GHO_USDT_USDC_add_GHO",
+    "Aave_GHO_USDT_USDC_add_USDC",
+    "Aave_GHO_USDT_USDC_add_USDT",
+    "Aave_GHO_USDT_USDC_remove",
+    "Aave_GHO_USDT_USDC_stake",
+    "claim_bal",
+    "claim_rewards",
+    "osETH_waWETH_remove",
+    "osETH_waWETH_remove_waEthWETH",
+    "osETH_waWETH_stake",
+    "rETH_waEthWETH_remove",
+    "rETH_waEthWETH_remove_waEthWETH",
+    "rETH_waEthWETH_stake",
+    "unstake",
+    "waEthWETH_unwrap"
+   ]
   },
   "cctp": {
    "name": "Circle CCTP v2 (bridge USDC)",
@@ -220,7 +242,54 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "3Crv_claim",
+    "3Crv_deposit",
+    "3Crv_withdraw",
+    "BTCGHOETH_claim",
+    "BTCGHOETH_deposit",
+    "BTCGHOETH_withdraw",
+    "ETH_ETH_claim",
+    "ETH_ETH_deposit",
+    "ETH_ETH_withdraw",
+    "OETH_WETH_claim",
+    "OETH_WETH_deposit",
+    "OETH_WETH_withdraw",
+    "RLUSD_USDC_claim",
+    "RLUSD_USDC_deposit",
+    "RLUSD_USDC_withdraw",
+    "crvCVXETH_claim",
+    "crvCVXETH_deposit",
+    "crvCVXETH_withdraw",
+    "crvUSDTWBTCWETH_claim",
+    "crvUSDTWBTCWETH_deposit",
+    "crvUSDTWBTCWETH_withdraw",
+    "crvUSDUSDC_f_claim",
+    "crvUSDUSDC_f_deposit",
+    "crvUSDUSDC_f_withdraw",
+    "crvUSDUSDT_f_claim",
+    "crvUSDUSDT_f_deposit",
+    "crvUSDUSDT_f_withdraw",
+    "crv_to_cvxcrv",
+    "cvx_claim",
+    "cvx_stake",
+    "cvx_unstake",
+    "cvxcrv_claim",
+    "cvxcrv_stake",
+    "cvxcrv_unstake",
+    "osETH_rETH_claim",
+    "osETH_rETH_deposit",
+    "osETH_rETH_withdraw",
+    "stETH_ng_f_claim",
+    "stETH_ng_f_deposit",
+    "stETH_ng_f_withdraw",
+    "steCRV_claim",
+    "steCRV_deposit",
+    "steCRV_withdraw",
+    "weeth_ng_claim",
+    "weeth_ng_deposit",
+    "weeth_ng_withdraw"
+   ]
   },
   "cowswap": {
    "name": "CoW Swap (pre-signed orders via the CowswapOrderSigner)",
@@ -241,7 +310,82 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "BTCGHOETH_add_GHO",
+    "BTCGHOETH_add_WETH",
+    "BTCGHOETH_remove",
+    "BTCGHOETH_remove_one",
+    "BTCGHOETH_stake",
+    "ETH_ETH_add_WETH",
+    "ETH_ETH_remove",
+    "ETH_ETH_remove_one",
+    "ETH_ETH_stake",
+    "MtEthena_add_sDAI",
+    "MtEthena_add_sUSDe",
+    "MtEthena_remove",
+    "MtEthena_remove_one",
+    "MtEthena_stake",
+    "OETH_WETH_add_WETH",
+    "OETH_WETH_remove",
+    "OETH_WETH_remove_one",
+    "OETH_WETH_stake",
+    "RLUSD_USDC_add_USDC",
+    "RLUSD_USDC_remove",
+    "RLUSD_USDC_remove_one",
+    "RLUSD_USDC_stake",
+    "USDeUSDC_add_USDC",
+    "USDeUSDC_add_USDe",
+    "USDeUSDC_remove",
+    "USDeUSDC_remove_one",
+    "USDeUSDC_stake",
+    "claim_crv",
+    "claim_rewards",
+    "crvUSDTWBTCWETH_add_USDT",
+    "crvUSDTWBTCWETH_add_WETH",
+    "crvUSDTWBTCWETH_remove",
+    "crvUSDTWBTCWETH_remove_one",
+    "crvUSDTWBTCWETH_stake",
+    "crvUSDUSDC_f_add_USDC",
+    "crvUSDUSDC_f_add_crvUSD",
+    "crvUSDUSDC_f_remove",
+    "crvUSDUSDC_f_remove_one",
+    "crvUSDUSDC_f_stake",
+    "crvUSDUSDT_f_add_USDT",
+    "crvUSDUSDT_f_add_crvUSD",
+    "crvUSDUSDT_f_remove",
+    "crvUSDUSDT_f_remove_one",
+    "crvUSDUSDT_f_stake",
+    "cvxeth_pool_add_CVX",
+    "cvxeth_pool_add_WETH",
+    "cvxeth_pool_remove",
+    "cvxeth_pool_remove_one",
+    "cvxeth_pool_stake",
+    "osETH_rETH_remove",
+    "osETH_rETH_remove_one",
+    "osETH_rETH_stake",
+    "stETH_ng_f_add_ETH",
+    "stETH_ng_f_add_stETH",
+    "stETH_ng_f_remove",
+    "stETH_ng_f_remove_one",
+    "stETH_ng_f_stake",
+    "steth_pool_add_ETH",
+    "steth_pool_add_stETH",
+    "steth_pool_remove",
+    "steth_pool_remove_one",
+    "steth_pool_stake",
+    "threepool_add_DAI",
+    "threepool_add_USDC",
+    "threepool_add_USDT",
+    "threepool_remove",
+    "threepool_remove_one",
+    "threepool_stake",
+    "unstake",
+    "weeth_ng_add_WETH",
+    "weeth_ng_add_weETH",
+    "weeth_ng_remove",
+    "weeth_ng_remove_one",
+    "weeth_ng_stake"
+   ]
   },
   "dialectic": {
    "name": "Dialectic (DUSD, smDUSD security module)",
@@ -466,7 +610,30 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "claim",
+    "sUSDE_26NOV2026_add_liquidity",
+    "sUSDE_26NOV2026_buy_pt",
+    "sUSDE_26NOV2026_mint_sy",
+    "sUSDE_26NOV2026_redeem_pt",
+    "sUSDE_26NOV2026_redeem_sy",
+    "sUSDE_26NOV2026_remove_liquidity",
+    "sUSDE_26NOV2026_sell_pt",
+    "sUSDS_26NOV2026_add_liquidity",
+    "sUSDS_26NOV2026_buy_pt",
+    "sUSDS_26NOV2026_mint_sy",
+    "sUSDS_26NOV2026_redeem_pt",
+    "sUSDS_26NOV2026_redeem_sy",
+    "sUSDS_26NOV2026_remove_liquidity",
+    "sUSDS_26NOV2026_sell_pt",
+    "stETH_30DEC2027_add_liquidity",
+    "stETH_30DEC2027_buy_pt",
+    "stETH_30DEC2027_mint_sy",
+    "stETH_30DEC2027_redeem_pt",
+    "stETH_30DEC2027_redeem_sy",
+    "stETH_30DEC2027_remove_liquidity",
+    "stETH_30DEC2027_sell_pt"
+   ]
   },
   "permit2": {
    "name": "Permit2 (shared token approvals)",
@@ -1852,6 +2019,57 @@
      "symbol": "cvxcrvCVXETH"
     },
     "note": "Convex pid 64 deposit token for curve.crvCVXETH"
+   }
+  ],
+  "1:0x0bfc9d54fc184518a81162f8fb99c2eaca081202": [
+   {
+    "chain_id": 1,
+    "address": "0x0bfc9d54Fc184518A81162F8fB99c2eACa081202",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "waEthWETH",
+    "title": "Wrapped Aave Ethereum WETH",
+    "ref": "balancer_v3.waEthWETH",
+    "category": "vault",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "waWETH",
+     "aave static weth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol",
+     "explorer: https://etherscan.io/address/0x0bfc9d54Fc184518A81162F8fB99c2eACa081202#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.asset() == weth.WETH",
+      "ok": true
+     },
+     {
+      "id": "$self.aToken() == aave_v3.aEthWETH",
+      "ok": true
+     },
+     {
+      "id": "vault.getBufferAsset($self) == weth.WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x487c2C53c0866F0A73ae317bD1A28F63ADcD9aD1",
+     "admin": "0xD3cF979e676265e4f6379749DECe4708B9A22476"
+    },
+    "onchain": {
+     "name": "Wrapped Aave Ethereum WETH",
+     "symbol": "waEthWETH"
+    },
+    "note": "Aave v3 static aToken wrapper for WETH (ERC-4626); the WETH leg of osETH_waWETH and rETH_waEthWETH"
    }
   ],
   "1:0x0c0d01abf3e6adfca0989ebba9d6e85dd58eab1e": [
@@ -22796,6 +23014,13 @@
    "to": "1:0xb195b618ea52b77cb2a58846f452f59f8dfa9390",
    "from_ref": "pendle.SY_sUSDE",
    "to_ref": "pendle.PT_sUSDE_26NOV2026"
+  },
+  {
+   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+   "relation": "underlying_of",
+   "to": "1:0x0bfc9d54fc184518a81162f8fb99c2eaca081202",
+   "from_ref": "weth.WETH",
+   "to_ref": "balancer_v3.waEthWETH"
   },
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",

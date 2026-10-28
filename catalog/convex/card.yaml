@@ -8,7 +8,396 @@ adding: >
   Add the deposit token keyed by its symbol() with operator() = booster as proof and
   an underlying edge to the Curve LP, and `<token key>_rewards` with operator() and
   stakingToken() as proofs. Put the pid in the note.
+  Actions are per pool (the _rewards pools have no decimals, so no --token list):
+  `<lp>_deposit` = Booster.deposit(pid, amount, _stake true) with the pid as a default,
+  `<lp>_withdraw` = rewards.withdrawAndUnwrap(amount, claim true), `<lp>_claim`. The
+  pid is a free param in the role (one Booster selector, several pids cannot merge).
+sources:
+  - "docs: https://docs.convexfinance.com"
+  - "explorer: verified source (Booster, BaseRewardPool, CvxRewardPool, CrvDepositor, cvxCRV staking)"
 
 contracts: {}
 
-actions: {}
+actions:
+  3Crv_deposit:
+    summary: "curve.3Crv -> Convex pid 9, staked in cvx3Crv_rewards (earns CRV + CVX)"
+    input: curve.3Crv
+    defaults: { pid: 9 }
+    calls:
+      - target: curve.3Crv
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 9 is filled in; cvx3Crv is minted and staked for msg.sender (the Vault)"
+  3Crv_withdraw:
+    summary: "cvx3Crv_rewards -> curve.3Crv back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvx3Crv
+    calls:
+      - target: cvx3Crv_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  3Crv_claim:
+    summary: "CRV, CVX and extra rewards of cvx3Crv_rewards -> the Vault"
+    calls:
+      - target: cvx3Crv_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  steCRV_deposit:
+    summary: "curve.steCRV -> Convex pid 25, staked in cvxsteCRV_rewards (earns CRV + CVX)"
+    input: curve.steCRV
+    defaults: { pid: 25 }
+    calls:
+      - target: curve.steCRV
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 25 is filled in; cvxsteCRV is minted and staked for msg.sender (the Vault)"
+  steCRV_withdraw:
+    summary: "cvxsteCRV_rewards -> curve.steCRV back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxsteCRV
+    calls:
+      - target: cvxsteCRV_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  steCRV_claim:
+    summary: "CRV, CVX and extra rewards of cvxsteCRV_rewards -> the Vault"
+    calls:
+      - target: cvxsteCRV_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  crvCVXETH_deposit:
+    summary: "curve.crvCVXETH -> Convex pid 64, staked in cvxcrvCVXETH_rewards (earns CRV + CVX)"
+    input: curve.crvCVXETH
+    defaults: { pid: 64 }
+    calls:
+      - target: curve.crvCVXETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 64 is filled in; cvxcrvCVXETH is minted and staked for msg.sender (the Vault)"
+  crvCVXETH_withdraw:
+    summary: "cvxcrvCVXETH_rewards -> curve.crvCVXETH back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxcrvCVXETH
+    calls:
+      - target: cvxcrvCVXETH_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  crvCVXETH_claim:
+    summary: "CRV, CVX and extra rewards of cvxcrvCVXETH_rewards -> the Vault"
+    calls:
+      - target: cvxcrvCVXETH_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  stETH_ng_f_deposit:
+    summary: "curve.stETH_ng_f -> Convex pid 177, staked in cvxstETH_ng_f_rewards (earns CRV + CVX)"
+    input: curve.stETH_ng_f
+    defaults: { pid: 177 }
+    calls:
+      - target: curve.stETH_ng_f
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 177 is filled in; cvxstETH_ng_f is minted and staked for msg.sender (the Vault)"
+  stETH_ng_f_withdraw:
+    summary: "cvxstETH_ng_f_rewards -> curve.stETH_ng_f back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxstETH_ng_f
+    calls:
+      - target: cvxstETH_ng_f_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  stETH_ng_f_claim:
+    summary: "CRV, CVX and extra rewards of cvxstETH_ng_f_rewards -> the Vault"
+    calls:
+      - target: cvxstETH_ng_f_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  crvUSDUSDT_f_deposit:
+    summary: "curve.crvUSDUSDT_f -> Convex pid 179, staked in cvxcrvUSDUSDT_f_rewards (earns CRV + CVX)"
+    input: curve.crvUSDUSDT_f
+    defaults: { pid: 179 }
+    calls:
+      - target: curve.crvUSDUSDT_f
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 179 is filled in; cvxcrvUSDUSDT_f is minted and staked for msg.sender (the Vault)"
+  crvUSDUSDT_f_withdraw:
+    summary: "cvxcrvUSDUSDT_f_rewards -> curve.crvUSDUSDT_f back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxcrvUSDUSDT_f
+    calls:
+      - target: cvxcrvUSDUSDT_f_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  crvUSDUSDT_f_claim:
+    summary: "CRV, CVX and extra rewards of cvxcrvUSDUSDT_f_rewards -> the Vault"
+    calls:
+      - target: cvxcrvUSDUSDT_f_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  crvUSDUSDC_f_deposit:
+    summary: "curve.crvUSDUSDC_f -> Convex pid 182, staked in cvxcrvUSDUSDC_f_rewards (earns CRV + CVX)"
+    input: curve.crvUSDUSDC_f
+    defaults: { pid: 182 }
+    calls:
+      - target: curve.crvUSDUSDC_f
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 182 is filled in; cvxcrvUSDUSDC_f is minted and staked for msg.sender (the Vault)"
+  crvUSDUSDC_f_withdraw:
+    summary: "cvxcrvUSDUSDC_f_rewards -> curve.crvUSDUSDC_f back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxcrvUSDUSDC_f
+    calls:
+      - target: cvxcrvUSDUSDC_f_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  crvUSDUSDC_f_claim:
+    summary: "CRV, CVX and extra rewards of cvxcrvUSDUSDC_f_rewards -> the Vault"
+    calls:
+      - target: cvxcrvUSDUSDC_f_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  crvUSDTWBTCWETH_deposit:
+    summary: "curve.crvUSDTWBTCWETH -> Convex pid 188, staked in cvxcrvUSDTWBTCWETH_rewards (earns CRV + CVX)"
+    input: curve.crvUSDTWBTCWETH
+    defaults: { pid: 188 }
+    calls:
+      - target: curve.crvUSDTWBTCWETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 188 is filled in; cvxcrvUSDTWBTCWETH is minted and staked for msg.sender (the Vault)"
+  crvUSDTWBTCWETH_withdraw:
+    summary: "cvxcrvUSDTWBTCWETH_rewards -> curve.crvUSDTWBTCWETH back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxcrvUSDTWBTCWETH
+    calls:
+      - target: cvxcrvUSDTWBTCWETH_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  crvUSDTWBTCWETH_claim:
+    summary: "CRV, CVX and extra rewards of cvxcrvUSDTWBTCWETH_rewards -> the Vault"
+    calls:
+      - target: cvxcrvUSDTWBTCWETH_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  osETH_rETH_deposit:
+    summary: "curve.osETH_rETH -> Convex pid 268, staked in cvxosETH_rETH_rewards (earns CRV + CVX)"
+    input: curve.osETH_rETH
+    defaults: { pid: 268 }
+    calls:
+      - target: curve.osETH_rETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 268 is filled in; cvxosETH_rETH is minted and staked for msg.sender (the Vault)"
+  osETH_rETH_withdraw:
+    summary: "cvxosETH_rETH_rewards -> curve.osETH_rETH back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxosETH_rETH
+    calls:
+      - target: cvxosETH_rETH_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  osETH_rETH_claim:
+    summary: "CRV, CVX and extra rewards of cvxosETH_rETH_rewards -> the Vault"
+    calls:
+      - target: cvxosETH_rETH_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  weeth_ng_deposit:
+    summary: "curve.weeth_ng -> Convex pid 355, staked in cvxweeth_ng_rewards (earns CRV + CVX)"
+    input: curve.weeth_ng
+    defaults: { pid: 355 }
+    calls:
+      - target: curve.weeth_ng
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 355 is filled in; cvxweeth_ng is minted and staked for msg.sender (the Vault)"
+  weeth_ng_withdraw:
+    summary: "cvxweeth_ng_rewards -> curve.weeth_ng back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxweeth_ng
+    calls:
+      - target: cvxweeth_ng_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  weeth_ng_claim:
+    summary: "CRV, CVX and extra rewards of cvxweeth_ng_rewards -> the Vault"
+    calls:
+      - target: cvxweeth_ng_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  BTCGHOETH_deposit:
+    summary: "curve.BTCGHOETH -> Convex pid 409, staked in cvxBTCGHOETH_rewards (earns CRV + CVX)"
+    input: curve.BTCGHOETH
+    defaults: { pid: 409 }
+    calls:
+      - target: curve.BTCGHOETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 409 is filled in; cvxBTCGHOETH is minted and staked for msg.sender (the Vault)"
+  BTCGHOETH_withdraw:
+    summary: "cvxBTCGHOETH_rewards -> curve.BTCGHOETH back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxBTCGHOETH
+    calls:
+      - target: cvxBTCGHOETH_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  BTCGHOETH_claim:
+    summary: "CRV, CVX and extra rewards of cvxBTCGHOETH_rewards -> the Vault"
+    calls:
+      - target: cvxBTCGHOETH_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  RLUSD_USDC_deposit:
+    summary: "curve.RLUSD_USDC -> Convex pid 443, staked in cvxRLUSD_USDC_rewards (earns CRV + CVX)"
+    input: curve.RLUSD_USDC
+    defaults: { pid: 443 }
+    calls:
+      - target: curve.RLUSD_USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 443 is filled in; cvxRLUSD_USDC is minted and staked for msg.sender (the Vault)"
+  RLUSD_USDC_withdraw:
+    summary: "cvxRLUSD_USDC_rewards -> curve.RLUSD_USDC back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxRLUSD_USDC
+    calls:
+      - target: cvxRLUSD_USDC_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  RLUSD_USDC_claim:
+    summary: "CRV, CVX and extra rewards of cvxRLUSD_USDC_rewards -> the Vault"
+    calls:
+      - target: cvxRLUSD_USDC_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  OETH_WETH_deposit:
+    summary: "curve.OETH_WETH -> Convex pid 451, staked in cvxOETH_WETH_rewards (earns CRV + CVX)"
+    input: curve.OETH_WETH
+    defaults: { pid: 451 }
+    calls:
+      - target: curve.OETH_WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 451 is filled in; cvxOETH_WETH is minted and staked for msg.sender (the Vault)"
+  OETH_WETH_withdraw:
+    summary: "cvxOETH_WETH_rewards -> curve.OETH_WETH back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxOETH_WETH
+    calls:
+      - target: cvxOETH_WETH_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  OETH_WETH_claim:
+    summary: "CRV, CVX and extra rewards of cvxOETH_WETH_rewards -> the Vault"
+    calls:
+      - target: cvxOETH_WETH_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  ETH_ETH_deposit:
+    summary: "curve.ETH_ETH -> Convex pid 470, staked in cvxETH_ETH_rewards (earns CRV + CVX)"
+    input: curve.ETH_ETH
+    defaults: { pid: 470 }
+    calls:
+      - target: curve.ETH_ETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: booster, amount: $amount }
+      - target: booster
+        sig: "deposit(uint256 _pid, uint256 _amount, bool _stake)"
+        args: { _pid: $pid, _amount: $amount, _stake: true }
+    note: "pid 470 is filled in; cvxETH_ETH is minted and staked for msg.sender (the Vault)"
+  ETH_ETH_withdraw:
+    summary: "cvxETH_ETH_rewards -> curve.ETH_ETH back to the Vault (unstake + unwrap, claims rewards)"
+    input: cvxETH_ETH
+    calls:
+      - target: cvxETH_ETH_rewards
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  ETH_ETH_claim:
+    summary: "CRV, CVX and extra rewards of cvxETH_ETH_rewards -> the Vault"
+    calls:
+      - target: cvxETH_ETH_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  cvx_stake:
+    summary: "CVX -> cvx_rewards (single staking, earns cvxCRV)"
+    input: CVX
+    calls:
+      - target: CVX
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: cvx_rewards, amount: $amount }
+      - target: cvx_rewards
+        sig: "stake(uint256 _amount)"
+        args: { _amount: $amount }
+  cvx_unstake:
+    summary: "cvx_rewards -> CVX back to the Vault (claims rewards)"
+    input: CVX
+    calls:
+      - target: cvx_rewards
+        sig: "withdraw(uint256 _amount, bool claim)"
+        args: { _amount: $amount, claim: true }
+  cvx_claim:
+    summary: "cvxCRV rewards of cvx_rewards -> the Vault"
+    calls:
+      - target: cvx_rewards
+        sig: "getReward(bool _stake)"
+        args: { _stake: false }
+  crv_to_cvxcrv:
+    summary: "CRV -> cvxCRV through crv_depositor (one way: there is no redeem, exit is a market sale)"
+    input: curve.CRV
+    calls:
+      - target: curve.CRV
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: crv_depositor, amount: $amount }
+      - target: crv_depositor
+        sig: "deposit(uint256 _amount, bool _lock)"
+        args: { _amount: $amount, _lock: true }
+    note: "cvxCRV is minted to msg.sender (the Vault). _lock true locks the CRV now and skips the caller incentive fee"
+  cvxcrv_stake:
+    summary: "cvxCRV -> stkCvxCrv (staked cvxCRV, earns CRV / 3CRV / CVX)"
+    input: cvxCRV
+    calls:
+      - target: cvxCRV
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: stkCvxCrv, amount: $amount }
+      - target: stkCvxCrv
+        sig: "stake(uint256 _amount, address _to)"
+        args: { _amount: $amount, _to: $AVATAR }
+  cvxcrv_unstake:
+    summary: "stkCvxCrv -> cvxCRV back to the Vault"
+    input: stkCvxCrv
+    calls:
+      - target: stkCvxCrv
+        sig: "withdraw(uint256 _amount)"
+        args: { _amount: $amount }
+  cvxcrv_claim:
+    summary: "stkCvxCrv rewards -> the Vault"
+    calls:
+      - target: stkCvxCrv
+        sig: "getReward(address _account)"
+        args: { _account: $AVATAR }
