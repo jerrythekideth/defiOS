@@ -1,0 +1,115 @@
+protocol: uniswap_v3
+name: Uniswap v3 (concentrated liquidity positions)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "docs: https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments"
+  - "explorer: verified source (NonfungiblePositionManager, UniswapV3Factory)"
+  - "addresses: onchain proofs (position_manager factory() / WETH9())"
+adding: >
+  Liquidity positions are NFTs minted by position_manager; the Vault only ever calls
+  position_manager plus token approves to it. To support another pair, add both
+  tokens (card refs) to `tokens:` and to the token0 / token1 one_of lists of mint
+  (token0 is the lower address). Pools themselves are never called and need no
+  record. Swaps are out of scope for this card.
+
+contracts:
+  position_manager:
+    address: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88"
+    name: "Uniswap V3 Positions NFT-V1"
+    category: minter
+    kind: uniswap_v3_npm
+    aliases: [NonfungiblePositionManager, uniswap v3 positions, UNI-V3-POS]
+    note: "mints / manages LP position NFTs and is the spender for every LP token approve"
+    proofs:
+      - { read: "factory() returns (address)", expect: factory }
+      - { read: "WETH9() returns (address)", expect: WETH }
+  factory:
+    address: "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+    category: config
+    kind: uniswap_v3_factory
+    aliases: [UniswapV3Factory, uniswap v3 factory]
+    note: "creates pools; getPool(token0, token1, fee) finds one. Not called by any action"
+    proofs:
+      - { from: position_manager, read: "factory() returns (address)", expect: $self }
+  WETH: { ref: weth.WETH }
+  USDC: { ref: stablecoins.USDC }
+  USDT: { ref: stablecoins.USDT }
+  DAI: { ref: stablecoins.DAI }
+  wstETH: { ref: lido.wstETH }
+
+ui_routes_to_avoid:
+  - ui: "Uniswap app add / remove liquidity"
+    via: "position_manager multicall(bytes[]) with refundETH / unwrapWETH9 / sweepToken, or Universal Router"
+    why: "free bytes and recipient params; call mint / increaseLiquidity / decreaseLiquidity / collect directly with WETH"
+
+reads:
+  - id: positions_count
+    target: position_manager
+    sig: "balanceOf(address owner) returns (uint256)"
+    args: [$AVATAR]
+
+actions:
+  approve:
+    summary: "approve an LP token to the position manager (before mint)"
+    tokens: [WETH, USDC, USDT, DAI, wstETH]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: position_manager, amount: $amount }
+        note: "one per token of the pair; plan revokes to 0 at the end"
+  mint:
+    summary: "open a new LP position (NFT minted to the Vault)"
+    calls:
+      - target: position_manager
+        sig: "mint((address token0, address token1, uint24 fee, int24 tickLower, int24 tickUpper, uint256 amount0Desired, uint256 amount1Desired, uint256 amount0Min, uint256 amount1Min, address recipient, uint256 deadline) params)"
+        args:
+          params:
+            token0: { one_of: [USDC, WETH, DAI, wstETH] }
+            token1: { one_of: [WETH, USDT, USDC] }
+            fee: $fee
+            tickLower: $tick_lower
+            tickUpper: $tick_upper
+            amount0Desired: $amount0
+            amount1Desired: $amount1
+            amount0Min: $amount0_min
+            amount1Min: $amount1_min
+            recipient: $AVATAR
+            deadline: $deadline
+        note: "token0 < token1 by address. Pairs: USDC/WETH, WETH/USDT, USDC/USDT, DAI/USDC, wstETH/WETH. Approve both tokens first"
+  decrease_liquidity:
+    summary: "remove liquidity from a position (tokens become owed, collect pays them out)"
+    calls:
+      - target: position_manager
+        sig: "decreaseLiquidity((uint256 tokenId, uint128 liquidity, uint256 amount0Min, uint256 amount1Min, uint256 deadline) params)"
+        args:
+          params:
+            tokenId: $token_id
+            liquidity: $liquidity
+            amount0Min: $amount0_min
+            amount1Min: $amount1_min
+            deadline: $deadline
+        note: "only the NFT owner / approved can call it"
+  collect:
+    summary: "owed tokens and fees of a position -> the Vault"
+    calls:
+      - target: position_manager
+        sig: "collect((uint256 tokenId, address recipient, uint128 amount0Max, uint128 amount1Max) params)"
+        args:
+          params:
+            tokenId: $token_id
+            recipient: $AVATAR
+            amount0Max: $amount0_max
+            amount1Max: $amount1_max
+        note: "only the NFT owner / approved can call it; use 2^128-1 for both maxima to collect everything"
+
+not_needed:
+  - "multicall / refundETH / unwrapWETH9 / sweepToken: only the app's ETH route needs them"
+  - "burn(tokenId): deletes an empty NFT; optional clean-up"
+  - "safeTransferFrom / approve / setApprovalForAll on position NFTs: move or hand over positions"
+
+notes: >
+  The plan picks the first entry of each one_of list for mint (USDC / WETH); other
+  pairs are allowed by the role but cannot be chosen at plan time yet. Positions use
+  WETH, never native ETH.

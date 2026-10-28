@@ -1,0 +1,12 @@
+contracts:
+  stader_config:
+    address: "0x4ABEF2263d5A5ED582FC9A9789a41D85b68d69DB"
+    category: config
+    kind: stader_config
+    aliases: [StaderConfig]
+    note: "Stader's address book and parameter store"
+    sources:
+      - "docs: https://www.staderlabs.com/docs-v1/Ethereum/smart-contracts"
+    proofs:
+      - { from: ETHx, read: "staderConfig() returns (address)", expect: $self }
+      - { read: "getETHxToken() returns (address)", expect: ETHx }

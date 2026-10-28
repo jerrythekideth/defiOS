@@ -61,6 +61,9 @@ contracts:
   FRAX: { ref: tokens.FRAX }
   CRV: { ref: curve.CRV }
   BAL: { ref: balancer.BAL }
+  rETH: { ref: rocket_pool.rETH }
+  osETH: { ref: stakewise_v3.osETH }
+  ETHx: { ref: stader.ETHx }
 
 ui_routes_to_avoid:
   - ui: "Aave app ETH deposit / swap / repay-with-collateral"
@@ -137,7 +140,7 @@ actions:
         args: { asset: $token, useAsCollateral: false }
   supply_other:
     summary: "token -> receipt token (collateral when enabled), credited to the Vault"
-    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG]
+    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, rETH, osETH]
     calls:
       - target: $token
         sig: "approve(address spender, uint256 amount)"
@@ -147,7 +150,7 @@ actions:
         args: { asset: $token, amount: $amount, onBehalfOf: $AVATAR, referralCode: 0 }
   withdraw_other:
     summary: "receipt token -> token, paid to the Vault"
-    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, ezETH, rsETH, sDAI, crvUSD, FRAX, CRV, BAL]
+    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, ezETH, rsETH, sDAI, crvUSD, FRAX, CRV, BAL, rETH, osETH, ETHx]
     calls:
       - target: pool
         sig: "withdraw(address asset, uint256 amount, address to)"
@@ -178,14 +181,14 @@ actions:
         args: { asset: $token, amount: $amount, interestRateMode: 2 }
   enable_collateral_other:
     summary: "use a supplied token as collateral"
-    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG]
+    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, rETH, osETH]
     calls:
       - target: pool
         sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"
         args: { asset: $token, useAsCollateral: true }
   disable_collateral_other:
     summary: "stop using a supplied token as collateral"
-    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, ezETH, rsETH, sDAI, crvUSD, FRAX, CRV, BAL]
+    tokens: [WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, ezETH, rsETH, sDAI, crvUSD, FRAX, CRV, BAL, rETH, osETH, ETHx]
     calls:
       - target: pool
         sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"

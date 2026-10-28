@@ -32,6 +32,7 @@ contracts:
   tBTC: { ref: tokens.tBTC }
   rsETH: { ref: tokens.rsETH }
   ezETH: { ref: tokens.ezETH }
+  rETH: { ref: rocket_pool.rETH }
 
 reads:
   - id: account_data
@@ -58,7 +59,7 @@ actions:
         args: { asset: $token, amount: $amount, onBehalfOf: $AVATAR, referralCode: 0 }
   withdraw:
     summary: "receipt token -> token, paid to the Vault"
-    tokens: [WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS, tBTC, rsETH, ezETH]
+    tokens: [WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS, tBTC, rsETH, ezETH, rETH]
     calls:
       - target: pool
         sig: "withdraw(address asset, uint256 amount, address to)"
@@ -96,7 +97,7 @@ actions:
         args: { asset: $token, useAsCollateral: true }
   disable_collateral:
     summary: "stop using a supplied token as collateral"
-    tokens: [WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS, tBTC, rsETH, ezETH]
+    tokens: [WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS, tBTC, rsETH, ezETH, rETH]
     calls:
       - target: pool
         sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"

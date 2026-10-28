@@ -1,0 +1,96 @@
+protocol: stader
+name: Stader (ETHx liquid staking)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "docs: https://www.staderlabs.com/docs-v1/Ethereum/smart-contracts"
+  - "explorer: verified source (StakePoolManager, UserWithdrawalManager, ETHx, StaderConfig)"
+  - "addresses: onchain proofs (StaderConfig getters; Aave v3 getReservesList() contains ETHx)"
+adding: >
+  StaderConfig is Stader's address book: getETHxToken(), getStakePoolManager(),
+  getUserWithdrawManager() return the live contracts, and each of them points back
+  with staderConfig(). Prove any new Stader contract from the matching StaderConfig
+  getter.
+
+contracts:
+  ETHx:
+    address: "0xA35b1B31Ce002FBF2058D22F30f95D405200A15b"
+    name: "ETHx"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [ethx, stader ethx]
+    note: "Stader's liquid staking token; minted by stake_pool_manager"
+    proofs:
+      - { from: stader_config, read: "getETHxToken() returns (address)", expect: $self }
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  stake_pool_manager:
+    address: "0xcf5EA1b38380f6aF39068375516Daf40Ed70D299"
+    category: staking
+    kind: stader_stake_pool_manager
+    aliases: [StakePoolManager, stader staking]
+    note: "deposit(receiver) payable mints ETHx to receiver"
+    proofs:
+      - { from: stader_config, read: "getStakePoolManager() returns (address)", expect: $self }
+      - { read: "staderConfig() returns (address)", expect: stader_config }
+  user_withdraw_manager:
+    address: "0x9F0491B32DBce587c50c4C43AB303b06478193A7"
+    category: queue
+    kind: stader_withdraw_queue
+    aliases: [UserWithdrawalManager, stader withdrawals]
+    note: "requestWithdraw(ethx, owner) pulls ETHx and queues ETH for owner; claim(requestId) pays the owner"
+    proofs:
+      - { from: stader_config, read: "getUserWithdrawManager() returns (address)", expect: $self }
+      - { read: "staderConfig() returns (address)", expect: stader_config }
+
+reads:
+  - id: ethx_balance
+    target: ETHx
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: withdraw_request_ids
+    target: user_withdraw_manager
+    sig: "getRequestIdsByUser(address _owner) returns (uint256[])"
+    args: [$AVATAR]
+  - id: ethx_exchange_rate
+    target: stake_pool_manager
+    sig: "getExchangeRate() returns (uint256)"
+    decimals: 18
+
+actions:
+  stake:
+    summary: "ETH -> ETHx, minted to the Vault"
+    input: ETH
+    calls:
+      - target: stake_pool_manager
+        sig: "deposit(address _receiver)"
+        args: { _receiver: $AVATAR }
+        send: true
+  request_withdrawal:
+    summary: "ETHx -> withdrawal request in the Stader queue, owned by the Vault"
+    input: ETHx
+    calls:
+      - target: ETHx
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: user_withdraw_manager, amount: $amount }
+      - target: user_withdraw_manager
+        sig: "requestWithdraw(uint256 _ethXAmount, address _owner)"
+        args: { _ethXAmount: $amount, _owner: $AVATAR }
+        note: "the request id is in the event / withdraw_request_ids"
+  claim_withdrawal:
+    summary: "finalized withdrawal request -> ETH to the Vault"
+    calls:
+      - target: user_withdraw_manager
+        sig: "claim(uint256 _requestId)"
+        args: { _requestId: $request_id }
+        note: "pays the request's owner (the Vault); pass --param request_id=<id> from withdraw_request_ids"
+
+not_needed:
+  - "deposit(address _receiver, string _referralId): same as deposit(receiver) plus a free string"
+  - "requestWithdraw(uint256, address, string): referral overload"
+
+notes: >
+  Withdrawals finalize after Stader processes the queue (days); claim reverts before
+  that. Only the request owner gets paid, and the owner is pinned to the Vault.

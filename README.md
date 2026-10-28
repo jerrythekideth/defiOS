@@ -145,13 +145,13 @@ See [`catalog/SCHEMA.md`](catalog/SCHEMA.md); the full action list is
 Ethereum mainnet:
 
 * Lending: aave_v3 (Core), aave_v3_prime, aave_v3_etherfi, aave_v4, spark,
-  gearbox_v3, morpho_vaults.
-* ETH staking and restaking: lido, etherfi (incl. Veda Liquid ETH and Liquid
-  USD), weth.
+  compound_v3, fluid, gearbox_v3, morpho_vaults.
+* ETH staking and restaking: lido, rocket_pool, stader, stakewise_v3, ankr,
+  etherfi (incl. Veda Liquid ETH and Liquid USD), weth.
 * Stables and savings: stablecoins, sky (USDS, sUSDS, sDAI, stUSDS, rewards),
   ethena, aave (stkAAVE, sGho), avant, strata, dialectic, infinifi, tokemak,
   upshift, noon, re, flying_tulip, threejane, yo, makina, origin_arm, liminal.
-* DEX, LP and yield trading: cowswap, curve, convex, balancer, balancer_v2,
+* DEX, LP and yield trading: cowswap, uniswap_v3, curve, convex, balancer, balancer_v2,
   balancer_v3, aura, pendle, permit2.
 * Bridges: cctp (Circle USDC).
 * Tokens with no protocol card of their own: tokens.

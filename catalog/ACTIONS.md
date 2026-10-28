@@ -29,13 +29,13 @@ each `--param` name must be given as `--param name=value`.
 | `set_emode` |  |  | category | switch the Vault's e-mode category (0 = none) |
 | `enable_collateral` |  | USDC, USDT, DAI, USDS, GHO, PYUSD, USDe, sUSDe |  | use a supplied token as collateral |
 | `disable_collateral` |  | USDC, USDT, DAI, USDS, GHO, PYUSD, USDe, sUSDe |  | stop using a supplied token as collateral |
-| `supply_other` |  | WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG |  | token -> receipt token (collateral when enabled), credited to the Vault |
-| `withdraw_other` |  | WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, ezETH, rsETH, sDAI, crvUSD, FRAX, CRV, BAL |  | receipt token -> token, paid to the Vault |
+| `supply_other` |  | WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, rETH, osETH |  | token -> receipt token (collateral when enabled), credited to the Vault |
+| `withdraw_other` |  | WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, ezETH, rsETH, sDAI, crvUSD, FRAX, CRV, BAL, rETH, osETH, ETHx |  | receipt token -> token, paid to the Vault |
 | `borrow_other` |  | WETH, WBTC, cbBTC, tBTC, LINK, RLUSD, USDtb, EURC, USDG |  | borrow token at variable rate against the Vault's collateral; paid to the Vault |
 | `repay_other` |  | WETH, WBTC, cbBTC, tBTC, LINK, RLUSD, USDtb, EURC, USDG |  | repay the Vault's variable debt in token |
 | `repay_with_atokens_other` |  | WETH, WBTC, cbBTC, tBTC, LINK, RLUSD, USDtb, EURC, USDG |  | repay the Vault's debt in token with its receipt tokens of the same token (no approve) |
-| `enable_collateral_other` |  | WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG |  | use a supplied token as collateral |
-| `disable_collateral_other` |  | WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, ezETH, rsETH, sDAI, crvUSD, FRAX, CRV, BAL |  | stop using a supplied token as collateral |
+| `enable_collateral_other` |  | WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, rETH, osETH |  | use a supplied token as collateral |
+| `disable_collateral_other` |  | WETH, wstETH, weETH, cbETH, WBTC, cbBTC, LBTC, tBTC, eBTC, LINK, AAVE, LDO, tETH, RLUSD, USDtb, EURC, USDG, ezETH, rsETH, sDAI, crvUSD, FRAX, CRV, BAL, rETH, osETH, ETHx |  | stop using a supplied token as collateral |
 | `supply_eth` | ETH |  |  | ETH -> aEthWETH (collateral) through the WETH gateway, credited to the Vault |
 | `withdraw_eth` | aEthWETH |  |  | aEthWETH -> ETH through the WETH gateway, paid to the Vault |
 | `borrow_eth` | WETH |  |  | borrow WETH at variable rate and receive it as ETH in the Vault |
@@ -83,6 +83,14 @@ each `--param` name must be given as `--param name=value`.
 | `update_risk_premium` |  |  |  | refresh the Vault's risk premium |
 | `update_dynamic_config` |  |  |  | refresh the Vault's dynamic reserve config |
 
+## ankr: Ankr (ankrETH liquid staking)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `stake` | ETH |  |  | ETH -> ankrETH |
+| `unstake` | ankrETH |  |  | ankrETH -> ETH through the Ankr exit queue (paid to the Vault later) |
+| `flash_unstake` | ankrETH |  |  | ankrETH -> ETH instantly from the FlashUnstake pool (fee applies), paid to the Vault |
+
 ## avant: Avant (avETH / savETH)
 
 | action | input | tokens | --param | does |
@@ -106,6 +114,24 @@ each `--param` name must be given as `--param name=value`.
 | `bridge_to_polygon` | USDC |  |  | USDC -> the same Vault address on Polygon PoS (CCTP domain 7), Standard transfer, no fee |
 | `bridge_to_unichain` | USDC |  |  | USDC -> the same Vault address on Unichain (CCTP domain 10), Standard transfer, no fee |
 | `bridge_to_linea` | USDC |  |  | USDC -> the same Vault address on Linea (CCTP domain 11), Standard transfer, no fee |
+
+## compound_v3: Compound v3 (Comet USDC, WETH and USDT markets)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `cusdcv3_supply` |  | USDC, WETH, wstETH, weETH |  | USDC (earns interest) or a collateral token -> Compound USDC market, credited to the Vault |
+| `cusdcv3_withdraw` |  | USDC, WETH, wstETH, weETH |  | Compound USDC market -> USDC or collateral back to the Vault |
+| `cusdcv3_borrow` | USDC |  |  | borrow USDC against the Vault's collateral in the USDC market; paid to the Vault |
+| `cusdcv3_repay` | USDC |  |  | repay the Vault's USDC debt in the USDC market |
+| `cwethv3_supply` |  | WETH, wstETH, weETH |  | WETH (earns interest) or an ETH LST collateral -> Compound WETH market, credited to the Vault |
+| `cwethv3_withdraw` |  | WETH, wstETH, weETH |  | Compound WETH market -> WETH or collateral back to the Vault |
+| `cwethv3_borrow` | WETH |  |  | borrow WETH against the Vault's LST collateral in the WETH market; paid to the Vault |
+| `cwethv3_repay` | WETH |  |  | repay the Vault's WETH debt in the WETH market |
+| `cusdtv3_supply` |  | USDT, WETH, wstETH |  | USDT (earns interest) or a collateral token -> Compound USDT market, credited to the Vault |
+| `cusdtv3_withdraw` |  | USDT, WETH, wstETH |  | Compound USDT market -> USDT or collateral back to the Vault |
+| `cusdtv3_borrow` | USDT |  |  | borrow USDT against the Vault's collateral in the USDT market; paid to the Vault |
+| `cusdtv3_repay` | USDT |  |  | repay the Vault's USDT debt in the USDT market |
+| `claim_rewards` |  |  |  | accrued COMP rewards of one Comet -> the Vault |
 
 ## cowswap: CoW Swap (pre-signed orders via the CowswapOrderSigner)
 
@@ -142,6 +168,26 @@ each `--param` name must be given as `--param name=value`.
 | `withdraw_liquid_eth` |  |  | deadline, discount_bps | Liquid ETH shares -> asset via the on-chain queue (solved by Veda; paid to the requester) |
 | `deposit_liquid_usd` | USDC |  | min_out | USDC -> Liquid USD shares (minted to msg.sender) |
 | `withdraw_liquid_usd` |  |  | deadline, discount_bps | Liquid USD shares -> USDC via the on-chain queue (solved by Veda; paid to the requester) |
+
+## fluid: Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `deposit_usdc` | USDC |  |  | USDC -> fUSDC shares, minted to the Vault |
+| `withdraw_usdc` | USDC |  |  | fUSDC -> USDC (amount in USDC), paid to the Vault |
+| `redeem_usdc` | fUSDC |  |  | fUSDC shares -> USDC, paid to the Vault (use for a full exit) |
+| `deposit_usdt` | USDT |  |  | USDT -> fUSDT shares, minted to the Vault |
+| `withdraw_usdt` | USDT |  |  | fUSDT -> USDT (amount in USDT), paid to the Vault |
+| `redeem_usdt` | fUSDT |  |  | fUSDT shares -> USDT, paid to the Vault (use for a full exit) |
+| `deposit_weth` | WETH |  |  | WETH -> fWETH shares, minted to the Vault |
+| `withdraw_weth` | WETH |  |  | fWETH -> WETH (amount in WETH), paid to the Vault |
+| `redeem_weth` | fWETH |  |  | fWETH shares -> WETH, paid to the Vault (use for a full exit) |
+| `deposit_eth` | ETH |  |  | ETH -> fWETH shares, minted to the Vault (no WETH wrap needed) |
+| `withdraw_eth` | WETH |  |  | fWETH -> ETH (amount in ETH), paid to the Vault |
+| `redeem_eth` | fWETH |  |  | fWETH shares -> ETH, paid to the Vault (use for a full exit) |
+| `deposit_wsteth` | wstETH |  |  | wstETH -> fwstETH shares, minted to the Vault |
+| `withdraw_wsteth` | wstETH |  |  | fwstETH -> wstETH (amount in wstETH), paid to the Vault |
+| `redeem_wsteth` | fwstETH |  |  | fwstETH shares -> wstETH, paid to the Vault (use for a full exit) |
 
 ## flying_tulip: Flying Tulip (ftUSD, sftUSD, ssftUSD, FT)
 
@@ -243,6 +289,13 @@ each `--param` name must be given as `--param name=value`.
 | `deposit` | USDC |  | min_shares | USDC -> reUSD (minted to the Vault) |
 | `redeem_instant` | reUSD |  | min_out | reUSD -> payout token to the Vault (instant redemption) |
 
+## rocket_pool: Rocket Pool (rETH liquid staking)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `stake` | ETH |  |  | ETH -> rETH via the deposit pool |
+| `burn` | rETH |  |  | rETH -> ETH at the protocol rate |
+
 ## sky: Sky (USDS, DAI, sUSDS, PSM, staking)
 
 | action | input | tokens | --param | does |
@@ -272,12 +325,12 @@ each `--param` name must be given as `--param name=value`.
 | action | input | tokens | --param | does |
 |---|---|---|---|---|
 | `supply` |  | WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS |  | token -> receipt token (collateral when enabled), credited to the Vault |
-| `withdraw` |  | WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS, tBTC, rsETH, ezETH |  | receipt token -> token, paid to the Vault |
+| `withdraw` |  | WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS, tBTC, rsETH, ezETH, rETH |  | receipt token -> token, paid to the Vault |
 | `borrow` |  | WETH, wstETH, cbBTC, USDC, DAI, USDT, PYUSD, USDS, RLUSD, USDG |  | borrow token at variable rate against the Vault's collateral; paid to the Vault |
 | `repay` |  | WETH, wstETH, cbBTC, USDC, DAI, USDT, PYUSD, USDS, RLUSD, USDG, tBTC |  | repay the Vault's variable debt in token |
 | `repay_with_atokens` |  | WETH, wstETH, cbBTC, USDC, DAI, USDT, PYUSD, USDS, RLUSD, USDG, tBTC |  | repay the Vault's debt in token with its receipt tokens of the same token (no approve) |
 | `enable_collateral` |  | WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS |  | use a supplied token as collateral |
-| `disable_collateral` |  | WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS, tBTC, rsETH, ezETH |  | stop using a supplied token as collateral |
+| `disable_collateral` |  | WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS, tBTC, rsETH, ezETH, rETH |  | stop using a supplied token as collateral |
 | `set_emode` |  |  | category | switch the Vault's e-mode category (0 = none) |
 | `supply_eth` | ETH |  |  | ETH -> spWETH (collateral when enabled) through the WETH gateway, credited to the Vault |
 | `withdraw_eth` | spWETH |  |  | spWETH -> ETH through the WETH gateway, paid to the Vault |
@@ -296,6 +349,24 @@ each `--param` name must be given as `--param name=value`.
 | `savings_deposit_eth` | WETH |  |  | WETH -> spETH savings shares, credited to the Vault |
 | `savings_withdraw_eth` | WETH |  |  | savings shares -> an exact amount of WETH, paid to the Vault |
 | `savings_redeem_eth` | spETH |  |  | an exact number of savings shares -> WETH, paid to the Vault |
+
+## stader: Stader (ETHx liquid staking)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `stake` | ETH |  |  | ETH -> ETHx, minted to the Vault |
+| `request_withdrawal` | ETHx |  |  | ETHx -> withdrawal request in the Stader queue, owned by the Vault |
+| `claim_withdrawal` |  |  | request_id | finalized withdrawal request -> ETH to the Vault |
+
+## stakewise_v3: StakeWise v3 (Genesis vault, osETH)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `genesis_stake` | ETH |  |  | ETH -> Genesis vault shares, credited to the Vault |
+| `genesis_mint_oseth` | osETH |  |  | mint osETH against the Vault's Genesis shares; paid to the Vault |
+| `genesis_burn_oseth` | osETH |  |  | burn the Vault's osETH to reduce its osETH position in the Genesis vault |
+| `genesis_unstake` |  |  |  | Genesis vault shares -> exit queue position owned by the Vault |
+| `genesis_claim` |  |  | exit_queue_index, position_ticket, timestamp | exited ETH -> the Vault |
 
 ## strata: Strata (senior/junior tranches on USDe and NUSD)
 
@@ -322,6 +393,15 @@ each `--param` name must be given as `--param name=value`.
 | `redeem` | autoUSD |  | min_out | autoUSD -> USDC to the Vault |
 | `unstake` |  |  |  | staked autoUSD (rewarder) -> autoUSD to msg.sender |
 | `claim_rewards` |  |  |  | claim autoUSD staking rewards to the Vault |
+
+## uniswap_v3: Uniswap v3 (concentrated liquidity positions)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `approve` |  | WETH, USDC, USDT, DAI, wstETH |  | approve an LP token to the position manager (before mint) |
+| `mint` |  |  | amount0, amount0_min, amount1, amount1_min, deadline, fee, tick_lower, tick_upper | open a new LP position (NFT minted to the Vault) |
+| `decrease_liquidity` |  |  | amount0_min, amount1_min, deadline, liquidity, token_id | remove liquidity from a position (tokens become owed, collect pays them out) |
+| `collect` |  |  | amount0_max, amount1_max, token_id | owed tokens and fees of a position -> the Vault |
 
 ## upshift: Upshift (coreUSDC via the SwapRouter)
 
