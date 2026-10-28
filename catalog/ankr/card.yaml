@@ -1,0 +1,87 @@
+protocol: ankr
+name: Ankr (ankrETH liquid staking)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "docs: https://www.ankr.com/docs/liquid-staking/eth/overview/"
+  - "explorer: verified source (ankrETH, ETH2_Staking GlobalPool, FlashUnstake)"
+  - "addresses: onchain proofs (FlashUnstake ankreth() / ethPool() / weth())"
+adding: >
+  Ankr's ETH staking is one pool contract (eth2_staking) and one token (ankrETH);
+  flash_unstake is Ankr's own instant-exit pool and points at both. New Ankr
+  contracts are proven from flash_unstake or the pool's getters.
+
+contracts:
+  ankrETH:
+    address: "0xE95A203B1a91a908F9B9CE46459d101078c2c3cb"
+    name: "Ankr Staked ETH"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [ankreth, aethc]
+    note: "Ankr's reward-bearing liquid staking token (ratio() falls as rewards accrue)"
+    proofs:
+      - { from: flash_unstake, read: "ankreth() returns (address)", expect: $self }
+  eth2_staking:
+    address: "0x84db6eE82b7Cf3b47E8F19270abdE5718B936670"
+    category: staking
+    kind: ankr_global_pool
+    aliases: [GlobalPool, ankr eth staking]
+    note: "stakeAndClaimAethC() payable mints ankrETH; unstakeAETH(shares) queues ETH paid out after validator exits"
+    proofs:
+      - { from: flash_unstake, read: "ethPool() returns (address)", expect: $self }
+  flash_unstake:
+    address: "0xf047f23ACFdB1315cF63Ad8aB5146d5fDa4267Af"
+    category: queue
+    kind: ankr_flash_unstake
+    aliases: [FlashUnstake, ankr flash unstake]
+    note: "instant ankrETH -> ETH against its own liquidity, for a fee"
+    proofs:
+      - { read: "ankreth() returns (address)", expect: ankrETH }
+      - { read: "weth() returns (address)", expect: WETH }
+  WETH: { ref: weth.WETH }
+
+reads:
+  - id: ankreth_balance
+    target: ankrETH
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: ankreth_ratio
+    target: ankrETH
+    sig: "ratio() returns (uint256)"
+    decimals: 18
+
+actions:
+  stake:
+    summary: "ETH -> ankrETH"
+    input: ETH
+    calls:
+      - target: eth2_staking
+        sig: "stakeAndClaimAethC()"
+        send: true
+        note: "mints ankrETH to msg.sender (the Vault); minimum stake applies"
+  unstake:
+    summary: "ankrETH -> ETH through the Ankr exit queue (paid to the Vault later)"
+    input: ankrETH
+    calls:
+      - target: eth2_staking
+        sig: "unstakeAETH(uint256 shares)"
+        args: { shares: $amount }
+        note: "burns ankrETH from msg.sender; ETH is sent to msg.sender by Ankr's distributor once validators exit"
+  flash_unstake:
+    summary: "ankrETH -> ETH instantly from the FlashUnstake pool (fee applies), paid to the Vault"
+    input: ankrETH
+    calls:
+      - target: ankrETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: flash_unstake, amount: $amount }
+      - target: flash_unstake
+        sig: "swapEth(uint256 amountIn, address receiver)"
+        args: { amountIn: $amount, receiver: $AVATAR }
+        note: "reverts when the pool has too little ETH"
+
+notes: >
+  ankrETH is ratio-based: 1 ankrETH > 1 ETH. unstake has no claim step; ETH arrives
+  at the Vault directly once processed (days).

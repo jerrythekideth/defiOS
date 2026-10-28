@@ -7,8 +7,250 @@ adding: >
   SparkLend is an Aave v3 fork: a new reserve's spToken / variableDebt token is keyed by
   its onchain symbol(), with POOL() = pool and UNDERLYING_ASSET_ADDRESS() = its
   underlying as proofs (the underlying edge only when the token is catalogued). A Spark
-  savings vault is keyed by its symbol() with asset() as proof.
+  savings vault is keyed by its symbol() with asset() as proof (savings_<symbol> when the symbol
+  clashes with a SparkLend spToken). Lending actions take a token from their `tokens:` list: add a
+  new reserve's token as a `{ ref: }` under `contracts:` and to the lists its live config allows
+  (data_provider getReserveConfigurationData: frozen -> withdraw / repay / disable only). A new
+  savings vault gets savings_deposit_/withdraw_/redeem_<asset> actions copied from spUSDC.
 
-contracts: {}
+contracts:
+  WETH: { ref: weth.WETH }
+  wstETH: { ref: lido.wstETH }
+  WBTC: { ref: tokens.WBTC }
+  USDC: { ref: stablecoins.USDC }
+  DAI: { ref: stablecoins.DAI }
+  USDT: { ref: stablecoins.USDT }
+  PYUSD: { ref: stablecoins.PYUSD }
+  weETH: { ref: etherfi.weETH }
+  cbBTC: { ref: tokens.cbBTC }
+  USDS: { ref: stablecoins.USDS }
+  LBTC: { ref: tokens.LBTC }
+  RLUSD: { ref: tokens.RLUSD }
+  USDG: { ref: tokens.USDG }
+  sDAI: { ref: sky.sDAI }
+  sUSDS: { ref: sky.sUSDS }
+  tBTC: { ref: tokens.tBTC }
+  rsETH: { ref: tokens.rsETH }
+  ezETH: { ref: tokens.ezETH }
+  rETH: { ref: rocket_pool.rETH }
 
-actions: {}
+reads:
+  - id: account_data
+    target: pool
+    sig: "getUserAccountData(address user) returns (uint256 totalCollateralBase, uint256 totalDebtBase, uint256 availableBorrowsBase, uint256 currentLiquidationThreshold, uint256 ltv, uint256 healthFactor)"
+    args: [$AVATAR]
+
+ui_routes_to_avoid:
+  - ui: "Spark app 'swap and deposit' / sDAI-sUSDS migration buttons"
+    via: "PSM wrapper actions and migration helper contracts"
+    why: "helpers that bundle several steps; use the direct actions here and in `sky`"
+
+actions:
+  # SparkLend (Aave v3 fork)
+  supply:
+    summary: "token -> receipt token (collateral when enabled), credited to the Vault"
+    tokens: [WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: pool, amount: $amount }
+      - target: pool
+        sig: "supply(address asset, uint256 amount, address onBehalfOf, uint16 referralCode)"
+        args: { asset: $token, amount: $amount, onBehalfOf: $AVATAR, referralCode: 0 }
+  withdraw:
+    summary: "receipt token -> token, paid to the Vault"
+    tokens: [WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS, tBTC, rsETH, ezETH, rETH]
+    calls:
+      - target: pool
+        sig: "withdraw(address asset, uint256 amount, address to)"
+        args: { asset: $token, amount: $amount, to: $AVATAR }
+  borrow:
+    summary: "borrow token at variable rate against the Vault's collateral; paid to the Vault"
+    tokens: [WETH, wstETH, cbBTC, USDC, DAI, USDT, PYUSD, USDS, RLUSD, USDG]
+    calls:
+      - target: pool
+        sig: "borrow(address asset, uint256 amount, uint256 interestRateMode, uint16 referralCode, address onBehalfOf)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2, referralCode: 0, onBehalfOf: $AVATAR }
+  repay:
+    summary: "repay the Vault's variable debt in token"
+    tokens: [WETH, wstETH, cbBTC, USDC, DAI, USDT, PYUSD, USDS, RLUSD, USDG, tBTC]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: pool, amount: $amount }
+      - target: pool
+        sig: "repay(address asset, uint256 amount, uint256 interestRateMode, address onBehalfOf)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2, onBehalfOf: $AVATAR }
+  repay_with_atokens:
+    summary: "repay the Vault's debt in token with its receipt tokens of the same token (no approve)"
+    tokens: [WETH, wstETH, cbBTC, USDC, DAI, USDT, PYUSD, USDS, RLUSD, USDG, tBTC]
+    calls:
+      - target: pool
+        sig: "repayWithATokens(address asset, uint256 amount, uint256 interestRateMode)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2 }
+  enable_collateral:
+    summary: "use a supplied token as collateral"
+    tokens: [WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS]
+    calls:
+      - target: pool
+        sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"
+        args: { asset: $token, useAsCollateral: true }
+  disable_collateral:
+    summary: "stop using a supplied token as collateral"
+    tokens: [WETH, wstETH, WBTC, USDC, DAI, USDT, PYUSD, weETH, cbBTC, USDS, LBTC, RLUSD, USDG, sDAI, sUSDS, tBTC, rsETH, ezETH, rETH]
+    calls:
+      - target: pool
+        sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"
+        args: { asset: $token, useAsCollateral: false }
+  set_emode:
+    summary: "switch the Vault's e-mode category (0 = none)"
+    calls:
+      - target: pool
+        sig: "setUserEMode(uint8 categoryId)"
+        args: { categoryId: $category }
+  supply_eth:
+    summary: "ETH -> spWETH (collateral when enabled) through the WETH gateway, credited to the Vault"
+    input: ETH
+    calls:
+      - target: weth_gateway
+        sig: "depositETH(address pool, address onBehalfOf, uint16 referralCode)"
+        args: { pool: pool, onBehalfOf: $AVATAR, referralCode: 0 }
+        send: true
+        note: "the protocol's own WETH gateway (wraps ETH, supplies WETH); with WETH in the Vault use `supply` instead"
+  withdraw_eth:
+    summary: "spWETH -> ETH through the WETH gateway, paid to the Vault"
+    input: spWETH
+    calls:
+      - target: spWETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: weth_gateway, amount: $amount }
+      - target: weth_gateway
+        sig: "withdrawETH(address pool, uint256 amount, address to)"
+        args: { pool: pool, amount: $amount, to: $AVATAR }
+  borrow_eth:
+    summary: "borrow WETH at variable rate and receive it as ETH in the Vault"
+    input: weth.WETH
+    calls:
+      - target: variableDebtWETH
+        sig: "approveDelegation(address delegatee, uint256 amount)"
+        args: { delegatee: weth_gateway, amount: $amount }
+        note: "lets the gateway open the debt on the Vault; the next call uses it up"
+      - target: weth_gateway
+        sig: "borrowETH(address pool, uint256 amount, uint256 interestRateMode, uint16 referralCode)"
+        args: { pool: pool, amount: $amount, interestRateMode: 2, referralCode: 0 }
+  repay_eth:
+    summary: "repay the Vault's variable WETH debt with ETH through the WETH gateway"
+    input: ETH
+    calls:
+      - target: weth_gateway
+        sig: "repayETH(address pool, uint256 amount, uint256 rateMode, address onBehalfOf)"
+        args: { pool: pool, amount: $amount, rateMode: 2, onBehalfOf: $AVATAR }
+        send: true
+        note: "ETH sent above the debt is refunded to the Vault"
+  claim_rewards:
+    summary: "claim one reward token accrued on one spToken / debt token, paid to the Vault"
+    calls:
+      - target: incentives_controller
+        sig: "claimRewards(address[] assets, uint256 amount, address to, address reward)"
+        args: { assets: [$asset], amount: 115792089237316195423570985008687907853269984665640564039457584007913129639935, to: $AVATAR, reward: $reward }
+        note: "--param asset=<receipt or debt token> --param reward=<reward token>; amount = type(uint256).max claims all of it"
+  # Spark savings vaults (ERC-4626 with a referral code)
+  savings_deposit_usdc:
+    summary: "USDC -> spUSDC savings shares, credited to the Vault"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: savings_spUSDC, amount: $amount }
+      - target: savings_spUSDC
+        sig: "deposit(uint256 assets, address receiver, uint16 referral)"
+        args: { assets: $amount, receiver: $AVATAR, referral: 0 }
+  savings_withdraw_usdc:
+    summary: "savings shares -> an exact amount of USDC, paid to the Vault"
+    input: USDC
+    calls:
+      - target: savings_spUSDC
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  savings_redeem_usdc:
+    summary: "an exact number of savings shares -> USDC, paid to the Vault"
+    input: savings_spUSDC
+    calls:
+      - target: savings_spUSDC
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+  savings_deposit_usdt:
+    summary: "USDT -> spUSDT savings shares, credited to the Vault"
+    input: USDT
+    calls:
+      - target: USDT
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: savings_spUSDT, amount: $amount }
+      - target: savings_spUSDT
+        sig: "deposit(uint256 assets, address receiver, uint16 referral)"
+        args: { assets: $amount, receiver: $AVATAR, referral: 0 }
+  savings_withdraw_usdt:
+    summary: "savings shares -> an exact amount of USDT, paid to the Vault"
+    input: USDT
+    calls:
+      - target: savings_spUSDT
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  savings_redeem_usdt:
+    summary: "an exact number of savings shares -> USDT, paid to the Vault"
+    input: savings_spUSDT
+    calls:
+      - target: savings_spUSDT
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+  savings_deposit_pyusd:
+    summary: "PYUSD -> spPYUSD savings shares, credited to the Vault"
+    input: PYUSD
+    calls:
+      - target: PYUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: savings_spPYUSD, amount: $amount }
+      - target: savings_spPYUSD
+        sig: "deposit(uint256 assets, address receiver, uint16 referral)"
+        args: { assets: $amount, receiver: $AVATAR, referral: 0 }
+  savings_withdraw_pyusd:
+    summary: "savings shares -> an exact amount of PYUSD, paid to the Vault"
+    input: PYUSD
+    calls:
+      - target: savings_spPYUSD
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  savings_redeem_pyusd:
+    summary: "an exact number of savings shares -> PYUSD, paid to the Vault"
+    input: savings_spPYUSD
+    calls:
+      - target: savings_spPYUSD
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+  savings_deposit_eth:
+    summary: "WETH -> spETH savings shares, credited to the Vault"
+    input: WETH
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: spETH, amount: $amount }
+      - target: spETH
+        sig: "deposit(uint256 assets, address receiver, uint16 referral)"
+        args: { assets: $amount, receiver: $AVATAR, referral: 0 }
+  savings_withdraw_eth:
+    summary: "savings shares -> an exact amount of WETH, paid to the Vault"
+    input: WETH
+    calls:
+      - target: spETH
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  savings_redeem_eth:
+    summary: "an exact number of savings shares -> WETH, paid to the Vault"
+    input: spETH
+    calls:
+      - target: spETH
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+
+not_needed:
+  - "flashLoan / flashLoanSimple, liquidationCall: never allow them"

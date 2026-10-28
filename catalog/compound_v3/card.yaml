@@ -1,0 +1,251 @@
+protocol: compound_v3
+name: Compound v3 (Comet USDC, WETH and USDT markets)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "docs: https://docs.compound.finance/"
+  - "address-book: github.com/compound-finance/comet deployments/mainnet/<market>/roots.json"
+  - "explorer: verified source (Comet proxy -> Comet implementation, CometRewards)"
+adding: >
+  Each Compound v3 market is one Comet proxy that is also the base-token receipt
+  (balanceOf = supplied base, borrowBalanceOf = debt). Markets are listed in the
+  comet repo deployments/mainnet/<base>/roots.json. Key a new market by its symbol()
+  (cUSDCv3 style), category market, kind comet, decimals = base token decimals, and
+  prove it with baseToken() == the base token's card ref plus governor() == timelock.
+  Copy the cusdcv3_* actions and set `tokens:` to the base token plus the collateral
+  tokens that already have a card record (getAssetInfoByAddress(asset) on the Comet
+  reverts for an asset that is not collateral; leave out assets whose supplyCap is 0).
+
+contracts:
+  cUSDCv3:
+    address: "0xc3d688B66703497DAA19211EEdff47f25384cdc3"
+    name: "Compound USDC"
+    category: market
+    kind: comet
+    decimals: 6
+    aliases: [compound usdc, comet usdc, compound v3 usdc]
+    note: "Comet proxy: base-token receipt (supplied USDC) and the spender for supply approvals"
+    sources:
+      - "docs: https://docs.compound.finance/#networks"
+    edges: { underlying: USDC }
+    proofs:
+      - { read: "baseToken() returns (address)", expect: USDC }
+      - { read: "governor() returns (address)", expect: timelock }
+  cWETHv3:
+    address: "0xA17581A9E3356d9A858b789D68B4d866e593aE94"
+    name: "Compound WETH"
+    category: market
+    kind: comet
+    decimals: 18
+    aliases: [compound weth, comet weth, compound v3 weth]
+    note: "Comet proxy: base-token receipt (supplied WETH) and the spender for supply approvals"
+    sources:
+      - "docs: https://docs.compound.finance/#networks"
+    edges: { underlying: WETH }
+    proofs:
+      - { read: "baseToken() returns (address)", expect: WETH }
+      - { read: "governor() returns (address)", expect: timelock }
+  cUSDTv3:
+    address: "0x3Afdc9BCA9213A35503b077a6072F3D0d5AB0840"
+    name: "Compound USDT"
+    category: market
+    kind: comet
+    decimals: 6
+    aliases: [compound usdt, comet usdt, compound v3 usdt]
+    note: "Comet proxy: base-token receipt (supplied USDT) and the spender for supply approvals"
+    sources:
+      - "docs: https://docs.compound.finance/#networks"
+    edges: { underlying: USDT }
+    proofs:
+      - { read: "baseToken() returns (address)", expect: USDT }
+      - { read: "governor() returns (address)", expect: timelock }
+  comet_rewards:
+    address: "0x1B0e765F6224C21223AeA2af16c1C46E38885a40"
+    category: escrow
+    kind: comet_rewards
+    aliases: [CometRewards, compound v3 rewards]
+    note: "Holds and pays COMP rewards for every mainnet Comet; claim(comet, src, accrue) pays src"
+    sources:
+      - "docs: https://docs.compound.finance/rewards/"
+    proofs:
+      - { read: "governor() returns (address)", expect: timelock }
+  USDC: { ref: stablecoins.USDC }
+  USDT: { ref: stablecoins.USDT }
+  WETH: { ref: weth.WETH }
+  wstETH: { ref: lido.wstETH }
+  weETH: { ref: etherfi.weETH }
+
+ui_routes_to_avoid:
+  - ui: "Compound app ETH supply / withdraw, and any 'supply + borrow' bundle"
+    via: "MainnetBulker invoke(bytes32[] actions, bytes[] data)"
+    why: "free bytes payloads and needs Comet.allow(bulker); call Comet supply/withdraw with WETH directly"
+
+reads:
+  - id: cusdcv3_supplied
+    target: cUSDCv3
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 6
+  - id: cusdcv3_debt
+    target: cUSDCv3
+    sig: "borrowBalanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 6
+  - id: cwethv3_supplied
+    target: cWETHv3
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: cwethv3_debt
+    target: cWETHv3
+    sig: "borrowBalanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: cusdtv3_supplied
+    target: cUSDTv3
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 6
+  - id: cusdtv3_debt
+    target: cUSDTv3
+    sig: "borrowBalanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 6
+
+actions:
+  cusdcv3_supply:
+    summary: "USDC (earns interest) or a collateral token -> Compound USDC market, credited to the Vault"
+    tokens: [USDC, WETH, wstETH, weETH]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: cUSDCv3, amount: $amount }
+      - target: cUSDCv3
+        sig: "supply(address asset, uint256 amount)"
+        args: { asset: $token, amount: $amount }
+        note: "credits msg.sender (the Vault); supplying USDC while in debt repays it first"
+  cusdcv3_withdraw:
+    summary: "Compound USDC market -> USDC or collateral back to the Vault"
+    tokens: [USDC, WETH, wstETH, weETH]
+    calls:
+      - target: cUSDCv3
+        sig: "withdraw(address asset, uint256 amount)"
+        args: { asset: $token, amount: $amount }
+        note: "pays msg.sender. Withdrawing more USDC than supplied opens a borrow"
+  cusdcv3_borrow:
+    summary: "borrow USDC against the Vault's collateral in the USDC market; paid to the Vault"
+    input: USDC
+    calls:
+      - target: cUSDCv3
+        sig: "withdraw(address asset, uint256 amount)"
+        args: { asset: USDC, amount: $amount }
+        note: "same call as withdraw: with no USDC supplied it borrows (min borrow baseBorrowMin)"
+  cusdcv3_repay:
+    summary: "repay the Vault's USDC debt in the USDC market"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: cUSDCv3, amount: $amount }
+      - target: cUSDCv3
+        sig: "supply(address asset, uint256 amount)"
+        args: { asset: USDC, amount: $amount }
+        note: "same call as supply: repays debt first, any excess becomes supply"
+
+  cwethv3_supply:
+    summary: "WETH (earns interest) or an ETH LST collateral -> Compound WETH market, credited to the Vault"
+    tokens: [WETH, wstETH, weETH]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: cWETHv3, amount: $amount }
+      - target: cWETHv3
+        sig: "supply(address asset, uint256 amount)"
+        args: { asset: $token, amount: $amount }
+        note: "credits msg.sender (the Vault); supplying WETH while in debt repays it first"
+  cwethv3_withdraw:
+    summary: "Compound WETH market -> WETH or collateral back to the Vault"
+    tokens: [WETH, wstETH, weETH]
+    calls:
+      - target: cWETHv3
+        sig: "withdraw(address asset, uint256 amount)"
+        args: { asset: $token, amount: $amount }
+        note: "pays msg.sender. Withdrawing more WETH than supplied opens a borrow"
+  cwethv3_borrow:
+    summary: "borrow WETH against the Vault's LST collateral in the WETH market; paid to the Vault"
+    input: WETH
+    calls:
+      - target: cWETHv3
+        sig: "withdraw(address asset, uint256 amount)"
+        args: { asset: WETH, amount: $amount }
+        note: "same call as withdraw: with no WETH supplied it borrows"
+  cwethv3_repay:
+    summary: "repay the Vault's WETH debt in the WETH market"
+    input: WETH
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: cWETHv3, amount: $amount }
+      - target: cWETHv3
+        sig: "supply(address asset, uint256 amount)"
+        args: { asset: WETH, amount: $amount }
+        note: "same call as supply: repays debt first, any excess becomes supply"
+
+  cusdtv3_supply:
+    summary: "USDT (earns interest) or a collateral token -> Compound USDT market, credited to the Vault"
+    tokens: [USDT, WETH, wstETH]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: cUSDTv3, amount: $amount }
+      - target: cUSDTv3
+        sig: "supply(address asset, uint256 amount)"
+        args: { asset: $token, amount: $amount }
+        note: "credits msg.sender (the Vault); supplying USDT while in debt repays it first"
+  cusdtv3_withdraw:
+    summary: "Compound USDT market -> USDT or collateral back to the Vault"
+    tokens: [USDT, WETH, wstETH]
+    calls:
+      - target: cUSDTv3
+        sig: "withdraw(address asset, uint256 amount)"
+        args: { asset: $token, amount: $amount }
+        note: "pays msg.sender. Withdrawing more USDT than supplied opens a borrow"
+  cusdtv3_borrow:
+    summary: "borrow USDT against the Vault's collateral in the USDT market; paid to the Vault"
+    input: USDT
+    calls:
+      - target: cUSDTv3
+        sig: "withdraw(address asset, uint256 amount)"
+        args: { asset: USDT, amount: $amount }
+        note: "same call as withdraw: with no USDT supplied it borrows"
+  cusdtv3_repay:
+    summary: "repay the Vault's USDT debt in the USDT market"
+    input: USDT
+    calls:
+      - target: USDT
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: cUSDTv3, amount: $amount }
+      - target: cUSDTv3
+        sig: "supply(address asset, uint256 amount)"
+        args: { asset: USDT, amount: $amount }
+        note: "same call as supply: repays debt first, any excess becomes supply"
+
+  claim_rewards:
+    summary: "accrued COMP rewards of one Comet -> the Vault"
+    calls:
+      - target: comet_rewards
+        sig: "claim(address comet, address src, bool shouldAccrue)"
+        args: { comet: { one_of: [cUSDCv3, cWETHv3, cUSDTv3] }, src: $AVATAR, shouldAccrue: true }
+        note: "pays src; pass the market with --param comet=<cUSDCv3|cWETHv3|cUSDTv3>"
+
+not_needed:
+  - "Comet.allow(manager, true) and MainnetBulker.invoke: only the app's ETH / bundle routes need them; allow() hands a manager full control of the Vault's position"
+  - "supplyTo / supplyFrom / withdrawTo / withdrawFrom / transferAsset: they move value to or from other accounts"
+  - "absorb / buyCollateral: liquidator functions"
+
+notes: >
+  amount = type(uint256).max in withdraw(base) withdraws the whole supply and in
+  supply(base) repays the whole debt; plan never uses "max". Collateral earns no
+  interest. Borrowing needs at least baseBorrowMin of the base token. USDT approve
+  must go through 0 (plan revokes to 0 after each use).

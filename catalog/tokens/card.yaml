@@ -1,0 +1,140 @@
+protocol: tokens
+name: ERC-20 tokens with no card of their own
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
+  - "token pages on Etherscan / Blockscout (verified source)"
+adding: |
+  Plain tokens that lending markets, pools and vaults take but whose issuer has
+  no card here. Key = onchain symbol(), `name` = onchain name(), `decimals` =
+  onchain decimals(). Prove each one with a market that lists it, e.g.
+  `{ from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }`.
+  When the issuer gets a card (staking, minting actions), move the record there
+  and leave `{ ref: <card>.<symbol> }` here so existing references keep working.
+
+contracts:
+  # BTC
+  WBTC:
+    address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"
+    name: "Wrapped BTC"
+    category: token
+    kind: erc20
+    decimals: 8
+    aliases: [wbtc]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  cbBTC:
+    address: "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf"
+    name: "Coinbase Wrapped BTC"
+    category: token
+    kind: erc20
+    decimals: 8
+    aliases: [cbbtc]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  LBTC:
+    address: "0x8236a87084f8B84306f72007F36F2618A5634494"
+    name: "Lombard Staked Bitcoin"
+    category: token
+    kind: erc20
+    decimals: 8
+    aliases: [lbtc]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  tBTC:
+    address: "0x18084fbA666a33d37592fA2633fD49a74DD93a88"
+    name: "tBTC v2"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [tbtc]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  eBTC:
+    address: "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642"
+    name: "ether.fi BTC"
+    category: token
+    kind: erc20
+    decimals: 8
+    aliases: [ebtc]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  # ETH
+  cbETH:
+    address: "0xBe9895146f7AF43049ca1c1AE358B0541Ea49704"
+    name: "Coinbase Wrapped Staked ETH"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [cbeth]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  ezETH:
+    address: "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110"
+    name: "Renzo Restaked ETH"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [ezeth]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  rsETH:
+    address: "0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7"
+    name: "rsETH"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [rseth]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  tETH:
+    address: "0xD11c452fc99cF405034ee446803b6F6c1F6d5ED8"
+    name: "Treehouse ETH"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [teth]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  # USD
+  RLUSD:
+    address: "0x8292Bb45bf1Ee4d140127049757C2E0fF06317eD"
+    name: "RLUSD"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [rlusd]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  USDG:
+    address: "0xe343167631d89B6Ffc58B88d6b7fB0228795491D"
+    name: "Global Dollar"
+    category: token
+    kind: erc20
+    decimals: 6
+    aliases: [usdg]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  FRAX:
+    address: "0x853d955aCEf822Db058eb8505911ED77F175b99e"
+    name: "Frax"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [frax]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+  # other
+  LINK:
+    address: "0x514910771AF9Ca656af840dff83E8264EcF986CA"
+    name: "ChainLink Token"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [link]
+    proofs:
+      - { from: aave_v3.pool, read: "getReservesList() returns (address[])", expect: { contains: $self } }
+
+actions: {}

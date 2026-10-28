@@ -111,6 +111,12 @@ class Fork:
             return {"ok": False, **_revert(e.data, str(e))}
         h = self.rpc.request("eth_sendTransaction", [tx])
         rc = self.rpc.request("eth_getTransactionReceipt", [h])
+        deadline = time.time() + 30
+        while rc is None:  # newer anvil mines after replying: the receipt shows up a moment later
+            if time.time() > deadline:
+                return {"ok": False, "error": f"no receipt for {h} after 30s"}
+            time.sleep(0.1)
+            rc = self.rpc.request("eth_getTransactionReceipt", [h])
         if int(rc["status"], 16) != 1:
             return {"ok": False, "error": "reverted on send (passed eth_call)", "gas": int(rc["gasUsed"], 16)}
         return {"ok": True, "gas": int(rc["gasUsed"], 16), "logs": rc.get("logs") or []}

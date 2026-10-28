@@ -7,8 +7,187 @@ adding: >
   Sky's contracts are listed by name in its chainlog. Add one keyed by its onchain symbol()
   (tokens) or the chainlog key in snake_case, with the chainlog key in `aliases`, and a
   self-report proof (asset(), usds(), dai(), gem(), stakingToken(), ...) against a
-  contract already in the catalog.
+  contract already in the catalog. A new ERC-4626 savings token gets deposit_ / withdraw_ /
+  redeem_<name> actions copied from sUSDS (check whether its deposit takes a uint16 referral);
+  a new USDS rewards farm gets stake_ / unstake_ / claim_<name> copied from rewards_usds_sky.
 
-contracts: {}
+contracts:
+  USDS: { ref: stablecoins.USDS }
+  DAI: { ref: stablecoins.DAI }
+  USDC: { ref: stablecoins.USDC }
 
-actions: {}
+reads:
+  - id: psm_fees
+    target: usds_psm_wrapper
+    sig: "tout() returns (uint256)"
+    args: []
+    note: "fee on usdc_from_usds in WAD (1e18 = 100%); 0 means 1:1"
+
+actions:
+  usds_from_dai:
+    summary: "DAI -> USDS 1:1, paid to the Vault"
+    input: DAI
+    calls:
+      - target: DAI
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: dai_usds, amount: $amount }
+      - target: dai_usds
+        sig: "daiToUsds(address usr, uint256 wad)"
+        args: { usr: $AVATAR, wad: $amount }
+  dai_from_usds:
+    summary: "USDS -> DAI 1:1, paid to the Vault"
+    input: USDS
+    calls:
+      - target: USDS
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: dai_usds, amount: $amount }
+      - target: dai_usds
+        sig: "usdsToDai(address usr, uint256 wad)"
+        args: { usr: $AVATAR, wad: $amount }
+  usds_from_usdc:
+    summary: "USDC -> USDS through the PSM (1:1 less `tin`), paid to the Vault"
+    input: USDC
+    calls:
+      - target: USDC
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: usds_psm_wrapper, amount: $amount }
+      - target: usds_psm_wrapper
+        sig: "sellGem(address usr, uint256 gemAmt)"
+        args: { usr: $AVATAR, gemAmt: $amount }
+  usdc_from_usds:
+    summary: "USDS -> an exact amount of USDC through the PSM, paid to the Vault"
+    input: USDC
+    calls:
+      - target: USDS
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: usds_psm_wrapper, amount: $usds_in }
+        note: "--param usds_in=<USDS wei> = USDC amount x 10^12 (+ that x tout / 1e18 when the fee is not 0; read psm_fees)"
+      - target: usds_psm_wrapper
+        sig: "buyGem(address usr, uint256 gemAmt)"
+        args: { usr: $AVATAR, gemAmt: $amount }
+  deposit_susds:
+    summary: "USDS -> sUSDS, credited to the Vault"
+    input: USDS
+    calls:
+      - target: USDS
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: sUSDS, amount: $amount }
+      - target: sUSDS
+        sig: "deposit(uint256 assets, address receiver, uint16 referral)"
+        args: { assets: $amount, receiver: $AVATAR, referral: 0 }
+  withdraw_susds:
+    summary: "sUSDS -> an exact amount of USDS, paid to the Vault"
+    input: USDS
+    calls:
+      - target: sUSDS
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  redeem_susds:
+    summary: "an exact number of sUSDS shares -> USDS, paid to the Vault"
+    input: sUSDS
+    calls:
+      - target: sUSDS
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+  deposit_sdai:
+    summary: "DAI -> sDAI, credited to the Vault"
+    input: DAI
+    calls:
+      - target: DAI
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: sDAI, amount: $amount }
+      - target: sDAI
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  withdraw_sdai:
+    summary: "sDAI -> an exact amount of DAI, paid to the Vault"
+    input: DAI
+    calls:
+      - target: sDAI
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  redeem_sdai:
+    summary: "an exact number of sDAI shares -> DAI, paid to the Vault"
+    input: sDAI
+    calls:
+      - target: sDAI
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+  deposit_stusds:
+    summary: "USDS -> stUSDS, credited to the Vault"
+    input: USDS
+    calls:
+      - target: USDS
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: stUSDS, amount: $amount }
+      - target: stUSDS
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  withdraw_stusds:
+    summary: "stUSDS -> an exact amount of USDS, paid to the Vault"
+    input: USDS
+    calls:
+      - target: stUSDS
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  redeem_stusds:
+    summary: "an exact number of stUSDS shares -> USDS, paid to the Vault"
+    input: stUSDS
+    calls:
+      - target: stUSDS
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+  stake_usds_sky:
+    summary: "stake USDS in rewards_usds_sky to earn SKY"
+    input: USDS
+    calls:
+      - target: USDS
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: rewards_usds_sky, amount: $amount }
+      - target: rewards_usds_sky
+        sig: "stake(uint256 amount, uint16 referral)"
+        args: { amount: $amount, referral: 0 }
+  unstake_usds_sky:
+    summary: "withdraw staked USDS from rewards_usds_sky to the Vault"
+    input: USDS
+    calls:
+      - target: rewards_usds_sky
+        sig: "withdraw(uint256 amount)"
+        args: { amount: $amount }
+  claim_usds_sky:
+    summary: "claim accrued SKY from rewards_usds_sky to the Vault"
+    calls:
+      - target: rewards_usds_sky
+        sig: "getReward()"
+        args: {}
+  stake_usds_spk:
+    summary: "stake USDS in rewards_usds_spk to earn SPK"
+    input: USDS
+    calls:
+      - target: USDS
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: rewards_usds_spk, amount: $amount }
+      - target: rewards_usds_spk
+        sig: "stake(uint256 amount, uint16 referral)"
+        args: { amount: $amount, referral: 0 }
+  unstake_usds_spk:
+    summary: "withdraw staked USDS from rewards_usds_spk to the Vault"
+    input: USDS
+    calls:
+      - target: rewards_usds_spk
+        sig: "withdraw(uint256 amount)"
+        args: { amount: $amount }
+  claim_usds_spk:
+    summary: "claim accrued SPK from rewards_usds_spk to the Vault"
+    calls:
+      - target: rewards_usds_spk
+        sig: "getReward()"
+        args: {}
+
+ui_routes_to_avoid:
+  - ui: "Sky / Spark app 'upgrade' and 'swap and deposit' buttons"
+    via: "migration helpers and PSM-to-savings wrappers"
+    why: "helpers that bundle steps; the direct actions above do the same with the Vault as receiver"
+  - ui: "Maker CDP / Vault UI"
+    via: "DSProxy execute(address,bytes)"
+    why: "runs arbitrary bytes from the Vault's proxy; not supported"

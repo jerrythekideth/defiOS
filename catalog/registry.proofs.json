@@ -1,8 +1,8 @@
 {
  "_meta": {
   "1": {
-   "block": 26278420,
-   "checked": "2026-10-26"
+   "block": 26293138,
+   "checked": "2026-10-28"
   }
  },
  "1:0x000000000022d473030f116ddee9f6b43ac78ba3": {
@@ -388,6 +388,30 @@
   "name": "Curve CVX-ETH Convex Deposit",
   "symbol": "cvxcrvCVXETH"
  },
+ "1:0x0bfc9d54fc184518a81162f8fb99c2eaca081202": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   },
+   {
+    "id": "$self.aToken() == aave_v3.aEthWETH",
+    "ok": true,
+    "got": "0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8"
+   },
+   {
+    "id": "vault.getBufferAsset($self) == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ],
+  "implementation": "0x487c2C53c0866F0A73ae317bD1A28F63ADcD9aD1",
+  "admin": "0xD3cF979e676265e4f6379749DECe4708B9A22476",
+  "name": "Wrapped Aave Ethereum WETH",
+  "symbol": "waEthWETH"
+ },
  "1:0x0c0d01abf3e6adfca0989ebba9d6e85dd58eab1e": {
   "code": true,
   "proofs": [
@@ -542,6 +566,18 @@
   "code": true,
   "proofs": []
  },
+ "1:0x18084fba666a33d37592fa2633fd49a74dd93a88": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "tBTC v2",
+  "symbol": "tBTC"
+ },
  "1:0x182b723a58739a9c974cfdb385ceadb237453c28": {
   "code": true,
   "proofs": [
@@ -632,6 +668,16 @@
   "name": "Euro Coin",
   "symbol": "EURC"
  },
+ "1:0x1b0e765f6224c21223aea2af16c1c46e38885a40": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.governor() == timelock",
+    "ok": true,
+    "got": "0x6d903f6003cca6255D85CcA4D3B5E5146dC33925"
+   }
+  ]
+ },
  "1:0x1b74fa5951dfa4c03d0127011548fa79b956f63b": {
   "code": true,
   "proofs": [
@@ -708,6 +754,10 @@
    }
   ]
  },
+ "1:0x1d8f8f00cfa6758d7be78336684788fb0ee0fa46": {
+  "code": true,
+  "proofs": []
+ },
  "1:0x1dbf07a746a08b8be86c673d56acbaec9b50fe04": {
   "code": true,
   "proofs": [
@@ -768,6 +818,16 @@
   "name": "Balancer rETH - Aave WETH",
   "symbol": "rETH-waEthWETH"
  },
+ "1:0x1f98431c8ad98523631ae4a59f267346ea31f984": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "position_manager.factory() == $self",
+    "ok": true,
+    "got": "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+   }
+  ]
+ },
  "1:0x20283cce209b29d19329e8ada47215a52188afdc": {
   "code": true,
   "proofs": [
@@ -815,6 +875,18 @@
   "name": "Aave Ethereum Variable Debt PT_eUSDe_14AUG2025",
   "symbol": "variableDebtEthPT_eUSDe_14AUG2025"
  },
+ "1:0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "Wrapped BTC",
+  "symbol": "WBTC"
+ },
  "1:0x232128844e5af56fd4b3f8bf97e08ab477282ab5": {
   "code": true,
   "proofs": [
@@ -859,6 +931,23 @@
  "1:0x23da9ade38e4477b23770ded512fd37b12381fab": {
   "code": true,
   "proofs": []
+ },
+ "1:0x2411802d8bea09be0af8fd8d08314a63e706b29c": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == wstETH",
+    "ok": true,
+    "got": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"
+   },
+   {
+    "id": "lending_factory.allTokens() contains $self",
+    "ok": true,
+    "got": "7 addresses"
+   }
+  ],
+  "name": "Fluid Wrapped liquid staked Ether 2.0",
+  "symbol": "fwstETH"
  },
  "1:0x24ab03a9a5bc2c49e5523e8d915a3536ac38b91d": {
   "code": true,
@@ -1128,6 +1217,24 @@
     "got": "0xD533a949740bb3306d119CC777fa900bA034cd52"
    }
   ]
+ },
+ "1:0x309a862bbc1a00e45506cb8a802d1ff10004c8c0": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "timelock.admin() == $self",
+    "ok": true,
+    "got": "0x309a862bbC1A00e45506cB8A802D1ff10004c8C0"
+   },
+   {
+    "id": "$self.timelock() == timelock",
+    "ok": true,
+    "got": "0x6d903f6003cca6255D85CcA4D3B5E5146dC33925"
+   }
+  ],
+  "implementation": "0x501Eb63A2120418C581B3bD31CF190b0a0616752",
+  "admin": "0x725ED7F44F0888aeC1b7630AB1ACdced91E0591A",
+  "name": "Compound Governor"
  },
  "1:0x30d9410ed1d5da1f6c8391af5338c93ab8d4035c": {
   "code": true,
@@ -1442,6 +1549,25 @@
   "admin": "0xd460CF1f5D764acAD1c3276c549EE5f1BB671473",
   "name": "yoETH",
   "symbol": "yoETH"
+ },
+ "1:0x3afdc9bca9213a35503b077a6072f3d0d5ab0840": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.baseToken() == USDT",
+    "ok": true,
+    "got": "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+   },
+   {
+    "id": "$self.governor() == timelock",
+    "ok": true,
+    "got": "0x6d903f6003cca6255D85CcA4D3B5E5146dC33925"
+   }
+  ],
+  "implementation": "0xAbc1195C5d34DDeBc36885a980A3009BB6f6Db9E",
+  "admin": "0x1EC63B5883C3481134FD50D5DAebc83Ecd2E8779",
+  "name": "Compound USDT",
+  "symbol": "cUSDTv3"
  },
  "1:0x3c20fbfd32243dd9899301c84bce17413eee0a0c": {
   "code": true,
@@ -1779,6 +1905,16 @@
   "name": "Aave Ethereum tETH",
   "symbol": "aEthtETH"
  },
+ "1:0x48319f97e5da1233c21c48b80097c0fb7a20ff86": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "genesis_vault.mevEscrow() == $self",
+    "ok": true,
+    "got": "0x48319f97E5Da1233c21c48b80097c0FB7a20Ff86"
+   }
+  ]
+ },
  "1:0x48351fcc9536da440ae9471220f6dc921b0eb703": {
   "code": true,
   "proofs": [
@@ -1823,6 +1959,23 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt FBTC",
   "symbol": "variableDebtEthFBTC"
+ },
+ "1:0x4abef2263d5a5ed582fc9a9789a41d85b68d69db": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "ETHx.staderConfig() == $self",
+    "ok": true,
+    "got": "0x4ABEF2263d5A5ED582FC9A9789a41D85b68d69DB"
+   },
+   {
+    "id": "$self.getETHxToken() == ETHx",
+    "ok": true,
+    "got": "0xA35b1B31Ce002FBF2058D22F30f95D405200A15b"
+   }
+  ],
+  "implementation": "0x808e8783Ba7e315517952d195E20bC8eDBa7da23",
+  "admin": "0x67B12264Ca3e0037Fc7E22F2457b42643a04C86e"
  },
  "1:0x4af166c6f2cf882f7b196e3625c3e8f2fe2a8083": {
   "code": true,
@@ -2136,6 +2289,18 @@
   "name": "Re Protocol Deposit Token",
   "symbol": "reUSD"
  },
+ "1:0x514910771af9ca656af840dff83e8264ecf986ca": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "ChainLink Token",
+  "symbol": "LINK"
+ },
  "1:0x529b6158d1d2992e3129f7c69e81a7c677dc3b12": {
   "code": true,
   "proofs": [
@@ -2153,6 +2318,18 @@
   "implementation": "0x86C71796CcDB31c3997F8Ec5C2E3dB3e9e40b985",
   "name": "Spark Variable Debt USDT",
   "symbol": "variableDebtUSDT"
+ },
+ "1:0x52aa899454998be5b000ad077a46bbe360f4e497": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "lending_factory.LIQUIDITY() == $self",
+    "ok": true,
+    "got": "0x52Aa899454998Be5b000Ad077a46Bbe360F4e497"
+   }
+  ],
+  "implementation": "0xCc331daf69752BEcE3DC98dBC63eAcd5092266A2",
+  "admin": "0x2386DC45AdDed673317eF068992F19421B481F4c"
  },
  "1:0x5300a1a15135ea4dc7ad5a167152c01efc9b192a": {
   "code": true,
@@ -2212,6 +2389,16 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum ENS",
   "symbol": "aEthENS"
+ },
+ "1:0x54b91a0d94cb471f37f949c60f7fa7935b551d03": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.LIQUIDITY() == liquidity",
+    "ok": true,
+    "got": "0x52Aa899454998Be5b000Ad077a46Bbe360F4e497"
+   }
+  ]
  },
  "1:0x56072c95faa701256059aa122697b133aded9279": {
   "code": true,
@@ -2353,6 +2540,23 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum KNC",
   "symbol": "aEthKNC"
+ },
+ "1:0x5c20b550819128074fd538edf79791733ccedd18": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == USDT",
+    "ok": true,
+    "got": "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+   },
+   {
+    "id": "lending_factory.allTokens() contains $self",
+    "ok": true,
+    "got": "7 addresses"
+   }
+  ],
+  "name": "Fluid Tether USD",
+  "symbol": "fUSDT"
  },
  "1:0x5c647ce0ae10658ec44fa4e11a51c96e94efd1dd": {
   "code": true,
@@ -2577,6 +2781,18 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt STG",
   "symbol": "variableDebtEthSTG"
+ },
+ "1:0x657e8c867d8b37dcc18fa4caead9c45eb088c642": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "ether.fi BTC",
+  "symbol": "eBTC"
  },
  "1:0x65906988adee75306021c417a1a3458040239602": {
   "code": true,
@@ -2810,6 +3026,21 @@
   ],
   "implementation": "0xE7a7477c636EbC2eD7C1968b5Fac5eaF29Ff6C0C",
   "admin": "0xA28c08f165116587D4F3E708743B4dEe155c5E64"
+ },
+ "1:0x6d903f6003cca6255d85cca4d3b5e5146dc33925": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "cUSDCv3.governor() == $self",
+    "ok": true,
+    "got": "0x6d903f6003cca6255D85CcA4D3B5E5146dC33925"
+   },
+   {
+    "id": "governor.timelock() == $self",
+    "ok": true,
+    "got": "0x6d903f6003cca6255D85CcA4D3B5E5146dC33925"
+   }
+  ]
  },
  "1:0x6de3e52a1b7294a34e271a508082b1ff4a37e30e": {
   "code": true,
@@ -3358,6 +3589,33 @@
   "name": "Aave Ethereum PT_sUSDe_7MAY2026",
   "symbol": "aEthPT_sUSDe_7MAY2026"
  },
+ "1:0x8236a87084f8b84306f72007f36f2618a5634494": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0x072072317469ebB6C340a47e41561C9C3b782BD9",
+  "admin": "0xbae061C73876952aa2C5e483B74DfA785425f879",
+  "name": "Lombard Staked Bitcoin",
+  "symbol": "LBTC"
+ },
+ "1:0x8292bb45bf1ee4d140127049757c2e0ff06317ed": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0x9747a0d261c2d56Eb93f542068e5d1E23170fa9e",
+  "name": "RLUSD",
+  "symbol": "RLUSD"
+ },
  "1:0x82f9c5ad306bba1ad0de49bb5fa6f01bf61085ef": {
   "code": true,
   "proofs": [
@@ -3403,6 +3661,30 @@
    }
   ],
   "implementation": "0xFF42Ce30054dcE7dc7C1282a9a497aa58eaBCe99"
+ },
+ "1:0x84db6ee82b7cf3b47e8f19270abde5718b936670": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "flash_unstake.ethPool() == $self",
+    "ok": true,
+    "got": "0x84db6eE82b7Cf3b47E8F19270abdE5718B936670"
+   }
+  ],
+  "implementation": "0xEcce8778214Fd9fe37C141a00cFf19853Ef5Bc4A",
+  "admin": "0xCc4E08A5BFA887621Ad68826a0D5913d7a2cb392"
+ },
+ "1:0x853d955acef822db058eb8505911ed77f175b99e": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "Frax",
+  "symbol": "FRAX"
  },
  "1:0x856900aa78e856a5df1a2665ee3a66b2487cd68f": {
   "code": true,
@@ -3759,6 +4041,23 @@
    }
   ]
  },
+ "1:0x90551c1795392094fe6d29b758eccd233cfaa260": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   },
+   {
+    "id": "lending_factory.allTokens() contains $self",
+    "ok": true,
+    "got": "7 addresses"
+   }
+  ],
+  "name": "Fluid Wrapped Ether",
+  "symbol": "fWETH"
+ },
  "1:0x91b7d78bf92db564221f6b5aee744d1727d1dd1e": {
   "code": true,
   "proofs": [
@@ -4083,11 +4382,45 @@
    }
   ]
  },
+ "1:0x9f0491b32dbce587c50c4c43ab303b06478193a7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "stader_config.getUserWithdrawManager() == $self",
+    "ok": true,
+    "got": "0x9F0491B32DBce587c50c4C43AB303b06478193A7"
+   },
+   {
+    "id": "$self.staderConfig() == stader_config",
+    "ok": true,
+    "got": "0x4ABEF2263d5A5ED582FC9A9789a41D85b68d69DB"
+   }
+  ],
+  "implementation": "0x678f0D5Aac7398502B50B24B3Ce67EA2dC4Fc29C",
+  "admin": "0x67B12264Ca3e0037Fc7E22F2457b42643a04C86e"
+ },
  "1:0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2": {
   "code": true,
   "proofs": [],
   "name": "Maker",
   "symbol": "MKR"
+ },
+ "1:0x9fb7b4477576fe5b32be4c1843afb1e55f251b33": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == USDC",
+    "ok": true,
+    "got": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+   },
+   {
+    "id": "lending_factory.allTokens() contains $self",
+    "ok": true,
+    "got": "7 addresses"
+   }
+  ],
+  "name": "Fluid USD Coin",
+  "symbol": "fUSDC"
  },
  "1:0x9fdd52efeb601e4bc78b89c6490505b8ac637e9f": {
   "code": true,
@@ -4112,6 +4445,39 @@
   ],
   "name": "USD Coin",
   "symbol": "USDC"
+ },
+ "1:0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0x7159107483e623707C18C6E06cBc095bd0717783",
+  "admin": "0xb61e0E39b6d4030C36A176f576aaBE44BF59Dc78",
+  "name": "rsETH",
+  "symbol": "rsETH"
+ },
+ "1:0xa17581a9e3356d9a858b789d68b4d866e593ae94": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.baseToken() == WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   },
+   {
+    "id": "$self.governor() == timelock",
+    "ok": true,
+    "got": "0x6d903f6003cca6255D85CcA4D3B5E5146dC33925"
+   }
+  ],
+  "implementation": "0xb647A44d6893e5328F3E307FAdA767197daF4f51",
+  "admin": "0x1EC63B5883C3481134FD50D5DAebc83Ecd2E8779",
+  "name": "Compound WETH",
+  "symbol": "cWETHv3"
  },
  "1:0xa188eec8f81263234da3622a406892f3d630f98c": {
   "code": true,
@@ -4155,6 +4521,25 @@
  "1:0xa31deebb3680a3007120e74bcbdf4df36f042a40": {
   "code": true,
   "proofs": []
+ },
+ "1:0xa35b1b31ce002fbf2058d22f30f95d405200a15b": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "stader_config.getETHxToken() == $self",
+    "ok": true,
+    "got": "0xA35b1B31Ce002FBF2058D22F30f95D405200A15b"
+   },
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0x4C22fFd479637EA0eD61D451CBe6355627283358",
+  "admin": "0x67B12264Ca3e0037Fc7E22F2457b42643a04C86e",
+  "name": "ETHx",
+  "symbol": "ETHx"
  },
  "1:0xa38fca8c6bf9bda52e76eb78f08caa3be7c5a970": {
   "code": true,
@@ -4414,6 +4799,17 @@
   "name": "Spark Variable Debt sDAI",
   "symbol": "variableDebtsDAI"
  },
+ "1:0xac0f906e433d58fa868f936e8a43230473652885": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.mevEscrow() == shared_mev_escrow",
+    "ok": true,
+    "got": "0x48319f97E5Da1233c21c48b80097c0FB7a20Ff86"
+   }
+  ],
+  "implementation": "0xf113BfD6423291b1dD2cA76f897bFf54456e7c88"
+ },
  "1:0xac15fffdca77fc86770beaba20cbc1bc2d00494c": {
   "code": true,
   "proofs": [
@@ -4490,6 +4886,18 @@
     "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
    }
   ]
+ },
+ "1:0xae78736cd615f374d3085123a210448e74fc6393": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "Rocket Pool ETH",
+  "symbol": "rETH"
  },
  "1:0xae7ab96520de3a18e5e111b5eaab095312d7fe84": {
   "code": true,
@@ -4991,6 +5399,18 @@
   "code": true,
   "proofs": []
  },
+ "1:0xbe9895146f7af43049ca1c1ae358b0541ea49704": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "Coinbase Wrapped Staked ETH",
+  "symbol": "cbETH"
+ },
  "1:0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7": {
   "code": true,
   "proofs": [
@@ -5000,6 +5420,20 @@
     "got": "0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7"
    }
   ]
+ },
+ "1:0xbf5495efe5db9ce00f80364c8b423567e58d2110": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0x9bD289b14Dd6E0782aF82eEb3FCfeed4354CDA2C",
+  "admin": "0x91625601e2BbBEb7171C40c79FadBCFbFf6A1982",
+  "name": "Renzo Restaked ETH",
+  "symbol": "ezETH"
  },
  "1:0xbf98480425a29197e5d99d003017f63a1e595d02": {
   "code": true,
@@ -5032,6 +5466,18 @@
     "got": "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A"
    }
   ]
+ },
+ "1:0xc00e94cb662c3520282e6f5717214004a7f26888": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "governor.token() == $self",
+    "ok": true,
+    "got": "0xc00e94Cb662C3520282E6f5717214004A7f26888"
+   }
+  ],
+  "name": "Compound",
+  "symbol": "COMP"
  },
  "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
   "code": true,
@@ -5262,6 +5708,42 @@
   "name": "Aave Ethereum Variable Debt LDO",
   "symbol": "variableDebtEthLDO"
  },
+ "1:0xc36442b4a4522e871399cd717abdd847ab11fe88": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.factory() == factory",
+    "ok": true,
+    "got": "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+   },
+   {
+    "id": "$self.WETH9() == WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ],
+  "name": "Uniswap V3 Positions NFT-V1",
+  "symbol": "UNI-V3-POS"
+ },
+ "1:0xc3d688b66703497daa19211eedff47f25384cdc3": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.baseToken() == USDC",
+    "ok": true,
+    "got": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+   },
+   {
+    "id": "$self.governor() == timelock",
+    "ok": true,
+    "got": "0x6d903f6003cca6255D85CcA4D3B5E5146dC33925"
+   }
+  ],
+  "implementation": "0x63e749153BaF1838f63cA22c275370BD2B1cEB15",
+  "admin": "0x1EC63B5883C3481134FD50D5DAebc83Ecd2E8779",
+  "name": "Compound USDC",
+  "symbol": "cUSDCv3"
+ },
  "1:0xc528f0c91cfae4fd86a68f6dfd4d7284707bec68": {
   "code": true,
   "proofs": [
@@ -5378,6 +5860,18 @@
   "name": "Aave Ethereum Variable Debt PT_sUSDE_25SEP2025",
   "symbol": "variableDebtEthPT_sUSDE_25SEP2025"
  },
+ "1:0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "Coinbase Wrapped BTC",
+  "symbol": "cbBTC"
+ },
  "1:0xcbc72d92b2dc8187414f6734718563898740c0bc": {
   "code": true,
   "proofs": [
@@ -5466,6 +5960,10 @@
    }
   ]
  },
+ "1:0xce15294273cfb9d9b628f4d61636623decdf4fdc": {
+  "code": true,
+  "proofs": []
+ },
  "1:0xce6ca9cdce00a2b0c0d1dac93894f4bd2c960567": {
   "code": true,
   "proofs": [
@@ -5506,6 +6004,23 @@
     "got": "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B"
    }
   ]
+ },
+ "1:0xcf5ea1b38380f6af39068375516daf40ed70d299": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "stader_config.getStakePoolManager() == $self",
+    "ok": true,
+    "got": "0xcf5EA1b38380f6aF39068375516Daf40Ed70D299"
+   },
+   {
+    "id": "$self.staderConfig() == stader_config",
+    "ok": true,
+    "got": "0x4ABEF2263d5A5ED582FC9A9789a41D85b68d69DB"
+   }
+  ],
+  "implementation": "0x716DF97EBC05CCb2745Bf04CD67df75cf2d11ee9",
+  "admin": "0x67B12264Ca3e0037Fc7E22F2457b42643a04C86e"
  },
  "1:0xcf8d0c70c850859266f5c338b38f9d663181c314": {
   "code": true,
@@ -5571,6 +6086,19 @@
     "got": "0x2F50D538606Fa9EDD2B11E2446BEb18C9D5846bB"
    }
   ]
+ },
+ "1:0xd11c452fc99cf405034ee446803b6f6c1f6d5ed8": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0xD1A622566F277AA76c3C47A30469432AAec95E38",
+  "name": "Treehouse ETH",
+  "symbol": "tETH"
  },
  "1:0xd15f11b334e1e233127302e5f759c17da1260df5": {
   "code": true,
@@ -5903,6 +6431,19 @@
   "name": "Spark Savings USDT",
   "symbol": "spUSDT"
  },
+ "1:0xe343167631d89b6ffc58b88d6b7fb0228795491d": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "implementation": "0xFACd5ff359aDf87822374275699Dd518aAf9a65F",
+  "name": "Global Dollar",
+  "symbol": "USDG"
+ },
  "1:0xe3490297a08d6fc8da46edb7b6142e4f461b62d3": {
   "code": true,
   "proofs": [
@@ -6014,6 +6555,20 @@
   "implementation": "0x79f5C4562EC3e85C3103Ce63Ab94E92EFfDd6197",
   "name": "Aave Ethereum Lido Variable Debt tETH",
   "symbol": "variableDebtEthLidotETH"
+ },
+ "1:0xe95a203b1a91a908f9b9ce46459d101078c2c3cb": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "flash_unstake.ankreth() == $self",
+    "ok": true,
+    "got": "0xE95A203B1a91a908F9B9CE46459d101078c2c3cb"
+   }
+  ],
+  "implementation": "0xE672E0E0101A7F58d728751E2a5e6Da5Ff1FDa64",
+  "admin": "0xCc4E08A5BFA887621Ad68826a0D5913d7a2cb392",
+  "name": "Ankr Staked ETH",
+  "symbol": "ankrETH"
  },
  "1:0xe9b725010a9e419412ed67d0fa5f3a5f40159d32": {
   "code": true,
@@ -6167,6 +6722,23 @@
   "name": "Aave Ethereum Variable Debt sUSDe",
   "symbol": "variableDebtEthsUSDe"
  },
+ "1:0xf047f23acfdb1315cf63ad8ab5146d5fda4267af": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.ankreth() == ankrETH",
+    "ok": true,
+    "got": "0xE95A203B1a91a908F9B9CE46459d101078c2c3cb"
+   },
+   {
+    "id": "$self.weth() == WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ],
+  "implementation": "0xdC8Df5eE5072f726Dc633dd8e7a6B19695689FD2",
+  "admin": "0x595987a11656e6d7Bc8779E8261E228E0Ced9c5D"
+ },
  "1:0xf0bb20865277abd641a307ece5ee04e79073416c": {
   "code": true,
   "proofs": [],
@@ -6184,6 +6756,18 @@
   ],
   "name": "ETH+/ETH Convex Deposit",
   "symbol": "cvxETH+ETH"
+ },
+ "1:0xf1c9acdc66974dfb6decb12aa385b9cd01190e38": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "aave_v3.pool.getReservesList() contains $self",
+    "ok": true,
+    "got": "67 addresses"
+   }
+  ],
+  "name": "Staked ETH",
+  "symbol": "osETH"
  },
  "1:0xf1eee0957267b1a474323ff9cff7719e964969fa": {
   "code": true,

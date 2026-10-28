@@ -1,0 +1,22 @@
+contracts:
+  lending_factory:
+    address: "0x54B91A0D94cb471F37f949c60F7Fa7935b551D03"
+    category: config
+    kind: fluid_lending_factory
+    aliases: [fluid lending factory, LendingFactory]
+    note: "creates the lending fTokens; allTokens() lists every one"
+    sources:
+      - "docs: https://docs.fluid.instadapp.io/contracts/contracts.html"
+      - "explorer: verified source (FluidLendingFactory)"
+    proofs:
+      - { read: "LIQUIDITY() returns (address)", expect: liquidity }
+  liquidity:
+    address: "0x52Aa899454998Be5b000Ad077a46Bbe360F4e497"
+    category: market
+    kind: fluid_liquidity
+    aliases: [fluid liquidity layer, FluidLiquidity]
+    note: "Fluid's shared liquidity layer: every fToken and Fluid vault holds its funds here. Not called by any action"
+    sources:
+      - "docs: https://docs.fluid.instadapp.io/contracts/contracts.html"
+    proofs:
+      - { from: lending_factory, read: "LIQUIDITY() returns (address)", expect: $self }

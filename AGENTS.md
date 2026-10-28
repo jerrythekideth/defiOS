@@ -18,10 +18,11 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
 * **Permission changes** are Vault transactions. You cannot make them. You hand
   the human a Safe Transaction Builder JSON; they propose it on the Vault.
 
-## The three files you rely on
+## The files you rely on
 
 | file | where | what it answers |
 |---|---|---|
+| `catalog/ACTIONS.md` | DeFi_os (public), generated | Which card and action does this request map to? Its input token, token list, required `--param`s. Grep it first, then read the card. |
 | `catalog/<protocol>/card.yaml` | DeFi_os (public) | Which contract is "the gearbox pool"? Which exact calls make up "lend"? Which params must be the Vault? What to read? Which UI routes to avoid? |
 | `books/<vault>/book.yaml` | your agent repo, generated | What does the vault use and hold? Which actions are allowed / missing / unsafe right now? What is queued? |
 | `books/<vault>/role.lock.json` | your agent repo, generated | The full decoded role at a block. A snapshot for diffs. Never trust it on its own. |

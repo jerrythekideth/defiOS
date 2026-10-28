@@ -32,6 +32,7 @@ SAFE_API_KEY, PROPOSER_PRIVATE_KEY for a delegate key) and `books/` (generated).
 | what is 0x… / is this address ours / an alert names an address | `defios --format text whois 0x… [--chain N]` | quote protocol, contract and status; act only on `verified`; `unknown` = not in the registry, never guess |
 | review this permission .json | `defios decode file.json` | list each change in plain words; flag `PASS[NONE]`, unpinned receivers, delegatecall |
 | something is broken | `defios doctor` | report failing checks |
+| which action does X | grep `catalog/ACTIONS.md` (card, action, input, tokens, `--param`s), then read that card's action and notes | never invent an action the list does not have |
 | do X (lend, stake, wrap, …) | `defios plan <card or alias>.<action>=<amount> [more steps] [--token T]` | show each call's `line`, the warnings; if REFUSED, explain each `why` and stop |
 | add the permission to do X | `defios permit <card>.<action> [--token T]` | show each `+` change with its condition and why; the JSON goes to the human for the Vault queue (never propose it); if REFUSED, explain each line and stop |
 | will this work? / simulate it | `defios simulate --calls calls.json` (or `--batch file.json`, both to try a permission batch then a plan) | report each revert in plain words, the Vault's token deltas and any allowance left open; never propose something that reverted |

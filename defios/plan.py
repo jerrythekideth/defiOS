@@ -349,9 +349,15 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
         input_tok = resolve_token(catalog, input_ref if input_ref == NATIVE or "." in str(input_ref)
                                   else f"{proto}.{input_ref}", vault.book_vars) if input_ref else None
         tok = resolve_token(catalog, step.token, vault.book_vars) if step.token else None
-        if tok and input_tok and (tok["address"] or "").lower() != (input_tok["address"] or "").lower():
+        # `tokens:` + `input:` (e.g. a list of vaults that take USDC): --token picks from the list,
+        # the amount is in the input token
+        pick_from_list = bool(action.get("tokens")) and bool(input_tok) and input_tok["address"] is not None
+        if tok and input_tok and not pick_from_list and \
+                (tok["address"] or "").lower() != (input_tok["address"] or "").lower():
             raise PlanError(f"{where} takes {input_tok['ref']}, not {tok['ref']}")
-        tok = tok or input_tok
+        if not pick_from_list:
+            tok = tok or input_tok
+        amt_tok = input_tok if pick_from_list else tok
         vars_: dict[str, Any] = {}
         if action.get("tokens"):  # per-token action: $token is the chosen token, which must be in the list
             allowed = catalog.action_tokens(proto, action, vault.book_vars)
@@ -365,16 +371,16 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
             vars_["_tokens"] = allowed
         raw = None
         if step.amount is not None:
-            if not tok:
+            if not amt_tok:
                 raise PlanError(f"{where}: the card does not say which token the amount is in; pass --token")
-            dec = tok["decimals"]
-            if tok["address"] and rpc is not None:
-                live = _onchain_decimals(rpc, tok["address"])
+            dec = amt_tok["decimals"]
+            if amt_tok["address"] and rpc is not None:
+                live = _onchain_decimals(rpc, amt_tok["address"])
                 if live is not None and dec is not None and live != int(dec):
-                    raise PlanError(f"{tok['ref']}: card says {dec} decimals, chain says {live}; fix the card")
+                    raise PlanError(f"{amt_tok['ref']}: card says {dec} decimals, chain says {live}; fix the card")
                 dec = live if dec is None else dec
             if dec is None:
-                raise PlanError(f"{tok['ref']} has no `decimals` in its card and no RPC_URL to read it")
+                raise PlanError(f"{amt_tok['ref']} has no `decimals` in its card and no RPC_URL to read it")
             raw = to_raw(step.amount, int(dec), where)
             vars_.update(amount=raw, shares=raw)
         if tok and tok["address"]:
@@ -385,7 +391,7 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
             vars_[k] = _param_value(catalog, proto, v, vault.book_vars)
         if raw is not None and any(c.get("send") for c in action.get("calls") or []):
             vars_["value"] = raw
-        amounts = {raw: f"{step.amount} {tok['symbol']}"} if raw is not None and tok else {}
+        amounts = {raw: f"{step.amount} {amt_tok['symbol']}"} if raw is not None and amt_tok else {}
 
         # calls: each required call, or the first allowed alt after it; optional calls skipped
         groups: list[list[tuple[int, dict]]] = []
@@ -458,9 +464,9 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
                  "card_reviewed": bool(catalog.cards[proto].raw.get("reviewed")), "calls": step_calls}
         if via:
             s_out["resolved_from"] = step.ref
-        if raw is not None and tok:
-            s_out["amount"] = {"human": step.amount, "raw": str(raw), "token": tok["ref"],
-                               "decimals": int(tok["decimals"] if tok["decimals"] is not None else NATIVE_DECIMALS)}
+        if raw is not None and amt_tok:
+            s_out["amount"] = {"human": step.amount, "raw": str(raw), "token": amt_tok["ref"],
+                               "decimals": int(amt_tok["decimals"] if amt_tok["decimals"] is not None else NATIVE_DECIMALS)}
         if skipped:
             s_out["skipped"] = skipped
         out_steps.append(s_out)

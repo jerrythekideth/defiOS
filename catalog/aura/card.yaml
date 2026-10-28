@@ -8,7 +8,47 @@ adding: >
   withdrawal-only, so records here are for exits (withdraw, claim, unlock).
   A pool is a deposit token and a BaseRewardPool4626 from booster.poolInfo(pid), keyed
   by their symbol() (sanitized) with operator() / stakingToken() / asset() proofs.
+  Exit actions only: withdraw / claim take a pool's `_vault` with --token.
+sources:
+  - "docs: https://docs.aura.finance"
+  - "explorer: verified source (BaseRewardPool4626, auraBAL rewards, stkauraBAL)"
 
 contracts: {}
 
-actions: {}
+actions:
+  withdraw:
+    summary: "Aura pool stake -> its Balancer v3 BPT back to the Vault (unstake + unwrap, claims rewards)"
+    tokens: [auraAave_GHO_USDT_USDC_vault, auraosETH_waWETH_vault, aurarETH_waEthWETH_vault]
+    calls:
+      - target: $token
+        sig: "withdrawAndUnwrap(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+    note: "--token <pool>_vault; amount in vault shares (1:1 with the BPT). The Booster is shut down: no deposit action"
+  claim:
+    summary: "BAL, AURA and extra rewards of one Aura pool -> the Vault"
+    tokens: [auraAave_GHO_USDT_USDC_vault, auraosETH_waWETH_vault, aurarETH_waEthWETH_vault]
+    calls:
+      - target: $token
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+    note: "--token <pool>_vault"
+  auraBAL_unstake:
+    summary: "auraBAL_rewards -> auraBAL back to the Vault (claims rewards)"
+    input: auraBAL
+    calls:
+      - target: auraBAL_rewards
+        sig: "withdraw(uint256 amount, bool claim)"
+        args: { amount: $amount, claim: true }
+  auraBAL_claim:
+    summary: "rewards of auraBAL_rewards -> the Vault"
+    calls:
+      - target: auraBAL_rewards
+        sig: "getReward(address _account, bool _claimExtras)"
+        args: { _account: $AVATAR, _claimExtras: true }
+  stkauraBAL_redeem:
+    summary: "stkauraBAL -> auraBAL back to the Vault"
+    input: stkauraBAL
+    calls:
+      - target: stkauraBAL
+        sig: "redeem(uint256 _shares, address _receiver, address _owner)"
+        args: { _shares: $amount, _receiver: $AVATAR, _owner: $AVATAR }

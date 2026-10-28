@@ -1,0 +1,11 @@
+contracts:
+  shared_mev_escrow:
+    address: "0x48319f97E5Da1233c21c48b80097c0FB7a20Ff86"
+    category: escrow
+    kind: stakewise_mev_escrow
+    aliases: [SharedMevEscrow]
+    note: "collects execution-layer rewards for StakeWise vaults without an own escrow"
+    sources:
+      - "docs: https://docs.stakewise.io/"
+    proofs:
+      - { from: genesis_vault, read: "mevEscrow() returns (address)", expect: $self }

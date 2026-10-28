@@ -1,0 +1,37 @@
+contracts:
+  timelock:
+    address: "0x6d903f6003cca6255D85CcA4D3B5E5146dC33925"
+    category: timelock
+    kind: compound_timelock
+    aliases: [compound timelock]
+    note: "governor() of every mainnet Comet and of CometRewards; executes Compound governance"
+    sources:
+      - "docs: https://docs.compound.finance/governance/"
+    edges: { admin: governor }
+    proofs:
+      - { from: cUSDCv3, read: "governor() returns (address)", expect: $self }
+      - { from: governor, read: "timelock() returns (address)", expect: $self }
+  governor:
+    address: "0x309a862bbC1A00e45506cB8A802D1ff10004c8C0"
+    name: "Compound Governor"
+    category: config
+    kind: governor
+    aliases: [compound governor]
+    note: "COMP-holder governance; admin() of the timelock"
+    sources:
+      - "docs: https://docs.compound.finance/governance/"
+    proofs:
+      - { from: timelock, read: "admin() returns (address)", expect: $self }
+      - { read: "timelock() returns (address)", expect: timelock }
+  COMP:
+    address: "0xc00e94Cb662C3520282E6f5717214004A7f26888"
+    name: "Compound"
+    category: governance
+    kind: erc20
+    decimals: 18
+    aliases: [comp, compound token]
+    note: "reward token paid by comet_rewards"
+    sources:
+      - "docs: https://docs.compound.finance/governance/"
+    proofs:
+      - { from: governor, read: "token() returns (address)", expect: $self }

@@ -9,7 +9,7 @@ from eth_utils import keccak
 from defios.catalog import CardError, Catalog
 from defios.chain import CallReverted
 from defios.cli import main
-from defios.registry import CATEGORIES, INDEX_FILE, Registry, dump, load_results, verify
+from defios.registry import ACTIONS_FILE, CATEGORIES, INDEX_FILE, Registry, dump, load_results, verify
 
 from .conftest import ROOT
 
@@ -38,6 +38,11 @@ def test_every_addressed_contract_is_a_record_with_a_category(reg):
 def test_index_json_is_up_to_date(reg):
     """catalog/index.json must be regenerated (defios registry export) whenever a card changes."""
     assert (CAT / INDEX_FILE).read_text() == dump(reg.export_index(load_results(CAT)))
+
+
+def test_actions_md_is_up_to_date(reg):
+    """catalog/ACTIONS.md is regenerated with index.json (defios registry export)."""
+    assert (CAT / ACTIONS_FILE).read_text() == reg.actions_md()
 
 
 def test_edges_use_design_relations(reg):

@@ -225,7 +225,7 @@ def registry():
 @click.option("--chain", "chains", type=int, multiple=True, help="Only these chain ids (default: every chain "
               "with an RPC: RPC_URL for 1, RPC_URL_<chain id> for the others).")
 @click.option("--write/--no-write", default=True, show_default=True,
-              help="Update catalog/registry.proofs.json and catalog/index.json.")
+              help="Update catalog/registry.proofs.json, catalog/index.json and catalog/ACTIONS.md.")
 @click.option("--dir", "directory", default=None, type=click.Path(file_okay=False), help="Catalog directory.")
 @click.pass_context
 def registry_verify(ctx, chains, write, directory):
@@ -235,7 +235,8 @@ def registry_verify(ctx, chains, write, directory):
     """
     def go():
         from .chain import Rpc, env
-        from .registry import INDEX_FILE, PROOFS_FILE, RegistryError, dump, merge_results, summarize_verify, verify
+        from .registry import (ACTIONS_FILE, INDEX_FILE, PROOFS_FILE, RegistryError, dump, merge_results,
+                               summarize_verify, verify)
         try:
             d, reg, old = _registry(directory)
         except RegistryError as e:
@@ -251,6 +252,7 @@ def registry_verify(ctx, chains, write, directory):
         if write:
             (d / PROOFS_FILE).write_text(dump(results))
             (d / INDEX_FILE).write_text(dump(reg.export_index(results)))
+            (d / ACTIONS_FILE).write_text(reg.actions_md())
         checked = [str(c) for c in rpcs]
         res = {"checked": checked, "statuses": {r.ref: reg.status(r, results).status for r in reg.records},
                "written": [str(d / PROOFS_FILE), str(d / INDEX_FILE)] if write else []}
@@ -264,8 +266,8 @@ def registry_verify(ctx, chains, write, directory):
 @click.option("--out", default=None, help="Where to write (default catalog/index.json; '-' = stdout).")
 @click.option("--dir", "directory", default=None, type=click.Path(file_okay=False), help="Catalog directory.")
 def registry_export(out, directory):
-    """Write the static index.json (deployments, status, edges) for non-Python consumers. Offline."""
-    from .registry import INDEX_FILE, RegistryError, dump
+    """Write the static index.json (deployments, status, edges) and ACTIONS.md. Offline."""
+    from .registry import ACTIONS_FILE, INDEX_FILE, RegistryError, dump
     try:
         d, reg, results = _registry(directory)
     except RegistryError as e:
@@ -278,6 +280,9 @@ def registry_export(out, directory):
     path = Path(out) if out else d / INDEX_FILE
     path.write_text(text)
     click.echo(f"wrote {path}", err=True)
+    if not out:
+        (d / ACTIONS_FILE).write_text(reg.actions_md())
+        click.echo(f"wrote {d / ACTIONS_FILE}", err=True)
 
 
 @main.command()

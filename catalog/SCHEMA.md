@@ -114,7 +114,7 @@ Action keys used by `defios plan` (all optional):
 |---|---|
 | `input` | contract (in this card, or `card.contract`) or `ETH` that `--amount` is denominated in; its `decimals` convert the human amount. `$amount` / `$shares` get the raw value; for `send:` calls the ETH value is the amount |
 | `defaults` | plan-time values for free `$vars` (e.g. `referral: "0x0…0"`). Any other free `$var` must be given with `--param`: plan never fills one with a check sample |
-| `tokens` | the action works on any one of these tokens (contracts of cards). `$token` in a call's `target` or args is that token; `plan` needs `--token` (one of the list); `check` checks the action once per token and reports `tokens: {USDC: allowed, …}` (status `partial` when only some pass). As an arg, `$token` is pinned to the whole list |
+| `tokens` | the action works on any one of these tokens (contracts of cards). `$token` in a call's `target` or args is that token; `plan` needs `--token` (one of the list); `check` checks the action once per token and reports `tokens: {USDC: allowed, …}` (status `partial` when only some pass). As an arg, `$token` is pinned to the whole list. With `input:` set as well, `$token` is a vault or pool from the list and the amount stays in the `input` token (`morpho_vaults.deposit_usdc=1000 --token KPK_USDC_Prime`) |
 | `approvals` | `keep` when the spender pulls after the transaction (a CoW settlement, a relayer filling a signed order). Otherwise `plan` ends the batch with `approve(spender, 0)` for every approval it made, so no allowance stays open |
 
 `plan` emits each required call (approves included) or, if the role rejects

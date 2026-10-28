@@ -2,8 +2,8 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26278420,
-   "checked": "2026-10-26"
+   "block": 26293138,
+   "checked": "2026-10-28"
   }
  },
  "protocols": {
@@ -14,7 +14,16 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "claim_and_stake_stkaave_rewards",
+    "claim_stkaave_rewards",
+    "cooldown_stkaave",
+    "deposit_sgho",
+    "redeem_sgho",
+    "stake_aave",
+    "unstake_aave",
+    "withdraw_sgho"
+   ]
   },
   "aave_v3": {
    "name": "Aave v3 (Ethereum core market)",
@@ -25,13 +34,59 @@
    ],
    "actions": [
     "borrow",
+    "borrow_eth",
+    "borrow_other",
+    "claim_rewards",
+    "disable_collateral",
+    "disable_collateral_other",
+    "enable_collateral",
+    "enable_collateral_other",
+    "repay",
+    "repay_eth",
+    "repay_other",
+    "repay_with_atokens",
+    "repay_with_atokens_other",
+    "set_emode",
+    "supply",
+    "supply_eth",
+    "supply_other",
+    "withdraw",
+    "withdraw_eth",
+    "withdraw_other"
+   ]
+  },
+  "aave_v3_etherfi": {
+   "name": "Aave v3 EtherFi market (exit only)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [],
+   "actions": [
+    "claim_rewards",
+    "disable_collateral",
+    "repay",
+    "repay_with_atokens",
+    "withdraw"
+   ]
+  },
+  "aave_v3_prime": {
+   "name": "Aave v3 Prime market",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [],
+   "actions": [
+    "borrow",
+    "borrow_eth",
+    "claim_rewards",
     "disable_collateral",
     "enable_collateral",
     "repay",
+    "repay_eth",
     "repay_with_atokens",
     "set_emode",
     "supply",
-    "withdraw"
+    "supply_eth",
+    "withdraw",
+    "withdraw_eth"
    ]
   },
   "aave_v4": {
@@ -52,6 +107,19 @@
     "withdraw"
    ]
   },
+  "ankr": {
+   "name": "Ankr (ankrETH liquid staking)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": [
+    "flash_unstake",
+    "stake",
+    "unstake"
+   ]
+  },
   "aura": {
    "name": "Aura (Balancer LP boosting, auraBAL, vlAURA)",
    "status": "draft",
@@ -59,7 +127,13 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "auraBAL_claim",
+    "auraBAL_unstake",
+    "claim",
+    "stkauraBAL_redeem",
+    "withdraw"
+   ]
   },
   "avant": {
    "name": "Avant (avETH / savETH)",
@@ -102,7 +176,23 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "Aave_GHO_USDT_USDC_add_GHO",
+    "Aave_GHO_USDT_USDC_add_USDC",
+    "Aave_GHO_USDT_USDC_add_USDT",
+    "Aave_GHO_USDT_USDC_remove",
+    "Aave_GHO_USDT_USDC_stake",
+    "claim_bal",
+    "claim_rewards",
+    "osETH_waWETH_remove",
+    "osETH_waWETH_remove_waEthWETH",
+    "osETH_waWETH_stake",
+    "rETH_waEthWETH_remove",
+    "rETH_waEthWETH_remove_waEthWETH",
+    "rETH_waEthWETH_stake",
+    "unstake",
+    "waEthWETH_unwrap"
+   ]
   },
   "cctp": {
    "name": "Circle CCTP v2 (bridge USDC)",
@@ -112,7 +202,37 @@
     1
    ],
    "actions": [
-    "bridge"
+    "bridge",
+    "bridge_to_arbitrum",
+    "bridge_to_avalanche",
+    "bridge_to_base",
+    "bridge_to_linea",
+    "bridge_to_optimism",
+    "bridge_to_polygon",
+    "bridge_to_unichain"
+   ]
+  },
+  "compound_v3": {
+   "name": "Compound v3 (Comet USDC, WETH and USDT markets)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": [
+    "claim_rewards",
+    "cusdcv3_borrow",
+    "cusdcv3_repay",
+    "cusdcv3_supply",
+    "cusdcv3_withdraw",
+    "cusdtv3_borrow",
+    "cusdtv3_repay",
+    "cusdtv3_supply",
+    "cusdtv3_withdraw",
+    "cwethv3_borrow",
+    "cwethv3_repay",
+    "cwethv3_supply",
+    "cwethv3_withdraw"
    ]
   },
   "convex": {
@@ -122,7 +242,54 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "3Crv_claim",
+    "3Crv_deposit",
+    "3Crv_withdraw",
+    "BTCGHOETH_claim",
+    "BTCGHOETH_deposit",
+    "BTCGHOETH_withdraw",
+    "ETH_ETH_claim",
+    "ETH_ETH_deposit",
+    "ETH_ETH_withdraw",
+    "OETH_WETH_claim",
+    "OETH_WETH_deposit",
+    "OETH_WETH_withdraw",
+    "RLUSD_USDC_claim",
+    "RLUSD_USDC_deposit",
+    "RLUSD_USDC_withdraw",
+    "crvCVXETH_claim",
+    "crvCVXETH_deposit",
+    "crvCVXETH_withdraw",
+    "crvUSDTWBTCWETH_claim",
+    "crvUSDTWBTCWETH_deposit",
+    "crvUSDTWBTCWETH_withdraw",
+    "crvUSDUSDC_f_claim",
+    "crvUSDUSDC_f_deposit",
+    "crvUSDUSDC_f_withdraw",
+    "crvUSDUSDT_f_claim",
+    "crvUSDUSDT_f_deposit",
+    "crvUSDUSDT_f_withdraw",
+    "crv_to_cvxcrv",
+    "cvx_claim",
+    "cvx_stake",
+    "cvx_unstake",
+    "cvxcrv_claim",
+    "cvxcrv_stake",
+    "cvxcrv_unstake",
+    "osETH_rETH_claim",
+    "osETH_rETH_deposit",
+    "osETH_rETH_withdraw",
+    "stETH_ng_f_claim",
+    "stETH_ng_f_deposit",
+    "stETH_ng_f_withdraw",
+    "steCRV_claim",
+    "steCRV_deposit",
+    "steCRV_withdraw",
+    "weeth_ng_claim",
+    "weeth_ng_deposit",
+    "weeth_ng_withdraw"
+   ]
   },
   "cowswap": {
    "name": "CoW Swap (pre-signed orders via the CowswapOrderSigner)",
@@ -143,7 +310,82 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "BTCGHOETH_add_GHO",
+    "BTCGHOETH_add_WETH",
+    "BTCGHOETH_remove",
+    "BTCGHOETH_remove_one",
+    "BTCGHOETH_stake",
+    "ETH_ETH_add_WETH",
+    "ETH_ETH_remove",
+    "ETH_ETH_remove_one",
+    "ETH_ETH_stake",
+    "MtEthena_add_sDAI",
+    "MtEthena_add_sUSDe",
+    "MtEthena_remove",
+    "MtEthena_remove_one",
+    "MtEthena_stake",
+    "OETH_WETH_add_WETH",
+    "OETH_WETH_remove",
+    "OETH_WETH_remove_one",
+    "OETH_WETH_stake",
+    "RLUSD_USDC_add_USDC",
+    "RLUSD_USDC_remove",
+    "RLUSD_USDC_remove_one",
+    "RLUSD_USDC_stake",
+    "USDeUSDC_add_USDC",
+    "USDeUSDC_add_USDe",
+    "USDeUSDC_remove",
+    "USDeUSDC_remove_one",
+    "USDeUSDC_stake",
+    "claim_crv",
+    "claim_rewards",
+    "crvUSDTWBTCWETH_add_USDT",
+    "crvUSDTWBTCWETH_add_WETH",
+    "crvUSDTWBTCWETH_remove",
+    "crvUSDTWBTCWETH_remove_one",
+    "crvUSDTWBTCWETH_stake",
+    "crvUSDUSDC_f_add_USDC",
+    "crvUSDUSDC_f_add_crvUSD",
+    "crvUSDUSDC_f_remove",
+    "crvUSDUSDC_f_remove_one",
+    "crvUSDUSDC_f_stake",
+    "crvUSDUSDT_f_add_USDT",
+    "crvUSDUSDT_f_add_crvUSD",
+    "crvUSDUSDT_f_remove",
+    "crvUSDUSDT_f_remove_one",
+    "crvUSDUSDT_f_stake",
+    "cvxeth_pool_add_CVX",
+    "cvxeth_pool_add_WETH",
+    "cvxeth_pool_remove",
+    "cvxeth_pool_remove_one",
+    "cvxeth_pool_stake",
+    "osETH_rETH_remove",
+    "osETH_rETH_remove_one",
+    "osETH_rETH_stake",
+    "stETH_ng_f_add_ETH",
+    "stETH_ng_f_add_stETH",
+    "stETH_ng_f_remove",
+    "stETH_ng_f_remove_one",
+    "stETH_ng_f_stake",
+    "steth_pool_add_ETH",
+    "steth_pool_add_stETH",
+    "steth_pool_remove",
+    "steth_pool_remove_one",
+    "steth_pool_stake",
+    "threepool_add_DAI",
+    "threepool_add_USDC",
+    "threepool_add_USDT",
+    "threepool_remove",
+    "threepool_remove_one",
+    "threepool_stake",
+    "unstake",
+    "weeth_ng_add_WETH",
+    "weeth_ng_add_weETH",
+    "weeth_ng_remove",
+    "weeth_ng_remove_one",
+    "weeth_ng_stake"
+   ]
   },
   "dialectic": {
    "name": "Dialectic (DUSD, smDUSD security module)",
@@ -187,6 +429,31 @@
     "request_unstake_weeth",
     "withdraw_liquid_eth",
     "withdraw_liquid_usd"
+   ]
+  },
+  "fluid": {
+   "name": "Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": [
+    "deposit_eth",
+    "deposit_usdc",
+    "deposit_usdt",
+    "deposit_weth",
+    "deposit_wsteth",
+    "redeem_eth",
+    "redeem_usdc",
+    "redeem_usdt",
+    "redeem_weth",
+    "redeem_wsteth",
+    "withdraw_eth",
+    "withdraw_usdc",
+    "withdraw_usdt",
+    "withdraw_weth",
+    "withdraw_wsteth"
    ]
   },
   "flying_tulip": {
@@ -295,7 +562,16 @@
    ],
    "actions": [
     "deposit",
-    "withdraw"
+    "deposit_eurc",
+    "deposit_usdc",
+    "deposit_usdt",
+    "deposit_weth",
+    "redeem",
+    "withdraw",
+    "withdraw_eurc",
+    "withdraw_usdc",
+    "withdraw_usdt",
+    "withdraw_weth"
    ]
   },
   "noon": {
@@ -334,7 +610,30 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "claim",
+    "sUSDE_26NOV2026_add_liquidity",
+    "sUSDE_26NOV2026_buy_pt",
+    "sUSDE_26NOV2026_mint_sy",
+    "sUSDE_26NOV2026_redeem_pt",
+    "sUSDE_26NOV2026_redeem_sy",
+    "sUSDE_26NOV2026_remove_liquidity",
+    "sUSDE_26NOV2026_sell_pt",
+    "sUSDS_26NOV2026_add_liquidity",
+    "sUSDS_26NOV2026_buy_pt",
+    "sUSDS_26NOV2026_mint_sy",
+    "sUSDS_26NOV2026_redeem_pt",
+    "sUSDS_26NOV2026_redeem_sy",
+    "sUSDS_26NOV2026_remove_liquidity",
+    "sUSDS_26NOV2026_sell_pt",
+    "stETH_30DEC2027_add_liquidity",
+    "stETH_30DEC2027_buy_pt",
+    "stETH_30DEC2027_mint_sy",
+    "stETH_30DEC2027_redeem_pt",
+    "stETH_30DEC2027_redeem_sy",
+    "stETH_30DEC2027_remove_liquidity",
+    "stETH_30DEC2027_sell_pt"
+   ]
   },
   "permit2": {
    "name": "Permit2 (shared token approvals)",
@@ -357,6 +656,18 @@
     "redeem_instant"
    ]
   },
+  "rocket_pool": {
+   "name": "Rocket Pool (rETH liquid staking)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": [
+    "burn",
+    "stake"
+   ]
+  },
   "sky": {
    "name": "Sky (USDS, DAI, sUSDS, PSM, staking)",
    "status": "draft",
@@ -364,7 +675,27 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "claim_usds_sky",
+    "claim_usds_spk",
+    "dai_from_usds",
+    "deposit_sdai",
+    "deposit_stusds",
+    "deposit_susds",
+    "redeem_sdai",
+    "redeem_stusds",
+    "redeem_susds",
+    "stake_usds_sky",
+    "stake_usds_spk",
+    "unstake_usds_sky",
+    "unstake_usds_spk",
+    "usdc_from_usds",
+    "usds_from_dai",
+    "usds_from_usdc",
+    "withdraw_sdai",
+    "withdraw_stusds",
+    "withdraw_susds"
+   ]
   },
   "spark": {
    "name": "Spark (SparkLend and Spark savings vaults)",
@@ -373,7 +704,33 @@
    "chains": [
     1
    ],
-   "actions": []
+   "actions": [
+    "borrow",
+    "borrow_eth",
+    "claim_rewards",
+    "disable_collateral",
+    "enable_collateral",
+    "repay",
+    "repay_eth",
+    "repay_with_atokens",
+    "savings_deposit_eth",
+    "savings_deposit_pyusd",
+    "savings_deposit_usdc",
+    "savings_deposit_usdt",
+    "savings_redeem_eth",
+    "savings_redeem_pyusd",
+    "savings_redeem_usdc",
+    "savings_redeem_usdt",
+    "savings_withdraw_eth",
+    "savings_withdraw_pyusd",
+    "savings_withdraw_usdc",
+    "savings_withdraw_usdt",
+    "set_emode",
+    "supply",
+    "supply_eth",
+    "withdraw",
+    "withdraw_eth"
+   ]
   },
   "stablecoins": {
    "name": "Blue-chip USD stablecoins (token contracts only)",
@@ -383,6 +740,34 @@
     1
    ],
    "actions": []
+  },
+  "stader": {
+   "name": "Stader (ETHx liquid staking)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": [
+    "claim_withdrawal",
+    "request_withdrawal",
+    "stake"
+   ]
+  },
+  "stakewise_v3": {
+   "name": "StakeWise v3 (Genesis vault, osETH)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": [
+    "genesis_burn_oseth",
+    "genesis_claim",
+    "genesis_mint_oseth",
+    "genesis_stake",
+    "genesis_unstake"
+   ]
   },
   "strata": {
    "name": "Strata (senior/junior tranches on USDe and NUSD)",
@@ -423,6 +808,29 @@
     "claim_rewards",
     "redeem",
     "unstake"
+   ]
+  },
+  "tokens": {
+   "name": "ERC-20 tokens with no card of their own",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": []
+  },
+  "uniswap_v3": {
+   "name": "Uniswap v3 (concentrated liquidity positions)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": [
+    "approve",
+    "collect",
+    "decrease_liquidity",
+    "mint"
    ]
   },
   "upshift": {
@@ -1613,6 +2021,57 @@
     "note": "Convex pid 64 deposit token for curve.crvCVXETH"
    }
   ],
+  "1:0x0bfc9d54fc184518a81162f8fb99c2eaca081202": [
+   {
+    "chain_id": 1,
+    "address": "0x0bfc9d54Fc184518A81162F8fB99c2eACa081202",
+    "protocol": "balancer_v3",
+    "protocol_name": "Balancer v3 (Vault, routers, pools)",
+    "name": "waEthWETH",
+    "title": "Wrapped Aave Ethereum WETH",
+    "ref": "balancer_v3.waEthWETH",
+    "category": "vault",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "waWETH",
+     "aave static weth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: address-book, card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/balancer_v3/registry.yaml",
+     "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol",
+     "explorer: https://etherscan.io/address/0x0bfc9d54Fc184518A81162F8fB99c2eACa081202#code"
+    ],
+    "proofs": [
+     {
+      "id": "$self.asset() == weth.WETH",
+      "ok": true
+     },
+     {
+      "id": "$self.aToken() == aave_v3.aEthWETH",
+      "ok": true
+     },
+     {
+      "id": "vault.getBufferAsset($self) == weth.WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x487c2C53c0866F0A73ae317bD1A28F63ADcD9aD1",
+     "admin": "0xD3cF979e676265e4f6379749DECe4708B9A22476"
+    },
+    "onchain": {
+     "name": "Wrapped Aave Ethereum WETH",
+     "symbol": "waEthWETH"
+    },
+    "note": "Aave v3 static aToken wrapper for WETH (ERC-4626); the WETH leg of osETH_waWETH and rETH_waEthWETH"
+   }
+  ],
   "1:0x0c0d01abf3e6adfca0989ebba9d6e85dd58eab1e": [
    {
     "chain_id": 1,
@@ -2083,6 +2542,42 @@
     "onchain": {}
    }
   ],
+  "1:0x18084fba666a33d37592fa2633fd49a74dd93a88": [
+   {
+    "chain_id": 1,
+    "address": "0x18084fbA666a33d37592fA2633fD49a74DD93a88",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "tBTC",
+    "title": "tBTC v2",
+    "ref": "tokens.tBTC",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "tbtc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "tBTC v2",
+     "symbol": "tBTC"
+    }
+   }
+  ],
   "1:0x182b723a58739a9c974cfdb385ceadb237453c28": [
    {
     "chain_id": 1,
@@ -2346,6 +2841,42 @@
     }
    }
   ],
+  "1:0x1b0e765f6224c21223aea2af16c1c46e38885a40": [
+   {
+    "chain_id": 1,
+    "address": "0x1B0e765F6224C21223AeA2af16c1C46E38885a40",
+    "protocol": "compound_v3",
+    "protocol_name": "Compound v3 (Comet USDC, WETH and USDT markets)",
+    "name": "comet_rewards",
+    "title": null,
+    "ref": "compound_v3.comet_rewards",
+    "category": "escrow",
+    "kind": "comet_rewards",
+    "eoa": false,
+    "aliases": [
+     "CometRewards",
+     "compound v3 rewards"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/compound_v3/card.yaml",
+     "docs: https://docs.compound.finance/rewards/"
+    ],
+    "proofs": [
+     {
+      "id": "$self.governor() == timelock",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Holds and pays COMP rewards for every mainnet Comet; claim(comet, src, accrue) pays src"
+   }
+  ],
   "1:0x1b74fa5951dfa4c03d0127011548fa79b956f63b": [
    {
     "chain_id": 1,
@@ -2539,6 +3070,38 @@
     "note": "KPK_USDC_Prime's adapter into Morpho markets (adapters(0))"
    }
   ],
+  "1:0x1d8f8f00cfa6758d7be78336684788fb0ee0fa46": [
+   {
+    "chain_id": 1,
+    "address": "0x1d8f8f00cfa6758d7bE78336684788Fb0ee0Fa46",
+    "protocol": "rocket_pool",
+    "protocol_name": "Rocket Pool (rETH liquid staking)",
+    "name": "rocket_storage",
+    "title": null,
+    "ref": "rocket_pool.rocket_storage",
+    "category": "config",
+    "kind": "rocket_storage",
+    "eoa": false,
+    "aliases": [
+     "RocketStorage",
+     "rocket pool storage"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/rocket_pool/registry.yaml",
+     "docs: https://docs.rocketpool.net/overview/contracts-integrations",
+     "explorer: verified source (RocketStorage)"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {},
+    "note": "Rocket Pool's address book: getAddress(keccak256('contract.address', name)) resolves every network contract"
+   }
+  ],
   "1:0x1dbf07a746a08b8be86c673d56acbaec9b50fe04": [
    {
     "chain_id": 1,
@@ -2696,6 +3259,41 @@
     "note": "Balancer v3 pool; the pool contract is also its BPT"
    }
   ],
+  "1:0x1f98431c8ad98523631ae4a59f267346ea31f984": [
+   {
+    "chain_id": 1,
+    "address": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+    "protocol": "uniswap_v3",
+    "protocol_name": "Uniswap v3 (concentrated liquidity positions)",
+    "name": "factory",
+    "title": null,
+    "ref": "uniswap_v3.factory",
+    "category": "config",
+    "kind": "uniswap_v3_factory",
+    "eoa": false,
+    "aliases": [
+     "UniswapV3Factory",
+     "uniswap v3 factory"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: position_manager.factory() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/uniswap_v3/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "position_manager.factory() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "creates pools; getPool(token0, token1, fee) finds one. Not called by any action"
+   }
+  ],
   "1:0x20283cce209b29d19329e8ada47215a52188afdc": [
    {
     "chain_id": 1,
@@ -2816,6 +3414,42 @@
     "onchain": {
      "name": "Aave Ethereum Variable Debt PT_eUSDe_14AUG2025",
      "symbol": "variableDebtEthPT_eUSDe_14AUG2025"
+    }
+   }
+  ],
+  "1:0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": [
+   {
+    "chain_id": 1,
+    "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "WBTC",
+    "title": "Wrapped BTC",
+    "ref": "tokens.WBTC",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "wbtc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Wrapped BTC",
+     "symbol": "WBTC"
     }
    }
   ],
@@ -2964,6 +3598,47 @@
     "proxy": {},
     "onchain": {},
     "note": "called with DELEGATECALL from the Avatar so the Avatar pre-signs the order"
+   }
+  ],
+  "1:0x2411802d8bea09be0af8fd8d08314a63e706b29c": [
+   {
+    "chain_id": 1,
+    "address": "0x2411802D8BEA09be0aF8fD8D08314a63e706b29C",
+    "protocol": "fluid",
+    "protocol_name": "Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)",
+    "name": "fwstETH",
+    "title": "Fluid Wrapped liquid staked Ether 2.0",
+    "ref": "fluid.fwstETH",
+    "category": "vault",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "fluid wsteth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.asset() == wstETH"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/fluid/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.asset() == wstETH",
+      "ok": true
+     },
+     {
+      "id": "lending_factory.allTokens() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Fluid Wrapped liquid staked Ether 2.0",
+     "symbol": "fwstETH"
+    },
+    "note": "ERC-4626 share token and the spender for wstETH deposits"
    }
   ],
   "1:0x24ab03a9a5bc2c49e5523e8d915a3536ac38b91d": [
@@ -3749,6 +4424,50 @@
     ],
     "proxy": {},
     "onchain": {}
+   }
+  ],
+  "1:0x309a862bbc1a00e45506cb8a802d1ff10004c8c0": [
+   {
+    "chain_id": 1,
+    "address": "0x309a862bbC1A00e45506cB8A802D1ff10004c8C0",
+    "protocol": "compound_v3",
+    "protocol_name": "Compound v3 (Comet USDC, WETH and USDT markets)",
+    "name": "governor",
+    "title": "Compound Governor",
+    "ref": "compound_v3.governor",
+    "category": "config",
+    "kind": "governor",
+    "eoa": false,
+    "aliases": [
+     "compound governor"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/compound_v3/registry.yaml",
+     "docs: https://docs.compound.finance/governance/"
+    ],
+    "proofs": [
+     {
+      "id": "timelock.admin() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.timelock() == timelock",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x501Eb63A2120418C581B3bD31CF190b0a0616752",
+     "admin": "0x725ED7F44F0888aeC1b7630AB1ACdced91E0591A"
+    },
+    "onchain": {
+     "name": "Compound Governor"
+    },
+    "note": "COMP-holder governance; admin() of the timelock"
    }
   ],
   "1:0x30d9410ed1d5da1f6c8391af5338c93ab8d4035c": [
@@ -4680,6 +5399,53 @@
      "name": "yoETH",
      "symbol": "yoETH"
     }
+   }
+  ],
+  "1:0x3afdc9bca9213a35503b077a6072f3d0d5ab0840": [
+   {
+    "chain_id": 1,
+    "address": "0x3Afdc9BCA9213A35503b077a6072F3D0d5AB0840",
+    "protocol": "compound_v3",
+    "protocol_name": "Compound v3 (Comet USDC, WETH and USDT markets)",
+    "name": "cUSDTv3",
+    "title": "Compound USDT",
+    "ref": "compound_v3.cUSDTv3",
+    "category": "market",
+    "kind": "comet",
+    "eoa": false,
+    "aliases": [
+     "compound usdt",
+     "comet usdt",
+     "compound v3 usdt"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/compound_v3/card.yaml",
+     "docs: https://docs.compound.finance/#networks"
+    ],
+    "proofs": [
+     {
+      "id": "$self.baseToken() == USDT",
+      "ok": true
+     },
+     {
+      "id": "$self.governor() == timelock",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xAbc1195C5d34DDeBc36885a980A3009BB6f6Db9E",
+     "admin": "0x1EC63B5883C3481134FD50D5DAebc83Ecd2E8779"
+    },
+    "onchain": {
+     "name": "Compound USDT",
+     "symbol": "cUSDTv3"
+    },
+    "note": "Comet proxy: base-token receipt (supplied USDT) and the spender for supply approvals"
    }
   ],
   "1:0x3c20fbfd32243dd9899301c84bce17413eee0a0c": [
@@ -5654,6 +6420,41 @@
     }
    }
   ],
+  "1:0x48319f97e5da1233c21c48b80097c0fb7a20ff86": [
+   {
+    "chain_id": 1,
+    "address": "0x48319f97E5Da1233c21c48b80097c0FB7a20Ff86",
+    "protocol": "stakewise_v3",
+    "protocol_name": "StakeWise v3 (Genesis vault, osETH)",
+    "name": "shared_mev_escrow",
+    "title": null,
+    "ref": "stakewise_v3.shared_mev_escrow",
+    "category": "escrow",
+    "kind": "stakewise_mev_escrow",
+    "eoa": false,
+    "aliases": [
+     "SharedMevEscrow"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/stakewise_v3/registry.yaml",
+     "docs: https://docs.stakewise.io/"
+    ],
+    "proofs": [
+     {
+      "id": "genesis_vault.mevEscrow() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "collects execution-layer rewards for StakeWise vaults without an own escrow"
+   }
+  ],
   "1:0x48351fcc9536da440ae9471220f6dc921b0eb703": [
    {
     "chain_id": 1,
@@ -5794,6 +6595,48 @@
      "name": "Aave Ethereum Variable Debt FBTC",
      "symbol": "variableDebtEthFBTC"
     }
+   }
+  ],
+  "1:0x4abef2263d5a5ed582fc9a9789a41d85b68d69db": [
+   {
+    "chain_id": 1,
+    "address": "0x4ABEF2263d5A5ED582FC9A9789a41D85b68d69DB",
+    "protocol": "stader",
+    "protocol_name": "Stader (ETHx liquid staking)",
+    "name": "stader_config",
+    "title": null,
+    "ref": "stader.stader_config",
+    "category": "config",
+    "kind": "stader_config",
+    "eoa": false,
+    "aliases": [
+     "StaderConfig"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/stader/registry.yaml",
+     "docs: https://www.staderlabs.com/docs-v1/Ethereum/smart-contracts"
+    ],
+    "proofs": [
+     {
+      "id": "ETHx.staderConfig() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.getETHxToken() == ETHx",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x808e8783Ba7e315517952d195E20bC8eDBa7da23",
+     "admin": "0x67B12264Ca3e0037Fc7E22F2457b42643a04C86e"
+    },
+    "onchain": {},
+    "note": "Stader's address book and parameter store"
    }
   ],
   "1:0x4af166c6f2cf882f7b196e3625c3e8f2fe2a8083": [
@@ -6638,6 +7481,42 @@
     }
    }
   ],
+  "1:0x514910771af9ca656af840dff83e8264ecf986ca": [
+   {
+    "chain_id": 1,
+    "address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "LINK",
+    "title": "ChainLink Token",
+    "ref": "tokens.LINK",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "link"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "ChainLink Token",
+     "symbol": "LINK"
+    }
+   }
+  ],
   "1:0x529b6158d1d2992e3129f7c69e81a7c677dc3b12": [
    {
     "chain_id": 1,
@@ -6677,6 +7556,45 @@
      "name": "Spark Variable Debt USDT",
      "symbol": "variableDebtUSDT"
     }
+   }
+  ],
+  "1:0x52aa899454998be5b000ad077a46bbe360f4e497": [
+   {
+    "chain_id": 1,
+    "address": "0x52Aa899454998Be5b000Ad077a46Bbe360F4e497",
+    "protocol": "fluid",
+    "protocol_name": "Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)",
+    "name": "liquidity",
+    "title": null,
+    "ref": "fluid.liquidity",
+    "category": "market",
+    "kind": "fluid_liquidity",
+    "eoa": false,
+    "aliases": [
+     "fluid liquidity layer",
+     "FluidLiquidity"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/fluid/registry.yaml",
+     "docs: https://docs.fluid.instadapp.io/contracts/contracts.html"
+    ],
+    "proofs": [
+     {
+      "id": "lending_factory.LIQUIDITY() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xCc331daf69752BEcE3DC98dBC63eAcd5092266A2",
+     "admin": "0x2386DC45AdDed673317eF068992F19421B481F4c"
+    },
+    "onchain": {},
+    "note": "Fluid's shared liquidity layer: every fToken and Fluid vault holds its funds here. Not called by any action"
    }
   ],
   "1:0x5300a1a15135ea4dc7ad5a167152c01efc9b192a": [
@@ -6855,6 +7773,43 @@
      "name": "Aave Ethereum ENS",
      "symbol": "aEthENS"
     }
+   }
+  ],
+  "1:0x54b91a0d94cb471f37f949c60f7fa7935b551d03": [
+   {
+    "chain_id": 1,
+    "address": "0x54B91A0D94cb471F37f949c60F7Fa7935b551D03",
+    "protocol": "fluid",
+    "protocol_name": "Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)",
+    "name": "lending_factory",
+    "title": null,
+    "ref": "fluid.lending_factory",
+    "category": "config",
+    "kind": "fluid_lending_factory",
+    "eoa": false,
+    "aliases": [
+     "fluid lending factory",
+     "LendingFactory"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/fluid/registry.yaml",
+     "docs: https://docs.fluid.instadapp.io/contracts/contracts.html",
+     "explorer: verified source (FluidLendingFactory)"
+    ],
+    "proofs": [
+     {
+      "id": "$self.LIQUIDITY() == liquidity",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "creates the lending fTokens; allTokens() lists every one"
    }
   ],
   "1:0x56072c95faa701256059aa122697b133aded9279": [
@@ -7288,6 +8243,47 @@
      "name": "Aave Ethereum KNC",
      "symbol": "aEthKNC"
     }
+   }
+  ],
+  "1:0x5c20b550819128074fd538edf79791733ccedd18": [
+   {
+    "chain_id": 1,
+    "address": "0x5C20B550819128074FD538Edf79791733ccEdd18",
+    "protocol": "fluid",
+    "protocol_name": "Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)",
+    "name": "fUSDT",
+    "title": "Fluid Tether USD",
+    "ref": "fluid.fUSDT",
+    "category": "vault",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "fluid usdt"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.asset() == USDT"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/fluid/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.asset() == USDT",
+      "ok": true
+     },
+     {
+      "id": "lending_factory.allTokens() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Fluid Tether USD",
+     "symbol": "fUSDT"
+    },
+    "note": "ERC-4626 share token and the spender for USDT deposits"
    }
   ],
   "1:0x5c647ce0ae10658ec44fa4e11a51c96e94efd1dd": [
@@ -7966,6 +8962,42 @@
     }
    }
   ],
+  "1:0x657e8c867d8b37dcc18fa4caead9c45eb088c642": [
+   {
+    "chain_id": 1,
+    "address": "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "eBTC",
+    "title": "ether.fi BTC",
+    "ref": "tokens.eBTC",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "ebtc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "ether.fi BTC",
+     "symbol": "eBTC"
+    }
+   }
+  ],
   "1:0x65906988adee75306021c417a1a3458040239602": [
    {
     "chain_id": 1,
@@ -8640,6 +9672,45 @@
      "admin": "0xA28c08f165116587D4F3E708743B4dEe155c5E64"
     },
     "onchain": {}
+   }
+  ],
+  "1:0x6d903f6003cca6255d85cca4d3b5e5146dc33925": [
+   {
+    "chain_id": 1,
+    "address": "0x6d903f6003cca6255D85CcA4D3B5E5146dC33925",
+    "protocol": "compound_v3",
+    "protocol_name": "Compound v3 (Comet USDC, WETH and USDT markets)",
+    "name": "timelock",
+    "title": null,
+    "ref": "compound_v3.timelock",
+    "category": "timelock",
+    "kind": "compound_timelock",
+    "eoa": false,
+    "aliases": [
+     "compound timelock"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/compound_v3/registry.yaml",
+     "docs: https://docs.compound.finance/governance/"
+    ],
+    "proofs": [
+     {
+      "id": "cUSDCv3.governor() == $self",
+      "ok": true
+     },
+     {
+      "id": "governor.timelock() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "governor() of every mainnet Comet and of CometRewards; executes Compound governance"
    }
   ],
   "1:0x6de3e52a1b7294a34e271a508082b1ff4a37e30e": [
@@ -10234,6 +11305,83 @@
     }
    }
   ],
+  "1:0x8236a87084f8b84306f72007f36f2618a5634494": [
+   {
+    "chain_id": 1,
+    "address": "0x8236a87084f8B84306f72007F36F2618A5634494",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "LBTC",
+    "title": "Lombard Staked Bitcoin",
+    "ref": "tokens.LBTC",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "lbtc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x072072317469ebB6C340a47e41561C9C3b782BD9",
+     "admin": "0xbae061C73876952aa2C5e483B74DfA785425f879"
+    },
+    "onchain": {
+     "name": "Lombard Staked Bitcoin",
+     "symbol": "LBTC"
+    }
+   }
+  ],
+  "1:0x8292bb45bf1ee4d140127049757c2e0ff06317ed": [
+   {
+    "chain_id": 1,
+    "address": "0x8292Bb45bf1Ee4d140127049757C2E0fF06317eD",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "RLUSD",
+    "title": "RLUSD",
+    "ref": "tokens.RLUSD",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "rlusd"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x9747a0d261c2d56Eb93f542068e5d1E23170fa9e"
+    },
+    "onchain": {
+     "name": "RLUSD",
+     "symbol": "RLUSD"
+    }
+   }
+  ],
   "1:0x82f9c5ad306bba1ad0de49bb5fa6f01bf61085ef": [
    {
     "chain_id": 1,
@@ -10371,6 +11519,80 @@
      "implementation": "0xFF42Ce30054dcE7dc7C1282a9a497aa58eaBCe99"
     },
     "onchain": {}
+   }
+  ],
+  "1:0x84db6ee82b7cf3b47e8f19270abde5718b936670": [
+   {
+    "chain_id": 1,
+    "address": "0x84db6eE82b7Cf3b47E8F19270abdE5718B936670",
+    "protocol": "ankr",
+    "protocol_name": "Ankr (ankrETH liquid staking)",
+    "name": "eth2_staking",
+    "title": null,
+    "ref": "ankr.eth2_staking",
+    "category": "staking",
+    "kind": "ankr_global_pool",
+    "eoa": false,
+    "aliases": [
+     "GlobalPool",
+     "ankr eth staking"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: flash_unstake.ethPool() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/ankr/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "flash_unstake.ethPool() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xEcce8778214Fd9fe37C141a00cFf19853Ef5Bc4A",
+     "admin": "0xCc4E08A5BFA887621Ad68826a0D5913d7a2cb392"
+    },
+    "onchain": {},
+    "note": "stakeAndClaimAethC() payable mints ankrETH; unstakeAETH(shares) queues ETH paid out after validator exits"
+   }
+  ],
+  "1:0x853d955acef822db058eb8505911ed77f175b99e": [
+   {
+    "chain_id": 1,
+    "address": "0x853d955aCEf822Db058eb8505911ED77F175b99e",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "FRAX",
+    "title": "Frax",
+    "ref": "tokens.FRAX",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "frax"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Frax",
+     "symbol": "FRAX"
+    }
    }
   ],
   "1:0x856900aa78e856a5df1a2665ee3a66b2487cd68f": [
@@ -11427,6 +12649,48 @@
     "note": "settles the orders; the pre-signature lives here. Not called directly"
    }
   ],
+  "1:0x90551c1795392094fe6d29b758eccd233cfaa260": [
+   {
+    "chain_id": 1,
+    "address": "0x90551c1795392094FE6D29B758EcCD233cFAa260",
+    "protocol": "fluid",
+    "protocol_name": "Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)",
+    "name": "fWETH",
+    "title": "Fluid Wrapped Ether",
+    "ref": "fluid.fWETH",
+    "category": "vault",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "fluid weth",
+     "fluid eth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.asset() == WETH"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/fluid/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.asset() == WETH",
+      "ok": true
+     },
+     {
+      "id": "lending_factory.allTokens() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Fluid Wrapped Ether",
+     "symbol": "fWETH"
+    },
+    "note": "ERC-4626 over WETH; also takes native ETH (depositNative / withdrawNative)"
+   }
+  ],
   "1:0x91b7d78bf92db564221f6b5aee744d1727d1dd1e": [
    {
     "chain_id": 1,
@@ -12403,6 +13667,48 @@
     "note": "Convex pid 470 rewards (BaseRewardPool): staked balance, getReward(), withdrawAndUnwrap()"
    }
   ],
+  "1:0x9f0491b32dbce587c50c4c43ab303b06478193a7": [
+   {
+    "chain_id": 1,
+    "address": "0x9F0491B32DBce587c50c4C43AB303b06478193A7",
+    "protocol": "stader",
+    "protocol_name": "Stader (ETHx liquid staking)",
+    "name": "user_withdraw_manager",
+    "title": null,
+    "ref": "stader.user_withdraw_manager",
+    "category": "queue",
+    "kind": "stader_withdraw_queue",
+    "eoa": false,
+    "aliases": [
+     "UserWithdrawalManager",
+     "stader withdrawals"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: stader_config.getUserWithdrawManager() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/stader/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "stader_config.getUserWithdrawManager() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.staderConfig() == stader_config",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x678f0D5Aac7398502B50B24B3Ce67EA2dC4Fc29C",
+     "admin": "0x67B12264Ca3e0037Fc7E22F2457b42643a04C86e"
+    },
+    "onchain": {},
+    "note": "requestWithdraw(ethx, owner) pulls ETHx and queues ETH for owner; claim(requestId) pays the owner"
+   }
+  ],
   "1:0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2": [
    {
     "chain_id": 1,
@@ -12431,6 +13737,47 @@
      "name": "Maker",
      "symbol": "MKR"
     }
+   }
+  ],
+  "1:0x9fb7b4477576fe5b32be4c1843afb1e55f251b33": [
+   {
+    "chain_id": 1,
+    "address": "0x9Fb7b4477576Fe5B32be4C1843aFB1e55F251B33",
+    "protocol": "fluid",
+    "protocol_name": "Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)",
+    "name": "fUSDC",
+    "title": "Fluid USD Coin",
+    "ref": "fluid.fUSDC",
+    "category": "vault",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "fluid usdc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.asset() == USDC"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/fluid/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.asset() == USDC",
+      "ok": true
+     },
+     {
+      "id": "lending_factory.allTokens() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Fluid USD Coin",
+     "symbol": "fUSDC"
+    },
+    "note": "ERC-4626 share token and the spender for USDC deposits"
    }
   ],
   "1:0x9fdd52efeb601e4bc78b89c6490505b8ac637e9f": [
@@ -12506,6 +13853,92 @@
      "name": "USD Coin",
      "symbol": "USDC"
     }
+   }
+  ],
+  "1:0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": [
+   {
+    "chain_id": 1,
+    "address": "0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "rsETH",
+    "title": "rsETH",
+    "ref": "tokens.rsETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "rseth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x7159107483e623707C18C6E06cBc095bd0717783",
+     "admin": "0xb61e0E39b6d4030C36A176f576aaBE44BF59Dc78"
+    },
+    "onchain": {
+     "name": "rsETH",
+     "symbol": "rsETH"
+    }
+   }
+  ],
+  "1:0xa17581a9e3356d9a858b789d68b4d866e593ae94": [
+   {
+    "chain_id": 1,
+    "address": "0xA17581A9E3356d9A858b789D68B4d866e593aE94",
+    "protocol": "compound_v3",
+    "protocol_name": "Compound v3 (Comet USDC, WETH and USDT markets)",
+    "name": "cWETHv3",
+    "title": "Compound WETH",
+    "ref": "compound_v3.cWETHv3",
+    "category": "market",
+    "kind": "comet",
+    "eoa": false,
+    "aliases": [
+     "compound weth",
+     "comet weth",
+     "compound v3 weth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/compound_v3/card.yaml",
+     "docs: https://docs.compound.finance/#networks"
+    ],
+    "proofs": [
+     {
+      "id": "$self.baseToken() == WETH",
+      "ok": true
+     },
+     {
+      "id": "$self.governor() == timelock",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xb647A44d6893e5328F3E307FAdA767197daF4f51",
+     "admin": "0x1EC63B5883C3481134FD50D5DAebc83Ecd2E8779"
+    },
+    "onchain": {
+     "name": "Compound WETH",
+     "symbol": "cWETHv3"
+    },
+    "note": "Comet proxy: base-token receipt (supplied WETH) and the spender for supply approvals"
    }
   ],
   "1:0xa188eec8f81263234da3622a406892f3d630f98c": [
@@ -12648,6 +14081,51 @@
     "proxy": {},
     "onchain": {},
     "note": "pulls reUSD from the user: the reUSD approve spender for redeemInstant"
+   }
+  ],
+  "1:0xa35b1b31ce002fbf2058d22f30f95d405200a15b": [
+   {
+    "chain_id": 1,
+    "address": "0xA35b1B31Ce002FBF2058D22F30f95D405200A15b",
+    "protocol": "stader",
+    "protocol_name": "Stader (ETHx liquid staking)",
+    "name": "ETHx",
+    "title": "ETHx",
+    "ref": "stader.ETHx",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "ethx",
+     "stader ethx"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: stader_config.getETHxToken() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/stader/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "stader_config.getETHxToken() == $self",
+      "ok": true
+     },
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x4C22fFd479637EA0eD61D451CBe6355627283358",
+     "admin": "0x67B12264Ca3e0037Fc7E22F2457b42643a04C86e"
+    },
+    "onchain": {
+     "name": "ETHx",
+     "symbol": "ETHx"
+    },
+    "note": "Stader's liquid staking token; minted by stake_pool_manager"
    }
   ],
   "1:0xa38fca8c6bf9bda52e76eb78f08caa3be7c5a970": [
@@ -13372,6 +14850,44 @@
     }
    }
   ],
+  "1:0xac0f906e433d58fa868f936e8a43230473652885": [
+   {
+    "chain_id": 1,
+    "address": "0xAC0F906E433d58FA868F936E8A43230473652885",
+    "protocol": "stakewise_v3",
+    "protocol_name": "StakeWise v3 (Genesis vault, osETH)",
+    "name": "genesis_vault",
+    "title": null,
+    "ref": "stakewise_v3.genesis_vault",
+    "category": "staking",
+    "kind": "stakewise_vault",
+    "eoa": false,
+    "aliases": [
+     "stakewise genesis",
+     "Genesis",
+     "EthGenesisVault"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.mevEscrow() == shared_mev_escrow"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/stakewise_v3/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.mevEscrow() == shared_mev_escrow",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xf113BfD6423291b1dD2cA76f897bFf54456e7c88"
+    },
+    "onchain": {},
+    "note": "StakeWise's main ETH vault. deposit mints non-transferable vault shares; mintOsToken mints osETH against them"
+   }
+  ],
   "1:0xac15fffdca77fc86770beaba20cbc1bc2d00494c": [
    {
     "chain_id": 1,
@@ -13597,6 +15113,45 @@
     "proxy": {},
     "onchain": {},
     "note": "v3 Router (version 2): add/remove liquidity and swaps for a single pool; pulls tokens via Permit2"
+   }
+  ],
+  "1:0xae78736cd615f374d3085123a210448e74fc6393": [
+   {
+    "chain_id": 1,
+    "address": "0xae78736Cd615f374D3085123A210448E74Fc6393",
+    "protocol": "rocket_pool",
+    "protocol_name": "Rocket Pool (rETH liquid staking)",
+    "name": "rETH",
+    "title": "Rocket Pool ETH",
+    "ref": "rocket_pool.rETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "reth",
+     "rocket pool eth"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/rocket_pool/card.yaml",
+     "docs: https://docs.rocketpool.net/overview/contracts-integrations"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Rocket Pool ETH",
+     "symbol": "rETH"
+    },
+    "note": "rETH token; burn(rethAmount) redeems for ETH from the deposit pool / rETH collateral"
    }
   ],
   "1:0xae7ab96520de3a18e5e111b5eaab095312d7fe84": [
@@ -15086,6 +16641,42 @@
     "note": "Executes Sky governance spells"
    }
   ],
+  "1:0xbe9895146f7af43049ca1c1ae358b0541ea49704": [
+   {
+    "chain_id": 1,
+    "address": "0xBe9895146f7AF43049ca1c1AE358B0541Ea49704",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "cbETH",
+    "title": "Coinbase Wrapped Staked ETH",
+    "ref": "tokens.cbETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "cbeth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Coinbase Wrapped Staked ETH",
+     "symbol": "cbETH"
+    }
+   }
+  ],
   "1:0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7": [
    {
     "chain_id": 1,
@@ -15120,6 +16711,45 @@
     "proxy": {},
     "onchain": {},
     "note": "Curve pool (Curve.fi DAI/USDC/USDT); its LP token is the separate contract 3Crv"
+   }
+  ],
+  "1:0xbf5495efe5db9ce00f80364c8b423567e58d2110": [
+   {
+    "chain_id": 1,
+    "address": "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "ezETH",
+    "title": "Renzo Restaked ETH",
+    "ref": "tokens.ezETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "ezeth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x9bD289b14Dd6E0782aF82eEb3FCfeed4354CDA2C",
+     "admin": "0x91625601e2BbBEb7171C40c79FadBCFbFf6A1982"
+    },
+    "onchain": {
+     "name": "Renzo Restaked ETH",
+     "symbol": "ezETH"
+    }
    }
   ],
   "1:0xbf98480425a29197e5d99d003017f63a1e595d02": [
@@ -15201,6 +16831,45 @@
     "proxy": {},
     "onchain": {},
     "note": "Curve gauge for 3Crv: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
+  "1:0xc00e94cb662c3520282e6f5717214004a7f26888": [
+   {
+    "chain_id": 1,
+    "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+    "protocol": "compound_v3",
+    "protocol_name": "Compound v3 (Comet USDC, WETH and USDT markets)",
+    "name": "COMP",
+    "title": "Compound",
+    "ref": "compound_v3.COMP",
+    "category": "governance",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "comp",
+     "compound token"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/compound_v3/registry.yaml",
+     "docs: https://docs.compound.finance/governance/"
+    ],
+    "proofs": [
+     {
+      "id": "governor.token() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Compound",
+     "symbol": "COMP"
+    },
+    "note": "reward token paid by comet_rewards"
    }
   ],
   "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": [
@@ -15815,6 +17484,96 @@
     }
    }
   ],
+  "1:0xc36442b4a4522e871399cd717abdd847ab11fe88": [
+   {
+    "chain_id": 1,
+    "address": "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
+    "protocol": "uniswap_v3",
+    "protocol_name": "Uniswap v3 (concentrated liquidity positions)",
+    "name": "position_manager",
+    "title": "Uniswap V3 Positions NFT-V1",
+    "ref": "uniswap_v3.position_manager",
+    "category": "minter",
+    "kind": "uniswap_v3_npm",
+    "eoa": false,
+    "aliases": [
+     "NonfungiblePositionManager",
+     "uniswap v3 positions",
+     "UNI-V3-POS"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.factory() == factory"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/uniswap_v3/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.factory() == factory",
+      "ok": true
+     },
+     {
+      "id": "$self.WETH9() == WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Uniswap V3 Positions NFT-V1",
+     "symbol": "UNI-V3-POS"
+    },
+    "note": "mints / manages LP position NFTs and is the spender for every LP token approve"
+   }
+  ],
+  "1:0xc3d688b66703497daa19211eedff47f25384cdc3": [
+   {
+    "chain_id": 1,
+    "address": "0xc3d688B66703497DAA19211EEdff47f25384cdc3",
+    "protocol": "compound_v3",
+    "protocol_name": "Compound v3 (Comet USDC, WETH and USDT markets)",
+    "name": "cUSDCv3",
+    "title": "Compound USDC",
+    "ref": "compound_v3.cUSDCv3",
+    "category": "market",
+    "kind": "comet",
+    "eoa": false,
+    "aliases": [
+     "compound usdc",
+     "comet usdc",
+     "compound v3 usdc"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/compound_v3/card.yaml",
+     "docs: https://docs.compound.finance/#networks"
+    ],
+    "proofs": [
+     {
+      "id": "$self.baseToken() == USDC",
+      "ok": true
+     },
+     {
+      "id": "$self.governor() == timelock",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x63e749153BaF1838f63cA22c275370BD2B1cEB15",
+     "admin": "0x1EC63B5883C3481134FD50D5DAebc83Ecd2E8779"
+    },
+    "onchain": {
+     "name": "Compound USDC",
+     "symbol": "cUSDCv3"
+    },
+    "note": "Comet proxy: base-token receipt (supplied USDC) and the spender for supply approvals"
+   }
+  ],
   "1:0xc528f0c91cfae4fd86a68f6dfd4d7284707bec68": [
    {
     "chain_id": 1,
@@ -16150,6 +17909,42 @@
     }
    }
   ],
+  "1:0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": [
+   {
+    "chain_id": 1,
+    "address": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "cbBTC",
+    "title": "Coinbase Wrapped BTC",
+    "ref": "tokens.cbBTC",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "cbbtc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Coinbase Wrapped BTC",
+     "symbol": "cbBTC"
+    }
+   }
+  ],
   "1:0xcbc72d92b2dc8187414f6734718563898740c0bc": [
    {
     "chain_id": 1,
@@ -16388,6 +18183,38 @@
     "onchain": {}
    }
   ],
+  "1:0xce15294273cfb9d9b628f4d61636623decdf4fdc": [
+   {
+    "chain_id": 1,
+    "address": "0xCE15294273CFb9D9b628F4D61636623decDF4fdC",
+    "protocol": "rocket_pool",
+    "protocol_name": "Rocket Pool (rETH liquid staking)",
+    "name": "deposit_pool",
+    "title": null,
+    "ref": "rocket_pool.deposit_pool",
+    "category": "staking",
+    "kind": "rocket_deposit_pool",
+    "eoa": false,
+    "aliases": [
+     "rocketDepositPool",
+     "rocket pool deposit pool"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/rocket_pool/card.yaml",
+     "docs: https://docs.rocketpool.net/overview/contracts-integrations",
+     "explorer: verified source (RocketDepositPool)"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {},
+    "note": "deposit() payable mints rETH to msg.sender. Address changes on Rocket Pool upgrades (see adding)"
+   }
+  ],
   "1:0xce6ca9cdce00a2b0c0d1dac93894f4bd2c960567": [
    {
     "chain_id": 1,
@@ -16500,6 +18327,48 @@
     "proxy": {},
     "onchain": {},
     "note": "CVX staking (cvxRewardPool), earns cvxCRV"
+   }
+  ],
+  "1:0xcf5ea1b38380f6af39068375516daf40ed70d299": [
+   {
+    "chain_id": 1,
+    "address": "0xcf5EA1b38380f6aF39068375516Daf40Ed70D299",
+    "protocol": "stader",
+    "protocol_name": "Stader (ETHx liquid staking)",
+    "name": "stake_pool_manager",
+    "title": null,
+    "ref": "stader.stake_pool_manager",
+    "category": "staking",
+    "kind": "stader_stake_pool_manager",
+    "eoa": false,
+    "aliases": [
+     "StakePoolManager",
+     "stader staking"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: stader_config.getStakePoolManager() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/stader/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "stader_config.getStakePoolManager() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.staderConfig() == stader_config",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x716DF97EBC05CCb2745Bf04CD67df75cf2d11ee9",
+     "admin": "0x67B12264Ca3e0037Fc7E22F2457b42643a04C86e"
+    },
+    "onchain": {},
+    "note": "deposit(receiver) payable mints ETHx to receiver"
    }
   ],
   "1:0xcf8d0c70c850859266f5c338b38f9d663181c314": [
@@ -16714,6 +18583,44 @@
     "proxy": {},
     "onchain": {},
     "note": "mint(gauge) claims CRV emissions for a gauge deposit"
+   }
+  ],
+  "1:0xd11c452fc99cf405034ee446803b6f6c1f6d5ed8": [
+   {
+    "chain_id": 1,
+    "address": "0xD11c452fc99cF405034ee446803b6F6c1F6d5ED8",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "tETH",
+    "title": "Treehouse ETH",
+    "ref": "tokens.tETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "teth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xD1A622566F277AA76c3C47A30469432AAec95E38"
+    },
+    "onchain": {
+     "name": "Treehouse ETH",
+     "symbol": "tETH"
+    }
    }
   ],
   "1:0xd15f11b334e1e233127302e5f759c17da1260df5": [
@@ -17696,6 +19603,44 @@
     }
    }
   ],
+  "1:0xe343167631d89b6ffc58b88d6b7fb0228795491d": [
+   {
+    "chain_id": 1,
+    "address": "0xe343167631d89B6Ffc58B88d6b7fB0228795491D",
+    "protocol": "tokens",
+    "protocol_name": "ERC-20 tokens with no card of their own",
+    "name": "USDG",
+    "title": "Global Dollar",
+    "ref": "tokens.USDG",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "usdg"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/tokens/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xFACd5ff359aDf87822374275699Dd518aAf9a65F"
+    },
+    "onchain": {
+     "name": "Global Dollar",
+     "symbol": "USDG"
+    }
+   }
+  ],
   "1:0xe3490297a08d6fc8da46edb7b6142e4f461b62d3": [
    {
     "chain_id": 1,
@@ -18021,6 +19966,47 @@
      "name": "Aave Ethereum Lido Variable Debt tETH",
      "symbol": "variableDebtEthLidotETH"
     }
+   }
+  ],
+  "1:0xe95a203b1a91a908f9b9ce46459d101078c2c3cb": [
+   {
+    "chain_id": 1,
+    "address": "0xE95A203B1a91a908F9B9CE46459d101078c2c3cb",
+    "protocol": "ankr",
+    "protocol_name": "Ankr (ankrETH liquid staking)",
+    "name": "ankrETH",
+    "title": "Ankr Staked ETH",
+    "ref": "ankr.ankrETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "ankreth",
+     "aethc"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: flash_unstake.ankreth() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/ankr/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "flash_unstake.ankreth() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xE672E0E0101A7F58d728751E2a5e6Da5Ff1FDa64",
+     "admin": "0xCc4E08A5BFA887621Ad68826a0D5913d7a2cb392"
+    },
+    "onchain": {
+     "name": "Ankr Staked ETH",
+     "symbol": "ankrETH"
+    },
+    "note": "Ankr's reward-bearing liquid staking token (ratio() falls as rewards accrue)"
    }
   ],
   "1:0xe9b725010a9e419412ed67d0fa5f3a5f40159d32": [
@@ -18468,6 +20454,48 @@
     }
    }
   ],
+  "1:0xf047f23acfdb1315cf63ad8ab5146d5fda4267af": [
+   {
+    "chain_id": 1,
+    "address": "0xf047f23ACFdB1315cF63Ad8aB5146d5fDa4267Af",
+    "protocol": "ankr",
+    "protocol_name": "Ankr (ankrETH liquid staking)",
+    "name": "flash_unstake",
+    "title": null,
+    "ref": "ankr.flash_unstake",
+    "category": "queue",
+    "kind": "ankr_flash_unstake",
+    "eoa": false,
+    "aliases": [
+     "FlashUnstake",
+     "ankr flash unstake"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.ankreth() == ankrETH"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/ankr/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.ankreth() == ankrETH",
+      "ok": true
+     },
+     {
+      "id": "$self.weth() == WETH",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xdC8Df5eE5072f726Dc633dd8e7a6B19695689FD2",
+     "admin": "0x595987a11656e6d7Bc8779E8261E228E0Ced9c5D"
+    },
+    "onchain": {},
+    "note": "instant ankrETH -> ETH against its own liquidity, for a fee"
+   }
+  ],
   "1:0xf0bb20865277abd641a307ece5ee04e79073416c": [
    {
     "chain_id": 1,
@@ -18539,6 +20567,44 @@
      "symbol": "cvxETH+ETH"
     },
     "note": "Convex pid 470 deposit token for curve.ETH_ETH"
+   }
+  ],
+  "1:0xf1c9acdc66974dfb6decb12aa385b9cd01190e38": [
+   {
+    "chain_id": 1,
+    "address": "0xf1C9acDc66974dFB6dEcB12aA385b9cD01190E38",
+    "protocol": "stakewise_v3",
+    "protocol_name": "StakeWise v3 (Genesis vault, osETH)",
+    "name": "osETH",
+    "title": "Staked ETH",
+    "ref": "stakewise_v3.osETH",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "oseth",
+     "stakewise oseth"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/stakewise_v3/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "aave_v3.pool.getReservesList() contains $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Staked ETH",
+     "symbol": "osETH"
+    },
+    "note": "StakeWise's overcollateralized liquid staking token, minted against vault shares"
    }
   ],
   "1:0xf1eee0957267b1a474323ff9cff7719e964969fa": [
@@ -19788,6 +21854,13 @@
    "to_ref": "convex.cvxETH_ETH"
   },
   {
+   "from": "1:0x309a862bbc1a00e45506cb8a802d1ff10004c8c0",
+   "relation": "admin_of",
+   "to": "1:0x6d903f6003cca6255d85cca4d3b5e5146dc33925",
+   "from_ref": "compound_v3.governor",
+   "to_ref": "compound_v3.timelock"
+  },
+  {
    "from": "1:0x30d9410ed1d5da1f6c8391af5338c93ab8d4035c",
    "relation": "underlying_of",
    "to": "1:0x689440f2ff927e1f24c72f1087e1faf471ece1c8",
@@ -20301,6 +22374,13 @@
   {
    "from": "1:0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
    "relation": "underlying_of",
+   "to": "1:0x2411802d8bea09be0af8fd8d08314a63e706b29c",
+   "from_ref": "lido.wstETH",
+   "to_ref": "fluid.fwstETH"
+  },
+  {
+   "from": "1:0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+   "relation": "underlying_of",
    "to": "1:0xa9d17f6d3285208280a1fd9b94479c62e0aaba64",
    "from_ref": "lido.wstETH",
    "to_ref": "kpk.kpkwstETH"
@@ -20693,6 +22773,13 @@
   {
    "from": "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
    "relation": "underlying_of",
+   "to": "1:0x9fb7b4477576fe5b32be4c1843afb1e55f251b33",
+   "from_ref": "stablecoins.USDC",
+   "to_ref": "fluid.fUSDC"
+  },
+  {
+   "from": "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+   "relation": "underlying_of",
    "to": "1:0xa188eec8f81263234da3622a406892f3d630f98c",
    "from_ref": "stablecoins.USDC",
    "to_ref": "sky.usds_psm_wrapper"
@@ -20710,6 +22797,13 @@
    "to": "1:0xbc65ad17c5c0a2a4d159fa5a503f4992c7b545fe",
    "from_ref": "stablecoins.USDC",
    "to_ref": "spark.sUSDC"
+  },
+  {
+   "from": "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+   "relation": "underlying_of",
+   "to": "1:0xc3d688b66703497daa19211eedff47f25384cdc3",
+   "from_ref": "stablecoins.USDC",
+   "to_ref": "compound_v3.cUSDCv3"
   },
   {
    "from": "1:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -20924,6 +23018,13 @@
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
    "relation": "underlying_of",
+   "to": "1:0x0bfc9d54fc184518a81162f8fb99c2eaca081202",
+   "from_ref": "weth.WETH",
+   "to_ref": "balancer_v3.waEthWETH"
+  },
+  {
+   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+   "relation": "underlying_of",
    "to": "1:0x2e7576042566f8d6990e07a1b61ad1efd86ae70d",
    "from_ref": "weth.WETH",
    "to_ref": "spark.variableDebtWETH"
@@ -20973,6 +23074,13 @@
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
    "relation": "underlying_of",
+   "to": "1:0x90551c1795392094fe6d29b758eccd233cfaa260",
+   "from_ref": "weth.WETH",
+   "to_ref": "fluid.fWETH"
+  },
+  {
+   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+   "relation": "underlying_of",
    "to": "1:0x91b7d78bf92db564221f6b5aee744d1727d1dd1e",
    "from_ref": "weth.WETH",
    "to_ref": "aave_v3.variableDebtEthLidoWETH"
@@ -20983,6 +23091,13 @@
    "to": "1:0x9396dcbf78fc526bb003665337c5e73b699571ef",
    "from_ref": "weth.WETH",
    "to_ref": "kpk.kpkWETH"
+  },
+  {
+   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+   "relation": "underlying_of",
+   "to": "1:0xa17581a9e3356d9a858b789d68b4d866e593ae94",
+   "from_ref": "weth.WETH",
+   "to_ref": "compound_v3.cWETHv3"
   },
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -21239,9 +23354,23 @@
   {
    "from": "1:0xdac17f958d2ee523a2206206994597c13d831ec7",
    "relation": "underlying_of",
+   "to": "1:0x3afdc9bca9213a35503b077a6072f3d0d5ab0840",
+   "from_ref": "stablecoins.USDT",
+   "to_ref": "compound_v3.cUSDTv3"
+  },
+  {
+   "from": "1:0xdac17f958d2ee523a2206206994597c13d831ec7",
+   "relation": "underlying_of",
    "to": "1:0x529b6158d1d2992e3129f7c69e81a7c677dc3b12",
    "from_ref": "stablecoins.USDT",
    "to_ref": "spark.variableDebtUSDT"
+  },
+  {
+   "from": "1:0xdac17f958d2ee523a2206206994597c13d831ec7",
+   "relation": "underlying_of",
+   "to": "1:0x5c20b550819128074fd538edf79791733ccedd18",
+   "from_ref": "stablecoins.USDT",
+   "to_ref": "fluid.fUSDT"
   },
   {
    "from": "1:0xdac17f958d2ee523a2206206994597c13d831ec7",

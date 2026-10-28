@@ -12,4 +12,77 @@ adding: >
 
 contracts: {}
 
-actions: {}
+actions:
+  stake_aave:
+    summary: "AAVE -> stkAAVE (Safety Module), credited to the Vault"
+    input: AAVE
+    calls:
+      - target: AAVE
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: stkAAVE, amount: $amount }
+      - target: stkAAVE
+        sig: "stake(address to, uint256 amount)"
+        args: { to: $AVATAR, amount: $amount }
+  cooldown_stkaave:
+    summary: "start the stkAAVE cooldown for the Vault's whole balance (needed before unstake)"
+    calls:
+      - target: stkAAVE
+        sig: "cooldown()"
+        args: {}
+        note: "unstake opens after getCooldownSeconds() (2 days today) and stays open for UNSTAKE_WINDOW(); staking more later can push the cooldown back"
+  unstake_aave:
+    summary: "stkAAVE -> AAVE after the cooldown, paid to the Vault"
+    input: stkAAVE
+    calls:
+      - target: stkAAVE
+        sig: "redeem(address to, uint256 amount)"
+        args: { to: $AVATAR, amount: $amount }
+        note: "reverts unless cooldown_stkaave ran and the cooldown has passed (read stakersCooldowns(Vault)); not fork-run for that reason"
+  claim_stkaave_rewards:
+    summary: "claim all AAVE rewards accrued on stkAAVE, paid to the Vault"
+    calls:
+      - target: stkAAVE
+        sig: "claimRewards(address to, uint256 amount)"
+        args: { to: $AVATAR, amount: 115792089237316195423570985008687907853269984665640564039457584007913129639935 }
+        note: "amount = type(uint256).max claims all of it; getTotalRewardsBalance(Vault) shows what is claimable"
+  claim_and_stake_stkaave_rewards:
+    summary: "claim the AAVE rewards accrued on stkAAVE and stake them straight back into stkAAVE for the Vault"
+    calls:
+      - target: stkAAVE
+        sig: "claimRewardsAndStake(address to, uint256 amount)"
+        args: { to: $AVATAR, amount: 115792089237316195423570985008687907853269984665640564039457584007913129639935 }
+  deposit_sgho:
+    summary: "GHO -> sGho (savings GHO), credited to the Vault"
+    input: stablecoins.GHO
+    calls:
+      - target: stablecoins.GHO
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: sGho, amount: $amount }
+      - target: sGho
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  withdraw_sgho:
+    summary: "sGho -> an exact amount of GHO, paid to the Vault"
+    input: stablecoins.GHO
+    calls:
+      - target: sGho
+        sig: "withdraw(uint256 assets, address receiver, address owner)"
+        args: { assets: $amount, receiver: $AVATAR, owner: $AVATAR }
+  redeem_sgho:
+    summary: "an exact number of sGho shares -> GHO, paid to the Vault"
+    input: sGho
+    calls:
+      - target: sGho
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+
+reads:
+  - id: stkaave_cooldown
+    target: stkAAVE
+    sig: "stakersCooldowns(address staker) returns (uint256)"
+    args: [$AVATAR]
+  - id: stkaave_rewards
+    target: stkAAVE
+    sig: "getTotalRewardsBalance(address staker) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18

@@ -1,0 +1,73 @@
+protocol: aave_v3_etherfi
+name: Aave v3 EtherFi market (exit only)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "address-book: https://github.com/bgd-labs/aave-address-book"
+adding: |
+  The EtherFi market's addresses (pool, aEthEtherFi* / variableDebtEthEtherFi* tokens) live in
+  `aave_v3/registry.yaml` with the `etherfi_` prefix and are referenced here. Every reserve's
+  supply and borrow cap is 1 token (read `getReserveCaps` on aave_v3.etherfi_data_provider), so
+  the market only takes exits: withdraw, repay, disable collateral, claim. If caps are raised
+  again, copy the supply / borrow / enable_collateral actions from `aave_v3_prime`.
+
+contracts:
+  pool: { ref: aave_v3.etherfi_pool }
+  USDC: { ref: stablecoins.USDC }
+  PYUSD: { ref: stablecoins.PYUSD }
+  weETH: { ref: etherfi.weETH }
+  FRAX: { ref: tokens.FRAX }
+
+reads:
+  - id: account_data
+    target: pool
+    sig: "getUserAccountData(address user) returns (uint256 totalCollateralBase, uint256 totalDebtBase, uint256 availableBorrowsBase, uint256 currentLiquidationThreshold, uint256 ltv, uint256 healthFactor)"
+    args: [$AVATAR]
+
+actions:
+  withdraw:
+    summary: "receipt token -> token, paid to the Vault"
+    tokens: [USDC, PYUSD, weETH, FRAX]
+    calls:
+      - target: pool
+        sig: "withdraw(address asset, uint256 amount, address to)"
+        args: { asset: $token, amount: $amount, to: $AVATAR }
+  repay:
+    summary: "repay the Vault's variable debt in token"
+    tokens: [USDC, PYUSD, FRAX]
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: pool, amount: $amount }
+      - target: pool
+        sig: "repay(address asset, uint256 amount, uint256 interestRateMode, address onBehalfOf)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2, onBehalfOf: $AVATAR }
+  repay_with_atokens:
+    summary: "repay the Vault's debt in token with its receipt tokens of the same token (no approve)"
+    tokens: [USDC, PYUSD, FRAX]
+    calls:
+      - target: pool
+        sig: "repayWithATokens(address asset, uint256 amount, uint256 interestRateMode)"
+        args: { asset: $token, amount: $amount, interestRateMode: 2 }
+  disable_collateral:
+    summary: "stop using a supplied token as collateral"
+    tokens: [USDC, PYUSD, weETH, FRAX]
+    calls:
+      - target: pool
+        sig: "setUserUseReserveAsCollateral(address asset, bool useAsCollateral)"
+        args: { asset: $token, useAsCollateral: false }
+  claim_rewards:
+    summary: "claim one reward token accrued on one receipt / debt token, paid to the Vault"
+    calls:
+      - target: aave.incentives_controller
+        sig: "claimRewards(address[] assets, uint256 amount, address to, address reward)"
+        args: { assets: [$asset], amount: 115792089237316195423570985008687907853269984665640564039457584007913129639935, to: $AVATAR, reward: $reward }
+        note: "--param asset=<receipt or debt token> --param reward=<reward token>; amount = type(uint256).max claims all of it"
+
+not_needed:
+  - "supply / borrow: caps are 1 token (wind-down); flashLoan, liquidationCall: never allow them"
+
+notes: >
+  Same Pool interface as `aave_v3`; exit-only market. `withdraw` / `repay` with type(uint256).max mean
+  everything; plan never uses "max".
