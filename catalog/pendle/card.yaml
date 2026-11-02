@@ -9,7 +9,8 @@ adding: >
   (sanitized, symbol in `aliases`) and prove each other (SY(), YT(), PT(), factory()).
   The SY's yieldToken() is its underlying edge. Markets expire: keep expired ones only
   while a vault still holds PT, YT or LP.
-  Actions are per market `<asset>_<expiry>_<verb>`. Underlying <-> SY is the SY's own
+  Actions are per market `<asset>_<expiry>_<verb>`, plus `any_<verb>` for any market by
+  address (`--param market_address`, proved by the market factories; see `lookups`). Underlying <-> SY is the SY's own
   deposit / redeem; PT and LP go through the router's *Simple and SY-only functions,
   which take no swap data and no off-chain guess. Selling PT needs swapExactPtForSy,
   whose limit-order struct is pinned to limitRouter 0 and optData 0x.
@@ -20,7 +21,103 @@ sources:
 
 contracts: {}
 
+# Any Pendle market by address (--param market_address=0x…, the address in app.pendle.finance/trade/markets/<addr>):
+# a catalogued market factory must answer isValidMarket(market) = true; SY / PT / YT come from the market
+# itself (readTokens), the SY's yieldToken must be a verified catalog token, and PT / YT / SY / LP decimals are
+# read onchain. Anyone can create a market on any SY, so the SY's code is not fixed by the factory: the plan
+# warns when the SY is not in a card. Choosing the market is the human's call.
+lookups:
+  any_market:
+    param: market_address
+    kind: address
+    check_any:
+      - { target: market_factory_v6, read: "isValidMarket(address) returns (bool)" }
+      - { target: market_factory, read: "isValidMarket(address) returns (bool)" }
+    reads:
+      tokens: "readTokens() returns (address sy, address pt, address yt)"
+      expiry: "expiry() returns (uint256)"
+    derived:
+      yield_token: { from: sy, read: "yieldToken() returns (address)" }
+    tokens: [yield_token]
+    derived_tokens: [sy, pt, yt, $self]
+    uncatalogued_code: [sy]
+    warn: "Check the market is listed on app.pendle.finance and the SY is Pendle's before minting into it."
+
 actions:
+  any_mint_sy:
+    summary: "the SY's yield token -> SY of Pendle market `market_address`, minted to the Vault"
+    token_from: any_market.yield_token
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: $any_market.sy, amount: $amount }
+      - target: $any_market.sy
+        sig: "deposit(address receiver, address tokenIn, uint256 amountTokenToDeposit, uint256 minSharesOut)"
+        args: { receiver: $AVATAR, tokenIn: $any_market.yield_token, amountTokenToDeposit: $amount, minSharesOut: $min_sy }
+    note: "--param market_address --param min_sy (raw SY). Direct SY call, no router. The SY is the market's own (readTokens)"
+  any_redeem_sy:
+    summary: "SY of market `market_address` -> its yield token, back to the Vault"
+    token_from: any_market.sy
+    calls:
+      - target: $any_market.sy
+        sig: "redeem(address receiver, uint256 amountSharesToRedeem, address tokenOut, uint256 minTokenOut, bool burnFromInternalBalance)"
+        args: { receiver: $AVATAR, amountSharesToRedeem: $amount, tokenOut: $any_market.yield_token, minTokenOut: $min_out, burnFromInternalBalance: false }
+    note: "--param market_address --param min_out (raw yield token)"
+  any_buy_pt:
+    summary: "SY -> PT on Pendle market `market_address`, paid to the Vault"
+    token_from: any_market.sy
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "swapExactSyForPtSimple(address receiver, address market, uint256 exactSyIn, uint256 minPtOut)"
+        args: { receiver: $AVATAR, market: $any_market, exactSyIn: $amount, minPtOut: $min_pt }
+    note: "--param market_address --param min_pt (raw PT). Start from the yield token with any_mint_sy first (same market). Simple variant: no swap data, no limit orders"
+  any_sell_pt:
+    summary: "PT -> SY on Pendle market `market_address` before expiry, paid to the Vault"
+    token_from: any_market.pt
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "swapExactPtForSy(address receiver, address market, uint256 exactPtIn, uint256 minSyOut, (address limitRouter, uint256 epsSkipMarket, ((uint256 salt, uint256 expiry, uint256 nonce, uint8 orderType, address token, address YT, address maker, address receiver, uint256 makingAmount, uint256 lnImpliedRate, uint256 failSafeRate, bytes permit) order, bytes signature, uint256 makingAmount)[] normalFills, ((uint256 salt, uint256 expiry, uint256 nonce, uint8 orderType, address token, address YT, address maker, address receiver, uint256 makingAmount, uint256 lnImpliedRate, uint256 failSafeRate, bytes permit) order, bytes signature, uint256 makingAmount)[] flashFills, bytes optData) limit)"
+        args: { receiver: $AVATAR, market: $any_market, exactPtIn: $amount, minSyOut: $min_sy, limit: { limitRouter: "0x0000000000000000000000000000000000000000", epsSkipMarket: 0, normalFills: [], flashFills: [], optData: "0x" } }
+    note: "--param market_address --param min_sy (raw SY). limitRouter pinned to zero (no limit-order fills). The role cannot pin normalFills / flashFills to empty arrays (they pass free); any fill would be sent to limitRouter = 0 and revert. Then any_redeem_sy"
+  any_redeem_pt:
+    summary: "PT of market `market_address` -> SY at maturity (after expiry), paid to the Vault"
+    token_from: any_market.pt
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "redeemPyToSy(address receiver, address YT, uint256 netPyIn, uint256 minSyOut)"
+        args: { receiver: $AVATAR, YT: $any_market.yt, netPyIn: $amount, minSyOut: $min_sy }
+    note: "--param market_address --param min_sy (raw SY). Reverts before expiry. Then any_redeem_sy"
+  any_add_liquidity:
+    summary: "SY -> LP of Pendle market `market_address` (single-sided), minted to the Vault"
+    token_from: any_market.sy
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "addLiquiditySingleSySimple(address receiver, address market, uint256 netSyIn, uint256 minLpOut)"
+        args: { receiver: $AVATAR, market: $any_market, netSyIn: $amount, minLpOut: $min_lp }
+    note: "--param market_address --param min_lp (raw LP). Before expiry only"
+  any_remove_liquidity:
+    summary: "LP of Pendle market `market_address` -> SY and PT in pool proportions, paid to the Vault"
+    token_from: any_market
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: router, amount: $amount }
+      - target: router
+        sig: "removeLiquidityDualSyAndPt(address receiver, address market, uint256 netLpToRemove, uint256 minSyOut, uint256 minPtOut)"
+        args: { receiver: $AVATAR, market: $any_market, netLpToRemove: $amount, minSyOut: $min_sy, minPtOut: $min_pt }
+    note: "--param market_address --param min_sy min_pt (raw). Then any_sell_pt or any_redeem_pt"
   stETH_30DEC2027_mint_sy:
     summary: "wstETH -> SY_stETH (the market's SY), minted to the Vault"
     input: lido.wstETH

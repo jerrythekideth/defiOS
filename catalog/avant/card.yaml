@@ -1,17 +1,19 @@
 protocol: avant
-name: Avant (avETH / savETH)
+name: Avant (avETH / savETH; bridged avUSD / savUSD)
 chain_id: 1
 status: draft
 reviewed: false
 sources:
   - "verified source on Blockscout: AvantCoin, StakedAvantCoinV2, AvantMintingV2 (checked 2026-10-14)"
   - "operator review draft, 2026-10-14 (vault-specific parts removed)"
+  - "docs: https://docs.avantprotocol.com/security/contract-addresses (avUSD / savUSD on Ethereum are CCIP-bridged, read 2026-11-02)"
 
 contracts:
   avETH:
     address: "0x9469470C9878bf3d6d0604831d9A3A366156f7EE"
     category: token
     kind: erc20
+    decimals: 18
     aliases: [avETH, avant eth]
     note: "AvantCoin; burnFrom spends allowance"
     proofs:
@@ -21,6 +23,7 @@ contracts:
     address: "0xDA06eE2dACF9245Aa80072a4407deBDea0D7e341"
     category: staking
     kind: erc4626_with_cooldown
+    decimals: 18
     aliases: [savETH, staked avETH, avant staking]
     edges: { underlying: avETH }
     proofs:
@@ -36,6 +39,50 @@ contracts:
     category: escrow
     note: "escrow that holds avETH during cooldown"
   WETH: { ref: weth.WETH }
+  avUSD:
+    address: "0xf4c13D631450De6B12a19829E37c8e2826891dC4"
+    name: "avUSD"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [avusd, avant usd]
+    note: >
+      Bridged from Avalanche (Chainlink CCIP burn & mint). Avant mints and stakes avUSD on
+      Avalanche only: on Ethereum there is no mint, stake or cooldown, just the token.
+    sources:
+      - "explorer: Blockscout verified source FactoryBurnMintERC20 (avUSD, 18 decimals)"
+    proofs:
+      - { from: avusd_ccip_pool, read: "getToken() returns (address)", expect: $self }
+  avusd_ccip_pool:
+    address: "0x81B72171642FaB457aa815C0B8412A22B63A6aF8"
+    category: bridge
+    kind: ccip_burn_mint_pool
+    note: "CCIP BurnMintTokenPool 1.5.1 for avUSD; mints on arrival, burns on departure (Avant's bridge, not a vault action)"
+    proofs:
+      - { read: "getToken() returns (address)", expect: avUSD }
+  savUSD:
+    address: "0xb8D89678E75a973E74698c976716308abB8a46A4"
+    name: "Staked avUSD"
+    category: token
+    kind: erc20
+    decimals: 18
+    aliases: [savusd, staked avusd, avant savusd]
+    note: >
+      Bridged from Avalanche (Chainlink CCIP burn & mint), NOT an ERC-4626 vault on Ethereum:
+      asset(), deposit() and cooldown do not exist here. Its value tracks the Avalanche savUSD
+      vault. On Ethereum a vault gets savUSD by bridging it from Avalanche or from a DEX pool;
+      no card action produces it yet. Morpho markets use it as collateral.
+    sources:
+      - "explorer: Blockscout verified source FactoryBurnMintERC20 (Staked avUSD / savUSD, 18 decimals, owner 0xd4d23209…57cb)"
+    proofs:
+      - { from: savusd_ccip_pool, read: "getToken() returns (address)", expect: $self }
+  savusd_ccip_pool:
+    address: "0x6d3B65eB14ad3546ab4Aa32cf8645a3610a9737b"
+    category: bridge
+    kind: ccip_burn_mint_pool
+    note: "CCIP BurnMintTokenPool 1.5.1 for savUSD"
+    proofs:
+      - { read: "getToken() returns (address)", expect: savUSD }
 
 ui_routes_to_avoid:
   - ui: "Avant app, stake avETH"
@@ -57,6 +104,16 @@ reads:
     target: savETH
     sig: "convertToAssets(uint256 shares) returns (uint256)"
     args: ["1000000000000000000"]
+    decimals: 18
+  - id: avusd_balance
+    target: avUSD
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
+    decimals: 18
+  - id: savusd_balance
+    target: savUSD
+    sig: "balanceOf(address account) returns (uint256)"
+    args: [$AVATAR]
     decimals: 18
   - id: cooldown
     target: savETH

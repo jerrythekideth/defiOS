@@ -2,7 +2,7 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26329782,
+   "block": 26330018,
    "checked": "2026-11-02"
   }
  },
@@ -121,7 +121,7 @@
    ]
   },
   "avant": {
-   "name": "Avant (avETH / savETH)",
+   "name": "Avant (avETH / savETH; bridged avUSD / savUSD)",
    "status": "draft",
    "reviewed": false,
    "chains": [
@@ -582,6 +582,13 @@
     1
    ],
    "actions": [
+    "any_add_liquidity",
+    "any_buy_pt",
+    "any_mint_sy",
+    "any_redeem_pt",
+    "any_redeem_sy",
+    "any_remove_liquidity",
+    "any_sell_pt",
     "claim",
     "sUSDE_26NOV2026_add_liquidity",
     "sUSDE_26NOV2026_buy_pt",
@@ -1709,7 +1716,7 @@
     "chain_id": 1,
     "address": "0x09becF6E5e297825D19aA14eD6081A03524532D7",
     "protocol": "avant",
-    "protocol_name": "Avant (avETH / savETH)",
+    "protocol_name": "Avant (avETH / savETH; bridged avUSD / savUSD)",
     "name": "minting",
     "title": null,
     "ref": "avant.minting",
@@ -9366,6 +9373,38 @@
     "onchain": {}
    }
   ],
+  "1:0x6d3b65eb14ad3546ab4aa32cf8645a3610a9737b": [
+   {
+    "chain_id": 1,
+    "address": "0x6d3B65eB14ad3546ab4Aa32cf8645a3610a9737b",
+    "protocol": "avant",
+    "protocol_name": "Avant (avETH / savETH; bridged avUSD / savUSD)",
+    "name": "savusd_ccip_pool",
+    "title": null,
+    "ref": "avant.savusd_ccip_pool",
+    "category": "bridge",
+    "kind": "ccip_burn_mint_pool",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.getToken() == savUSD"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/avant/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.getToken() == savUSD",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "CCIP BurnMintTokenPool 1.5.1 for savUSD"
+   }
+  ],
   "1:0x6d903f6003cca6255d85cca4d3b5e5146dc33925": [
    {
     "chain_id": 1,
@@ -10976,6 +11015,38 @@
     },
     "onchain": {},
     "note": "Aave v3 RewardsController: claimRewards for aToken / debt token incentives"
+   }
+  ],
+  "1:0x81b72171642fab457aa815c0b8412a22b63a6af8": [
+   {
+    "chain_id": 1,
+    "address": "0x81B72171642FaB457aa815C0B8412A22B63A6aF8",
+    "protocol": "avant",
+    "protocol_name": "Avant (avETH / savETH; bridged avUSD / savUSD)",
+    "name": "avusd_ccip_pool",
+    "title": null,
+    "ref": "avant.avusd_ccip_pool",
+    "category": "bridge",
+    "kind": "ccip_burn_mint_pool",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.getToken() == avUSD"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/avant/card.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.getToken() == avUSD",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "CCIP BurnMintTokenPool 1.5.1 for avUSD; mints on arrival, burns on departure (Avant's bridge, not a vault action)"
    }
   ],
   "1:0x81b76ff3fed28ba0b4a5d4c76bd5c13bd0641d86": [
@@ -12629,7 +12700,7 @@
     "chain_id": 1,
     "address": "0x9469470C9878bf3d6d0604831d9A3A366156f7EE",
     "protocol": "avant",
-    "protocol_name": "Avant (avETH / savETH)",
+    "protocol_name": "Avant (avETH / savETH; bridged avUSD / savUSD)",
     "name": "avETH",
     "title": null,
     "ref": "avant.avETH",
@@ -15454,6 +15525,46 @@
     ],
     "proxy": {},
     "onchain": {}
+   }
+  ],
+  "1:0xb8d89678e75a973e74698c976716308abb8a46a4": [
+   {
+    "chain_id": 1,
+    "address": "0xb8D89678E75a973E74698c976716308abB8a46A4",
+    "protocol": "avant",
+    "protocol_name": "Avant (avETH / savETH; bridged avUSD / savUSD)",
+    "name": "savUSD",
+    "title": "Staked avUSD",
+    "ref": "avant.savUSD",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "savusd",
+     "staked avusd",
+     "avant savusd"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/avant/card.yaml",
+     "explorer: Blockscout verified source FactoryBurnMintERC20 (Staked avUSD / savUSD, 18 decimals, owner 0xd4d23209\u202657cb)"
+    ],
+    "proofs": [
+     {
+      "id": "savusd_ccip_pool.getToken() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Staked avUSD",
+     "symbol": "savUSD"
+    },
+    "note": "Bridged from Avalanche (Chainlink CCIP burn & mint), NOT an ERC-4626 vault on Ethereum: asset(), deposit() and cooldown do not exist here. Its value tracks the Avalanche savUSD vault. On Ethereum a vault gets savUSD by bridging it from Avalanche or from a DEX pool; no card action produces it yet. Morpho markets use it as collateral.\n"
    }
   ],
   "1:0xba100000625a3754423978a60c9317c58a424e3d": [
@@ -18366,7 +18477,7 @@
     "chain_id": 1,
     "address": "0xDA06eE2dACF9245Aa80072a4407deBDea0D7e341",
     "protocol": "avant",
-    "protocol_name": "Avant (avETH / savETH)",
+    "protocol_name": "Avant (avETH / savETH; bridged avUSD / savUSD)",
     "name": "savETH",
     "title": null,
     "ref": "avant.savETH",
@@ -20023,6 +20134,45 @@
     "proxy": {},
     "onchain": {},
     "note": "Entry point: deposit(pid, amount, stake) / withdraw(pid, amount); poolInfo(pid) lists each pool's contracts"
+   }
+  ],
+  "1:0xf4c13d631450de6b12a19829e37c8e2826891dc4": [
+   {
+    "chain_id": 1,
+    "address": "0xf4c13D631450De6B12a19829E37c8e2826891dC4",
+    "protocol": "avant",
+    "protocol_name": "Avant (avETH / savETH; bridged avUSD / savUSD)",
+    "name": "avUSD",
+    "title": "avUSD",
+    "ref": "avant.avUSD",
+    "category": "token",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "avusd",
+     "avant usd"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/avant/card.yaml",
+     "explorer: Blockscout verified source FactoryBurnMintERC20 (avUSD, 18 decimals)"
+    ],
+    "proofs": [
+     {
+      "id": "avusd_ccip_pool.getToken() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "avUSD",
+     "symbol": "avUSD"
+    },
+    "note": "Bridged from Avalanche (Chainlink CCIP burn & mint). Avant mints and stakes avUSD on Avalanche only: on Ethereum there is no mint, stake or cooldown, just the token.\n"
    }
   ],
   "1:0xf5f5b97624542d72a9e06f04804bf81baa15e2b4": [

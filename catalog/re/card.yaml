@@ -21,6 +21,7 @@ contracts:
     address: "0x5086bf358635B81D8C47C66d1C8b9E567Db70c72"
     category: receipt
     kind: erc20
+    decimals: 18
     aliases: [reusd]
     proofs:
       - { from: icl, read: "shareToken() returns (address)", expect: $self }

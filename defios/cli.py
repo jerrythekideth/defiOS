@@ -216,6 +216,62 @@ def whois(ctx, address, chain_id, directory):
     _emit(ctx, res, summarize_whois(res))
 
 
+@main.command("resolve")
+@click.argument("thing")
+@click.option("--dir", "directory", default=None, type=click.Path(file_okay=False), help="Catalog directory.")
+@click.pass_context
+def resolve_cmd(ctx, thing, directory):
+    """What is THING, and which card action takes it? An app URL, an address, a 32-byte id or a symbol.
+
+    \b
+    defios resolve https://app.morpho.org/ethereum/market/0x…   -> morpho_markets.* --param market_id=0x…
+    defios resolve https://app.pendle.finance/trade/markets/0x… -> pendle.any_* --param market_address=0x…
+    defios resolve savUSD
+    Proves lookups onchain with RPC_URL (no defios.yaml needed). `covered: false` means: say it is not covered.
+    """
+    from .catalog import Catalog
+    from .config import default_catalog_dir
+    from .engine import make_rpc
+    from .resolve import resolve, summarize
+    o = ctx.obj
+    catalog = Catalog.load(Path(directory) if directory else default_catalog_dir())
+    rpc = None if o["offline"] else make_rpc()
+    res = resolve(catalog, thing, rpc)
+    _emit(ctx, res, summarize(res))
+    if not res["covered"]:
+        sys.exit(3)
+
+
+@main.command("recipe")
+@click.argument("spec", required=False)
+@click.pass_context
+def recipe_cmd(ctx, spec):
+    """Show what a recipe expands to (no SPEC: list the recipes). Read-only; needs RPC_URL for the lookup.
+
+    \b
+    defios recipe morpho_loop@market_id=0x…
+    defios recipe pendle_pt@market_address=0x…
+    Then: defios permit --recipe <same spec>
+    """
+    from .catalog import Catalog
+    from .config import default_catalog_dir
+    from .engine import make_rpc
+    from .recipes import RECIPES, RecipeError, expand
+    if not spec:
+        res = {k: {"param": r["param"], "summary": r["summary"]} for k, r in RECIPES.items()}
+        _emit(ctx, res, "\n".join(f"{k}@{r['param']}=…  {r['summary']}" for k, r in RECIPES.items()))
+        return
+    catalog = Catalog.load(default_catalog_dir())
+    try:
+        res = expand(catalog, spec, None if ctx.obj["offline"] else make_rpc())
+    except RecipeError as e:
+        click.echo(json.dumps({"error": str(e)}))
+        click.echo(f"error: {e}", err=True)
+        sys.exit(2)
+    _emit(ctx, res, "\n".join([f"RECIPE {res['recipe']}: {res['summary']}"] + [f"  {r}" for r in res["refs"]]
+                              + [f"  note: {n}" for n in res["notes"]]))
+
+
 @main.group()
 def registry():
     """The protocol registry: verify proofs, export index.json (see catalog/REGISTRY.md)."""
@@ -313,7 +369,7 @@ def propose(ctx, calls_file, send, nonce, batch):
             if meta.get("chain_id") and int(meta["chain_id"]) != vault.chain_id:
                 raise TxError(f"calls.json is for chain {meta['chain_id']}, vault {vault.name} is on {vault.chain_id}")
             res = run(vault, calls, send=send, nonce=nonce, batch=batch, catalog=catalog, rpc=rpc,
-                      books_dir=cfg.books_dir, description=meta.get("description"))
+                      books_dir=cfg.books_dir, description=meta.get("description"), lookups=meta.get("lookups"))
         except (ProposeError, TxError) as e:
             raise ConfigError(str(e)) from e
         _emit(ctx, res, summarize(res))
@@ -392,7 +448,9 @@ def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe, keep_a
 
 
 @main.command()
-@click.argument("actions", nargs=-1, required=True)
+@click.argument("actions", nargs=-1)
+@click.option("--recipe", "recipes", multiple=True, help="A recipe, e.g. morpho_loop@market_id=0x… or "
+              "pendle_pt@market_address=0x… (repeatable): expands to card actions (`defios recipe` shows them).")
 @click.option("--token", "tokens", multiple=True, help="Limit actions with a `tokens:` list to these tokens (repeatable). "
               "Default: every token the card lists.")
 @click.option("--with-optional", is_flag=True, help="Also permit the actions' optional / alternative calls.")
@@ -406,13 +464,15 @@ def plan(ctx, steps, intent, amount, token, params, out, batch, no_probe, keep_a
 @click.option("--no-simulate", is_flag=True, help="Skip the anvil fork run (done by default when RPC_URL and anvil "
               "are available).")
 @click.pass_context
-def permit(ctx, actions, tokens, with_optional, params, replace, description, out, no_simulate):
+def permit(ctx, actions, recipes, tokens, with_optional, params, replace, description, out, no_simulate):
     """Build the Roles permission batch that lets the Operator run card ACTIONS.
 
     \b
     ACTIONS are <card>.<action> or <alias>.<action>:
       defios permit aave_v3.supply aave_v3.withdraw --token USDC --token USDT
       defios permit morpho_markets.supply morpho_markets.withdraw --param market_id=0x…
+      defios permit morpho_markets.borrow@market_id=0xA… morpho_markets.borrow@market_id=0xB…
+      defios permit --recipe morpho_loop@market_id=0x… --recipe pendle_pt@market_address=0x…
     Conditions come from the card; the batch is merged with the live role (existing
     approve spenders are kept) and checked on a copy of it: every call allowed, hostile
     variants rejected, nothing that works today broken, no new high lint.
@@ -433,12 +493,24 @@ def permit(ctx, actions, tokens, with_optional, params, replace, description, ou
                 if not eq or not k.strip():
                     raise PermitError(f"--param {kv!r}: expected name=value")
                 extra[k.strip()] = v.strip()
+            refs, rnotes = list(actions), []
+            for spec in recipes:
+                from .recipes import RecipeError, expand
+                try:
+                    ex = expand(catalog, spec, rpc, vault.book_vars)
+                except RecipeError as e:
+                    raise PermitError(str(e)) from None
+                refs += [x for x in ex["refs"] if x not in refs]
+                rnotes += [f"recipe {ex['recipe']}: {n}" for n in ex["notes"]]
+            if not refs:
+                raise PermitError("nothing to permit: give <card>.<action> refs or --recipe")
             state, adapter, source = role_for_plan(cfg, vault, ctx.obj["logs_file"], rpc)
-            res = run(catalog, state, adapter, vault, list(actions), tokens=list(tokens) or None,
+            res = run(catalog, state, adapter, vault, refs, tokens=list(tokens) or None,
                       with_optional=with_optional, replace=replace, description=description, role_source=source,
                       params=extra, rpc=rpc)
         except (PermitError, PlanError, CardError) as e:
             raise ConfigError(str(e)) from e
+        res["notes"] = rnotes + list(res.get("notes") or [])
         if res["ok"] and res.get("batch"):
             _auto_simulate(ctx, vault, catalog, res, batch=res["batch"], skip=no_simulate)
         if res["ok"] and res.get("batch") and out != "-":

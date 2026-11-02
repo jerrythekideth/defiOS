@@ -83,6 +83,21 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
     `defios whois` first. Act only on `verified` records. `unverified`: say so
     and stop. `conflict`: hand it to the human. `unknown`: it is not in the
     registry; never guess which protocol it belongs to.
+12. **Resolve before you map.** Every link, bare `0x…`, id or token symbol the
+    human gives goes through `defios resolve` before you pick an action. A
+    32-byte value is an id (a Morpho Blue market), never a vault or contract
+    address; `app.morpho.org/…/market/<id>` is `morpho_markets.*` with
+    `--param market_id`, `…/vault/<address>` is `morpho_vaults.*_any` with
+    `--param vault_address`, `app.pendle.finance/trade/markets/<address>` is
+    `pendle.any_*` with `--param market_address`.
+13. **Never diff permissions by hand.** "We already have X, so we need Y" is
+    `defios permit`'s job: it reads the live role, skips what is allowed and
+    writes only what is missing. Do not hand the human a list of permissions
+    you worked out yourself, and do not edit a batch it wrote.
+14. **"Not covered" is an answer.** When `resolve` says `covered: false`, `plan`
+    or `permit` refuses, or a recipe note says no card covers a step (a bridge,
+    a DEX swap, an issuer mint), say exactly that. Do not fill the gap with a
+    protocol, a route or a payload of your own.
 
 ## Commands
 
@@ -95,8 +110,10 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
 | `defios decode batch.json` | someone hands you a permission batch: decode it before the human proposes it |
 | `defios catalog` | list cards and validate them |
 | `defios whois 0x… [--chain N]` | "what is this address?": protocol, contract, category, trust status, proxy, edges, card actions (see rule 11) |
+| `defios resolve <url / 0x… / symbol>` | the human pastes a link, an address, an id or a name: what it is (vault, market, token, card), proved onchain, and which action + `--param` takes it; exit 3 when not covered (see rule 12) |
+| `defios recipe [<name>@<param>=0x…]` | "loop X on market 0x…" (`morpho_loop@market_id=`), "fixed yield / buy the PT" (`pendle_pt@market_address=`): the card actions a strategy needs, and notes on what no card covers |
 | `defios plan <card>.<action>=<amount> …` | M2: turn an intent into engine-built, role-checked calls; writes `calls.json` (see "Planning") |
-| `defios permit <card>.<action> … [--token T]` | "add the permission to do X": builds the Roles batch from the card, merged with the live role and verified; writes a Tx Builder JSON for the Vault queue (see "Permissions") |
+| `defios permit <card>.<action>[@param=0x…] … [--recipe R] [--token T]` | "add the permission to do X" / "what payload do we need": builds the Roles batch from the card, merged with the live role and verified; writes a Tx Builder JSON for the Vault queue (see "Permissions") |
 | `defios simulate [--batch b.json] [--calls calls.json] [--tenderly]` | run a permission batch and/or a plan on an anvil fork (or on Tenderly with `--tenderly`, which gives a link per transaction): per-tx success or decoded revert, gas, Vault token deltas, allowances left open |
 | `defios propose --file calls.json` | M2: dry run of an Operator proposal (see "Proposing"); `--send` only after the human said yes |
 
@@ -144,6 +161,13 @@ report them in your summary. `known_dead` and `uncatalogued` are clean-up items.
   vault_address=0x…` with `morpho_vaults.*_any`, `--param market_id=0x…` with
   `morpho_markets.*` (`skills/defios-morpho/SKILL.md`). Choosing the vault or
   market is the human's decision, not yours.
+* **"Loop X on market 0x…, buy the PT at 0x…: what payload do we need?"**:
+  `sync` → `defios resolve` each link (rule 12) → `defios recipe` each strategy
+  → show what each one reads (tokens, LLTV, SY / PT / expiry) and every note on
+  what is not covered → one `defios permit --recipe morpho_loop@market_id=0xA…
+  --recipe morpho_loop@market_id=0xB… --recipe pendle_pt@market_address=0x…,accept_sy=0x…`
+  (`accept_sy` only once the human has checked the SY: `skills/defios-pendle/SKILL.md`).
+  The batch holds only what the live role is missing (rule 13).
 * **"Add permission for X"**: `sync` → `defios permit <card>.<action> [--token T]`
   → show the human every `+` line (function, condition tree, why) and every
   `note` → they import the JSON into the Safe Transaction Builder **on the

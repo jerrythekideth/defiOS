@@ -11,6 +11,7 @@ contracts:
     address: "0x3A43AEC53490CB9Fa922847385D82fe25d0E9De7"
     category: vault
     kind: erc4626_async_redeem
+    decimals: 18
     aliases: [yoETH, yo eth, yo vault]
     edges: { underlying: weth.WETH }
     proofs:
@@ -28,6 +29,7 @@ contracts:
     address: "0x0000000f2eB9f69274678c76222B35eEc7588a65"
     category: vault
     kind: erc4626_async_redeem
+    decimals: 6
     aliases: [yoUSD, yo usd]
     note: "YoVault: requestRedeem pays instantly when liquid, otherwise an operator's fulfillRedeem pays the receiver"
     edges: { underlying: stablecoins.USDC }

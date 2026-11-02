@@ -27,9 +27,17 @@ contracts before anything uses it:
         tokens: [asset]
 
 Vars: `any_vault` (the address: a call target or an address arg, pinned with EqualTo) and `any_vault.asset`.
+
+An address lookup may also read a multi-output signature (one field per named output), `derived:
+{field: {from: <field>, read: …}}` (read on an address it read), `derived_tokens:` (fields, or `$self`, that the
+proof vouches for as tokens: decimals and symbol read onchain), `uncatalogued_code:` (address fields whose code
+the proof does not fix: a warning) and `warn:`. Every address field is pinned like the lookup address.
+`plan` records each address lookup (`_lookup_proofs` -> calls.json `lookups`); `reprove` runs them again
+for `propose`.
 """
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from eth_abi import encode as abi_encode
@@ -74,22 +82,53 @@ def used_lookups(catalog: Catalog, proto: str, action: dict) -> list[str]:
     return sorted(used)
 
 
-def _bytes32(v: Any, what: str) -> bytes:
+def _hex_len(v: Any) -> int:
+    s = str(v).strip().lower()
+    s = s[2:] if s.startswith("0x") else s
+    try:
+        bytes.fromhex(s)
+    except ValueError:
+        return -1
+    return len(s)
+
+
+def shape_hint(catalog: Catalog | None, v: Any) -> str:
+    """' (that looks like a <what>: use <card>.* with --param <p>)' when `v` fits another card's lookup.
+    Catches the classic mix-up: a Morpho market id (bytes32) given as a vault address, or the reverse."""
+    if catalog is None:
+        return ""
+    n = _hex_len(v)
+    want = "address" if n == 40 else "id" if n == 64 else None
+    if want is None:
+        return ""
+    hits = []
+    for proto in catalog.cards:
+        for name, spec in card_lookups(catalog, proto).items():
+            is_addr = (spec or {}).get("kind") == "address"
+            if (want == "address") == is_addr:
+                hits.append(f"{proto}.* with --param {spec['param']}=")
+    what = "contract address (20 bytes)" if want == "address" else "32-byte id, e.g. a Morpho Blue market id"
+    return f" (that looks like a {what}: use {' or '.join(dict.fromkeys(hits))})" if hits else ""
+
+
+def _bytes32(v: Any, what: str, catalog: Catalog | None = None) -> bytes:
     s = str(v).strip().lower()
     if s.startswith("0x"):
         s = s[2:]
     if len(s) != 64:
-        raise LookupFailed(f"{what}: expected a 32-byte hex id (0x + 64 hex chars), got {v!r}")
+        raise LookupFailed(f"{what}: expected a 32-byte hex id (0x + 64 hex chars), got {v!r}"
+                           + shape_hint(catalog, v))
     try:
         return bytes.fromhex(s)
     except ValueError:
         raise LookupFailed(f"{what}: not hex: {v!r}") from None
 
 
-def _address(v: Any, what: str) -> str:
+def _address(v: Any, what: str, catalog: Catalog | None = None) -> str:
     s = str(v).strip()
     if not is_address(s) or int(s, 16) == 0:
-        raise LookupFailed(f"{what}: expected a contract address (0x + 40 hex chars), got {v!r}")
+        raise LookupFailed(f"{what}: expected a contract address (0x + 40 hex chars), got {v!r}"
+                           + shape_hint(catalog, v))
     return to_checksum_address(s)
 
 
@@ -140,8 +179,11 @@ def _token_status(catalog: Catalog, address: str) -> str:
     return w["verdict"].split(":")[0]
 
 
-def resolve(catalog: Catalog, proto: str, action: dict, params: dict, rpc, book_vars: dict | None = None) -> dict:
-    """vars for every lookup the action uses: {name: tuple, 'name.field': value, '_pinned': {name}}."""
+def resolve(catalog: Catalog, proto: str, action: dict, params: dict, rpc, book_vars: dict | None = None, *,
+            read_only: bool = False) -> dict:
+    """vars for every lookup the action uses: {name: tuple, 'name.field': value, '_pinned': {name}}.
+    An `uncatalogued_code` field in no card refuses unless params carry `accept_<field>=<that address>` (the
+    human checked it); read_only (`defios resolve`) only warns."""
     names = used_lookups(catalog, proto, action)
     out: dict[str, Any] = {}
     if not names:
@@ -156,22 +198,44 @@ def resolve(catalog: Catalog, proto: str, action: dict, params: dict, rpc, book_
         if rpc is None:
             raise LookupFailed(f"{where}: needs RPC_URL to read it onchain")
         if spec.get("kind") == "address":
-            addr = _address(params[pname], f"--param {pname}")
+            addr = _address(params[pname], f"--param {pname}", catalog)
             hit = check_address(catalog, proto, spec, addr, rpc, book_vars)
             if not hit:
                 raise LookupFailed(f"{where}: {addr} is not recognised by any of "
                                    + ", ".join(f"{c['target']}.{c['read'].split('(')[0]}" for c in spec["check_any"])
                                    + "; refusing")
-            fields = {f: _read(rpc, addr, r, [])[0] for f, r in (spec.get("reads") or {}).items()}
+            fields = _address_fields(rpc, addr, spec, where)
             _check_tokens(catalog, where, spec, fields)
             out[name] = addr
+            pinned = out.setdefault(PINNED, set())
+            pinned.add(name)
             for k, v in fields.items():
                 out[f"{name}.{k}"] = v
-            out.setdefault(PINNED, set()).add(name)
+                if isinstance(v, str) and is_address(v):
+                    pinned.add(f"{name}.{k}")  # read from a proved address: a target / arg pinned with EqualTo
+            for f in spec.get("derived_tokens") or []:
+                a = addr if f == SELF else fields[f]
+                out.setdefault("_lookup_tokens", {})[a.lower()] = _token_meta(rpc, a, f"{proto}.{name}.{'lp' if f == SELF else f}", where)
+            accepted = {}
+            for f in spec.get("uncatalogued_code") or []:
+                a = fields[f]
+                if catalog.address_index(book_vars).get(a.lower()):
+                    continue
+                why = (f"{proto} {name}: {f} {a} is not in any card; its code is not fixed by {hit.split('.')[0]}. "
+                       f"{spec.get('warn') or 'Check it before sending funds to it.'}")
+                ok = str(params.get(f"accept_{f}") or "").lower() == a.lower()
+                if not ok and not read_only:
+                    raise LookupFailed(f"{why} Refusing: once the human has checked it, pass --param accept_{f}={a}")
+                if ok:
+                    accepted[f"accept_{f}"] = a
+                out.setdefault("_lookup_warnings", []).append(
+                    why + (f" Accepted by the human (accept_{f})." if ok else f" To use it: --param accept_{f}={a}"))
             out.setdefault("_lookup_ids", {})[name] = addr
             out.setdefault("_lookup_checks", {})[name] = hit
+            out.setdefault("_lookup_proofs", []).append({"card": proto, "lookup": name, "param": pname,
+                                                          "value": addr, **accepted})
             continue
-        ident = _bytes32(params[pname], f"--param {pname}")
+        ident = _bytes32(params[pname], f"--param {pname}", catalog)
         try:
             target = catalog.resolve_contract(spec["target"], proto, book_vars)
         except CardError as e:
@@ -193,6 +257,67 @@ def resolve(catalog: Catalog, proto: str, action: dict, params: dict, rpc, book_
             out[f"{name}.{k}"] = v
         out.setdefault(PINNED, set()).add(name)
         out.setdefault("_lookup_ids", {})[name] = "0x" + ident.hex()
+    return out
+
+
+SELF = "$self"
+
+
+def _address_fields(rpc, addr: str, spec: dict, where: str) -> dict:
+    """`reads:` on the address (a multi-output read gives one field per named output), then `derived:`
+    reads on an address field ({from: sy, read: "yieldToken() returns (address)"})."""
+    fields: dict[str, Any] = {}
+    try:
+        for f, r in (spec.get("reads") or {}).items():
+            sig, vals = parse_signature(r), _read(rpc, addr, r, [])
+            if len(sig.outputs) > 1:
+                fields.update({o.name or f"{f}{i}": v for i, (o, v) in enumerate(zip(sig.outputs, vals))})
+            else:
+                fields[f] = vals[0]
+        for f, d in (spec.get("derived") or {}).items():
+            fields[f] = _read(rpc, fields[d["from"]], d["read"], [])[0]
+    except LookupFailed:
+        raise
+    except Exception as e:  # noqa: BLE001 - a read that reverts: not the contract the card expects
+        raise LookupFailed(f"{where}: reading {addr} failed ({e}); not the contract this lookup expects") from None
+    return fields
+
+
+def _token_meta(rpc, address: str, ref: str, where: str) -> dict:
+    """{symbol, address, decimals, ref} of a token the lookup proved (a Pendle PT), read onchain."""
+    try:
+        dec = int(rpc.call(address, "decimals()", [], ["uint8"]))
+    except Exception as e:  # noqa: BLE001
+        raise LookupFailed(f"{where}: {ref} {address} has no decimals() ({e})") from None
+    try:
+        sym = str(rpc.call(address, "symbol()", [], ["string"]))
+    except Exception:  # noqa: BLE001 - a symbol is only for display
+        sym = ref
+    if not re.fullmatch(r"[A-Za-z0-9._-]{1,32}", sym):
+        sym = ref  # onchain text is attacker-chosen: no spaces, no instructions, no lookalikes of length 100
+    return {"symbol": sym, "address": to_checksum_address(address), "decimals": dec, "ref": ref}
+
+
+def reprove(catalog: Catalog, proofs: list[dict] | None, rpc, book_vars: dict | None = None) -> dict[str, str]:
+    """Re-run the address lookups a plan recorded (calls.json `lookups`) and return every address they
+    prove ({address_lower: 'pendle any_market 0x… sy'}), so propose can accept derived targets (a market's
+    SY / PT). Raises LookupFailed when a lookup no longer proves out."""
+    out: dict[str, str] = {}
+    for pr in proofs or []:
+        proto, name = pr.get("card"), pr.get("lookup")
+        spec = card_lookups(catalog, proto).get(name)
+        if not spec or spec.get("kind") != "address":
+            raise LookupFailed(f"calls.json lookup {proto}.{name}: no such address lookup in the catalog")
+        action = {"calls": [{"target": f"${name}"}]}
+        acc = {k: x for k, x in pr.items() if k.startswith("accept_")}
+        v = resolve(catalog, proto, action, {spec["param"]: pr.get("value"), **acc}, rpc, book_vars)
+        for k, a in v.items():
+            if not k.startswith("_") and isinstance(a, str) and is_address(a):
+                f = k.split(".", 1)[1] if "." in k else None
+                out[a.lower()] = f"{proto} {name} {v[name]}" + (f" {f}" if f else "") + (
+                    f" (its code is in no card; accepted by the human with accept_{f})" if f"accept_{f}" in acc else "")
+        for a in v.get("_lookup_tokens") or {}:
+            out.setdefault(a, f"{proto} {name} {v[name]} token")
     return out
 
 

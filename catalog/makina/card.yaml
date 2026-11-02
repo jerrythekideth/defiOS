@@ -11,6 +11,7 @@ contracts:
     address: "0x871aB8E36CaE9AF35c6A3488B049965233DeB7ed"
     category: receipt
     kind: erc20
+    decimals: 18
     aliases: [DETH, dialectic eth, makina deth]
   machine_depositor:
     address: TODO   # Makina machine / depositor contract for DETH not recorded yet; do not guess

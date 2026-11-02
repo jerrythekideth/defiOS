@@ -12,6 +12,7 @@ contracts:
     address: "0x1e33E98aF620F1D563fcD3cfd3C75acE841204ef"
     category: token
     kind: erc20
+    decimals: 18
     aliases: [dusd]
     proofs:
       - { from: smDUSD, read: "machineShare() returns (address)", expect: $self }

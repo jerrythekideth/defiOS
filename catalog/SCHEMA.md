@@ -191,6 +191,33 @@ any_vault.asset` makes the asset the action's `$token`. `propose` accepts the
 address as a call target only after the same `check_any` answers true again
 over RPC.
 
+An address lookup can also read several outputs, read on what it read, and
+declare the tokens it found (a Pendle market):
+
+```yaml
+lookups:
+  any_market:
+    param: market_address
+    kind: address
+    check_any:
+      - { target: market_factory_v6, read: "isValidMarket(address) returns (bool)" }
+    reads:
+      tokens: "readTokens() returns (address sy, address pt, address yt)"   # one field per named output
+      expiry: "expiry() returns (uint256)"
+    derived:                       # read on an address field instead of the lookup address
+      yield_token: { from: sy, read: "yieldToken() returns (address)" }
+    tokens: [yield_token]          # must be verified catalog tokens
+    derived_tokens: [sy, pt, yt, $self]   # tokens the proof itself vouches for: decimals + symbol read onchain
+    uncatalogued_code: [sy]        # fields whose code the proof does not fix: always warned about
+    warn: "Check the market is listed on app.pendle.finance and the SY is Pendle's before minting into it."
+```
+
+Every address field (`$any_market.sy`, …) can be a call `target`, a spender or
+an address arg, and is pinned like the lookup address. `token_from:
+any_market.sy` makes it the action's `$token`; a `derived_tokens` entry needs no
+catalog record. `plan` records the lookup in calls.json (`lookups`), and
+`propose` re-proves it before it accepts a derived address as a call target.
+
 ## Dead permissions
 
 ```yaml

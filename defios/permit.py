@@ -410,6 +410,19 @@ def _statuses(res: dict) -> dict[tuple[str, str], str]:
     return out
 
 
+def split_ref(ref: str) -> tuple[str, dict]:
+    """'morpho_markets.supply@market_id=0x…' -> ('morpho_markets.supply', {'market_id': '0x…'}): lookup params
+    for one action, so one batch can permit the same action on two markets."""
+    ref, at, rest = str(ref).partition("@")
+    out = {}
+    for kv in filter(None, rest.split(",")) if at else []:
+        k, eq, v = kv.partition("=")
+        if not eq or not k.strip():
+            raise PermitError(f"{ref}@{rest}: expected name=value after @")
+        out[k.strip()] = v.strip()
+    return ref.strip(), out
+
+
 def permit(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: VaultConfig, refs: list[str], *,
            tokens: list[str] | None = None, with_optional: bool = False, replace: bool = False,
            description: str | None = None, role_source: str | None = None, params: dict | None = None,
@@ -422,6 +435,7 @@ def permit(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vau
     notes: list[str] = []
     protos: list[str] = []
     for ref in refs:
+        ref, ref_params = split_ref(ref)
         try:
             proto, aname, _ = resolve_action(catalog, ref, vault.book_vars)
         except PlanError as e:
@@ -431,7 +445,7 @@ def permit(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vau
         action = catalog.cards[proto].actions[aname] or {}
         toks = _selected_tokens(catalog, proto, aname, action, tokens, vault.book_vars)
         try:
-            lk_vars = lookups.resolve(catalog, proto, action, params or {}, rpc, vault.book_vars)
+            lk_vars = lookups.resolve(catalog, proto, action, {**(params or {}), **ref_params}, rpc, vault.book_vars)
         except lookups.LookupFailed as e:
             raise PermitError(f"{proto}.{aname}: {e}") from None
         if lookups.token_from(action, lk_vars):
@@ -453,7 +467,8 @@ def permit(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vau
                 continue
             cond, opts = cb.call(proto, aname, i, call, toks, lk_vars)
             sig = parse_signature(call["sig"])
-            label = f"{proto}.{aname}[{i}]"
+            label = f"{proto}.{aname}[{i}]" + "".join(f"@{str(x)[:10]}…" for x in
+                                                       (lk_vars.get("_lookup_ids") or {}).values())
             for tok in (toks or [None]):
                 bc = builder.build(proto, aname, i, call, {**lk_vars, **({"token": tok, "_tokens": toks} if tok else {})})
                 if bc.error:

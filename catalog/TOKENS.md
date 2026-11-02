@@ -4,7 +4,7 @@ Every ERC-20 in the catalog: tokens, receipt tokens and vault shares. Use the `s
 `--token` (or `<card>.<symbol>` when two cards share one). Read amounts with `decimals`.
 How to work with them: `skills/defios-tokens/SKILL.md`.
 
-## Verified (336): an agent may act on these
+## Verified (355): an agent may act on these
 
 | symbol | name | address | decimals | card | category | kind | underlying |
 |---|---|---|---|---|---|---|---|
@@ -92,6 +92,9 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | aEthwstETH | Aave Ethereum wstETH | `0x0B925eD163218f6662a35e0f0371Ac234f9E9371` | 18 | aave_v3 | receipt | atoken | lido.wstETH |
 | aEthXAUt | Aave Ethereum XAUt | `0x8A2b6f94Ff3A89a03E8c02Ee92b55aF90c9454A2` | 6 | aave_v3 | receipt | atoken |  |
 | ankrETH | Ankr Staked ETH | `0xE95A203B1a91a908F9B9CE46459d101078c2c3cb` | 18 | ankr | token | erc20 |  |
+| autoUSD |  | `0xa7569A44f348d3D70d8ad5889e50F78E33d80D35` | 18 | tokemak | vault | erc4626 | stablecoins.USDC |
+| avETH |  | `0x9469470C9878bf3d6d0604831d9A3A366156f7EE` | 18 | avant | token | erc20 |  |
+| avUSD | avUSD | `0xf4c13D631450De6B12a19829E37c8e2826891dC4` | 18 | avant | token | erc20 |  |
 | BAL | Balancer | `0xba100000625a3754423978a60c9317c58a424e3D` | 18 | tokens | governance | erc20 |  |
 | BTCGHOETH | TricryptoGHO | `0x8a4f252812dFF2A8636E4F7EB249d8FC2E3bd77f` | 18 | curve | market | curve_pool |  |
 | BTCGHOETH_gauge | Curve.fi BTCGHOETH Gauge Deposit | `0x1E4B83f6bFE9dbeB6d5b92a5237E5c18a44176f4` | 18 | curve | staking | curve_gauge | BTCGHOETH |
@@ -127,6 +130,7 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | cvxweeth_ng | weETH/WETH-ng Convex Deposit | `0x3f353d76Ae89dc2C89Dcd0426e7Fa9c96A332273` | 18 | convex | receipt | convex_deposit_token | curve.weeth_ng |
 | cWETHv3 | Compound WETH | `0xA17581A9E3356d9A858b789D68B4d866e593aE94` | 18 | compound_v3 | market | comet | WETH |
 | DAI |  | `0x6B175474E89094C44Da98b954EedeAC495271d0F` | 18 | stablecoins | token | erc20 |  |
+| DUSD |  | `0x1e33E98aF620F1D563fcD3cfd3C75acE841204ef` | 18 | dialectic | token | erc20 |  |
 | eBTC | ether.fi BTC | `0x657e8C867D8B37dCC18fA4Caead9C45EB088C642` | 8 | tokens | token | erc20 |  |
 | ENA | ENA | `0x57e114B691Db790C35207b2e685D4A43181e6061` | 18 | ethena | governance | erc20 |  |
 | ETH_ETH | ETH+/ETH | `0x2c683fAd51da2cd17793219CC86439C1875c353e` | 18 | curve | market | curve_pool |  |
@@ -136,11 +140,13 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | ezETH | Renzo Restaked ETH | `0xbf5495Efe5DB9ce00f80364C8B423567e58d2110` | 18 | tokens | token | erc20 |  |
 | FRAX | Frax | `0x853d955aCEf822Db058eb8505911ED77F175b99e` | 18 | tokens | token | erc20 |  |
 | FT |  | `0x5DD1A7A369e8273371d2DBf9d83356057088082c` | 18 | flying_tulip | governance | erc20 |  |
+| ftUSD |  | `0xF7D85EC4E7710f71992752eac2111312e73E9C9C` | 6 | flying_tulip | token | erc20 |  |
 | fUSDC | Fluid USD Coin | `0x9Fb7b4477576Fe5B32be4C1843aFB1e55F251B33` | 6 | fluid | vault | erc4626 | USDC |
 | fUSDT | Fluid Tether USD | `0x5C20B550819128074FD538Edf79791733ccEdd18` | 6 | fluid | vault | erc4626 | USDT |
 | fWETH | Fluid Wrapped Ether | `0x90551c1795392094FE6D29B758EcCD233cFAa260` | 18 | fluid | vault | erc4626 | WETH |
 | fwstETH | Fluid Wrapped liquid staked Ether 2.0 | `0x2411802D8BEA09be0aF8fD8D08314a63e706b29C` | 18 | fluid | vault | erc4626 | wstETH |
 | GHO |  | `0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f` | 18 | stablecoins | token | erc20 |  |
+| iUSD |  | `0x48f9e38f3070AD8945DFEae3FA70987722E3D89c` | 18 | infinifi | token | erc20 |  |
 | KPK_ETH_Prime | KPK ETH Prime | `0xBb50A5341368751024ddf33385BA8cf61fE65FF9` | 18 | kpk | vault | erc4626 | weth.WETH |
 | KPK_ETH_Yield | KPK ETH Yield | `0x5dbf760b4fd0cDdDe0366b33aEb338b2A6d77725` | 18 | kpk | vault | erc4626 | weth.WETH |
 | KPK_EURC_Yield | KPK EURC Yield | `0xa877D5bb0274dcCbA8556154A30E1Ca4021a275f` | 18 | kpk | vault | erc4626 | stablecoins.EURC |
@@ -154,6 +160,7 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | kpkwstETH | wstETH v3 | `0xA9d17f6D3285208280a1Fd9B94479c62e0AABa64` | 18 | kpk | vault | erc4626 | lido.wstETH |
 | LBTC | Lombard Staked Bitcoin | `0x8236a87084f8B84306f72007F36F2618A5634494` | 8 | tokens | token | erc20 |  |
 | LDO | Lido DAO Token | `0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32` | 18 | lido | governance | erc20 |  |
+| limUSD |  | `0x9B74D3BD96f54dE689CfFDeb27EE34f68dFf086d` | 18 | liminal | receipt | oft |  |
 | LINK | ChainLink Token | `0x514910771AF9Ca656af840dff83E8264EcF986CA` | 18 | tokens | token | erc20 |  |
 | lsSKY | LockstakeSky | `0xf9A9cfD3229E985B91F99Bc866d42938044FFa1C` | 18 | sky | receipt | erc20 |  |
 | market_stETH_30DEC2027 | Pendle Market | `0x34280882267ffa6383B363E278B027Be083bBe3b` | 18 | pendle | market | pendle_market | PT_stETH_30DEC2027, SY_stETH |
@@ -174,16 +181,21 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | PT_sUSDS_26NOV2026 | PT Savings USDS 26NOV2026 | `0xdC169AbE56461A2E0c034Da431Ac2a3ebf596094` | 18 | pendle | receipt | pendle_pt | SY_sUSDS |
 | PYUSD |  | `0x6c3ea9036406852006290770BEdFcAbA0e23A0e8` | 6 | stablecoins | token | erc20 |  |
 | rETH | Rocket Pool ETH | `0xae78736Cd615f374D3085123A210448E74Fc6393` | 18 | rocket_pool | token | erc20 |  |
+| reUSD |  | `0x5086bf358635B81D8C47C66d1C8b9E567Db70c72` | 18 | re | receipt | erc20 |  |
 | RLUSD | RLUSD | `0x8292Bb45bf1Ee4d140127049757C2E0fF06317eD` | 18 | tokens | token | erc20 |  |
 | RLUSD_USDC | RLUSD/USDC | `0xD001aE433f254283FeCE51d4ACcE8c53263aa186` | 18 | curve | market | curve_pool |  |
 | RLUSD_USDC_gauge | Curve.fi RLUSD/USDC Gauge Deposit | `0xFc3212Bd9Ad9A28Da6B2bd50a2918969C126894F` | 18 | curve | staking | curve_gauge | RLUSD_USDC |
 | rsETH | rsETH | `0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7` | 18 | tokens | token | erc20 |  |
+| savETH |  | `0xDA06eE2dACF9245Aa80072a4407deBDea0D7e341` | 18 | avant | staking | erc4626_with_cooldown | avETH |
 | savings_spPYUSD | Spark Savings PYUSD | `0x80128DbB9f07b93DDE62A6daeadb69ED14a7D354` | 6 | spark | vault | erc4626 | stablecoins.PYUSD |
 | savings_spUSDC | Spark Savings USDC | `0x28B3a8fb53B741A8Fd78c0fb9A6B2393d896a43d` | 6 | spark | vault | erc4626 | stablecoins.USDC |
 | savings_spUSDT | Spark Savings USDT | `0xe2e7a17dFf93280dec073C995595155283e3C372` | 6 | spark | vault | erc4626 | stablecoins.USDT |
+| savUSD | Staked avUSD | `0xb8D89678E75a973E74698c976716308abB8a46A4` | 18 | avant | token | erc20 |  |
 | sDAI | Savings Dai | `0x83F20F44975D03b1b09e64809B757c47f942BEeA` | 18 | sky | vault | erc4626 | stablecoins.DAI |
 | sENA | Staked ENA | `0x8bE3460A480c80728a8C4D7a5D5303c85ba7B3b9` | 18 | ethena | staking | erc4626 | ENA |
+| sftUSD |  | `0xeb48218a4c35C814C7678cBcae88C6Ee037F7625` | 6 | flying_tulip | staking | erc4626 | ftUSD |
 | sGho | sGho | `0xE1753F2e00940cC31213dd92013cF019DFE4ca1d` | 18 | aave | vault | erc4626 | stablecoins.GHO |
+| siUSD |  | `0xDBDC1Ef57537E34680B898E1FEBD3D68c7389bCB` | 18 | infinifi | staking | erc4626 | iUSD |
 | SKY | SKY Governance Token | `0x56072C95FAA701256059aa122697B133aDEd9279` | 18 | sky | governance | erc20 |  |
 | spcbBTC | Spark cbBTC | `0xb3973D459df38ae57797811F2A1fd061DA1BC123` | 8 | spark | receipt | atoken |  |
 | spDAI | Spark DAI | `0x4DEDf26112B3Ec8eC46e7E31EA5e123490B05B8B` | 18 | spark | receipt | atoken | stablecoins.DAI |
@@ -208,6 +220,7 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | spweETH | Spark weETH | `0x3CFd5C0D4acAA8Faee335842e4f31159fc76B008` | 18 | spark | receipt | atoken | etherfi.weETH |
 | spWETH | Spark WETH | `0x59cD1C87501baa753d0B5B5Ab5D8416A45cD71DB` | 18 | spark | receipt | atoken | weth.WETH |
 | spwstETH | Spark wstETH | `0x12B54025C112Aa61fAce2CDB7118740875A566E9` | 18 | spark | receipt | atoken | lido.wstETH |
+| ssftUSD |  | `0x232128844e5aF56fD4B3f8BF97e08aB477282Ab5` | 18 | flying_tulip | staking | erc4626 | ftUSD |
 | steCRV | Curve.fi ETH/stETH | `0x06325440D014e39736583c165C2963BA99fAf14E` | 18 | curve | receipt | curve_lp | steth_pool |
 | steCRV_gauge | Curve.fi steCRV Gauge Deposit | `0x182B723a58739a9c974cFDB385ceaDb237453c28` | 18 | curve | staking | curve_gauge | steCRV |
 | stETH |  | `0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84` | 18 | lido | token | erc20_rebasing |  |
@@ -217,14 +230,17 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | stkCvxCrv | Staked CvxCrv | `0xaa0C3f5F7DFD688C6E646F66CD2a6B66ACdbE434` | 18 | convex | staking | convex_cvxcrv_staking_wrapper | cvxCRV |
 | stSPK | Staked Spark | `0xc6132FAF04627c8d05d6E759FAbB331Ef2D8F8fD` | 18 | spark | staking | staked_token |  |
 | stUSDS | Staked USDS | `0x99CD4Ec3f88A45940936F469E4bB72A2A701EEB9` | 18 | sky | vault | erc4626 | stablecoins.USDS |
+| sUSD3 |  | `0xf689555121e529Ff0463e191F9Bd9d1E496164a7` | 6 | threejane | staking | erc4626_cooldown | USD3 |
 | sUSDC | Spark USDC Vault | `0xBc65ad17c5C0a2A4D159fa5a503f4992c7B545FE` | 18 | spark | vault | erc4626 | stablecoins.USDC |
 | sUSDe |  | `0x9D39A5DE30e57443BfF2A8307A4256c8797A3497` | 18 | ethena | staking | erc4626_cooldown | USDe |
 | sUSDS | Savings USDS | `0xa3931d71877C0E7a3148CB7Eb4463524FEc27fbD` | 18 | sky | vault | erc4626 | stablecoins.USDS |
+| sUSN |  | `0xE24a3DC889621612422A64E6388927901608B91D` | 18 | noon | staking | erc4626 | USN |
 | SY_stETH | SY stETH | `0xcbC72d92b2dc8187414F6734718563898740C0BC` | 18 | pendle | receipt | pendle_sy | lido.wstETH |
 | SY_sUSDE | SY Ethena sUSDE | `0xBF98480425A29197e5d99D003017f63a1e595D02` | 18 | pendle | receipt | pendle_sy | ethena.sUSDe |
 | SY_sUSDS | SY Savings USDS | `0xBe3d4ec488A0a042BB86F9176C24f8CD54018BA7` | 18 | pendle | receipt | pendle_sy | sky.sUSDS |
 | tBTC | tBTC v2 | `0x18084fbA666a33d37592fA2633fD49a74DD93a88` | 18 | tokens | token | erc20 |  |
 | tETH | Treehouse ETH | `0xD11c452fc99cF405034ee446803b6F6c1F6d5ED8` | 18 | tokens | token | erc20 |  |
+| USD3 |  | `0x056B269Eb1f75477a8666ae8C7fE01b64dD55eCc` | 6 | threejane | vault | erc4626 | stablecoins.USDC |
 | USDC |  | `0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48` | 6 | stablecoins | token | erc20 |  |
 | USDe |  | `0x4c9EDD5852cd905f086C759E8383e09bff1E68B3` | 18 | ethena | token | erc20 |  |
 | USDeUSDC | USDe-USDC | `0x02950460E2b9529D0E00284A5fA2d7bDF3fA4d72` | 18 | curve | market | curve_pool |  |
@@ -233,6 +249,7 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | USDS |  | `0xdC035D45d973E3EC169d2276DDab16f1e407384F` | 18 | stablecoins | token | erc20 |  |
 | USDT |  | `0xdAC17F958D2ee523a2206206994597C13D831ec7` | 6 | stablecoins | token | erc20 |  |
 | USDtb | USDtb | `0xC139190F447e929f090Edeb554D95AbB8b18aC1C` | 18 | ethena | token | erc20 |  |
+| USN |  | `0xdA67B4284609d2d48e5d10cfAc411572727dc1eD` | 18 | noon | token | erc20 |  |
 | variableDebtcbBTC | Spark Variable Debt cbBTC | `0x661fE667D2103eb52d3632a3eB2cAbd123F27938` | 8 | spark | debt | variable_debt |  |
 | variableDebtDAI | Spark Variable Debt DAI | `0xf705d2B7e92B3F38e6ae7afaDAA2fEE110fE5914` | 18 | spark | debt | variable_debt | stablecoins.DAI |
 | variableDebtEth1INCH | Aave Ethereum Variable Debt 1INCH | `0xA38fCa8c6Bf9BdA52E76EB78f08CaA3BE7c5A970` | 18 | aave_v3 | debt | variable_debt |  |
@@ -341,11 +358,15 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | weeth_ng_gauge | Curve.fi weeth-ng Gauge Deposit | `0x053df3e4D0CeD9a3Bf0494F97E83CE1f13BdC0E2` | 18 | curve | staking | curve_gauge | weeth_ng |
 | WETH |  | `0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2` | 18 | weth | token | erc20 |  |
 | wstETH |  | `0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0` | 18 | lido | token | erc20 | stETH |
+| yoETH |  | `0x3A43AEC53490CB9Fa922847385D82fe25d0E9De7` | 18 | yo | vault | erc4626_async_redeem | weth.WETH |
+| yoUSD |  | `0x0000000f2eB9f69274678c76222B35eEc7588a65` | 6 | yo | vault | erc4626_async_redeem | stablecoins.USDC |
 | YT_stETH_30DEC2027 | YT stETH 30DEC2027 | `0x04B7Fa1e727d7290D6E24fA9b426d0c940283a95` | 18 | pendle | receipt | pendle_yt | SY_stETH |
 | YT_sUSDE_26NOV2026 | YT Ethena sUSDE 26NOV2026 | `0x89E6e5f7c3A60e7D6347F054051A29a272F4cE44` | 18 | pendle | receipt | pendle_yt | SY_sUSDE |
 | YT_sUSDS_26NOV2026 | YT Savings USDS 26NOV2026 | `0xC7B8551C6B286Ce0b44952320e940Bd3Dee58A09` | 18 | pendle | receipt | pendle_yt | SY_sUSDS |
 
-## Not verified (0): shown for reading, never acted on
+## Not verified (2): shown for reading, never acted on
 
 | symbol | name | address | decimals | card | category | kind | underlying | status |
 |---|---|---|---|---|---|---|---|---|
+| DETH |  | `0x871aB8E36CaE9AF35c6A3488B049965233DeB7ed` | 18 | makina | receipt | erc20 |  | unverified |
+| JANE |  | `0x333333330522F64EE8d0b3039c460b41670e3404` | 18 | threejane | reward | erc20 |  | unverified |
