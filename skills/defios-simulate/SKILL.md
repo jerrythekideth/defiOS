@@ -17,10 +17,30 @@ next to the Safe link. Never write "should work".
 |---|---|---|
 | automatic | `defios plan` and `defios permit` run their result on a local anvil fork and refuse if anything reverts | `RPC_URL` + Foundry's `anvil` (`defios doctor` reports both) |
 | by hand | `defios simulate --calls calls.json`, `--batch permit.json`, or both (the batch first, then the plan, so a new permission is tried with the call that needs it) | same |
+| with links | `defios simulate --tenderly --batch permit.json --calls calls.json`: the same bundle (batch from the Roles owner, then the Operator's execTransactionWithRole) on Tenderly, one dashboard link per transaction | `TENDERLY_ACCESS_KEY`, `TENDERLY_ACCOUNT`, `TENDERLY_PROJECT`; no anvil, no RPC |
 | at signing | in the Safe app, every signer presses **Simulate** on the queued transaction (Tenderly, built into the Safe app, no key needed) | nothing |
 
 Run `curl -L https://foundry.paradigm.xyz | bash && foundryup` to get anvil
 when `doctor` warns that it is missing.
+
+## Tenderly: ask for the key once
+
+If `defios doctor` says the Tenderly keys are not set, ask the human once:
+"Do you want simulations with Tenderly links? I need a Tenderly access key
+(dashboard.tenderly.co > Settings > Access Keys) and the account and project
+slugs from the project URL, put in `.env` as `TENDERLY_ACCESS_KEY`,
+`TENDERLY_ACCOUNT` and `TENDERLY_PROJECT`." Never ask them to paste the key
+into the chat; it goes in `.env` (AGENTS.md rule 8). With the keys set:
+
+* run `defios simulate --tenderly …` for anything the humans will sign, and
+  put the links next to the Safe link: signers can open the exact trace, state
+  changes and events without installing anything;
+* the links open for members of that Tenderly project; to show someone
+  outside it, use the dashboard's Share button (that makes it public:
+  ask the human first);
+* `--block N` pins the block; default is latest;
+* Tenderly reports Approval events, not the allowance left at the end: the
+  anvil run reads allowances back. When both are available, run both.
 
 ## Reading the result
 

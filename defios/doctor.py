@@ -11,7 +11,8 @@ from .engine import read_role
 from .roles import detect_version
 from .safe import TxService, safe_info
 
-ENV_KEYS = ["RPC_URL", "ETHERSCAN_API_KEY", "SAFE_API_KEY", "PROPOSER_PRIVATE_KEY"]
+ENV_KEYS = ["RPC_URL", "ETHERSCAN_API_KEY", "SAFE_API_KEY", "PROPOSER_PRIVATE_KEY",
+            "TENDERLY_ACCESS_KEY", "TENDERLY_ACCOUNT", "TENDERLY_PROJECT"]
 
 
 def _ok(cond: bool, ok_msg: str, bad_msg: str, severity: str = "error") -> dict:
@@ -29,6 +30,10 @@ def doctor(vault: VaultConfig, rpc: Rpc | None, logs_file: str | None = None) ->
     checks.append(_ok(bool(shutil.which("anvil")), "anvil found: plan / permit are simulated on a fork",
                       "anvil not installed (Foundry): plan / permit cannot simulate; nothing should be signed "
                       "unsimulated", "warning"))
+    tdly = [out["env"][k] for k in ("TENDERLY_ACCESS_KEY", "TENDERLY_ACCOUNT", "TENDERLY_PROJECT")]
+    checks.append(_ok(all(tdly), "Tenderly keys set: `defios simulate --tenderly` gives shareable links",
+                      "Tenderly keys not set (optional): ask the human for TENDERLY_ACCESS_KEY, TENDERLY_ACCOUNT, "
+                      "TENDERLY_PROJECT to simulate with links", "info" if not any(tdly) else "warning"))
     if rpc is None:
         return out
 

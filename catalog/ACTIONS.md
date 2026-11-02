@@ -410,6 +410,9 @@ each `--param` name must be given as `--param name=value`.
 | `deposit_eurc` | EURC | KPK_EURC_Yield |  | EURC -> shares of one of these EURC vaults, credited to the Vault |
 | `withdraw_eurc` | EURC | KPK_EURC_Yield |  | vault shares -> an exact amount of EURC, paid to the Vault |
 | `redeem` |  | KPK_ETH_Prime, KPK_ETH_Yield, KPK_USDC_Prime, KPK_USDC_Prime_Core, KPK_USDC_Yield, KPK_USDC_Yield_RWA, KPK_USDT_Prime, KPK_EURC_Yield |  | an exact number of vault shares -> the vault's asset, paid to the Vault (amount in shares) |
+| `deposit_any` | the asset |  | vault_address | the vault's asset -> shares of vault `vault_address`, credited to the Vault |
+| `withdraw_any` | the asset |  |  | shares of vault `vault_address` -> an exact amount of its asset, paid to the Vault |
+| `redeem_any` | the asset |  | shares_raw | raw shares of vault `vault_address` (--param shares_raw) -> its asset, paid to the Vault |
 
 ## noon: Noon (USN, sUSN with a withdrawal handler)
 

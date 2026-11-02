@@ -112,3 +112,79 @@ def test_list_params_and_bytes32_proofs(catalog):
     assert _fixed_bytes([v], "bytes32[][]")[0][1] == bytes.fromhex("01" * 32)
     with pytest.raises(Exception):
         _param_value(catalog, "merkl", ["0x" + "12" * 20], {})  # an uncatalogued address
+
+
+# --------------------------------------------------------------------------- any Morpho vault by address
+VAULT_A, VAULT_B = to_checksum_address("0x" + "a1" * 20), to_checksum_address("0x" + "b2" * 20)
+DEPOSIT = "0x6e553f65"
+
+
+class VaultRpc:
+    """Factories vouch for `vaults` ({address: asset}); `factory` says which factory knows them."""
+
+    def __init__(self, catalog, vaults, factory="morpho_vaults.vault_v2_factory"):
+        self.vaults, self.factory = vaults, catalog.resolve_contract(factory, "x")
+
+    def call(self, to, sig, args, out_types):
+        if sig in ("isMetaMorpho(address)", "isVaultV2(address)"):
+            return to == self.factory and args[0] in self.vaults
+        assert sig == "asset()"
+        return self.vaults[to]
+
+
+def test_any_vault_resolves(catalog):
+    usdc = catalog.resolve_contract("stablecoins.USDC", "x")
+    v = resolve(catalog, "morpho_vaults", catalog.cards["morpho_vaults"].actions["deposit_any"],
+                {"vault_address": VAULT_A.lower()}, VaultRpc(catalog, {VAULT_A: usdc}))
+    assert v["any_vault"] == VAULT_A and v["any_vault.asset"] == usdc
+    assert v["_lookup_checks"]["any_vault"] == "vault_v2_factory.isVaultV2"
+
+
+@pytest.mark.parametrize("case", ["not_a_vault", "unknown_asset", "bad_address"])
+def test_any_vault_refuses(catalog, case):
+    usdc = catalog.resolve_contract("stablecoins.USDC", "x")
+    vaults, addr = {VAULT_A: usdc}, VAULT_A
+    if case == "not_a_vault":
+        addr = VAULT_B
+    elif case == "unknown_asset":
+        vaults = {VAULT_A: to_checksum_address("0x" + "cd" * 20)}
+    else:
+        addr = "0x1234"
+    with pytest.raises(LookupFailed):
+        resolve(catalog, "morpho_vaults", catalog.cards["morpho_vaults"].actions["deposit_any"],
+                {"vault_address": addr}, VaultRpc(catalog, vaults))
+
+
+def test_permit_any_vault_pins_target_and_spender(catalog):
+    usdc = catalog.resolve_contract("stablecoins.USDC", "x")
+    rpc = VaultRpc(catalog, {VAULT_A: usdc, VAULT_B: usdc}, "morpho_vaults.metamorpho_factory")
+    state = RoleState("v2", 1, MOD, "R", 0, "t")
+    for v in (VAULT_A, VAULT_B):
+        seen = []
+        orig = P.apply_ops
+        P.apply_ops = lambda st, ops: seen.append(orig(st, ops)) or seen[-1]
+        try:
+            r = P.permit(catalog, state, RolesV2(MOD), VaultConfig("t", 1, AVATAR, MOD, "R"),
+                         ["morpho_vaults.deposit_any"], params={"vault_address": v}, rpc=rpc)
+        finally:
+            P.apply_ops = orig
+        assert r["ok"], r
+        state = seen[0]
+    assert state.function(VAULT_A, DEPOSIT) and state.function(VAULT_B, DEPOSIT)
+    spender = state.function(usdc, "0x095ea7b3").condition.children[0]
+    assert spender.operator == Operator.OR and len(spender.children) == 2
+
+
+def test_any_vault_target_without_param(catalog):
+    from defios.catalog import CallBuilder
+    call = catalog.cards["morpho_vaults"].actions["deposit_any"]["calls"][1]
+    bc = CallBuilder(catalog, AVATAR).build("morpho_vaults", "deposit_any", 1, call, {})
+    assert bc.error and "vault_address" in bc.error
+
+
+def test_recognize_for_propose(catalog):
+    from defios.lookups import recognize
+    rpc = VaultRpc(catalog, {VAULT_A: catalog.resolve_contract("stablecoins.USDC", "x")})
+    assert recognize(catalog, VAULT_A, rpc) == "morpho_vaults any_vault (vault_v2_factory.isVaultV2)"
+    assert recognize(catalog, VAULT_B, rpc) is None
+    assert recognize(catalog, VAULT_A, None) is None

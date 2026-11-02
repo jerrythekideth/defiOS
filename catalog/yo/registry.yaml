@@ -1,0 +1,10 @@
+contracts:
+  vault_registry:
+    address: "0x56c3119DC3B1a75763C87D5B0A2C55E489502232"
+    category: config
+    kind: vault_list
+    aliases: [YoRegistry, yo registry]
+    note: "Yo's list of its vaults; the gateway only routes to listed vaults (gateway.registry())"
+    proofs:
+      - { read: "listYoVaults() returns (address[])", expect: { contains: yoETH } }
+      - { read: "listYoVaults() returns (address[])", expect: { contains: yoUSD } }

@@ -31,6 +31,8 @@ contracts:
     category: vault
     kind: arm_lp_vault
     aliases: [ARM-WETH, multi asset arm, origin multi-asset arm]
+    proofs:
+      - { read: "asset() returns (address)", expect: weth.WETH }
   WETH: { ref: weth.WETH }
 
 reads:

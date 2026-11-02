@@ -4,7 +4,7 @@ Every ERC-20 in the catalog: tokens, receipt tokens and vault shares. Use the `s
 `--token` (or `<card>.<symbol>` when two cards share one). Read amounts with `decimals`.
 How to work with them: `skills/defios-tokens/SKILL.md`.
 
-## Verified (335): an agent may act on these
+## Verified (336): an agent may act on these
 
 | symbol | name | address | decimals | card | category | kind | underlying |
 |---|---|---|---|---|---|---|---|
@@ -135,6 +135,7 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | EURC | Euro Coin | `0x1aBaEA1f7C830bD89Acc67eC4af516284b1bC33c` | 6 | stablecoins | token | erc20 |  |
 | ezETH | Renzo Restaked ETH | `0xbf5495Efe5DB9ce00f80364C8B423567e58d2110` | 18 | tokens | token | erc20 |  |
 | FRAX | Frax | `0x853d955aCEf822Db058eb8505911ED77F175b99e` | 18 | tokens | token | erc20 |  |
+| FT |  | `0x5DD1A7A369e8273371d2DBf9d83356057088082c` | 18 | flying_tulip | governance | erc20 |  |
 | fUSDC | Fluid USD Coin | `0x9Fb7b4477576Fe5B32be4C1843aFB1e55F251B33` | 6 | fluid | vault | erc4626 | USDC |
 | fUSDT | Fluid Tether USD | `0x5C20B550819128074FD538Edf79791733ccEdd18` | 6 | fluid | vault | erc4626 | USDT |
 | fWETH | Fluid Wrapped Ether | `0x90551c1795392094FE6D29B758EcCD233cFAa260` | 18 | fluid | vault | erc4626 | WETH |
@@ -344,8 +345,7 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | YT_sUSDE_26NOV2026 | YT Ethena sUSDE 26NOV2026 | `0x89E6e5f7c3A60e7D6347F054051A29a272F4cE44` | 18 | pendle | receipt | pendle_yt | SY_sUSDE |
 | YT_sUSDS_26NOV2026 | YT Savings USDS 26NOV2026 | `0xC7B8551C6B286Ce0b44952320e940Bd3Dee58A09` | 18 | pendle | receipt | pendle_yt | SY_sUSDS |
 
-## Not verified (1): shown for reading, never acted on
+## Not verified (0): shown for reading, never acted on
 
 | symbol | name | address | decimals | card | category | kind | underlying | status |
 |---|---|---|---|---|---|---|---|---|
-| FT |  | `0x5DD1A7A369e8273371d2DBf9d83356057088082c` | 18 | flying_tulip | governance | erc20 |  | unverified |

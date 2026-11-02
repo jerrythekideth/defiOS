@@ -240,6 +240,15 @@ def _fmt(raw: int, dec: int | None) -> str:
     return ("-" if raw < 0 else "+") + s
 
 
+def operator_sends(vault: VaultConfig, calls: list[Call], batch_mode: str = "roles",
+                   multisend: str | None = None) -> tuple[list[Call], list[str]]:
+    """The transaction(s) the Operator Safe makes for `calls`: execTransactionWithRole on the Roles modifier."""
+    op = build_operator_tx(calls, vault.roles_modifier, vault.role_key, vault.chain_id, batch_mode, multisend)
+    sends = [op.safe_tx] if op.safe_tx.operation == 0 else [
+        Call(vault.roles_modifier, 0, exec_with_role(c, vault.role_key, True)) for c in calls]
+    return sends, list(op.warnings)
+
+
 def simulate(vault: VaultConfig, fork: Fork, *, batch: dict | None = None, calls: list[Call] | None = None,
              catalog: Catalog | None = None, batch_mode: str = "roles", multisend: str | None = None) -> dict:
     if not batch and not calls:
@@ -275,11 +284,9 @@ def simulate(vault: VaultConfig, fork: Fork, *, batch: dict | None = None, calls
     if calls and ok:
         if not vault.operator:
             raise SimulateError(f"vault {vault.name} has no operator in defios.yaml; calls run through it")
-        op = build_operator_tx(calls, vault.roles_modifier, vault.role_key, vault.chain_id, batch_mode, multisend)
-        res["warnings"] += op.warnings
+        sends, warns = operator_sends(vault, calls, batch_mode, multisend)
+        res["warnings"] += warns
         fork.impersonate(vault.operator)
-        sends = [op.safe_tx] if op.safe_tx.operation == 0 else [
-            Call(vault.roles_modifier, 0, exec_with_role(c, vault.role_key, True)) for c in calls]
         for i, s in enumerate(sends):
             if not ok:
                 res["steps"].append({"kind": "operator", "index": i, "ok": None, "error": "not run"})

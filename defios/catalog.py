@@ -460,6 +460,8 @@ class CallBuilder:
                         for c, v in zip(p.components, vars_[spec[1:]]):
                             if c.type == "address":
                                 pins.append(Pin(f"{path}.{c.name}", [v], "lookup"))
+                    elif spec[1:] in vars_.get("_pinned", ()) and t == "address":
+                        pins.append(Pin(path, [vars_[spec[1:]]], "lookup"))
                     return _fixed_bytes(vars_[spec[1:]], t)
                 if spec[1:].split(".", 1)[0] in (self.catalog.cards[protocol].raw.get("lookups") or {}):
                     lk = self.catalog.cards[protocol].raw["lookups"][spec[1:].split(".", 1)[0]]
@@ -520,6 +522,13 @@ class CallBuilder:
                 bc.target = vars_.get("token")
                 if not bc.target:
                     bc.error = "target $token: no token chosen (the action's `tokens:` list, --token, or its lookup)"
+                    return bc
+            elif call["target"].startswith("$") and not call["target"].startswith("$book."):
+                # an address lookup (any Morpho vault): proved onchain by lookups.resolve, then pinned
+                bc.target = vars_.get(call["target"][1:])
+                if not bc.target:
+                    lk = (self.catalog.cards[protocol].raw.get("lookups") or {}).get(call["target"][1:]) or {}
+                    bc.error = f"target {call['target']} is looked up onchain from --param {lk.get('param')}; not given"
                     return bc
             else:
                 bc.target = self.catalog.resolve_contract(call["target"], protocol, self.book_vars)
@@ -655,6 +664,32 @@ def validate_card(catalog: Catalog, card: Card) -> list[str]:
             errs.append(f"{card.protocol}.{name}: decimals must be an integer 0..77, got {d!r}")
     for lname, lk in (raw.get("lookups") or {}).items():
         lk = lk or {}
+        if lk.get("kind") == "address":
+            if "param" not in lk:
+                errs.append(f"{card.protocol} lookup {lname}: missing `param`")
+            if not lk.get("check_any"):
+                errs.append(f"{card.protocol} lookup {lname}: an address lookup needs `check_any` "
+                            f"(catalogued contracts that vouch for the address onchain)")
+            for chk in lk.get("check_any") or []:
+                try:
+                    sig = parse_signature(chk.get("read") or "")
+                    if [p.type for p in sig.params] != ["address"] or [p.type for p in sig.outputs] != ["bool"]:
+                        errs.append(f"{card.protocol} lookup {lname}: check {sig.name} must be (address) returns (bool)")
+                    if not catalog.resolve_contract(chk.get("target", ""), card.protocol):
+                        errs.append(f"{card.protocol} lookup {lname}: check target {chk.get('target')} has no address")
+                except CardError as e:
+                    errs.append(f"{card.protocol} lookup {lname}: {e}")
+            for f, r in (lk.get("reads") or {}).items():
+                try:
+                    sig = parse_signature(r)
+                    if sig.params or len(sig.outputs) != 1:
+                        errs.append(f"{card.protocol} lookup {lname}: read {f} must take no args and return one value")
+                except CardError as e:
+                    errs.append(f"{card.protocol} lookup {lname}: {e}")
+            for f in lk.get("tokens") or []:
+                if f not in (lk.get("reads") or {}):
+                    errs.append(f"{card.protocol} lookup {lname}: token field {f!r} not in `reads`")
+            continue
         for k in ("param", "target", "read"):
             if k not in lk:
                 errs.append(f"{card.protocol} lookup {lname}: missing `{k}`")
@@ -723,6 +758,10 @@ def validate_card(catalog: Catalog, card: Card) -> list[str]:
                     errs.append(f"{card.protocol}.{aname}[{i}]: receiver-like param {p.name!r} not pinned "
                                 f"(pin it or list it under `free:` with a reason)")
             if call["target"] == TOKEN:
+                continue
+            if call["target"].startswith("$") and not call["target"].startswith("$book."):
+                if (raw.get("lookups") or {}).get(call["target"][1:], {}).get("kind") != "address":
+                    errs.append(f"{card.protocol}.{aname}[{i}]: target {call['target']} is not an address lookup")
                 continue
             try:
                 catalog.resolve_contract(call["target"], card.protocol)

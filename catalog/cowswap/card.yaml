@@ -14,6 +14,8 @@ contracts:
     kind: library_delegatecall
     aliases: [cow order signer, cowswap signer]
     note: "called with DELEGATECALL from the Avatar so the Avatar pre-signs the order"
+    proofs:
+      - { read: "signing() returns (address)", expect: settlement }
   gpv2_vault_relayer:
     address: "0xC92E8bdf79f0507f65a392b0ab4667716BFE0110"
     category: spender

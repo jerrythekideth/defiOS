@@ -14,6 +14,8 @@ contracts:
     kind: lending_spoke
     aliases: [aave v4, aave v4 spoke, spoke]
     note: "TransparentUpgradeableProxy -> SpokeInstance. The Spoke pulls tokens from msg.sender, so it is the approve spender; withdraw and borrow pay msg.sender"
+    proofs:
+      - { read: "ORACLE() returns (address)", expect: oracle }
   USDC: { ref: stablecoins.USDC }
   USDT: { ref: stablecoins.USDT }
   DAI: { ref: stablecoins.DAI }

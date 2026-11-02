@@ -2,8 +2,8 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26293727,
-   "checked": "2026-10-28"
+   "block": 26328853,
+   "checked": "2026-11-02"
   }
  },
  "protocols": {
@@ -530,12 +530,15 @@
    ],
    "actions": [
     "deposit",
+    "deposit_any",
     "deposit_eurc",
     "deposit_usdc",
     "deposit_usdt",
     "deposit_weth",
     "redeem",
+    "redeem_any",
     "withdraw",
+    "withdraw_any",
     "withdraw_eurc",
     "withdraw_usdc",
     "withdraw_usdt",
@@ -1564,15 +1567,24 @@
      "veda liquid usd",
      "liquidUSD"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: liquid_usd_teller.vault() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/etherfi/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "liquid_usd_teller.vault() == $self",
+      "ok": true
+     },
+     {
+      "id": "liquid_usd_queue.boringVault() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {
      "name": "Ether.Fi Liquid USD",
@@ -2063,15 +2075,20 @@
     "aliases": [
      "noon withdrawal handler"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.usn() == USN"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/noon/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.usn() == USN",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {}
    }
@@ -2992,15 +3009,20 @@
     "aliases": [
      "dusd"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: smDUSD.machineShare() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/dialectic/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "smDUSD.machineShare() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {
      "name": "Dialectic USD",
@@ -3290,15 +3312,20 @@
      "cow order signer",
      "cowswap signer"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.signing() == settlement"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/cowswap/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.signing() == settlement",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {},
     "note": "called with DELEGATECALL from the Avatar so the Avatar pre-signs the order"
@@ -3584,15 +3611,20 @@
      "token messenger",
      "TokenMessengerV2"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: token_minter.localTokenMessenger() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/cctp/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "token_minter.localTokenMessenger() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x555E272506C06e7E559d57418563742AFE363ec8",
      "admin": "0xa820A620F638114F3Eb45df87382383322dDBC49"
@@ -4128,6 +4160,43 @@
     ],
     "proxy": {},
     "onchain": {}
+   }
+  ],
+  "1:0x308861a430be4cce5502d0a12724771fc6daf216": [
+   {
+    "chain_id": 1,
+    "address": "0x308861A430be4cce5502d0A12724771Fc6DaF216",
+    "protocol": "etherfi",
+    "protocol_name": "ether.fi (weETH) + Veda Liquid ETH / Liquid USD",
+    "name": "liquidity_pool",
+    "title": null,
+    "ref": "etherfi.liquidity_pool",
+    "category": "staking",
+    "kind": "liquidity_pool",
+    "eoa": false,
+    "aliases": [
+     "ether.fi liquidity pool",
+     "LiquidityPool"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: weETH.liquidityPool() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/etherfi/registry.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "weETH.liquidityPool() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x17A16747D03006c9754548AC0d0afF48783A4a45"
+    },
+    "onchain": {},
+    "note": "ether.fi ETH pool behind eETH / weETH (weETH.liquidityPool())"
    }
   ],
   "1:0x309a862bbc1a00e45506cb8a802d1ff10004c8c0": [
@@ -5950,15 +6019,20 @@
      "re icl",
      "insurance capital layer"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.shareToken() == reUSD"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/re/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.shareToken() == reUSD",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x06d4ACC104b974cD99bF22e4572f48A051E59670"
     },
@@ -6166,15 +6240,20 @@
     "aliases": [
      "iusd"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: siUSD.asset() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/infinifi/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "siUSD.asset() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {
      "name": "infiniFi USD",
@@ -7122,15 +7201,20 @@
     "aliases": [
      "reusd"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: icl.shareToken() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/re/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "icl.shareToken() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0xb5276c436F65913Cd5332DE745d04feDEb4a21D4"
     },
@@ -7499,6 +7583,48 @@
      "name": "SKY Governance Token",
      "symbol": "SKY"
     }
+   }
+  ],
+  "1:0x56c3119dc3b1a75763c87d5b0a2c55e489502232": [
+   {
+    "chain_id": 1,
+    "address": "0x56c3119DC3B1a75763C87D5B0A2C55E489502232",
+    "protocol": "yo",
+    "protocol_name": "Yo (yoETH, yoUSD)",
+    "name": "vault_registry",
+    "title": null,
+    "ref": "yo.vault_registry",
+    "category": "config",
+    "kind": "vault_list",
+    "eoa": false,
+    "aliases": [
+     "YoRegistry",
+     "yo registry"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.listYoVaults() contains yoETH"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yo/registry.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.listYoVaults() contains yoETH",
+      "ok": true
+     },
+     {
+      "id": "$self.listYoVaults() contains yoUSD",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x542D29b2b69f83fa65EEC2F3C782968c43BC8aE8",
+     "admin": "0x7A6cCE05a054786F7b7923006640F9C9C09b6292"
+    },
+    "onchain": {},
+    "note": "Yo's list of its vaults; the gateway only routes to listed vaults (gateway.registry())"
    }
   ],
   "1:0x56d919e7b25aa42f3f8a4bc77b8982048f2e84b4": [
@@ -8034,15 +8160,20 @@
      "ft",
      "flying tulip"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: sftUSD.FT() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/flying_tulip/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "sftUSD.FT() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {
      "name": "Flying Tulip",
@@ -8551,15 +8682,24 @@
      "srnusd",
      "strata senior nusd"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.cdo() == cdo_nusd"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/strata/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.cdo() == cdo_nusd",
+      "ok": true
+     },
+     {
+      "id": "cdo_nusd.srtVault() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x470B9D44674b4706bAD670DaBb75ccFDa90D2743",
      "admin": "0xBfA0344ee901C425F42039D203526cC26bC186fD"
@@ -8666,15 +8806,20 @@
      "multi asset arm",
      "origin multi-asset arm"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.asset() == weth.WETH"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/origin_arm/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.asset() == weth.WETH",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0xe0Dba0eF9A1C7dF2a94386A3187e9360e1B2c1fb",
      "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F"
@@ -10173,6 +10318,48 @@
     }
    }
   ],
+  "1:0x7b6c960cf185fb27ecb91c174fae065978bedd10": [
+   {
+    "chain_id": 1,
+    "address": "0x7b6c960cf185fb27ECb91c174FAe065978beDd10",
+    "protocol": "strata",
+    "protocol_name": "Strata (senior/junior tranches on USDe and NUSD)",
+    "name": "cdo_nusd",
+    "title": null,
+    "ref": "strata.cdo_nusd",
+    "category": "config",
+    "kind": "tranche_cdo",
+    "eoa": false,
+    "aliases": [
+     "strata nusd cdo",
+     "StrataCDO nusd"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.jrtVault() == jrNUSD"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/strata/registry.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.jrtVault() == jrNUSD",
+      "ok": true
+     },
+     {
+      "id": "$self.srtVault() == srNUSD",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0x19A123423ca8dAF9E87DED8daD690c3Efc094f02",
+     "admin": "0x12C609ef6d60eA23c84d1da0cD4c4Ca025025221"
+    },
+    "onchain": {},
+    "note": "StrataCDO behind the NUSD tranches (jrNUSD.cdo())"
+   }
+  ],
   "1:0x7b70d04099cb9cfb1db7b6820badafb4c5c70a67": [
    {
     "chain_id": 1,
@@ -10336,15 +10523,24 @@
      "ether.fi withdraw request nft",
      "WithdrawRequestNFT"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: liquidity_pool.withdrawRequestNFT() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/etherfi/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "liquidity_pool.withdrawRequestNFT() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.liquidityPool() == liquidity_pool",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x41617D01362770ebAAC10311aB899FBc8a4E4A7E"
     },
@@ -10797,7 +10993,7 @@
      }
     ],
     "proxy": {
-     "implementation": "0x072072317469ebB6C340a47e41561C9C3b782BD9",
+     "implementation": "0xE15382BC6968a50C5Ff5aF193D03de6BE4d0270f",
      "admin": "0xbae061C73876952aa2C5e483B74DfA785425f879"
     },
     "onchain": {
@@ -11749,15 +11945,24 @@
     "aliases": [
      "re redemption gateway"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.shareToken() == reUSD"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/re/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.shareToken() == reUSD",
+      "ok": true
+     },
+     {
+      "id": "$self.instantRedemption() == instant_redemption",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {}
    }
@@ -12337,15 +12542,24 @@
      "avETH",
      "avant eth"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: savETH.asset() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/avant/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "savETH.asset() == $self",
+      "ok": true
+     },
+     {
+      "id": "minting.avantcoin() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {
      "name": "avETH",
@@ -12371,15 +12585,20 @@
      "aave v4 spoke",
      "spoke"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.ORACLE() == oracle"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/aave_v4/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.ORACLE() == oracle",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0xABd0E26FE17BDe4F1f1187Ed8aA80C274E03D8b5",
      "admin": "0xfFeAcCAd70f4393701272212dACD791c01957f7f"
@@ -12693,6 +12912,41 @@
     "note": "PENDLE staking (replaces the deprecated vePENDLE)"
    }
   ],
+  "1:0x99b2b6cea9c3d2fd8f4d90f86741c44b212a6127": [
+   {
+    "chain_id": 1,
+    "address": "0x99B2B6CEa9C3D2fd8F4d90f86741C44B212a6127",
+    "protocol": "aave_v4",
+    "protocol_name": "Aave v4 (Spoke, core hub)",
+    "name": "oracle",
+    "title": null,
+    "ref": "aave_v4.oracle",
+    "category": "oracle",
+    "kind": "aave_oracle",
+    "eoa": false,
+    "aliases": [
+     "aave v4 oracle",
+     "AaveOracle v4"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: $self.spoke() == spoke"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/aave_v4/registry.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "$self.spoke() == spoke",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "the spoke's price oracle (spoke.ORACLE())"
+   }
+  ],
   "1:0x99cd4ec3f88a45940936f469e4bb72a2a701eeb9": [
    {
     "chain_id": 1,
@@ -12819,15 +13073,20 @@
      "limusd",
      "liminal usd"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: spoke.shareOFT() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/liminal/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "spoke.shareOFT() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x0631AB29fE888205e3F7322983ba569e064fd23F",
      "admin": "0xf32e7353DBA967c426A6F54F9a3baC7DBd26eee4"
@@ -13999,15 +14258,20 @@
      "flying tulip mint",
      "MintAndRedeem"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.collateralAt(0) == USDC"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/flying_tulip/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.collateralAt(0) == USDC",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x8852B132B72613a16f1E3960978a3d45c0A7c3C6"
     },
@@ -15033,15 +15297,20 @@
      "smdusd",
      "dialectic security module"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.machineShare() == DUSD"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/dialectic/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.machineShare() == DUSD",
+      "ok": true
+     }
+    ],
     "proxy": {
      "beacon": "0x49eE9b4865CBbF9ec8B142cdd4A5a65971F92542"
     },
@@ -15390,15 +15659,24 @@
     "kind": "core",
     "eoa": false,
     "aliases": [],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: metamorpho_factory_v1_1.MORPHO() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/morpho_vaults/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "metamorpho_factory_v1_1.MORPHO() == $self",
+      "ok": true
+     },
+     {
+      "id": "metamorpho_factory.MORPHO() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {},
     "note": "Morpho Blue singleton; vaults allocate into it. Direct market actions are in the morpho_markets card."
@@ -17435,15 +17713,24 @@
     "aliases": [
      "ether.fi deposit adapter"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.weETH() == weETH"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/etherfi/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.weETH() == weETH",
+      "ok": true
+     },
+     {
+      "id": "$self.liquidityPool() == liquidity_pool",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0xE774E19f087523EA316fCCb4B156169153f18b9d"
     },
@@ -18057,15 +18344,20 @@
      "usn",
      "noon usd"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: sUSN.asset() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/noon/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "sUSN.asset() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x79FD7FE2a8EbcAE47798321b2AC97107dF3de229",
      "admin": "0x55f39512cb43111A13E8440ee3e3602e72628239"
@@ -19415,15 +19707,20 @@
      "liquidETH",
      "ether.fi liquid"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.hook() == liquid_eth_teller"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/etherfi/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.hook() == liquid_eth_teller",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {
      "name": "Ether.Fi Liquid ETH",
@@ -19524,15 +19821,20 @@
      "YoGateway",
      "yo gateway"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.registry() == vault_registry"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/yo/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.registry() == vault_registry",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x0cF9a84BB9E916229F3037dc079eF418B97bb0cF",
      "admin": "0xB3C902F8fA46d7985efaB885105ae2d7b4976827"
@@ -19906,15 +20208,20 @@
      "ftusd",
      "flying tulip usd"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: sftUSD.asset() == $self"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/flying_tulip/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "sftUSD.asset() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0xf47bb65Fb0886Be183dB541AfCE555345e3e1885"
     },
@@ -20231,15 +20538,24 @@
     "aliases": [
      "ether.fi weETH withdraw adapter"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.weETH() == weETH"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/etherfi/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.weETH() == weETH",
+      "ok": true
+     },
+     {
+      "id": "$self.liquidityPool() == liquidity_pool",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0xbe386B1Fb51ffAcAE0522a5dA099371cd4a2AAeA"
     },
@@ -20337,15 +20653,24 @@
      "jrnusd",
      "strata junior nusd"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.cdo() == cdo_nusd"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/strata/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.cdo() == cdo_nusd",
+      "ok": true
+     },
+     {
+      "id": "cdo_nusd.jrtVault() == $self",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x0Ea5BdF736F84949563F1Ec66c79b9c047fb8965",
      "admin": "0xec45EBDd0278ffBC9ce5731DC8E3a34dc8674c07"
@@ -20426,6 +20751,41 @@
      "name": "Aave Ethereum EtherFi Variable Debt FRAX",
      "symbol": "variableDebtEthEtherFiFRAX"
     }
+   }
+  ],
+  "1:0xfd78ee919681417d192449715b2594ab58f5d002": [
+   {
+    "chain_id": 1,
+    "address": "0xfd78EE919681417d192449715b2594ab58f5D002",
+    "protocol": "cctp",
+    "protocol_name": "Circle CCTP v2 (bridge USDC)",
+    "name": "token_minter",
+    "title": null,
+    "ref": "cctp.token_minter",
+    "category": "minter",
+    "kind": "token_minter",
+    "eoa": false,
+    "aliases": [
+     "TokenMinterV2",
+     "cctp token minter"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: token_messenger.localMinter() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/cctp/registry.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "token_messenger.localMinter() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "mints and burns USDC for the token messenger (token_messenger.localMinter())"
    }
   ],
   "1:0xfdafc9d1902f4e0b84f65f49f244b32b31013b74": [

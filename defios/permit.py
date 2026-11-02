@@ -437,7 +437,9 @@ def permit(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vau
         if lookups.token_from(action, lk_vars):
             toks = [lookups.token_from(action, lk_vars)]
         for lname, lid in (lk_vars.get("_lookup_ids") or {}).items():
-            notes.append(f"{proto}.{aname}: {lname} {lid} pinned field by field: "
+            chk = (lk_vars.get("_lookup_checks") or {}).get(lname)
+            notes.append(f"{proto}.{aname}: {lname} {lid} "
+                         + (f"proved by {chk}, pinned as target / address: " if chk else "pinned field by field: ")
                          + ", ".join(f"{k.split('.', 1)[1]}={v}" for k, v in lk_vars.items()
                                      if k.startswith(lname + ".")))
         for i, call in enumerate(action.get("calls") or []):

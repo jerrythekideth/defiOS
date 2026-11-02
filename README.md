@@ -71,7 +71,7 @@ defios --format text check
 ```
 
 Point your agent at `AGENTS.md` (the manual and rules) and, for OpenClaw or
-Claude Code, at `skills/defios/SKILL.md` (and `skills/defios-tokens`, `skills/defios-simulate`, `skills/defios-merkl` for tokens, simulation and Merkl rewards).
+Claude Code, at `skills/defios/SKILL.md` (and `skills/defios-tokens`, `skills/defios-simulate`, `skills/defios-merkl`, `skills/defios-morpho` for tokens, simulation, Merkl rewards and any Morpho vault or market).
 
 Optional MCP server exposing the same functions as tools:
 `pip install -e "DeFi_os[mcp]"` then `DEFIOS_ROOT=/path/to/agent-repo python -m defios.mcp`.
@@ -81,7 +81,7 @@ Optional MCP server exposing the same functions as tools:
 ```
 DeFi_os/                    public · this repo · no user data
 ├── AGENTS.md               the agent manual and rules
-├── skills/                 AgentSkills-format skills (OpenClaw, Claude Code): defios, defios-tokens, defios-simulate, defios-merkl
+├── skills/                 AgentSkills-format skills (OpenClaw, Claude Code): defios, defios-tokens, defios-simulate, defios-merkl, defios-morpho
 ├── catalog/<protocol>/     card.yaml (+ NOTES.md): public protocol facts
 ├── defios/                 Python engine: roles/ (v2 adapter, v3 slot), sync, check, doctor, cli, mcp,
 │                           plan (intent -> calls.json), tx (MultiSend + execTransactionWithRole),
@@ -129,7 +129,7 @@ your-permissions/           public or private audit trail of permission batches
 | `defios decode <batch.json>` | decodes a Tx Builder batch of Roles changes, conditions as a tree |
 | `defios plan <card>.<action>[=amount] … [--token T] [--intent json]` | M2: resolves card/alias, converts amounts with token decimals, builds every call (approves included, receivers = Vault), checks each against the role (+ eth_call probe with RPC); refuses missing/unsafe (exit 3), else writes `calls.json` and prints the Operator Safe tx preview. Flow: plan → human reads → propose dry run → `--send` |
 | `defios permit <card>.<action> … [--token T] [--replace]` | builds the Roles permission batch for card actions: conditions from the card, merged with the live role (existing approve spenders kept), verified on a copy (calls allowed, hostile variants rejected, nothing that works today broken, no new high lint); writes a Safe Tx Builder JSON for the Vault queue, or refuses (exit 3) |
-| `defios simulate [--batch b.json] [--calls calls.json] [--block N]` | starts `anvil --fork-url $RPC_URL`, impersonates the Roles owner (batch) and the Operator (calls), sends exactly what those Safes would send; reports per-tx success or the decoded revert (Roles `ConditionViolation` names the check), gas, the Vault's token deltas from Transfer logs and every allowance still open. `plan` and `permit` do this by themselves when `RPC_URL` and `anvil` are available (`--no-simulate` skips) |
+| `defios simulate [--batch b.json] [--calls calls.json] [--block N]` | starts `anvil --fork-url $RPC_URL`, impersonates the Roles owner (batch) and the Operator (calls), sends exactly what those Safes would send; reports per-tx success or the decoded revert (Roles `ConditionViolation` names the check), gas, the Vault's token deltas from Transfer logs and every allowance still open. `plan` and `permit` do this by themselves when `RPC_URL` and `anvil` are available (`--no-simulate` skips). `--tenderly` runs the same bundle on Tenderly instead and prints a dashboard link per transaction (`TENDERLY_ACCESS_KEY`, `TENDERLY_ACCOUNT`, `TENDERLY_PROJECT`) |
 | `defios propose --file calls.json [--send]` | M2: wraps engine-built calls in `execTransactionWithRole` (MultiSend when several), picks a non-colliding Operator nonce, computes the SafeTxHash, signs as a delegate; prints everything (dry run) unless `--send` posts it to the Safe Transaction Service. Never signs as an owner, never executes |
 | `defios catalog` | lists and validates cards |
 | `defios whois 0x…` | what an address is, and whether it is verified (see `catalog/REGISTRY.md`) |

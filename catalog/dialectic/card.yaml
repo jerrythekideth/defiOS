@@ -13,12 +13,16 @@ contracts:
     category: token
     kind: erc20
     aliases: [dusd]
+    proofs:
+      - { from: smDUSD, read: "machineShare() returns (address)", expect: $self }
   smDUSD:
     address: "0xb8431779dd9d5753b5a7F66afa3C65ABFD8c3fe1"
     category: staking
     kind: security_module
     aliases: [smdusd, dialectic security module]
     note: "startCooldown mints a cooldown receipt NFT to `receiver`; redeem pays the receipt's current owner and requires msg.sender to own it"
+    proofs:
+      - { read: "machineShare() returns (address)", expect: DUSD }
 
 reads:
   - { id: dusd_balance, target: DUSD, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }

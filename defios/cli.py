@@ -465,21 +465,38 @@ def permit(ctx, actions, tokens, with_optional, params, replace, description, ou
 @click.option("--anvil", "anvil_path", default=None, help="Path to anvil (default: on PATH).")
 @click.option("--batch-mode", type=click.Choice(["roles", "operator"]), default="roles", show_default=True,
               help="How several calls are batched (same meaning as in propose).")
+@click.option("--tenderly", is_flag=True, help="Run on Tenderly instead of anvil (TENDERLY_ACCESS_KEY, "
+              "TENDERLY_ACCOUNT, TENDERLY_PROJECT); prints a dashboard link per transaction.")
 @click.option("--no-fork", is_flag=True, hidden=True, help="Plain local anvil (tests).")
 @click.pass_context
-def simulate(ctx, calls_file, batch_file, fork_url, block, anvil_path, batch_mode, no_fork):
+def simulate(ctx, calls_file, batch_file, fork_url, block, anvil_path, batch_mode, tenderly, no_fork):
     """Run a permission batch and/or a plan on a local anvil fork; report reverts, Vault deltas, open allowances.
 
     \b
       defios simulate --calls calls.json
       defios simulate --batch permissions_<vault>_<date>.json --calls calls.json
-    Nothing leaves the fork. Exit 3 if any transaction reverts.
+      defios simulate --tenderly --calls calls.json      # same bundle on Tenderly, with links
+    Nothing is signed or broadcast. Exit 3 if any transaction reverts.
     """
     def go():
         from .chain import env
-        from .simulate import Fork, SimulateError, load_batch, simulate as run, summarize
+        from .simulate import Fork, SimulateError, _read, load_batch, simulate as run, summarize
         from .tx import TxError, load_calls_file
-        cfg, vault, catalog, _rpc = _setup(ctx)
+        cfg, vault, catalog, rpc = _setup(ctx)
+        if tenderly:
+            from . import tenderly as td
+            try:
+                calls = load_calls_file(calls_file)[0] if calls_file else None
+                batch = load_batch(batch_file) if batch_file else None
+                owner = _read(rpc, vault.roles_modifier, "owner()", [], ["address"]) if batch and rpc else None
+                res = td.simulate(vault, batch=batch, calls=calls, catalog=catalog, owner=owner, block=block,
+                                  batch_mode=batch_mode, multisend=getattr(vault, "multisend", None))
+            except (SimulateError, TxError) as e:
+                raise ConfigError(str(e)) from e
+            _emit(ctx, res, td.summarize(res))
+            if not res["ok"]:
+                sys.exit(3)
+            return
         try:
             url = None if no_fork else (fork_url or env("RPC_URL"))
             if not no_fork and not url:

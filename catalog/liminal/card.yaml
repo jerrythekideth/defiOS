@@ -21,6 +21,8 @@ contracts:
     category: receipt
     kind: oft
     aliases: [limusd, liminal usd]
+    proofs:
+      - { from: spoke, read: "shareOFT() returns (address)", expect: $self }
   keeper:
     address: "0x28dA642f406bB5234A779Ee0143c317D4d55Fa27"
     category: keeper

@@ -183,6 +183,13 @@ def propose(vault: VaultConfig, calls: list[Call], *, send: bool = False, nonce:
     op = vault.operator
 
     unknown = _uncatalogued(calls, catalog, vault)
+    if unknown and catalog is not None:  # a looked-up address (any Morpho vault): re-proved onchain now
+        from .lookups import recognize
+        for a in list(unknown):
+            hit = recognize(catalog, a, rpc, vault.book_vars)
+            if hit:
+                unknown.remove(a)
+                warnings.append(f"{a} is not in a card; accepted because {hit} vouches for it onchain")
     if unknown:
         problems.append(f"uncatalogued call target(s) {unknown}: every address must come from a card or defios.yaml")
     if otx.batch == "roles":

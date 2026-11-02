@@ -13,6 +13,8 @@ contracts:
     category: token
     kind: erc20
     aliases: [usn, noon usd]
+    proofs:
+      - { from: sUSN, read: "asset() returns (address)", expect: $self }
   sUSN:
     address: "0xE24a3DC889621612422A64E6388927901608B91D"
     category: staking
@@ -26,6 +28,8 @@ contracts:
     category: queue
     kind: queue
     aliases: [noon withdrawal handler]
+    proofs:
+      - { read: "usn() returns (address)", expect: USN }
 
 reads:
   - { id: usn_balance, target: USN, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR] }
