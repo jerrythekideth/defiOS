@@ -1,8 +1,8 @@
 {
  "_meta": {
   "1": {
-   "block": 26293727,
-   "checked": "2026-10-28"
+   "block": 26328853,
+   "checked": "2026-11-02"
   }
  },
  "1:0x0000000f2eb9f69274678c76222b35eec7588a65": {
@@ -255,7 +255,18 @@
  },
  "1:0x08c6f91e2b681faf5e17227f2a44c307b3c1364c": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "liquid_usd_teller.vault() == $self",
+    "ok": true,
+    "got": "0x08c6F91e2B681FaF5e17227F2a44C307b3C1364C"
+   },
+   {
+    "id": "liquid_usd_queue.boringVault() == $self",
+    "ok": true,
+    "got": "0x08c6F91e2B681FaF5e17227F2a44C307b3C1364C"
+   }
+  ],
   "name": "Ether.Fi Liquid USD",
   "symbol": "liquidUSD"
  },
@@ -414,7 +425,13 @@
  },
  "1:0x0dabc0d9b270c9b0c4c77aaceaa712b56d0f9178": {
   "code": true,
-  "proofs": []
+  "proofs": [
+   {
+    "id": "$self.usn() == USN",
+    "ok": true,
+    "got": "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+   }
+  ]
  },
  "1:0x10ac93971cdb1f5c778144084242374473c350da": {
   "code": true,
@@ -736,7 +753,13 @@
  },
  "1:0x1e33e98af620f1d563fcd3cfd3c75ace841204ef": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "smDUSD.machineShare() == $self",
+    "ok": true,
+    "got": "0x1e33E98aF620F1D563fcD3cfd3C75acE841204ef"
+   }
+  ],
   "name": "Dialectic USD",
   "symbol": "DUSD"
  },
@@ -832,7 +855,13 @@
  },
  "1:0x23da9ade38e4477b23770ded512fd37b12381fab": {
   "code": true,
-  "proofs": []
+  "proofs": [
+   {
+    "id": "$self.signing() == settlement",
+    "ok": true,
+    "got": "0x9008D19f58AAbD9eD0D60971565AA8510560ab41"
+   }
+  ]
  },
  "1:0x2411802d8bea09be0af8fd8d08314a63e706b29c": {
   "code": true,
@@ -928,7 +957,13 @@
  },
  "1:0x28b5a0e9c621a5badaa536219b3a228c8168cf5d": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "token_minter.localTokenMessenger() == $self",
+    "ok": true,
+    "got": "0x28b5a0e9C621a5BadaA536219b3a228C8168cf5d"
+   }
+  ],
   "implementation": "0x555E272506C06e7E559d57418563742AFE363ec8",
   "admin": "0xa820A620F638114F3Eb45df87382383322dDBC49"
  },
@@ -1119,6 +1154,17 @@
     "got": "0xD533a949740bb3306d119CC777fa900bA034cd52"
    }
   ]
+ },
+ "1:0x308861a430be4cce5502d0a12724771fc6daf216": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "weETH.liquidityPool() == $self",
+    "ok": true,
+    "got": "0x308861A430be4cce5502d0A12724771Fc6DaF216"
+   }
+  ],
+  "implementation": "0x17A16747D03006c9754548AC0d0afF48783A4a45"
  },
  "1:0x309a862bbc1a00e45506cb8a802d1ff10004c8c0": {
   "code": true,
@@ -1748,7 +1794,13 @@
  },
  "1:0x4691c475be804fa85f91c2d6d0adf03114de3093": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.shareToken() == reUSD",
+    "ok": true,
+    "got": "0x5086bf358635B81D8C47C66d1C8b9E567Db70c72"
+   }
+  ],
   "implementation": "0x06d4ACC104b974cD99bF22e4572f48A051E59670"
  },
  "1:0x47ad2cd1dd15739a7a035b9d3b7828d916fef77e": {
@@ -1814,7 +1866,13 @@
  },
  "1:0x48f9e38f3070ad8945dfeae3fa70987722e3d89c": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "siUSD.asset() == $self",
+    "ok": true,
+    "got": "0x48f9e38f3070AD8945DFEae3FA70987722E3D89c"
+   }
+  ],
   "name": "infiniFi USD",
   "symbol": "iUSD"
  },
@@ -2168,7 +2226,13 @@
  },
  "1:0x5086bf358635b81d8c47c66d1c8b9e567db70c72": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "icl.shareToken() == $self",
+    "ok": true,
+    "got": "0x5086bf358635B81D8C47C66d1C8b9E567Db70c72"
+   }
+  ],
   "implementation": "0xb5276c436F65913Cd5332DE745d04feDEb4a21D4",
   "name": "Re Protocol Deposit Token",
   "symbol": "reUSD"
@@ -2289,6 +2353,23 @@
   "proofs": [],
   "name": "SKY Governance Token",
   "symbol": "SKY"
+ },
+ "1:0x56c3119dc3b1a75763c87d5b0a2c55e489502232": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.listYoVaults() contains yoETH",
+    "ok": true,
+    "got": "9 addresses"
+   },
+   {
+    "id": "$self.listYoVaults() contains yoUSD",
+    "ok": true,
+    "got": "9 addresses"
+   }
+  ],
+  "implementation": "0x542D29b2b69f83fa65EEC2F3C782968c43BC8aE8",
+  "admin": "0x7A6cCE05a054786F7b7923006640F9C9C09b6292"
  },
  "1:0x56d919e7b25aa42f3f8a4bc77b8982048f2e84b4": {
   "code": true,
@@ -2470,7 +2551,13 @@
  },
  "1:0x5dd1a7a369e8273371d2dbf9d83356057088082c": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "sftUSD.FT() == $self",
+    "ok": true,
+    "got": "0x5DD1A7A369e8273371d2DBf9d83356057088082c"
+   }
+  ],
   "name": "Flying Tulip",
   "symbol": "FT"
  },
@@ -2640,7 +2727,18 @@
  },
  "1:0x65a44528e8868166401ea08b549e19552af589db": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.cdo() == cdo_nusd",
+    "ok": true,
+    "got": "0x7b6c960cf185fb27ECb91c174FAe065978beDd10"
+   },
+   {
+    "id": "cdo_nusd.srtVault() == $self",
+    "ok": true,
+    "got": "0x65a44528e8868166401eA08b549E19552af589dB"
+   }
+  ],
   "implementation": "0x470B9D44674b4706bAD670DaBb75ccFDa90D2743",
   "admin": "0xBfA0344ee901C425F42039D203526cC26bC186fD",
   "name": "Strata Senior NUSD",
@@ -2679,7 +2777,13 @@
  },
  "1:0x68025a4615407993a680102b08a23a61d11c657c": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.asset() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   }
+  ],
   "implementation": "0xe0Dba0eF9A1C7dF2a94386A3187e9360e1B2c1fb",
   "admin": "0x35918cDE7233F2dD33fA41ae3Cb6aE0e42E0e69F",
   "name": "WETH ARM",
@@ -3202,6 +3306,23 @@
   "name": "Spark GNO",
   "symbol": "spGNO"
  },
+ "1:0x7b6c960cf185fb27ecb91c174fae065978bedd10": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.jrtVault() == jrNUSD",
+    "ok": true,
+    "got": "0xFC807058A352b61aEef6A38e2D0fC3990225E772"
+   },
+   {
+    "id": "$self.srtVault() == srNUSD",
+    "ok": true,
+    "got": "0x65a44528e8868166401eA08b549E19552af589dB"
+   }
+  ],
+  "implementation": "0x19A123423ca8dAF9E87DED8daD690c3Efc094f02",
+  "admin": "0x12C609ef6d60eA23c84d1da0cD4c4Ca025025221"
+ },
  "1:0x7b70d04099cb9cfb1db7b6820badafb4c5c70a67": {
   "code": true,
   "proofs": [
@@ -3258,7 +3379,18 @@
  },
  "1:0x7d5706f6ef3f89b3951e23e557cdfbc3239d4e2c": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "liquidity_pool.withdrawRequestNFT() == $self",
+    "ok": true,
+    "got": "0x7d5706f6ef3F89B3951E23e557CDFBC3239D4E2c"
+   },
+   {
+    "id": "$self.liquidityPool() == liquidity_pool",
+    "ok": true,
+    "got": "0x308861A430be4cce5502d0A12724771Fc6DaF216"
+   }
+  ],
   "implementation": "0x41617D01362770ebAAC10311aB899FBc8a4E4A7E",
   "name": "Withdraw Request NFT",
   "symbol": "WithdrawRequestNFT"
@@ -3417,7 +3549,7 @@
     "got": "67 addresses"
    }
   ],
-  "implementation": "0x072072317469ebB6C340a47e41561C9C3b782BD9",
+  "implementation": "0xE15382BC6968a50C5Ff5aF193D03de6BE4d0270f",
   "admin": "0xbae061C73876952aa2C5e483B74DfA785425f879",
   "name": "Lombard Staked Bitcoin",
   "symbol": "LBTC"
@@ -3728,7 +3860,18 @@
  },
  "1:0x8aeb9453ef22cb38abc7a3af9c208f65c1bfe31e": {
   "code": true,
-  "proofs": []
+  "proofs": [
+   {
+    "id": "$self.shareToken() == reUSD",
+    "ok": true,
+    "got": "0x5086bf358635B81D8C47C66d1C8b9E567Db70c72"
+   },
+   {
+    "id": "$self.instantRedemption() == instant_redemption",
+    "ok": true,
+    "got": "0xa31deEbb3680A3007120e74bCbDf4df36F042A40"
+   }
+  ]
  },
  "1:0x8b884f80b3b839f52b6ce168f133e7a5d1f0a537": {
   "code": true,
@@ -3928,13 +4071,30 @@
  },
  "1:0x9469470c9878bf3d6d0604831d9a3a366156f7ee": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "savETH.asset() == $self",
+    "ok": true,
+    "got": "0x9469470C9878bf3d6d0604831d9A3A366156f7EE"
+   },
+   {
+    "id": "minting.avantcoin() == $self",
+    "ok": true,
+    "got": "0x9469470C9878bf3d6d0604831d9A3A366156f7EE"
+   }
+  ],
   "name": "avETH",
   "symbol": "avETH"
  },
  "1:0x94e7a5dcbe816e498b89ab752661904e2f56c485": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.ORACLE() == oracle",
+    "ok": true,
+    "got": "0x99B2B6CEa9C3D2fd8F4d90f86741C44B212a6127"
+   }
+  ],
   "implementation": "0xABd0E26FE17BDe4F1f1187Ed8aA80C274E03D8b5",
   "admin": "0xfFeAcCAd70f4393701272212dACD791c01957f7f"
  },
@@ -4042,6 +4202,16 @@
   "name": "StakedPendle",
   "symbol": "sPENDLE"
  },
+ "1:0x99b2b6cea9c3d2fd8f4d90f86741c44b212a6127": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.spoke() == spoke",
+    "ok": true,
+    "got": "0x94e7A5dCbE816e498b89aB752661904E2F56c485"
+   }
+  ]
+ },
  "1:0x99cd4ec3f88a45940936f469e4bb72a2a701eeb9": {
   "code": true,
   "proofs": [
@@ -4080,7 +4250,13 @@
  },
  "1:0x9b74d3bd96f54de689cffdeb27ee34f68dff086d": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "spoke.shareOFT() == $self",
+    "ok": true,
+    "got": "0x9B74D3BD96f54dE689CfFDeb27EE34f68dFf086d"
+   }
+  ],
   "implementation": "0x0631AB29fE888205e3F7322983ba569e064fd23F",
   "admin": "0xf32e7353DBA967c426A6F54F9a3baC7DBd26eee4",
   "name": "limUSD",
@@ -4487,7 +4663,13 @@
  },
  "1:0xaa48ecbc843cf7e9a29155d112b8cb27902bd23c": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.collateralAt(0) == USDC",
+    "ok": true,
+    "got": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+   }
+  ],
   "implementation": "0x8852B132B72613a16f1E3960978a3d45c0A7c3C6"
  },
  "1:0xaa6e91c82942aeae040303bf96c15a6dbcb82ca0": {
@@ -4861,7 +5043,13 @@
  },
  "1:0xb8431779dd9d5753b5a7f66afa3c65abfd8c3fe1": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.machineShare() == DUSD",
+    "ok": true,
+    "got": "0x1e33E98aF620F1D563fcD3cfd3C75acE841204ef"
+   }
+  ],
   "beacon": "0x49eE9b4865CBbF9ec8B142cdd4A5a65971F92542",
   "name": "Security Module: Dialectic USD",
   "symbol": "smDUSD"
@@ -4982,7 +5170,18 @@
  },
  "1:0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb": {
   "code": true,
-  "proofs": []
+  "proofs": [
+   {
+    "id": "metamorpho_factory_v1_1.MORPHO() == $self",
+    "ok": true,
+    "got": "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
+   },
+   {
+    "id": "metamorpho_factory.MORPHO() == $self",
+    "ok": true,
+    "got": "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb"
+   }
+  ]
  },
  "1:0xbc65ad17c5c0a2a4d159fa5a503f4992c7b545fe": {
   "code": true,
@@ -5700,7 +5899,18 @@
  },
  "1:0xcfc6d9bd7411962bfe7145451a7ef71a24b6a7a2": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.weETH() == weETH",
+    "ok": true,
+    "got": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee"
+   },
+   {
+    "id": "$self.liquidityPool() == liquidity_pool",
+    "ok": true,
+    "got": "0x308861A430be4cce5502d0A12724771Fc6DaF216"
+   }
+  ],
   "implementation": "0xE774E19f087523EA316fCCb4B156169153f18b9d"
  },
  "1:0xd001ae433f254283fece51d4acce8c53263aa186": {
@@ -5905,7 +6115,13 @@
  },
  "1:0xda67b4284609d2d48e5d10cfac411572727dc1ed": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "sUSN.asset() == $self",
+    "ok": true,
+    "got": "0xdA67B4284609d2d48e5d10cfAc411572727dc1eD"
+   }
+  ],
   "implementation": "0x79FD7FE2a8EbcAE47798321b2AC97107dF3de229",
   "admin": "0x55f39512cb43111A13E8440ee3e3602e72628239",
   "name": "USN",
@@ -6367,7 +6583,13 @@
  },
  "1:0xf0bb20865277abd641a307ece5ee04e79073416c": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.hook() == liquid_eth_teller",
+    "ok": true,
+    "got": "0x9AA79C84b79816ab920bBcE20f8f74557B514734"
+   }
+  ],
   "name": "Ether.Fi Liquid ETH",
   "symbol": "liquidETH"
  },
@@ -6397,7 +6619,13 @@
  },
  "1:0xf1eee0957267b1a474323ff9cff7719e964969fa": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.registry() == vault_registry",
+    "ok": true,
+    "got": "0x56c3119DC3B1a75763C87D5B0A2C55E489502232"
+   }
+  ],
   "implementation": "0x0cF9a84BB9E916229F3037dc079eF418B97bb0cF",
   "admin": "0xB3C902F8fA46d7985efaB885105ae2d7b4976827"
  },
@@ -6528,7 +6756,13 @@
  },
  "1:0xf7d85ec4e7710f71992752eac2111312e73e9c9c": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "sftUSD.asset() == $self",
+    "ok": true,
+    "got": "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
+   }
+  ],
   "implementation": "0xf47bb65Fb0886Be183dB541AfCE555345e3e1885",
   "name": "Flying Tulip USD",
   "symbol": "ftUSD"
@@ -6628,7 +6862,18 @@
  },
  "1:0xfbfe6b9cee0e555bad7e2e7309effc75200cbe38": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.weETH() == weETH",
+    "ok": true,
+    "got": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee"
+   },
+   {
+    "id": "$self.liquidityPool() == liquidity_pool",
+    "ok": true,
+    "got": "0x308861A430be4cce5502d0A12724771Fc6DaF216"
+   }
+  ],
   "implementation": "0xbe386B1Fb51ffAcAE0522a5dA099371cd4a2AAeA"
  },
  "1:0xfc21d6d146e6086b8359705c8b28512a983db0cb": {
@@ -6660,7 +6905,18 @@
  },
  "1:0xfc807058a352b61aeef6a38e2d0fc3990225e772": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.cdo() == cdo_nusd",
+    "ok": true,
+    "got": "0x7b6c960cf185fb27ECb91c174FAe065978beDd10"
+   },
+   {
+    "id": "cdo_nusd.jrtVault() == $self",
+    "ok": true,
+    "got": "0xFC807058A352b61aEef6A38e2D0fC3990225E772"
+   }
+  ],
   "implementation": "0x0Ea5BdF736F84949563F1Ec66c79b9c047fb8965",
   "admin": "0xec45EBDd0278ffBC9ce5731DC8E3a34dc8674c07",
   "name": "Strata Junior NUSD",
@@ -6688,6 +6944,16 @@
   "implementation": "0x1D5E86F59069c1AF086607A56d2D7df6f440A5f2",
   "name": "Aave Ethereum EtherFi Variable Debt FRAX",
   "symbol": "variableDebtEthEtherFiFRAX"
+ },
+ "1:0xfd78ee919681417d192449715b2594ab58f5d002": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "token_messenger.localMinter() == $self",
+    "ok": true,
+    "got": "0xfd78EE919681417d192449715b2594ab58f5D002"
+   }
+  ]
  },
  "1:0xfdafc9d1902f4e0b84f65f49f244b32b31013b74": {
   "code": true,

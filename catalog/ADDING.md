@@ -61,6 +61,13 @@ refuses unless both tokens are verified catalog tokens (add a missing token
 first, below). Check the oracle, LLTV and liquidity before you whitelist: the
 role fixes which market, not whether it is a good one.
 
+**Any other Morpho vault** (MetaMorpho v1 / v1.1 or Vault V2) does not need a
+card either: `defios permit morpho_vaults.deposit_any morpho_vaults.withdraw_any
+morpho_vaults.redeem_any --param vault_address=0x…`. The engine asks the
+catalogued Morpho factories onchain (`isMetaMorpho` / `isVaultV2`) whether they
+deployed it, refuses unless its `asset()` is a verified catalog token, and pins
+that vault as target and spender. See `skills/defios-morpho/SKILL.md`.
+
 **Tokens.** A token belongs to the card of the protocol that issues it (stETH
 in `lido`, sUSDe in `ethena`, GHO in `stablecoins`). A token with no card of its
 own (WBTC, cbBTC, LINK …) goes in `catalog/tokens`, proved by a market that

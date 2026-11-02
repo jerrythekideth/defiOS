@@ -53,6 +53,9 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
    anything reverts; show the human the Vault deltas and any open allowance.
    If the summary says "not simulated", run `defios simulate` before anyone
    signs, or say plainly that it was not simulated (`skills/defios-simulate/SKILL.md`).
+   If the Tenderly keys are not set, ask the human once whether they want
+   them (`TENDERLY_ACCESS_KEY`, `TENDERLY_ACCOUNT`, `TENDERLY_PROJECT` in
+   `.env`): `defios simulate --tenderly` then gives signers a link per transaction.
 5. **Receivers are the Vault.** Every receiver / recipient / owner /
    onBehalfOf / to parameter is the Vault. No exceptions without the human's
    explicit, written OK in the conversation.
@@ -94,7 +97,7 @@ You (agent) --propose--> Operator Safe --execTransactionWithRole--> Roles modifi
 | `defios whois 0x… [--chain N]` | "what is this address?": protocol, contract, category, trust status, proxy, edges, card actions (see rule 11) |
 | `defios plan <card>.<action>=<amount> …` | M2: turn an intent into engine-built, role-checked calls; writes `calls.json` (see "Planning") |
 | `defios permit <card>.<action> … [--token T]` | "add the permission to do X": builds the Roles batch from the card, merged with the live role and verified; writes a Tx Builder JSON for the Vault queue (see "Permissions") |
-| `defios simulate [--batch b.json] [--calls calls.json]` | run a permission batch and/or a plan on an anvil fork: per-tx success or decoded revert, gas, Vault token deltas, allowances left open |
+| `defios simulate [--batch b.json] [--calls calls.json] [--tenderly]` | run a permission batch and/or a plan on an anvil fork (or on Tenderly with `--tenderly`, which gives a link per transaction): per-tx success or decoded revert, gas, Vault token deltas, allowances left open |
 | `defios propose --file calls.json` | M2: dry run of an Operator proposal (see "Proposing"); `--send` only after the human said yes |
 
 All commands print JSON on stdout and a short summary on stderr
@@ -135,6 +138,12 @@ report them in your summary. `known_dead` and `uncatalogued` are clean-up items.
   warnings → only after the human's yes, `propose --file calls.json --send` →
   give the Operator queue link and nonce. If `plan` refuses: stop, explain,
   offer a permission batch.
+* **"Deposit into this Morpho vault 0x…" / "supply to market 0x…"**: the
+  human brings the vault address or market id; defios proves it onchain
+  (Morpho factories / `idToMarketParams`) and pins it. `--param
+  vault_address=0x…` with `morpho_vaults.*_any`, `--param market_id=0x…` with
+  `morpho_markets.*` (`skills/defios-morpho/SKILL.md`). Choosing the vault or
+  market is the human's decision, not yours.
 * **"Add permission for X"**: `sync` → `defios permit <card>.<action> [--token T]`
   → show the human every `+` line (function, condition tree, why) and every
   `note` → they import the JSON into the Safe Transaction Builder **on the

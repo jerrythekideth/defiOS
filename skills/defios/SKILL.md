@@ -38,6 +38,7 @@ SAFE_API_KEY, PROPOSER_PRIVATE_KEY for a delegate key) and `books/` (generated).
 | add the permission to do X | `defios permit <card>.<action> [--token T]` | show each `+` change with its condition and why; the JSON goes to the human for the Vault queue (never propose it); if REFUSED, explain each line and stop |
 | will this work? / simulate it | `defios simulate --calls calls.json` (or `--batch file.json`, both to try a permission batch then a plan) | report each revert in plain words, the Vault's token deltas and any allowance left open; never propose something that reverted. Nothing is signed unsimulated: `skills/defios-simulate/SKILL.md` |
 | rewards to claim (Merkl) | `skills/defios-merkl/SKILL.md` (API -> `merkl.claim` per token) | only verified reward tokens; claim pays the Vault |
+| any Morpho vault (by address) or Blue market (by id) | `skills/defios-morpho/SKILL.md` (`--param vault_address=` / `market_id=`) | the human picks it; the engine proves it onchain and pins it |
 | queue this transaction | `defios propose --file calls.json` (dry run) | show calls, nonce, SafeTxHash, warnings/problems; wait for the human's yes |
 | (after the human's yes) | `defios propose --file calls.json --send` | give the Safe app link + nonce; humans sign there |
 

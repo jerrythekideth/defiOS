@@ -20,6 +20,8 @@ contracts:
     category: token
     kind: erc20
     aliases: [iusd]
+    proofs:
+      - { from: siUSD, read: "asset() returns (address)", expect: $self }
   siUSD:
     address: "0xDBDC1Ef57537E34680B898E1FEBD3D68c7389bCB"
     category: staking

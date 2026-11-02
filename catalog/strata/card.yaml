@@ -31,12 +31,18 @@ contracts:
     kind: tranche
     aliases: [srnusd, strata senior nusd]
     note: "NUSD market wound down after the 2026 sNUSD exploit; redeem only"
+    proofs:
+      - { read: "cdo() returns (address)", expect: cdo_nusd }
+      - { from: cdo_nusd, read: "srtVault() returns (address)", expect: $self }
   jrNUSD:
     address: "0xFC807058A352b61aEef6A38e2D0fC3990225E772"
     category: vault
     kind: tranche
     aliases: [jrnusd, strata junior nusd]
     note: "junior NUSD tranche was written down to ~0 after the sNUSD exploit; redeem only"
+    proofs:
+      - { read: "cdo() returns (address)", expect: cdo_nusd }
+      - { from: cdo_nusd, read: "jrtVault() returns (address)", expect: $self }
   depositor_usde:
     address: "0x7a6AD3753b51cB0161405e93645B5E1f95b6e50F"
     category: router

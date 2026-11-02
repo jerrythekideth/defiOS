@@ -1,0 +1,10 @@
+contracts:
+  cdo_nusd:
+    address: "0x7b6c960cf185fb27ECb91c174FAe065978beDd10"
+    category: config
+    kind: tranche_cdo
+    aliases: [strata nusd cdo, StrataCDO nusd]
+    note: "StrataCDO behind the NUSD tranches (jrNUSD.cdo())"
+    proofs:
+      - { read: "jrtVault() returns (address)", expect: jrNUSD }
+      - { read: "srtVault() returns (address)", expect: srNUSD }

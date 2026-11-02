@@ -16,11 +16,15 @@ contracts:
     kind: router
     aliases: [flying tulip mint, MintAndRedeem]
     note: "pulls USDC on mint and ftUSD on redeem (safeTransferFrom); redeem may queue part of it (returns queueId)"
+    proofs:
+      - { read: "collateralAt(uint256 i) returns (address)", args: [0], expect: USDC }
   ftUSD:
     address: "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
     category: token
     kind: erc20
     aliases: [ftusd, flying tulip usd]
+    proofs:
+      - { from: sftUSD, read: "asset() returns (address)", expect: $self }
   sftUSD:
     address: "0xeb48218a4c35C814C7678cBcae88C6Ee037F7625"
     category: staking
@@ -43,6 +47,8 @@ contracts:
     kind: erc20
     decimals: 18
     aliases: [ft, flying tulip]
+    proofs:
+      - { from: sftUSD, read: "FT() returns (address)", expect: $self }
   curve_ft_ftusd:
     address: "0x68102ff5406475881462880a8dA3C9Bc9181aD6c"
     category: market

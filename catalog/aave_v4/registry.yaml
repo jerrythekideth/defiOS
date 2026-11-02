@@ -1,0 +1,9 @@
+contracts:
+  oracle:
+    address: "0x99B2B6CEa9C3D2fd8F4d90f86741C44B212a6127"
+    category: oracle
+    kind: aave_oracle
+    aliases: [aave v4 oracle, AaveOracle v4]
+    note: "the spoke's price oracle (spoke.ORACLE())"
+    proofs:
+      - { read: "spoke() returns (address)", expect: spoke }

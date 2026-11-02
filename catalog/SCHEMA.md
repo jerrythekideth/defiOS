@@ -170,6 +170,27 @@ Running `permit` again with another id adds that market to an Or of pinned
 markets. `check` without the id reports `unresolved`; `plan` still checks every
 call against the role.
 
+An **address lookup** takes a contract the catalog does not list (any Morpho
+vault) and proves what it is from catalogued contracts first:
+
+```yaml
+lookups:
+  any_vault:
+    param: vault_address      # --param vault_address=0x…
+    kind: address
+    check_any:                # at least one must answer true; each is (address) returns (bool)
+      - { target: metamorpho_factory, read: "isMetaMorpho(address) returns (bool)" }
+      - { target: vault_v2_factory, read: "isVaultV2(address) returns (bool)" }
+    reads: { asset: "asset() returns (address)" }   # read on the address itself
+    tokens: [asset]
+```
+
+`$any_vault` can be a call `target` or an address arg; it is pinned (the role
+scopes that address, and a spender or address arg gets EqualTo). `token_from:
+any_vault.asset` makes the asset the action's `$token`. `propose` accepts the
+address as a call target only after the same `check_any` answers true again
+over RPC.
+
 ## Dead permissions
 
 ```yaml

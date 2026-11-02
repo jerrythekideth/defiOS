@@ -15,16 +15,23 @@ contracts:
     kind: vault
     aliases: [re icl, insurance capital layer]
     note: "pulls the deposit token from msg.sender; KYC-gated (the Vault must be whitelisted)"
+    proofs:
+      - { read: "shareToken() returns (address)", expect: reUSD }
   reUSD:
     address: "0x5086bf358635B81D8C47C66d1C8b9E567Db70c72"
     category: receipt
     kind: erc20
     aliases: [reusd]
+    proofs:
+      - { from: icl, read: "shareToken() returns (address)", expect: $self }
   redemption_gateway:
     address: "0x8aEb9453EF22Cb38abC7a3Af9c208F65C1BfE31e"
     category: router
     kind: router
     aliases: [re redemption gateway]
+    proofs:
+      - { read: "shareToken() returns (address)", expect: reUSD }
+      - { read: "instantRedemption() returns (address)", expect: instant_redemption }
   instant_redemption:
     address: "0xa31deEbb3680A3007120e74bCbDf4df36F042A40"
     category: router

@@ -23,22 +23,33 @@ contracts:
     category: adapter
     kind: adapter
     aliases: [ether.fi deposit adapter]
+    proofs:
+      - { read: "weETH() returns (address)", expect: weETH }
+      - { read: "liquidityPool() returns (address)", expect: liquidity_pool }
   weeth_withdraw_adapter:
     address: "0xFbfe6b9cEe0E555Bad7e2E7309EFFC75200cBE38"
     category: adapter
     kind: adapter
     aliases: [ether.fi weETH withdraw adapter]
+    proofs:
+      - { read: "weETH() returns (address)", expect: weETH }
+      - { read: "liquidityPool() returns (address)", expect: liquidity_pool }
   withdraw_request_nft:
     address: "0x7d5706f6ef3F89B3951E23e557CDFBC3239D4E2c"
     category: queue
     kind: erc721_queue
     aliases: [ether.fi withdraw request nft, WithdrawRequestNFT]
+    proofs:
+      - { from: liquidity_pool, read: "withdrawRequestNFT() returns (address)", expect: $self }
+      - { read: "liquidityPool() returns (address)", expect: liquidity_pool }
   liquid_eth:
     address: "0xf0bb20865277aBd641a307eCe5Ee04E79073416C"
     category: vault
     kind: boring_vault
     aliases: [liquid eth, veda liquid eth, liquidETH, ether.fi liquid]
     note: "Veda BoringVault; also the share token and the spender for deposit approvals"
+    proofs:
+      - { read: "hook() returns (address)", expect: liquid_eth_teller }
   liquid_eth_teller:
     address: "0x9AA79C84b79816ab920bBcE20f8f74557B514734"
     category: router
@@ -61,6 +72,9 @@ contracts:
     kind: boring_vault
     aliases: [liquid usd, veda liquid usd, liquidUSD]
     note: "Veda BoringVault; share token and deposit spender (it pulls the asset)"
+    proofs:
+      - { from: liquid_usd_teller, read: "vault() returns (address)", expect: $self }
+      - { from: liquid_usd_queue, read: "boringVault() returns (address)", expect: $self }
   liquid_usd_teller:
     address: "0x4DE413a26fC24c3FC27Cc983be70aA9c5C299387"
     category: router

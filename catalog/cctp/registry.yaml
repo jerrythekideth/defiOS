@@ -1,0 +1,9 @@
+contracts:
+  token_minter:
+    address: "0xfd78EE919681417d192449715b2594ab58f5D002"
+    category: minter
+    kind: token_minter
+    aliases: [TokenMinterV2, cctp token minter]
+    note: "mints and burns USDC for the token messenger (token_messenger.localMinter())"
+    proofs:
+      - { from: token_messenger, read: "localMinter() returns (address)", expect: $self }

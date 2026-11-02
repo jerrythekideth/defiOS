@@ -26,6 +26,20 @@ contracts:
     category: market
     kind: core
     note: "Morpho Blue singleton; vaults allocate into it. Direct market actions are in the morpho_markets card."
+    proofs:
+      - { from: metamorpho_factory_v1_1, read: "MORPHO() returns (address)", expect: $self }
+      - { from: metamorpho_factory, read: "MORPHO() returns (address)", expect: $self }
+
+lookups:
+  any_vault:
+    param: vault_address
+    kind: address
+    check_any:
+      - { target: metamorpho_factory_v1_1, read: "isMetaMorpho(address) returns (bool)" }
+      - { target: metamorpho_factory, read: "isMetaMorpho(address) returns (bool)" }
+      - { target: vault_v2_factory, read: "isVaultV2(address) returns (bool)" }
+    reads: { asset: "asset() returns (address)" }
+    tokens: [asset]
 
 ui_routes_to_avoid:
   - ui: "Morpho app deposit"
@@ -147,3 +161,30 @@ actions:
       - target: $token
         sig: "redeem(uint256 shares, address receiver, address onBehalf)"
         args: { shares: $amount, receiver: $AVATAR, onBehalf: $AVATAR }
+  # Any Morpho vault by address (--param vault_address=0x…): the engine checks onchain that a
+  # catalogued factory deployed it and that its asset() is a verified token, then pins that vault.
+  deposit_any:
+    summary: "the vault's asset -> shares of vault `vault_address`, credited to the Vault"
+    token_from: any_vault.asset
+    calls:
+      - target: $token
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: $any_vault, amount: $amount }
+      - target: $any_vault
+        sig: "deposit(uint256 assets, address onBehalf)"
+        args: { assets: $amount, onBehalf: $AVATAR }
+  withdraw_any:
+    summary: "shares of vault `vault_address` -> an exact amount of its asset, paid to the Vault"
+    token_from: any_vault.asset
+    calls:
+      - target: $any_vault
+        sig: "withdraw(uint256 assets, address receiver, address onBehalf)"
+        args: { assets: $amount, receiver: $AVATAR, onBehalf: $AVATAR }
+  redeem_any:
+    summary: "raw shares of vault `vault_address` (--param shares_raw) -> its asset, paid to the Vault"
+    token_from: any_vault.asset
+    calls:
+      - target: $any_vault
+        sig: "redeem(uint256 shares, address receiver, address onBehalf)"
+        args: { shares: $shares_raw, receiver: $AVATAR, onBehalf: $AVATAR }
+        note: "full exit: shares_raw = balanceOf(Vault) on the vault (raw units, no --amount)"

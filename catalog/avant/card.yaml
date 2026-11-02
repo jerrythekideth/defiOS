@@ -14,6 +14,9 @@ contracts:
     kind: erc20
     aliases: [avETH, avant eth]
     note: "AvantCoin; burnFrom spends allowance"
+    proofs:
+      - { from: savETH, read: "asset() returns (address)", expect: $self }
+      - { from: minting, read: "avantcoin() returns (address)", expect: $self }
   savETH:
     address: "0xDA06eE2dACF9245Aa80072a4407deBDea0D7e341"
     category: staking
