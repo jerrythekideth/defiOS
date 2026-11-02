@@ -17,3 +17,5 @@ venv/
 defios.yaml
 books/
 *.key
+.claude/ # stops .claude/ showing as untracked
+.claude/

@@ -12,6 +12,7 @@ Checklist for a new protocol, end to end:
 3. Actions for the main verbs (§5), each run on a fork (§6).
 4. `adding:` text so the next person (or model) can add a pool or market.
 5. `defios registry verify`, `defios registry export`, `pytest` (§4).
+6. Open a PR with the template: see [`CONTRIBUTING.md`](../CONTRIBUTING.md).
 
 ## 1. A new protocol
 
