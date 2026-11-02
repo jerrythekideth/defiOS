@@ -38,6 +38,7 @@ Read [`AGENTS.md`](AGENTS.md) first (rules and flows). Then:
 | a curated vault or pool (kpkUSDC, kpkwstETH …) | the curator's card ([`catalog/kpk`](catalog/kpk)); the protocol card's actions take it with `--token` |
 | the card format | [`catalog/SCHEMA.md`](catalog/SCHEMA.md) (cards, actions), [`catalog/REGISTRY.md`](catalog/REGISTRY.md) (records, proofs, categories) |
 | how to add a protocol, market, vault or action | [`catalog/ADDING.md`](catalog/ADDING.md), then the card's own `adding:` field |
+| how to propose one (PR or request) | [`CONTRIBUTING.md`](CONTRIBUTING.md): set-up, checks, fork run, PR template; or open a *New protocol / action request* issue |
 
 Naming conventions in cards:
 

@@ -1,0 +1,51 @@
+name: New protocol / action request
+description: Ask for a protocol, contract, pool or action to be added to the catalog
+title: "Add <protocol>: <actions>"
+labels: [catalog]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Writing the card yourself? See CONTRIBUTING.md and open a PR instead.
+        Public information only: no vault addresses, positions or keys.
+  - type: input
+    id: protocol
+    attributes:
+      label: Protocol
+      placeholder: "e.g. Fluid lending"
+    validations:
+      required: true
+  - type: input
+    id: chain
+    attributes:
+      label: Chain
+      value: "Ethereum mainnet (1)"
+    validations:
+      required: true
+  - type: textarea
+    id: actions
+    attributes:
+      label: Actions needed
+      description: The verbs an agent should be able to run, with the tokens.
+      placeholder: |
+        - supply / withdraw USDC, USDT
+        - claim rewards
+    validations:
+      required: true
+  - type: textarea
+    id: contracts
+    attributes:
+      label: Contracts
+      description: Addresses you know, with where each comes from (docs page, verified explorer page). Leave blank if unknown.
+  - type: textarea
+    id: sources
+    attributes:
+      label: Docs, verified source, audits
+      description: Public links that describe the contracts and how deposits / withdrawals work.
+    validations:
+      required: true
+  - type: textarea
+    id: ui
+    attributes:
+      label: How the official UI does it
+      description: Routers, zaps or bundlers the UI uses, if you know (these go in ui_routes_to_avoid).
