@@ -15,6 +15,9 @@ contracts:
     kind: router
     aliases: [infinifi gateway, infinifi]
     note: "pulls USDC / iUSD / siUSD from msg.sender: approve the gateway"
+    proofs:
+      - { read: "getAddress(string name) returns (address)", args: [receiptToken], expect: iUSD }
+      - { read: "getAddress(string name) returns (address)", args: [stakedToken], expect: siUSD }
   iUSD:
     address: "0x48f9e38f3070AD8945DFEae3FA70987722E3D89c"
     category: token

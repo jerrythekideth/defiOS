@@ -8,3 +8,22 @@ contracts:
     proofs:
       - { read: "jrtVault() returns (address)", expect: jrNUSD }
       - { read: "srtVault() returns (address)", expect: srNUSD }
+  cdo_usde:
+    address: "0x908B3921aaE4fC17191D382BB61020f2Ee6C0e20"
+    category: config
+    kind: tranche_cdo
+    aliases: [strata usde cdo, StrataCDO usde]
+    note: "StrataCDO behind the USDe tranches (srUSDe.cdo())"
+    proofs:
+      - { from: srUSDe, read: "cdo() returns (address)", expect: $self }
+      - { read: "srtVault() returns (address)", expect: srUSDe }
+      - { read: "jrtVault() returns (address)", expect: jrUSDe }
+  acm:
+    address: "0x1d19E18ECaC4ef332a0d5d6Aa3a0f0f772605f60"
+    category: config
+    kind: access_control
+    aliases: [strata access control manager]
+    note: "AccessControlManager shared by the tranches, the CDOs and the depositor"
+    proofs:
+      - { from: srUSDe, read: "acm() returns (address)", expect: $self }
+      - { from: cdo_usde, read: "acm() returns (address)", expect: $self }

@@ -120,6 +120,7 @@ class Proof:
     out_types: list[str]
     expect: str  # address that must come back
     contains: bool
+    index: int = 0  # which output holds it (`field:`)
 
 
 @dataclass
@@ -240,7 +241,13 @@ class Registry:
                 if set(exp) != {"contains"}:
                     raise RegistryError(f"{where}: expect must be a ref or {{contains: ref}}")
                 exp, contains = exp["contains"], True
-            if outs != (["address[]"] if contains else ["address"]):
+            index, pick = 0, p.get("field")
+            if pick is not None:
+                names = [o.name for o in sig.outputs]
+                if contains or pick not in names or outs[names.index(pick)] != "address":
+                    raise RegistryError(f"{where}: `field: {pick}` must name an address output of `read`")
+                index = names.index(pick)
+            elif outs != (["address[]"] if contains else ["address"]):
                 raise RegistryError(f"{where}: `read` must return {'(address[])' if contains else '(address)'}")
             want = self.resolve(exp, rec)
             if want is None:
@@ -250,13 +257,16 @@ class Registry:
                 if prm.type == "address":
                     r2 = self.resolve(a, rec) if not is_address(str(a)) else None
                     args.append(r2.address if r2 else to_checksum_address(str(a)))
+                elif prm.type == "string":
+                    args.append(str(a))
                 else:
                     args.append(int(a) if not isinstance(a, str) else int(a, 0))
             if len(args) != len(sig.params):
                 raise RegistryError(f"{where}: {len(sig.params)} args expected")
             arg_txt = ",".join(str(a) for a in p.get("args") or [])
-            out.append(Proof(f"{p.get('from', SELF)}.{sig.name}({arg_txt}) {'contains' if contains else '=='} {exp}",
-                             src.address, sig.canonical, args, outs, want.address, contains))
+            got = f"{sig.name}({arg_txt})" + (f".{pick}" if pick is not None else "")
+            out.append(Proof(f"{p.get('from', SELF)}.{got} {'contains' if contains else '=='} {exp}",
+                             src.address, sig.canonical, args, outs, want.address, contains, index))
         return out
 
     def _proofs_or_none(self, rec: Record) -> list[Proof]:
@@ -521,7 +531,7 @@ def verify(reg: Registry, rpcs: dict[int, Any], chains: list[int] | None = None)
                     sig = parse_signature(p.sig)
                     data = bytes.fromhex(sig.selector[2:]) + abi_encode([q.type for q in sig.params], p.args)
                     raw = rpc.call_raw(p.target, data, block=block)
-                    val = abi_decode(p.out_types, raw)[0]
+                    val = abi_decode(p.out_types, raw)[p.index]
                     if p.contains:
                         pr["ok"] = p.expect.lower() in {str(v).lower() for v in val}
                         pr["got"] = f"{len(val)} addresses"

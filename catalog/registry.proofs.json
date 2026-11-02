@@ -1,7 +1,7 @@
 {
  "_meta": {
   "1": {
-   "block": 26328853,
+   "block": 26329782,
    "checked": "2026-11-02"
   }
  },
@@ -696,6 +696,21 @@
   "implementation": "0xadC45Df3cf1584624C97338BEF33363BF5b97AdA",
   "name": "Aave Ethereum ETHx",
   "symbol": "aEthETHx"
+ },
+ "1:0x1d19e18ecac4ef332a0d5d6aa3a0f0f772605f60": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "srUSDe.acm() == $self",
+    "ok": true,
+    "got": "0x1d19E18ECaC4ef332a0d5d6Aa3a0f0f772605f60"
+   },
+   {
+    "id": "cdo_usde.acm() == $self",
+    "ok": true,
+    "got": "0x1d19E18ECaC4ef332a0d5d6Aa3a0f0f772605f60"
+   }
+  ]
  },
  "1:0x1d511811aca9d8817a3e50f29cadff6243a02902": {
   "code": true,
@@ -1610,7 +1625,18 @@
  },
  "1:0x3f04b65ddbd87f9ce0a2e7eb24d80e7fb87625b5": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.getAddress(receiptToken) == iUSD",
+    "ok": true,
+    "got": "0x48f9e38f3070AD8945DFEae3FA70987722E3D89c"
+   },
+   {
+    "id": "$self.getAddress(stakedToken) == siUSD",
+    "ok": true,
+    "got": "0xDBDC1Ef57537E34680B898E1FEBD3D68c7389bCB"
+   }
+  ],
   "implementation": "0x750136aC021a7149F0EE38141d0bA920Cca1fC5D",
   "admin": "0x21071E0f9D600571Ffe47873e95fffF2FAc9141c"
  },
@@ -3277,7 +3303,13 @@
  },
  "1:0x7a6ad3753b51cb0161405e93645b5e1f95b6e50f": {
   "code": true,
-  "proofs": [],
+  "proofs": [
+   {
+    "id": "$self.acm() == acm",
+    "ok": true,
+    "got": "0x1d19E18ECaC4ef332a0d5d6Aa3a0f0f772605f60"
+   }
+  ],
   "implementation": "0x932a1d70A5E1c64a13dAa5a60564aCF5A2Ac0D11",
   "admin": "0x83eB1f36AAdB97c9B88A473d1a299F42124cE9E0"
  },
@@ -3996,6 +4028,28 @@
   ],
   "name": "Fluid Wrapped Ether",
   "symbol": "fWETH"
+ },
+ "1:0x908b3921aae4fc17191d382bb61020f2ee6c0e20": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "srUSDe.cdo() == $self",
+    "ok": true,
+    "got": "0x908B3921aaE4fC17191D382BB61020f2Ee6C0e20"
+   },
+   {
+    "id": "$self.srtVault() == srUSDe",
+    "ok": true,
+    "got": "0x3d7d6fdf07EE548B939A80edbc9B2256d0cdc003"
+   },
+   {
+    "id": "$self.jrtVault() == jrUSDe",
+    "ok": true,
+    "got": "0xC58D044404d8B14e953C115E67823784dEA53d8F"
+   }
+  ],
+  "implementation": "0xb3d4f2C2123f8C3CA85aE7A6D48aA2ef049c79bA",
+  "admin": "0xcAb791D0D44eBaC17378fF2AF6356c012F15c9e6"
  },
  "1:0x91b7d78bf92db564221f6b5aee744d1727d1dd1e": {
   "code": true,
@@ -4769,7 +4823,13 @@
  },
  "1:0xac771209ff2b71eecff6e85a9ad01db8ff2618b0": {
   "code": true,
-  "proofs": []
+  "proofs": [
+   {
+    "id": "$self.vaultInfo(coreUSDC).lpTokenAddress == coreUSDC",
+    "ok": true,
+    "got": "0xE9B725010A9E419412ed67d0fA5f3A5f40159D32"
+   }
+  ]
  },
  "1:0xacd3d3facea0424984f662827b988f4581a3ce31": {
   "code": true,

@@ -2,7 +2,7 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26328853,
+   "block": 26329782,
    "checked": "2026-11-02"
   }
  },
@@ -2874,6 +2874,44 @@
     }
    }
   ],
+  "1:0x1d19e18ecac4ef332a0d5d6aa3a0f0f772605f60": [
+   {
+    "chain_id": 1,
+    "address": "0x1d19E18ECaC4ef332a0d5d6Aa3a0f0f772605f60",
+    "protocol": "strata",
+    "protocol_name": "Strata (senior/junior tranches on USDe and NUSD)",
+    "name": "acm",
+    "title": null,
+    "ref": "strata.acm",
+    "category": "config",
+    "kind": "access_control",
+    "eoa": false,
+    "aliases": [
+     "strata access control manager"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: srUSDe.acm() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/strata/registry.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "srUSDe.acm() == $self",
+      "ok": true
+     },
+     {
+      "id": "cdo_usde.acm() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "AccessControlManager shared by the tranches, the CDOs and the depositor"
+   }
+  ],
   "1:0x1d511811aca9d8817a3e50f29cadff6243a02902": [
    {
     "chain_id": 1,
@@ -5498,15 +5536,24 @@
      "infinifi gateway",
      "infinifi"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.getAddress(receiptToken) == iUSD"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/infinifi/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.getAddress(receiptToken) == iUSD",
+      "ok": true
+     },
+     {
+      "id": "$self.getAddress(stakedToken) == siUSD",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x750136aC021a7149F0EE38141d0bA920Cca1fC5D",
      "admin": "0x21071E0f9D600571Ffe47873e95fffF2FAc9141c"
@@ -10227,15 +10274,20 @@
      "strata usde depositor",
      "TrancheDepositor"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.acm() == acm"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/strata/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.acm() == acm",
+      "ok": true
+     }
+    ],
     "proxy": {
      "implementation": "0x932a1d70A5E1c64a13dAa5a60564aCF5A2Ac0D11",
      "admin": "0x83eB1f36AAdB97c9B88A473d1a299F42124cE9E0"
@@ -12306,6 +12358,52 @@
      "symbol": "fWETH"
     },
     "note": "ERC-4626 over WETH; also takes native ETH (depositNative / withdrawNative)"
+   }
+  ],
+  "1:0x908b3921aae4fc17191d382bb61020f2ee6c0e20": [
+   {
+    "chain_id": 1,
+    "address": "0x908B3921aaE4fC17191D382BB61020f2Ee6C0e20",
+    "protocol": "strata",
+    "protocol_name": "Strata (senior/junior tranches on USDe and NUSD)",
+    "name": "cdo_usde",
+    "title": null,
+    "ref": "strata.cdo_usde",
+    "category": "config",
+    "kind": "tranche_cdo",
+    "eoa": false,
+    "aliases": [
+     "strata usde cdo",
+     "StrataCDO usde"
+    ],
+    "status": "verified",
+    "why": [
+     "source card + onchain proof: srUSDe.cdo() == $self"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/strata/registry.yaml"
+    ],
+    "proofs": [
+     {
+      "id": "srUSDe.cdo() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.srtVault() == srUSDe",
+      "ok": true
+     },
+     {
+      "id": "$self.jrtVault() == jrUSDe",
+      "ok": true
+     }
+    ],
+    "proxy": {
+     "implementation": "0xb3d4f2C2123f8C3CA85aE7A6D48aA2ef049c79bA",
+     "admin": "0xcAb791D0D44eBaC17378fF2AF6356c012F15c9e6"
+    },
+    "onchain": {},
+    "note": "StrataCDO behind the USDe tranches (srUSDe.cdo())"
    }
   ],
   "1:0x91b7d78bf92db564221f6b5aee744d1727d1dd1e": [
@@ -14531,15 +14629,20 @@
      "upshift router",
      "upshift swaprouter"
     ],
-    "status": "unverified",
+    "status": "verified",
     "why": [
-     "one source (card); no onchain proof declared"
+     "source card + onchain proof: $self.vaultInfo(coreUSDC).lpTokenAddress == coreUSDC"
     ],
     "card_reviewed": false,
     "sources": [
      "card: catalog/upshift/card.yaml"
     ],
-    "proofs": [],
+    "proofs": [
+     {
+      "id": "$self.vaultInfo(coreUSDC).lpTokenAddress == coreUSDC",
+      "ok": true
+     }
+    ],
     "proxy": {},
     "onchain": {},
     "note": "pulls the asset from msg.sender: approve the router"

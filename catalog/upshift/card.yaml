@@ -15,6 +15,11 @@ contracts:
     kind: router
     aliases: [upshift router, upshift swaprouter]
     note: "pulls the asset from msg.sender: approve the router"
+    proofs:
+      - read: "vaultInfo(address vault) returns (uint256 swapFee, uint8 vaultType, address referenceAsset, address lpTokenAddress)"
+        args: [coreUSDC]
+        field: lpTokenAddress
+        expect: coreUSDC
   coreUSDC:
     address: "0xE9B725010A9E419412ed67d0fA5f3A5f40159D32"
     category: vault
