@@ -22,6 +22,7 @@ contracts:
     address: "0xF7D85EC4E7710f71992752eac2111312e73E9C9C"
     category: token
     kind: erc20
+    decimals: 6
     aliases: [ftusd, flying tulip usd]
     proofs:
       - { from: sftUSD, read: "asset() returns (address)", expect: $self }
@@ -29,6 +30,7 @@ contracts:
     address: "0xeb48218a4c35C814C7678cBcae88C6Ee037F7625"
     category: staking
     kind: erc4626
+    decimals: 6
     aliases: [sftusd, staked ftusd]
     edges: { underlying: ftUSD }
     proofs:
@@ -37,6 +39,7 @@ contracts:
     address: "0x232128844e5aF56fD4B3f8BF97e08aB477282Ab5"
     category: staking
     kind: erc4626
+    decimals: 18
     aliases: [ssftusd, stable staked ftusd]
     edges: { underlying: ftUSD }
     proofs:

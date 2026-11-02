@@ -635,6 +635,31 @@ def has_free_calls(p: Param) -> bool:
     return False
 
 
+def address_lookup_fields(lk: dict) -> dict[str, str]:
+    """{field: abi type} of an address lookup: each `reads:` entry (one field, or one per named output of a
+    multi-output read) and each `derived:` read on an address field."""
+    fields: dict[str, str] = {}
+    for f, r in (lk.get("reads") or {}).items():
+        sig = parse_signature(r)
+        if sig.params or not sig.outputs:
+            raise CardError(f"read {f} must take no args and return a value")
+        if len(sig.outputs) == 1:
+            fields[f] = sig.outputs[0].type
+        else:
+            for o in sig.outputs:
+                if not o.name:
+                    raise CardError(f"read {f} returns several values: name each output")
+                fields[o.name] = o.type
+    for f, d in (lk.get("derived") or {}).items():
+        sig = parse_signature((d or {}).get("read") or "")
+        if fields.get((d or {}).get("from")) != "address":
+            raise CardError(f"derived {f}: `from` must be an address field of `reads`")
+        if sig.params or len(sig.outputs) != 1:
+            raise CardError(f"derived {f} must take no args and return one value")
+        fields[f] = sig.outputs[0].type
+    return fields
+
+
 def validate_card(catalog: Catalog, card: Card) -> list[str]:
     """Static checks used by tests and `defios catalog lint` (future)."""
     errs = []
@@ -679,16 +704,18 @@ def validate_card(catalog: Catalog, card: Card) -> list[str]:
                         errs.append(f"{card.protocol} lookup {lname}: check target {chk.get('target')} has no address")
                 except CardError as e:
                     errs.append(f"{card.protocol} lookup {lname}: {e}")
-            for f, r in (lk.get("reads") or {}).items():
-                try:
-                    sig = parse_signature(r)
-                    if sig.params or len(sig.outputs) != 1:
-                        errs.append(f"{card.protocol} lookup {lname}: read {f} must take no args and return one value")
-                except CardError as e:
-                    errs.append(f"{card.protocol} lookup {lname}: {e}")
-            for f in lk.get("tokens") or []:
-                if f not in (lk.get("reads") or {}):
-                    errs.append(f"{card.protocol} lookup {lname}: token field {f!r} not in `reads`")
+            try:
+                fields = address_lookup_fields(lk)
+            except CardError as e:
+                errs.append(f"{card.protocol} lookup {lname}: {e}")
+                fields = {}
+            for key in ("tokens", "derived_tokens", "uncatalogued_code"):
+                for f in lk.get(key) or []:
+                    if f == "$self" and key == "derived_tokens":
+                        continue
+                    if fields.get(f) != "address":
+                        errs.append(f"{card.protocol} lookup {lname}: {key} field {f!r} is not an address field "
+                                    f"of `reads` / `derived`")
             continue
         for k in ("param", "target", "read"):
             if k not in lk:
@@ -760,7 +787,13 @@ def validate_card(catalog: Catalog, card: Card) -> list[str]:
             if call["target"] == TOKEN:
                 continue
             if call["target"].startswith("$") and not call["target"].startswith("$book."):
-                if (raw.get("lookups") or {}).get(call["target"][1:], {}).get("kind") != "address":
+                lname, _, fld = call["target"][1:].partition(".")
+                lk = (raw.get("lookups") or {}).get(lname) or {}
+                try:
+                    is_addr = lk.get("kind") == "address" and (not fld or address_lookup_fields(lk).get(fld) == "address")
+                except CardError:
+                    is_addr = False
+                if not is_addr:
                     errs.append(f"{card.protocol}.{aname}[{i}]: target {call['target']} is not an address lookup")
                 continue
             try:

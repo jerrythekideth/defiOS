@@ -313,7 +313,7 @@ def propose(ctx, calls_file, send, nonce, batch):
             if meta.get("chain_id") and int(meta["chain_id"]) != vault.chain_id:
                 raise TxError(f"calls.json is for chain {meta['chain_id']}, vault {vault.name} is on {vault.chain_id}")
             res = run(vault, calls, send=send, nonce=nonce, batch=batch, catalog=catalog, rpc=rpc,
-                      books_dir=cfg.books_dir, description=meta.get("description"))
+                      books_dir=cfg.books_dir, description=meta.get("description"), lookups=meta.get("lookups"))
         except (ProposeError, TxError) as e:
             raise ConfigError(str(e)) from e
         _emit(ctx, res, summarize(res))

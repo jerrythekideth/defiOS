@@ -1,7 +1,7 @@
 {
  "_meta": {
   "1": {
-   "block": 26329782,
+   "block": 26330018,
    "checked": "2026-11-02"
   }
  },
@@ -2988,6 +2988,16 @@
   "implementation": "0xE7a7477c636EbC2eD7C1968b5Fac5eaF29Ff6C0C",
   "admin": "0xA28c08f165116587D4F3E708743B4dEe155c5E64"
  },
+ "1:0x6d3b65eb14ad3546ab4aa32cf8645a3610a9737b": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.getToken() == savUSD",
+    "ok": true,
+    "got": "0xb8D89678E75a973E74698c976716308abB8a46A4"
+   }
+  ]
+ },
  "1:0x6d903f6003cca6255d85cca4d3b5e5146dc33925": {
   "code": true,
   "proofs": [
@@ -3558,6 +3568,16 @@
    }
   ],
   "implementation": "0xE7B67F44eA304DD7f6d215b13686637ff64CD2B2"
+ },
+ "1:0x81b72171642fab457aa815c0b8412a22b63a6af8": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.getToken() == avUSD",
+    "ok": true,
+    "got": "0xf4c13D631450De6B12a19829E37c8e2826891dC4"
+   }
+  ]
  },
  "1:0x81b76ff3fed28ba0b4a5d4c76bd5c13bd0641d86": {
   "code": true,
@@ -5123,6 +5143,18 @@
     "got": "0xB85B2bFEbeC4F5f401dbf92ac147A3076391fCD5"
    }
   ]
+ },
+ "1:0xb8d89678e75a973e74698c976716308abb8a46a4": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "savusd_ccip_pool.getToken() == $self",
+    "ok": true,
+    "got": "0xb8D89678E75a973E74698c976716308abB8a46A4"
+   }
+  ],
+  "name": "Staked avUSD",
+  "symbol": "savUSD"
  },
  "1:0xba100000625a3754423978a60c9317c58a424e3d": {
   "code": true,
@@ -6715,6 +6747,18 @@
     "got": "0xD533a949740bb3306d119CC777fa900bA034cd52"
    }
   ]
+ },
+ "1:0xf4c13d631450de6b12a19829e37c8e2826891dc4": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "avusd_ccip_pool.getToken() == $self",
+    "ok": true,
+    "got": "0xf4c13D631450De6B12a19829E37c8e2826891dC4"
+   }
+  ],
+  "name": "avUSD",
+  "symbol": "avUSD"
  },
  "1:0xf5f5b97624542d72a9e06f04804bf81baa15e2b4": {
   "code": true,

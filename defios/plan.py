@@ -338,6 +338,7 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
     out_steps, refused, warnings, all_calls = [], [], [], []
     revokes: dict[tuple[str, str], tuple[BuiltCall, str]] = {}  # (token, spender) -> (approve call, action)
     kept: list[str] = []
+    lookup_proofs: list[dict] = []
 
     for si, step in enumerate(steps):
         proto, aname, via = resolve_action(catalog, step.ref, vault.book_vars)
@@ -353,7 +354,12 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
         input_ref = action.get("input")
         input_tok = resolve_token(catalog, input_ref if input_ref == NATIVE or "." in str(input_ref)
                                   else f"{proto}.{input_ref}", vault.book_vars) if input_ref else None
-        tok = resolve_token(catalog, step.token, vault.book_vars) if step.token else None
+        try:
+            tok = resolve_token(catalog, step.token, vault.book_vars) if step.token else None
+        except PlanError:
+            if not action.get("token_from"):
+                raise
+            tok = None  # may be a token the action's lookup proves (a Pendle PT): matched below
         # `tokens:` + `input:` (e.g. a list of vaults that take USDC): --token picks from the list,
         # the amount is in the input token
         pick_from_list = bool(action.get("tokens")) and bool(input_tok) and input_tok["address"] is not None
@@ -369,9 +375,22 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
             vars_.update(lookups.resolve(catalog, proto, action, step.params, rpc, vault.book_vars))
         except lookups.LookupFailed as e:
             raise PlanError(f"{where}: {e}") from None
+        for a, meta in (vars_.get("_lookup_tokens") or {}).items():
+            names.setdefault(a, meta["symbol"])
+        for pr in vars_.get("_lookup_proofs") or []:
+            if pr not in lookup_proofs:
+                lookup_proofs.append(pr)
+        for w in vars_.get("_lookup_warnings") or []:
+            if w not in warnings:
+                warnings.append(w)
         lk_tok = lookups.token_from(action, vars_)
         if lk_tok:
-            ltok = resolve_token(catalog, lk_tok, vault.book_vars)
+            ltok = (vars_.get("_lookup_tokens") or {}).get(lk_tok.lower()) or resolve_token(catalog, lk_tok,
+                                                                                            vault.book_vars)
+            if step.token and tok is None and str(step.token).lower() not in {
+                    lk_tok.lower(), str(ltok["symbol"]).lower(), str(ltok["ref"]).lower()}:
+                raise PlanError(f"{where}: the {action['token_from'].split('.')[-1]} of this lookup is "
+                                f"{ltok['symbol']} ({lk_tok}), not {step.token!r}")
             if tok and (tok["address"] or "").lower() != lk_tok.lower():
                 raise PlanError(f"{where}: the market's {action['token_from'].split('.')[-1]} is {ltok['ref']}, "
                                 f"not {tok['ref']}")
@@ -566,6 +585,7 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
         "refused": refused,
         "warnings": warnings,
         "calls": [c.to_json() for c in all_calls] if not refused else [],
+        "lookups": lookup_proofs,
         "operator_tx": operator_tx,
     }
 
@@ -573,7 +593,8 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
 def calls_file(p: dict) -> dict:
     """The calls.json `defios propose --file` reads."""
     return {"description": p["description"], "chain_id": p["chain_id"], "vault": p["vault"],
-            "generated_by": "defios plan", "role_block": p["role"]["block"], "calls": p["calls"]}
+            "generated_by": "defios plan", "role_block": p["role"]["block"], "calls": p["calls"],
+            **({"lookups": p["lookups"]} if p.get("lookups") else {})}
 
 
 def summarize(p: dict) -> str:

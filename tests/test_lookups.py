@@ -188,3 +188,13 @@ def test_recognize_for_propose(catalog):
     assert recognize(catalog, VAULT_A, rpc) == "morpho_vaults any_vault (vault_v2_factory.isVaultV2)"
     assert recognize(catalog, VAULT_B, rpc) is None
     assert recognize(catalog, VAULT_A, None) is None
+
+
+def test_market_id_given_as_vault_address_points_to_markets(catalog):
+    """The mix-up an agent made in the wild: a Morpho Blue market id passed as a vault address."""
+    mid = "0xe3df58f9d3011b7481ff36b939fa5f8da642f34ea5792d25d3958dbf1efa26d7"
+    with pytest.raises(LookupFailed, match=r"Morpho Blue market id: use morpho_markets\.\* with --param market_id="):
+        resolve(catalog, "morpho_vaults", catalog.cards["morpho_vaults"].actions["deposit_any"],
+                {"vault_address": mid}, VaultRpc(catalog, {}))
+    with pytest.raises(LookupFailed, match=r"contract address .*morpho_vaults\.\* with --param vault_address="):
+        resolve(catalog, "morpho_markets", _action(catalog, "supply"), {"market_id": VAULT_A}, FakeRpc({}))

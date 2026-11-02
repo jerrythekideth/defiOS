@@ -171,7 +171,7 @@ def describe_calls(otx: OperatorTx, catalog=None, vault: VaultConfig | None = No
 def propose(vault: VaultConfig, calls: list[Call], *, send: bool = False, nonce: int | None = None,
             batch: str = "roles", catalog=None, rpc: Rpc | None = None, service: Any = None,
             private_key: str | None = None, books_dir: Path | None = None, description: str | None = None,
-            origin: str = ORIGIN) -> dict:
+            origin: str = ORIGIN, lookups: list[dict] | None = None) -> dict:
     """Build (and with send=True, post) a proposal on the Operator Safe. Returns a JSON-able report.
 
     Blocking problems (anything in `problems`) stop a send; a dry run reports them."""
@@ -183,6 +183,17 @@ def propose(vault: VaultConfig, calls: list[Call], *, send: bool = False, nonce:
     op = vault.operator
 
     unknown = _uncatalogued(calls, catalog, vault)
+    if unknown and catalog is not None and lookups:  # the plan's address lookups (a Pendle market): re-proved now
+        from .lookups import LookupFailed, reprove
+        try:
+            proved = reprove(catalog, lookups, rpc, vault.book_vars) if rpc is not None else {}
+        except LookupFailed as e:
+            proved = {}
+            problems.append(f"a lookup recorded in calls.json no longer proves out: {e}")
+        for a in list(unknown):
+            if a.lower() in proved:
+                unknown.remove(a)
+                warnings.append(f"{a} is not in a card; accepted because {proved[a.lower()]} proves it onchain")
     if unknown and catalog is not None:  # a looked-up address (any Morpho vault): re-proved onchain now
         from .lookups import recognize
         for a in list(unknown):

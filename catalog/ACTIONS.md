@@ -91,7 +91,7 @@ each `--param` name must be given as `--param name=value`.
 | `unstake` | ankrETH |  |  | ankrETH -> ETH through the Ankr exit queue (paid to the Vault later) |
 | `flash_unstake` | ankrETH |  |  | ankrETH -> ETH instantly from the FlashUnstake pool (fee applies), paid to the Vault |
 
-## avant: Avant (avETH / savETH)
+## avant: Avant (avETH / savETH; bridged avUSD / savUSD)
 
 | action | input | tokens | --param | does |
 |---|---|---|---|---|
@@ -437,6 +437,13 @@ each `--param` name must be given as `--param name=value`.
 
 | action | input | tokens | --param | does |
 |---|---|---|---|---|
+| `any_mint_sy` | the yield_token |  | market_address, min_sy | the SY's yield token -> SY of Pendle market `market_address`, minted to the Vault |
+| `any_redeem_sy` | the sy |  | market_address, min_out | SY of market `market_address` -> its yield token, back to the Vault |
+| `any_buy_pt` | the sy |  | market_address, min_pt | SY -> PT on Pendle market `market_address`, paid to the Vault |
+| `any_sell_pt` | the pt |  | market_address, min_sy | PT -> SY on Pendle market `market_address` before expiry, paid to the Vault |
+| `any_redeem_pt` | the pt |  | market_address, min_sy | PT of market `market_address` -> SY at maturity (after expiry), paid to the Vault |
+| `any_add_liquidity` | the sy |  | market_address, min_lp | SY -> LP of Pendle market `market_address` (single-sided), minted to the Vault |
+| `any_remove_liquidity` | the any_market |  | market_address, min_pt, min_sy | LP of Pendle market `market_address` -> SY and PT in pool proportions, paid to the Vault |
 | `stETH_30DEC2027_mint_sy` | wstETH |  | min_sy | wstETH -> SY_stETH (the market's SY), minted to the Vault |
 | `stETH_30DEC2027_redeem_sy` | SY_stETH |  | min_out | SY_stETH -> wstETH back to the Vault |
 | `stETH_30DEC2027_buy_pt` | SY_stETH |  | min_pt | SY_stETH -> PT_stETH_30DEC2027 on market_stETH_30DEC2027, paid to the Vault |

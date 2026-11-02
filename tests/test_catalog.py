@@ -87,3 +87,21 @@ def test_repo_holds_no_user_config():
         for k in ("avatar", "roles_modifier", "operator", "proposer"):
             a = v[k]
             assert is_address(a) and int(a, 16) < 2**16, (k, a)
+
+
+TOKEN_CATEGORIES = {"token", "receipt", "debt", "reward", "governance"}
+
+
+def test_every_token_record_has_decimals(catalog):
+    """A token record without `decimals` is left out of TOKENS.md, so agents grep for it, miss it and
+    call a catalogued token unknown. Vault shares (erc4626*) are tokens too."""
+    missing = []
+    for card in catalog.cards.values():
+        for name, c in card.contracts.items():
+            if not isinstance(c, dict) or "ref" in c or not str(c.get("address", "")).startswith("0x"):
+                continue
+            kind = str(c.get("kind", ""))
+            tokenish = c.get("category") in TOKEN_CATEGORIES or kind.startswith(("erc20", "erc4626", "atoken"))
+            if tokenish and "decimals" not in c and kind != "merkl_distributor":
+                missing.append(f"{card.protocol}.{name}")
+    assert not missing, f"add `decimals:` (read decimals() onchain) to {missing}"

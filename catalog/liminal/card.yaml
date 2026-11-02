@@ -20,6 +20,7 @@ contracts:
     address: "0x9B74D3BD96f54dE689CfFDeb27EE34f68dFf086d"
     category: receipt
     kind: oft
+    decimals: 18
     aliases: [limusd, liminal usd]
     proofs:
       - { from: spoke, read: "shareOFT() returns (address)", expect: $self }
