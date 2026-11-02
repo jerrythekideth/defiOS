@@ -60,12 +60,43 @@ Then simulate (`skills/defios-simulate/SKILL.md`), propose a dry run, and
 
 ## Where ids and addresses come from
 
-The human gives them: from the Morpho app URL (`/vault/<address>`,
-`/market/<id>`), from their own research, or from a curator they trust.
-Never pick one yourself because its APY is high. Before you whitelist, show
-the human what the engine read: the vault's asset and which factory vouched
-for it, or the market's tokens, oracle, IRM and LLTV (the `notes` of `permit`
-and the `lookups` of `plan`).
+The human gives them: from a Morpho app link, from their own research, or
+from a curator they trust. Never pick one yourself because its APY is high.
+Run every link or bare hex through `defios resolve` first; it says which kind
+of thing it is and which actions take it:
+
+| the human pastes | it is | use |
+|---|---|---|
+| `app.morpho.org/<chain>/market/<0x + 64 hex>/…` (also `/variable/`, `/fixed/`, `market?id=`) | a **Blue market id** (bytes32) | `morpho_markets.*` `--param market_id=` |
+| `app.morpho.org/<chain>/vault/<0x + 40 hex>/…` (also `vault?vault=`) | a **vault address** | `morpho_vaults.*_any` `--param vault_address=` |
+| a bare `0x…` | 64 hex = a market id, 40 hex = an address | `defios resolve 0x…` |
+
+**A market is not a vault.** A market id never goes into a `morpho_vaults`
+action: the engine refuses it ("that looks like a 32-byte id … use morpho_markets.*").
+A vault address never goes into `market_id`. Check the `<chain>` in the link
+against the vault's chain; `resolve` refuses a link for another chain.
+
+Before you whitelist, show the human what the engine read: the vault's asset
+and which factory vouched for it, or the market's tokens, oracle, IRM and LLTV
+(the `matches` of `resolve`, the `notes` of `permit`, the `lookups` of `plan`).
+
+## Loops (`morpho_loop` recipe)
+
+"Loop X on market 0x…" means: post X as collateral, borrow the loan token,
+turn it back into X, and repeat. Unwind in reverse.
+
+```bash
+defios recipe morpho_loop@market_id=0x…              # the actions, plus a note on anything not covered
+defios permit --recipe morpho_loop@market_id=0xA… --recipe morpho_loop@market_id=0xB…
+```
+
+The recipe adds `supply_collateral`, `borrow`, `repay` and `withdraw_collateral`
+for that market. It also adds the collateral card's actions that take the loan
+token (to get the collateral) or the collateral (to unwind). When no card
+turns the loan token into the collateral (savUSD on Ethereum is bridged, with
+no mint), the recipe says so in a note. Tell the human the loop cannot be run
+onchain with cards alone. Do not invent a DEX or bridge route. Several markets
+go into one batch; each is pinned on its own.
 
 ## Pitfalls
 

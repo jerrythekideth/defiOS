@@ -27,6 +27,13 @@ contracts before anything uses it:
         tokens: [asset]
 
 Vars: `any_vault` (the address: a call target or an address arg, pinned with EqualTo) and `any_vault.asset`.
+
+An address lookup may also read a multi-output signature (one field per named output), `derived:
+{field: {from: <field>, read: …}}` (read on an address it read), `derived_tokens:` (fields, or `$self`, that the
+proof vouches for as tokens: decimals and symbol read onchain), `uncatalogued_code:` (address fields whose code
+the proof does not fix: a warning) and `warn:`. Every address field is pinned like the lookup address.
+`plan` records each address lookup (`_lookup_proofs` -> calls.json `lookups`); `reprove` runs them again
+for `propose`.
 """
 from __future__ import annotations
 

@@ -72,17 +72,18 @@ defios --format text check
 ```
 
 Point your agent at `AGENTS.md` (the manual and rules) and, for OpenClaw or
-Claude Code, at `skills/defios/SKILL.md` (and `skills/defios-tokens`, `skills/defios-simulate`, `skills/defios-merkl`, `skills/defios-morpho` for tokens, simulation, Merkl rewards and any Morpho vault or market).
+Claude Code, at `skills/defios/SKILL.md` (and `skills/defios-tokens`, `skills/defios-simulate`, `skills/defios-merkl`, `skills/defios-morpho`, `skills/defios-pendle` for tokens, simulation, Merkl rewards, any Morpho vault or market and any Pendle market).
 
 Optional MCP server exposing the same functions as tools:
-`pip install -e "DeFi_os[mcp]"` then `DEFIOS_ROOT=/path/to/agent-repo python -m defios.mcp`.
+`pip install -e "DeFi_os[mcp]"` then `DEFIOS_ROOT=/path/to/agent-repo python -m defios.mcp`. Tools: doctor, sync,
+state, check, whois, resolve, recipe, actions, plan, permit, simulate and propose (dry run only; `--send` stays on the CLI).
 
 ## Three repos
 
 ```
 DeFi_os/                    public · this repo · no user data
 ├── AGENTS.md               the agent manual and rules
-├── skills/                 AgentSkills-format skills (OpenClaw, Claude Code): defios, defios-tokens, defios-simulate, defios-merkl, defios-morpho
+├── skills/                 AgentSkills-format skills (OpenClaw, Claude Code): defios, defios-tokens, defios-simulate, defios-merkl, defios-morpho, defios-pendle
 ├── catalog/<protocol>/     card.yaml (+ NOTES.md): public protocol facts
 ├── defios/                 Python engine: roles/ (v2 adapter, v3 slot), sync, check, doctor, cli, mcp,
 │                           plan (intent -> calls.json), tx (MultiSend + execTransactionWithRole),
