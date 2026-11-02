@@ -104,7 +104,10 @@ A proof is an `eth_call` whose answer must be another record's address:
 * `read`: a full signature with `returns (address)`, or `returns (address[])`
   together with `expect: { contains: … }`;
 * `from`: the record to call (default `$self`), on the same chain;
-* `args`: optional, card refs or literals;
+* `args`: optional, card refs or literals (addresses, numbers, strings);
+* `field`: when `read` returns several values, the name of the address output
+  to compare (`vaultInfo(address vault) returns (uint256 swapFee, …, address
+  lpTokenAddress)` with `field: lpTokenAddress`);
 * `expect`: a card ref, or `$self`.
 
 Good proofs tie the record to something already known: the protocol's own

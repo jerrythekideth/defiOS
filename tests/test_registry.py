@@ -243,3 +243,26 @@ def test_whois_and_export_see_registry_yaml(tmp_path):
     assert (m["protocol"], m["name"], m["category"]) == ("demo", "dUSD", "token")
     r = run(["registry", "export", "--out", "-", "--dir", str(d)])
     assert "1:" + DEMO.lower() in json.loads(r.output)["deployments"]
+
+
+def test_proof_with_string_arg_and_named_field(reg):
+    gw, router = reg.by_ref["infinifi.gateway"], reg.by_ref["upshift.router"]
+    by_id = {p.id: p for p in reg.proofs_of(gw) + reg.proofs_of(router)}
+    p = by_id["$self.getAddress(receiptToken) == iUSD"]
+    assert p.args == ["receiptToken"] and p.expect == reg.by_ref["infinifi.iUSD"].address
+    q = by_id["$self.vaultInfo(coreUSDC).lpTokenAddress == coreUSDC"]
+    assert q.index == 3 and q.out_types == ["uint256", "uint8", "address", "address"]
+    core, usdc = reg.by_ref["upshift.coreUSDC"].address, reg.by_ref["stablecoins.USDC"].address
+    sel = keccak(text="vaultInfo(address)")[:4].hex()
+    ok = verify(reg, {1: FakeRpc(1, {(router.address.lower(), sel): encode(["uint256", "uint8", "address", "address"], [150, 1, usdc, core])})}, [1])
+    assert ok[router.key]["proofs"][0]["ok"]
+    swapped = verify(reg, {1: FakeRpc(1, {(router.address.lower(), sel): encode(["uint256", "uint8", "address", "address"], [150, 1, core, usdc])})}, [1])
+    assert not swapped[router.key]["proofs"][0]["ok"]
+
+
+def test_field_must_name_an_address_output(tmp_path):
+    d = _tmp_catalog(tmp_path, ["stablecoins", "upshift"])
+    card = d / "upshift" / "card.yaml"
+    card.write_text(card.read_text().replace("field: lpTokenAddress", "field: swapFee"))
+    errs = " ".join(Registry.from_catalog(Catalog.load(d)).errors)
+    assert "`field: swapFee` must name an address output" in errs

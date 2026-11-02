@@ -49,6 +49,8 @@ contracts:
     kind: router
     aliases: [strata depositor, strata usde depositor, TrancheDepositor]
     note: "proxy -> TrancheDepositor; pulls the asset from msg.sender, so it is the approve spender"
+    proofs:
+      - { read: "acm() returns (address)", expect: acm }
   depositor_nusd:
     address: "0x7945e45c2F39bE3A0cbF467F3fae982C17CB4Bf7"
     category: router
