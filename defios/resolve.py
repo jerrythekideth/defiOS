@@ -158,6 +158,9 @@ def summarize(r: dict) -> str:
         if "lookup" in m:
             lines.append(f"  {m['card']} {m['lookup']}: proved by {m['proved_by'] or 'its id (keccak)'}")
             for k, v in m["fields"].items():
+                if k == "expiry" and isinstance(v, int):
+                    from datetime import datetime, timezone
+                    v = f"{v} ({datetime.fromtimestamp(v, timezone.utc):%Y-%m-%d %H:%M} UTC)"
                 lines.append(f"     {k} = {v}")
             for w in m["warnings"]:
                 lines.append(f"     warning: {w}")
