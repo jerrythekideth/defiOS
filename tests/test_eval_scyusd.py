@@ -103,7 +103,7 @@ def test_one_permission_batch_for_the_whole_request(catalog):
     rpc = Mainnet(catalog)
     ex = [expand(catalog, s, rpc) for s in (f"morpho_loop@market_id={USD3_MARKET}",
                                             f"morpho_loop@market_id={SAVUSD_MARKET}",
-                                            f"pendle_pt@market_address={PENDLE_MARKET}")]
+                                            f"pendle_pt@market_address={PENDLE_MARKET},accept_sy={SY}")]
     assert "threejane.deposit" in ex[0]["refs"] and "threejane.redeem" in ex[0]["refs"]
     assert any("avant.savUSD" in n and "not covered" in n for n in ex[1]["notes"])     # no savUSD route: a note
     assert "infinifi.unstake" in ex[2]["refs"]

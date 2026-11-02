@@ -58,7 +58,7 @@ def _try_lookup(catalog: Catalog, proto: str, lname: str, value: str, rpc, book_
     spec = lookups.card_lookups(catalog, proto)[lname]
     try:
         v = lookups.resolve(catalog, proto, {"calls": [{"target": f"${lname}"}]}, {spec["param"]: value}, rpc,
-                            book_vars)
+                            book_vars, read_only=True)
     except lookups.LookupFailed as e:
         return {"card": proto, "lookup": lname, "ok": False, "why": str(e)}
     fields = {k.split(".", 1)[1]: (to_checksum_address(x) if isinstance(x, str) and is_address(x) else x)

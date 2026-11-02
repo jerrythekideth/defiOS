@@ -84,7 +84,7 @@ actions:
       - target: router
         sig: "swapExactPtForSy(address receiver, address market, uint256 exactPtIn, uint256 minSyOut, (address limitRouter, uint256 epsSkipMarket, ((uint256 salt, uint256 expiry, uint256 nonce, uint8 orderType, address token, address YT, address maker, address receiver, uint256 makingAmount, uint256 lnImpliedRate, uint256 failSafeRate, bytes permit) order, bytes signature, uint256 makingAmount)[] normalFills, ((uint256 salt, uint256 expiry, uint256 nonce, uint8 orderType, address token, address YT, address maker, address receiver, uint256 makingAmount, uint256 lnImpliedRate, uint256 failSafeRate, bytes permit) order, bytes signature, uint256 makingAmount)[] flashFills, bytes optData) limit)"
         args: { receiver: $AVATAR, market: $any_market, exactPtIn: $amount, minSyOut: $min_sy, limit: { limitRouter: "0x0000000000000000000000000000000000000000", epsSkipMarket: 0, normalFills: [], flashFills: [], optData: "0x" } }
-    note: "--param market_address --param min_sy (raw SY). limitRouter pinned to zero (no limit-order fills). Then any_redeem_sy"
+    note: "--param market_address --param min_sy (raw SY). limitRouter pinned to zero (no limit-order fills). The role cannot pin normalFills / flashFills to empty arrays (they pass free); any fill would be sent to limitRouter = 0 and revert. Then any_redeem_sy"
   any_redeem_pt:
     summary: "PT of market `market_address` -> SY at maturity (after expiry), paid to the Vault"
     token_from: any_market.pt

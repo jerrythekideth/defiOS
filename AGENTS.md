@@ -165,7 +165,8 @@ report them in your summary. `known_dead` and `uncatalogued` are clean-up items.
   `sync` → `defios resolve` each link (rule 12) → `defios recipe` each strategy
   → show what each one reads (tokens, LLTV, SY / PT / expiry) and every note on
   what is not covered → one `defios permit --recipe morpho_loop@market_id=0xA…
-  --recipe morpho_loop@market_id=0xB… --recipe pendle_pt@market_address=0x…`.
+  --recipe morpho_loop@market_id=0xB… --recipe pendle_pt@market_address=0x…,accept_sy=0x…`
+  (`accept_sy` only once the human has checked the SY: `skills/defios-pendle/SKILL.md`).
   The batch holds only what the live role is missing (rule 13).
 * **"Add permission for X"**: `sync` → `defios permit <card>.<action> [--token T]`
   → show the human every `+` line (function, condition tree, why) and every

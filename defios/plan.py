@@ -425,7 +425,7 @@ def plan(catalog: Catalog, state: RoleState, adapter: RolesAdapter, vault: Vault
             vars_.setdefault(k, _param_value(catalog, proto, v, vault.book_vars))
         lookup_params = {lk.get("param") for lk in lookups.card_lookups(catalog, proto).values()}
         for k, v in step.params.items():
-            if k not in lookup_params:
+            if k not in lookup_params and not k.startswith("accept_"):  # accept_<field>: for the lookup only
                 vars_[k] = _param_value(catalog, proto, v, vault.book_vars)
         if raw is not None and any(c.get("send") for c in action.get("calls") or []):
             vars_["value"] = raw

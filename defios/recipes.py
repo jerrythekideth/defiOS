@@ -64,11 +64,11 @@ def expand(catalog: Catalog, spec: str, rpc, book_vars: dict | None = None) -> d
         raise RecipeError(f"recipe {name} needs @{r['param']}=… (e.g. {name}@{r['param']}=0x…)")
     pv = params[r["param"]]
     try:
-        v = lookups.resolve(catalog, r["card"], {"calls": [{"target": f"${r['lookup']}"}]}, {r["param"]: pv}, rpc,
+        v = lookups.resolve(catalog, r["card"], {"calls": [{"target": f"${r['lookup']}"}]}, params, rpc,
                             book_vars)
     except lookups.LookupFailed as e:
         raise RecipeError(f"recipe {name}: {e}") from None
-    at = f"@{r['param']}={pv}"
+    at = "@" + ",".join(f"{k}={x}" for k, x in params.items())
     refs = [f"{r['card']}.{a}{at}" for a in r["core"]]
     notes: list[str] = list(v.get("_lookup_warnings") or [])
     tok = v[f"{r['lookup']}.{r['token']}"]

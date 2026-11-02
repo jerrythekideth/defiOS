@@ -89,7 +89,9 @@ def _write(cfg, out: str, data: dict) -> str:
     import json
     from pathlib import Path
 
-    path = Path(out) if Path(out).is_absolute() else cfg.root / out
+    path = (cfg.root / out).resolve()
+    if not path.is_relative_to(Path(cfg.root).resolve()):
+        raise ValueError(f"out must be inside DEFIOS_ROOT ({cfg.root}), got {out}")
     path.write_text(json.dumps(data, indent=2) + "\n")
     return str(path)
 

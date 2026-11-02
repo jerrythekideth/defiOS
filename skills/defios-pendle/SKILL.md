@@ -35,9 +35,13 @@ to the human before you whitelist anything.
   the yield token. The yield token must be a **verified** catalog token.
 * The role pins that market, its SY, PT and YT (call targets, approve spenders
   and the `market` arg), so a lookalike market fails.
-* **Warning (always shown):** anyone can create an SY, and the market factory
-  does not fix the SY's code. Check that the market is listed on
-  app.pendle.finance and that its SY is Pendle's before you mint into it.
+* **An SY that no card lists is refused.** Anyone can create an SY, and the
+  market factory does not fix the SY's code: a market built on a hostile SY
+  passes `isValidMarket`. `plan`, `permit` and recipes refuse it until the
+  human has checked that the market is listed on app.pendle.finance and that
+  its SY is Pendle's, and then passes that exact SY address:
+  `--param accept_sy=0x…` (`resolve` prints the line to use). Never add it
+  yourself.
 * `propose` proves the market again onchain before it accepts the SY, PT or YT
   as a call target (calls.json carries the `lookups` record from `plan`).
 
@@ -56,12 +60,12 @@ to the human before you whitelist anything.
 
 ```bash
 # whitelist one market: the recipe adds the core actions plus the yield token card's actions
-defios recipe pendle_pt@market_address=0x…          # read-only: what it expands to
-defios permit --recipe pendle_pt@market_address=0x…  # Tx Builder JSON for the Vault queue
+defios recipe pendle_pt@market_address=0x…,accept_sy=0x…          # read-only: what it expands to
+defios permit --recipe pendle_pt@market_address=0x…,accept_sy=0x…  # Tx Builder JSON for the Vault queue
 
 # siUSD -> SY -> PT in one plan (amounts in each step's input token; leave a margin)
 defios plan pendle.any_mint_sy=1000 pendle.any_buy_pt=999 \
-  --param market_address=0x… --param min_sy=<raw> --param min_pt=<raw>
+  --param market_address=0x… --param accept_sy=0x… --param min_sy=<raw> --param min_pt=<raw>
 ```
 
 The human sets the minimums from a quote they trust. defios does not quote
