@@ -1,6 +1,6 @@
 protocol: avant
-name: Avant (avETH / savETH; bridged avUSD / savUSD)
-chain_id: 1
+name: Avant (avETH / savETH on Ethereum; avUSD / savUSD minting & staking on Avalanche)
+chain_ids: [1, 43114]
 status: draft
 reviewed: false
 sources:
@@ -80,7 +80,38 @@ contracts:
     address: "0x6d3B65eB14ad3546ab4Aa32cf8645a3610a9737b"
     category: bridge
     kind: ccip_burn_mint_pool
-    note: "CCIP BurnMintTokenPool 1.5.1 for savUSD"
+    note: "CCIP BurnMintTokenPool 1.5.1 for savUSD (Avalanche -> Ethereum)"
+  minting_avalanche:
+    address: "0xcb43139e90f019624e3b76c56fb05394b162a49c"
+    category: minter
+    kind: rfq_minting
+    chain_id: 43114
+    aliases: [avant avalanche minting, mint avusd]
+    note: "AvantMintingV2 on Avalanche; mint/redeem avUSD (benefactor scoped to Vault)"
+  staking_avalanche:
+    address: "0x06d47f3fb376649c3a9dafe069b3d6e35572219e"
+    category: staking
+    kind: erc4626_with_cooldown
+    chain_id: 43114
+    decimals: 18
+    aliases: [avant avalanche staking, stake savusd, savusd vault]
+    edges: { underlying: avusd_avalanche }
+    note: "StakedAvantCoinV2 on Avalanche; ERC-4626 vault with cooldown (receiver scoped to Vault)"
+  avusd_avalanche:
+    address: "0xa7569a44f348d3d70d8ad5889e50f78e33d80d35"
+    name: "avUSD (Avalanche)"
+    category: token
+    kind: erc20
+    chain_id: 43114
+    decimals: 18
+    aliases: [avusd avalanche]
+    note: "Native avUSD on Avalanche (before bridging to Ethereum)"
+  savusd_ccip_pool_avalanche:
+    address: "0x6d3B65eB14ad3546ab4Aa32cf8645a3610a9737b"
+    category: bridge
+    kind: ccip_burn_mint_pool
+    chain_id: 43114
+    note: "CCIP BurnMintTokenPool 1.5.1 for savUSD on Avalanche (burns here, mints on Ethereum)"
     proofs:
       - { read: "getToken() returns (address)", expect: savUSD }
 
