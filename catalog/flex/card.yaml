@@ -1,0 +1,69 @@
+protocol: flex
+name: "Flex Protocol (siUSD Trove Manager)"
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "Flex Protocol siUSD trove manager: 0x0d50e97b521d62e1509ca408ade621658c367bed"
+  - "Function selectors provided by Jerry 2026-11-03"
+
+contracts:
+  trove_manager:
+    address: "0x0d50e97b521d62e1509ca408ade621658c367bed"
+    category: lending
+    kind: trove_manager
+    decimals: 18
+    aliases: [flex trove manager, siUSD trove manager]
+    note: "Flex Protocol siUSD lending: open, manage, and close troves"
+  siUSD:
+    ref: infinifi.siUSD
+
+actions:
+  open_trove:
+    summary: "Open new siUSD trove (owner scoped to Vault)"
+    calls:
+      - target: trove_manager
+        sig: "openTrove(...)"
+        selectors: ["0xf70d8c11", "0x18ee2f0a"]
+  add_collateral:
+    summary: "Add collateral to trove"
+    calls:
+      - target: trove_manager
+        sig: "addCollateral()"
+        selector: "0x650f939c"
+  remove_collateral:
+    summary: "Remove collateral from trove"
+    calls:
+      - target: trove_manager
+        sig: "removeCollateral()"
+        selector: "0x6a48f8b3"
+  borrow:
+    summary: "Borrow siUSD against collateral"
+    calls:
+      - target: trove_manager
+        sig: "borrow(...)"
+        selectors: ["0xf8e61b69", "0x36a3cf45"]
+  repay:
+    summary: "Repay siUSD debt"
+    calls:
+      - target: trove_manager
+        sig: "repay()"
+        selector: "0xd8aed145"
+  adjust_interest_rate:
+    summary: "Adjust trove interest rate"
+    calls:
+      - target: trove_manager
+        sig: "adjustInterestRate()"
+        selector: "0x3665ead8"
+  close_trove:
+    summary: "Close siUSD trove"
+    calls:
+      - target: trove_manager
+        sig: "closeTrove()"
+        selector: "0xaa665baf"
+  redeem:
+    summary: "Redeem siUSD for collateral"
+    calls:
+      - target: trove_manager
+        sig: "redeem()"
+        selector: "0x7bde82f2"
