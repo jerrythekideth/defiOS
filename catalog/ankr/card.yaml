@@ -1,8 +1,8 @@
 protocol: ankr
 name: Ankr (ankrETH liquid staking)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "docs: https://www.ankr.com/docs/liquid-staking/eth/overview/"
   - "explorer: verified source (ankrETH, ETH2_Staking GlobalPool, FlashUnstake)"

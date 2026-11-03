@@ -1,8 +1,8 @@
 protocol: weth
 name: Wrapped Ether (WETH9)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "address: onchain proof (Aave v3 getReservesList() contains it; Tokemak router weth9() and Origin ARM token0() return it)"
 

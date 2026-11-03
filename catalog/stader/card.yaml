@@ -1,8 +1,8 @@
 protocol: stader
 name: Stader (ETHx liquid staking)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "docs: https://www.staderlabs.com/docs-v1/Ethereum/smart-contracts"
   - "explorer: verified source (StakePoolManager, UserWithdrawalManager, ETHx, StaderConfig)"

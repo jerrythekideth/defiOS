@@ -1,8 +1,8 @@
 protocol: pendle
 name: Pendle (router, PT / YT / SY, markets)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 adding: >
   All user actions go through the PendleRouterV4. A market is `market_<asset>_<expiry>`
   with factory() = a market factory as proof; its PT / YT / SY are keyed by symbol()

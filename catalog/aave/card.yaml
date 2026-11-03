@@ -1,8 +1,8 @@
 protocol: aave
 name: Aave (governance, staking, GHO)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 adding: >
   Aave DAO contracts shared by every Aave market: governance executors, the collector,
   the rewards controller, AAVE / stkAAVE, sGHO and the GHO stability modules. Markets live

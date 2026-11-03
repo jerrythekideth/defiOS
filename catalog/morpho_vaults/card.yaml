@@ -1,8 +1,8 @@
 protocol: morpho_vaults
 name: Morpho Vaults (MetaMorpho v1 / Vault v2, ERC-4626)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "Morpho Vault V2 / MetaMorpho: ERC-4626 deposit / withdraw / redeem; asset() read onchain per vault"
 

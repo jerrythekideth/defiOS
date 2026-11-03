@@ -9,8 +9,8 @@
  "protocols": {
   "aave": {
    "name": "Aave (governance, staking, GHO)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -27,8 +27,8 @@
   },
   "aave_v3": {
    "name": "Aave v3 (Ethereum core market)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -57,8 +57,8 @@
   },
   "aave_v3_etherfi": {
    "name": "Aave v3 EtherFi market (exit only)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [],
    "actions": [
     "claim_rewards",
@@ -70,8 +70,8 @@
   },
   "aave_v3_prime": {
    "name": "Aave v3 Prime market",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [],
    "actions": [
     "borrow",
@@ -91,8 +91,8 @@
   },
   "aave_v4": {
    "name": "Aave v4 (Spoke, core hub)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -109,8 +109,8 @@
   },
   "ankr": {
    "name": "Ankr (ankrETH liquid staking)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -138,8 +138,8 @@
   },
   "cctp": {
    "name": "Circle CCTP v2 (bridge USDC)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -156,8 +156,8 @@
   },
   "compound_v3": {
    "name": "Compound v3 (Comet USDC, WETH and USDT markets)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -179,8 +179,8 @@
   },
   "convex": {
    "name": "Convex (Curve LP boosting, cvxCRV, CVX)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -247,8 +247,8 @@
   },
   "curve": {
    "name": "Curve (pools, gauges, CRV, veCRV)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -331,8 +331,8 @@
   },
   "dialectic": {
    "name": "Dialectic (DUSD, smDUSD security module)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -345,8 +345,8 @@
   },
   "ethena": {
    "name": "Ethena (USDe, sUSDe staking with cooldown)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -375,8 +375,8 @@
   },
   "fluid": {
    "name": "Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -434,8 +434,8 @@
   },
   "infinifi": {
    "name": "infiniFi (iUSD, siUSD via the gateway)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -449,8 +449,8 @@
   },
   "kpk": {
    "name": "kpk (vault curator on Gearbox v3 and Morpho)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -458,8 +458,8 @@
   },
   "lido": {
    "name": "Lido (stETH, wstETH, withdrawal queue)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -497,8 +497,8 @@
   },
   "merkl": {
    "name": "Merkl (reward distributor)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -508,8 +508,8 @@
   },
   "morpho_markets": {
    "name": "Morpho Blue markets (direct supply, borrow, collateral)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [],
    "actions": [
     "accrue_interest",
@@ -523,8 +523,8 @@
   },
   "morpho_vaults": {
    "name": "Morpho Vaults (MetaMorpho v1 / Vault v2, ERC-4626)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -547,8 +547,8 @@
   },
   "noon": {
    "name": "Noon (USN, sUSN with a withdrawal handler)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -560,8 +560,8 @@
   },
   "origin_arm": {
    "name": "Origin ARM (Automated Redemption Managers)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -576,8 +576,8 @@
   },
   "pendle": {
    "name": "Pendle (router, PT / YT / SY, markets)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -627,8 +627,8 @@
   },
   "rocket_pool": {
    "name": "Rocket Pool (rETH liquid staking)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -639,8 +639,8 @@
   },
   "sky": {
    "name": "Sky (USDS, DAI, sUSDS, PSM, staking)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -668,8 +668,8 @@
   },
   "spark": {
    "name": "Spark (SparkLend and Spark savings vaults)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -703,8 +703,8 @@
   },
   "stablecoins": {
    "name": "Blue-chip USD stablecoins (token contracts only)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -712,8 +712,8 @@
   },
   "stader": {
    "name": "Stader (ETHx liquid staking)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -725,8 +725,8 @@
   },
   "stakewise_v3": {
    "name": "StakeWise v3 (Genesis vault, osETH)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -768,8 +768,8 @@
   },
   "tokemak": {
    "name": "Tokemak Autopilot (autoUSD via the AutopilotRouter)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -781,8 +781,8 @@
   },
   "tokens": {
    "name": "ERC-20 tokens with no card of their own",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -790,8 +790,8 @@
   },
   "uniswap_v3": {
    "name": "Uniswap v3 (concentrated liquidity positions)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -804,8 +804,8 @@
   },
   "upshift": {
    "name": "Upshift (coreUSDC via the SwapRouter)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -817,8 +817,8 @@
   },
   "weth": {
    "name": "Wrapped Ether (WETH9)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -829,8 +829,8 @@
   },
   "yo": {
    "name": "Yo (yoETH, yoUSD)",
-   "status": "draft",
-   "reviewed": false,
+   "status": "reviewed",
+   "reviewed": true,
    "chains": [
     1
    ],
@@ -863,7 +863,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == stablecoins.USDC"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/yo/card.yaml"
     ],
@@ -901,7 +901,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -940,7 +940,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/registry.yaml",
      "docs: https://docs.morpho.org/get-started/resources/addresses/"
@@ -968,7 +968,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -1000,7 +1000,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -1037,7 +1037,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -1074,7 +1074,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -1111,7 +1111,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -1150,7 +1150,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x02950460E2b9529D0E00284A5fA2d7bDF3fA4d72#code"
@@ -1186,7 +1186,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -1218,7 +1218,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -1250,7 +1250,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -1289,7 +1289,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0x04B7Fa1e727d7290D6E24fA9b426d0c940283a95#code"
@@ -1336,7 +1336,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x04E80Db3f84873e4132B221831af1045D27f140F#code"
@@ -1379,7 +1379,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x053df3e4D0CeD9a3Bf0494F97E83CE1f13BdC0E2#code"
@@ -1461,7 +1461,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x06325440D014e39736583c165C2963BA99fAf14E#code"
@@ -1500,7 +1500,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -1537,7 +1537,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -1617,7 +1617,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -1654,7 +1654,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -1691,7 +1691,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -1758,7 +1758,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -1792,7 +1792,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x0A760466E1B4621579a82a39CB56Dda2F4E70f03#code"
@@ -1831,7 +1831,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -1866,7 +1866,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -1903,7 +1903,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x0bC857f97c0554d1d0D602b56F2EEcE682016fBA#code"
@@ -1939,7 +1939,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -1976,7 +1976,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -2047,7 +2047,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -2086,7 +2086,7 @@
     "why": [
      "source card + onchain proof: $self.usn() == USN"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/noon/card.yaml"
     ],
@@ -2117,7 +2117,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -2154,7 +2154,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -2191,7 +2191,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -2232,7 +2232,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -2269,7 +2269,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -2308,7 +2308,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x167478921b907422F8E88B43C4Af2B8BEa278d3A#code"
@@ -2347,7 +2347,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -2387,7 +2387,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/GovernanceV3Ethereum.sol"
@@ -2416,7 +2416,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -2453,7 +2453,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x182B723a58739a9c974cFDB385ceaDb237453c28#code"
@@ -2493,7 +2493,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -2532,7 +2532,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/registry.yaml",
      "docs: https://docs.morpho.org/get-started/resources/addresses/"
@@ -2564,7 +2564,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -2603,7 +2603,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == stablecoins.USDC"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -2638,7 +2638,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -2678,7 +2678,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stablecoins/registry.yaml",
      "docs: https://developers.circle.com/stablecoins/eurc-contract-addresses"
@@ -2716,7 +2716,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/compound_v3/card.yaml",
      "docs: https://docs.compound.finance/rewards/"
@@ -2751,7 +2751,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x1b74fa5951dfa4c03D0127011548fA79b956f63B#code"
@@ -2787,7 +2787,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -2824,7 +2824,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -2861,7 +2861,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -2936,7 +2936,7 @@
     "why": [
      "source card + onchain proof: $self.parentVault() == KPK_USDC_Prime"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -2983,7 +2983,7 @@
     "why": [
      "independent sources: card, docs, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/rocket_pool/registry.yaml",
      "docs: https://docs.rocketpool.net/overview/contracts-integrations",
@@ -3012,7 +3012,7 @@
     "why": [
      "source card + onchain proof: $self.parentVault() == KPK_USDT_Prime"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -3058,7 +3058,7 @@
     "why": [
      "source card + onchain proof: smDUSD.machineShare() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/dialectic/card.yaml"
     ],
@@ -3095,7 +3095,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x1E4B83f6bFE9dbeB6d5b92a5237E5c18a44176f4#code"
@@ -3138,7 +3138,7 @@
     "why": [
      "source card + onchain proof: position_manager.factory() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/uniswap_v3/card.yaml"
     ],
@@ -3173,7 +3173,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x21E27a5E5513D6e65C4f830167390997aA84843a#code"
@@ -3209,7 +3209,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -3248,7 +3248,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -3321,7 +3321,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -3395,7 +3395,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == wstETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/fluid/card.yaml"
     ],
@@ -3434,7 +3434,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -3471,7 +3471,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -3508,7 +3508,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -3547,7 +3547,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
@@ -3579,7 +3579,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -3619,7 +3619,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -3660,7 +3660,7 @@
     "why": [
      "source card + onchain proof: token_minter.localTokenMessenger() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/cctp/card.yaml"
     ],
@@ -3732,7 +3732,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x2a1e7Cf85E533348AC5770514bF713544a11f856#code"
@@ -3768,7 +3768,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -3844,7 +3844,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -3881,7 +3881,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -3921,7 +3921,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x2c683fAd51da2cd17793219CC86439C1875c353e#code"
@@ -3957,7 +3957,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -3994,7 +3994,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -4031,7 +4031,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -4068,7 +4068,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -4109,7 +4109,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -4149,7 +4149,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/card.yaml",
      "address-book: bgd-labs/aave-address-book AaveV3Ethereum.POOL_ADDRESSES_PROVIDER"
@@ -4184,7 +4184,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "docs: https://docs.curve.finance/user/deployments"
@@ -4263,7 +4263,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/compound_v3/registry.yaml",
      "docs: https://docs.compound.finance/governance/"
@@ -4305,7 +4305,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x30D9410ED1D5DA1F6C8391af5338C93ab8d4035C#code"
@@ -4341,7 +4341,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -4380,7 +4380,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -4416,7 +4416,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -4453,7 +4453,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -4492,7 +4492,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/registry.yaml",
      "docs: https://docs.morpho.org/get-started/resources/addresses/"
@@ -4521,7 +4521,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -4557,7 +4557,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x330Cfd12e0E97B0aDF46158D2A81E8Bd2985c6cB#code"
@@ -4629,7 +4629,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -4670,7 +4670,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -4707,7 +4707,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -4743,7 +4743,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0x34280882267ffa6383B363E278B027Be083bBe3b#code"
@@ -4779,7 +4779,7 @@
     "why": [
      "source card + onchain proof: $self.parentVault() == KPK_wARS_Yield"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -4825,7 +4825,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/registry.yaml",
      "docs: https://docs.morpho.org/get-started/resources/addresses/"
@@ -4855,7 +4855,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x36cC1d791704445A5b6b9c36a667e511d4702F3f#code"
@@ -4895,7 +4895,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -4936,7 +4936,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -4973,7 +4973,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -5046,7 +5046,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x390f3595bCa2Df7d23783dFd126427CCeb997BF4#code"
@@ -5086,7 +5086,7 @@
     "why": [
      "source card + onchain proof: $self.weth9() == weth.WETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokemak/card.yaml"
     ],
@@ -5120,7 +5120,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x3A283D9c08E8b55966afb64C515f5143cf907611#code"
@@ -5159,7 +5159,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/GhoEthereum.sol"
@@ -5199,7 +5199,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == weth.WETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/yo/card.yaml"
     ],
@@ -5240,7 +5240,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/compound_v3/card.yaml",
      "docs: https://docs.compound.finance/#networks"
@@ -5283,7 +5283,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -5320,7 +5320,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -5352,7 +5352,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -5393,7 +5393,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -5472,7 +5472,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
@@ -5510,7 +5510,7 @@
     "why": [
      "source card + onchain proof: distribution_creator.distributor() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/merkl/card.yaml"
     ],
@@ -5547,7 +5547,7 @@
     "why": [
      "source card + onchain proof: $self.getAddress(receiptToken) == iUSD"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/infinifi/card.yaml"
     ],
@@ -5588,7 +5588,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x3f353d76Ae89dc2C89Dcd0426e7Fa9c96A332273#code"
@@ -5627,7 +5627,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
@@ -5664,7 +5664,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -5701,7 +5701,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -5740,7 +5740,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stablecoins/card.yaml"
     ],
@@ -5774,7 +5774,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -5811,7 +5811,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -5848,7 +5848,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -5883,7 +5883,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -5915,7 +5915,7 @@
     "why": [
      "source card + onchain proof: $self.parentVault() == KPK_USDC_Prime_Core"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -5961,7 +5961,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x44D8FaB7CD8b7877D5F79974c2F501aF6E65AbBA#code"
@@ -5998,7 +5998,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6038,7 +6038,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6114,7 +6114,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0x47ad2Cd1DD15739A7a035b9d3B7828d916FEF77E#code"
@@ -6150,7 +6150,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6187,7 +6187,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6226,7 +6226,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stakewise_v3/registry.yaml",
      "docs: https://docs.stakewise.io/"
@@ -6259,7 +6259,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6298,7 +6298,7 @@
     "why": [
      "source card + onchain proof: siUSD.asset() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/infinifi/card.yaml"
     ],
@@ -6332,7 +6332,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6369,7 +6369,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6408,7 +6408,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stader/registry.yaml",
      "docs: https://www.staderlabs.com/docs-v1/Ethereum/smart-contracts"
@@ -6448,7 +6448,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6485,7 +6485,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6522,7 +6522,7 @@
     "why": [
      "source card + onchain proof: $self.parentVault() == KPK_EURC_Yield"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -6566,7 +6566,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6606,7 +6606,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/ethena/card.yaml"
     ],
@@ -6642,7 +6642,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x4d10e7FC03dE065Aef3dfbc0394CbEd1e4d36D6E#code"
@@ -6679,7 +6679,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6718,7 +6718,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveSafetyModule.sol"
@@ -6792,7 +6792,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x4DEcE678ceceb27446b35C672dC7d61F30bAD69E#code"
@@ -6828,7 +6828,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -6871,7 +6871,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -6906,7 +6906,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -6946,7 +6946,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
@@ -6984,7 +6984,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x4e6bB6B7447B7B2Aa268C16AB87F4Bb48BF57939#code"
@@ -7024,7 +7024,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -7065,7 +7065,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -7104,7 +7104,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == stablecoins.USDC"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -7139,7 +7139,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -7176,7 +7176,7 @@
     "why": [
      "source card + onchain proof: $self.parentVault() == KPK_USDC_Yield"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -7220,7 +7220,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -7297,7 +7297,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -7331,7 +7331,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -7375,7 +7375,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/fluid/registry.yaml",
      "docs: https://docs.fluid.instadapp.io/contracts/contracts.html"
@@ -7414,7 +7414,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/GovernanceV3Ethereum.sol"
@@ -7449,7 +7449,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x5411CC583f0b51104fA523eEF9FC77A29DF80F58#code"
@@ -7486,7 +7486,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -7520,7 +7520,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -7552,7 +7552,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -7592,7 +7592,7 @@
     "why": [
      "independent sources: card, docs, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/fluid/registry.yaml",
      "docs: https://docs.fluid.instadapp.io/contracts/contracts.html",
@@ -7626,7 +7626,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -7659,7 +7659,7 @@
     "why": [
      "source card + onchain proof: $self.listYoVaults() contains yoETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/yo/registry.yaml"
     ],
@@ -7698,7 +7698,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -7735,7 +7735,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -7772,7 +7772,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -7809,7 +7809,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/ethena/registry.yaml",
      "docs: https://docs.ethena.fi/solution-design/key-addresses"
@@ -7839,7 +7839,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/registry.yaml",
      "docs: https://docs.morpho.org/get-started/resources/addresses/"
@@ -7871,7 +7871,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -7908,7 +7908,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -7951,7 +7951,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x5A71E7e04F8725fD42a216949E7099ebd08A42E3#code"
@@ -7990,7 +7990,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/lido/registry.yaml",
      "docs: https://docs.lido.fi/deployed-contracts/"
@@ -8025,7 +8025,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -8064,7 +8064,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == USDT"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/fluid/card.yaml"
     ],
@@ -8103,7 +8103,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -8140,7 +8140,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -8180,7 +8180,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == weth.WETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/card.yaml"
     ],
@@ -8252,7 +8252,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -8289,7 +8289,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -8329,7 +8329,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "docs: https://docs.curve.finance/user/deployments"
@@ -8369,7 +8369,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -8406,7 +8406,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -8443,7 +8443,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -8483,7 +8483,7 @@
     "why": [
      "independent sources: card, docs, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "docs: https://docs.curve.finance/user/deployments",
@@ -8515,7 +8515,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
@@ -8553,7 +8553,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x63037a4e3305d25D48BAED2022b8462b2807351c#code"
@@ -8593,7 +8593,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -8627,7 +8627,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -8666,7 +8666,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -8700,7 +8700,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -8782,7 +8782,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -8819,7 +8819,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -8864,7 +8864,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == weth.WETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/origin_arm/card.yaml"
     ],
@@ -8944,7 +8944,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x689440f2Ff927E1f24c72F1087E1FAF471eCe1c8#code"
@@ -8981,7 +8981,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9018,7 +9018,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9055,7 +9055,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9092,7 +9092,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -9131,7 +9131,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stablecoins/card.yaml"
     ],
@@ -9167,7 +9167,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x6B27D7BC63F1999D14fF9bA900069ee516669ee8#code"
@@ -9207,7 +9207,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stablecoins/card.yaml"
     ],
@@ -9243,7 +9243,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490#code"
@@ -9279,7 +9279,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9316,7 +9316,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9355,7 +9355,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
@@ -9424,7 +9424,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/compound_v3/registry.yaml",
      "docs: https://docs.compound.finance/governance/"
@@ -9461,7 +9461,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9498,7 +9498,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9535,7 +9535,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9572,7 +9572,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -9611,7 +9611,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
@@ -9643,7 +9643,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9684,7 +9684,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
@@ -9724,7 +9724,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9761,7 +9761,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9798,7 +9798,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -9837,7 +9837,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/ethena/registry.yaml",
      "docs: https://docs.ethena.fi/solution-design/key-addresses"
@@ -9869,7 +9869,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -9908,7 +9908,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x75A2F59eC37c18962c53b0244D60B53f749DF25E#code"
@@ -9944,7 +9944,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -9981,7 +9981,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -10018,7 +10018,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -10059,7 +10059,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -10096,7 +10096,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -10133,7 +10133,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -10241,7 +10241,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x79F21BC30632cd40d2aF8134B469a0EB4C9574AA#code"
@@ -10281,7 +10281,7 @@
     "why": [
      "source card + onchain proof: KPK_USDC_Prime_Core.curator() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -10354,7 +10354,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == stablecoins.USDC"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -10389,7 +10389,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -10468,7 +10468,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -10509,7 +10509,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -10546,7 +10546,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -10583,7 +10583,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -10661,7 +10661,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x7E1444BA99dcdFfE8fBdb42C02F0005D14f13BE1#code"
@@ -10701,7 +10701,7 @@
     "why": [
      "source card + onchain proof: KPK_USDC_Yield.curator() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/card.yaml"
     ],
@@ -10733,7 +10733,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -10773,7 +10773,7 @@
     "why": [
      "source card + onchain proof: $self.stETH() == stETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/lido/card.yaml"
     ],
@@ -10811,7 +10811,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -10852,7 +10852,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -10891,7 +10891,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
@@ -10930,7 +10930,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
@@ -10965,7 +10965,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -10999,7 +10999,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -11066,7 +11066,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -11105,7 +11105,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -11144,7 +11144,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -11180,7 +11180,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -11217,7 +11217,7 @@
     "why": [
      "source card + onchain proof: KPK_USDT_Prime.curator() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -11251,7 +11251,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == stablecoins.DAI"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml"
     ],
@@ -11285,7 +11285,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -11322,7 +11322,7 @@
     "why": [
      "source card + onchain proof: flash_unstake.ethPool() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/ankr/card.yaml"
     ],
@@ -11359,7 +11359,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -11395,7 +11395,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -11430,7 +11430,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -11471,7 +11471,7 @@
     "why": [
      "source card + onchain proof: $self.token0() == weth.WETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/origin_arm/card.yaml"
     ],
@@ -11515,7 +11515,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/registry.yaml",
      "docs: https://docs.morpho.org/get-started/resources/addresses/"
@@ -11549,7 +11549,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == stablecoins.USDT"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -11621,7 +11621,7 @@
     "why": [
      "independent sources: address-book, card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/card.yaml",
      "address-book: bgd-labs/aave-address-book AaveV3Ethereum.POOL",
@@ -11687,7 +11687,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/GhoEthereum.sol"
@@ -11723,7 +11723,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -11764,7 +11764,7 @@
     "why": [
      "independent sources: address-book, card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json",
@@ -11797,7 +11797,7 @@
     "why": [
      "source card + onchain proof: $self.STETH() == stETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/lido/card.yaml"
     ],
@@ -11838,7 +11838,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -11875,7 +11875,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -11914,7 +11914,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0x89E6e5f7c3A60e7D6347F054051A29a272F4cE44#code"
@@ -11958,7 +11958,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -11995,7 +11995,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -12034,7 +12034,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x8a4f252812dFF2A8636E4F7EB249d8FC2E3bd77f#code"
@@ -12107,7 +12107,7 @@
     "why": [
      "source card + onchain proof: KPK_ETH_Yield.owner() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/card.yaml"
     ],
@@ -12145,7 +12145,7 @@
     "why": [
      "source card + onchain proof: $self.distributor() == distributor"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/merkl/card.yaml"
     ],
@@ -12181,7 +12181,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/ethena/registry.yaml",
      "docs: https://docs.ethena.fi/solution-design/key-addresses"
@@ -12219,7 +12219,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -12260,7 +12260,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -12297,7 +12297,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -12334,7 +12334,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -12409,7 +12409,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == WETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/fluid/card.yaml"
     ],
@@ -12494,7 +12494,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -12531,7 +12531,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -12595,7 +12595,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -12635,7 +12635,7 @@
     "why": [
      "source card + onchain proof: gearbox_v3.credit_manager.pool() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/card.yaml"
     ],
@@ -12676,7 +12676,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x939e4C11E391a28CD81248163f3a2e595f12CE5E#code"
@@ -12758,7 +12758,7 @@
     "why": [
      "source card + onchain proof: $self.ORACLE() == oracle"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v4/card.yaml"
     ],
@@ -12829,7 +12829,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x9518c9063eB0262D791f38d8d6Eb0aca33c63ed0#code"
@@ -12865,7 +12865,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x952A316330705AC7B2116aa3dECaB4Dd211340c7#code"
@@ -12904,7 +12904,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0x95f00391cB5EebCd190EB58728B4CE23DbFa6ac1#code"
@@ -12944,7 +12944,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -12981,7 +12981,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -13018,7 +13018,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -13059,7 +13059,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "address-book: https://github.com/pendle-finance/pendle-core-v2-public/blob/main/deployments/1-core.json"
@@ -13101,7 +13101,7 @@
     "why": [
      "source card + onchain proof: $self.spoke() == spoke"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v4/registry.yaml"
     ],
@@ -13135,7 +13135,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -13172,7 +13172,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -13283,7 +13283,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -13323,7 +13323,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0x9C560eBaF78e596cbcC27411d633a74D628dd7dC#code"
@@ -13359,7 +13359,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -13399,7 +13399,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == USDe"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/ethena/card.yaml"
     ],
@@ -13440,7 +13440,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0x9e0A248528Aa933ff1F8f707ea75F61eD780836E#code"
@@ -13480,7 +13480,7 @@
     "why": [
      "source card + onchain proof: stader_config.getUserWithdrawManager() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stader/card.yaml"
     ],
@@ -13519,7 +13519,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -13551,7 +13551,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == USDC"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/fluid/card.yaml"
     ],
@@ -13593,7 +13593,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stablecoins/card.yaml"
     ],
@@ -13629,7 +13629,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -13670,7 +13670,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/compound_v3/card.yaml",
      "docs: https://docs.compound.finance/#networks"
@@ -13716,7 +13716,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -13759,7 +13759,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/registry.yaml",
      "docs: https://docs.morpho.org/get-started/resources/addresses/"
@@ -13789,7 +13789,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -13858,7 +13858,7 @@
     "why": [
      "source card + onchain proof: stader_config.getETHxToken() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stader/card.yaml"
     ],
@@ -13900,7 +13900,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -13939,7 +13939,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -13976,7 +13976,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -14013,7 +14013,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -14054,7 +14054,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == stablecoins.USDC"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokemak/card.yaml"
     ],
@@ -14091,7 +14091,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -14128,7 +14128,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -14167,7 +14167,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == stablecoins.EURC"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -14204,7 +14204,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/registry.yaml",
      "docs: https://docs.morpho.org/get-started/resources/addresses/"
@@ -14240,7 +14240,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == lido.wstETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/card.yaml"
     ],
@@ -14275,7 +14275,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -14312,7 +14312,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -14349,7 +14349,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -14389,7 +14389,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
@@ -14465,7 +14465,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -14502,7 +14502,7 @@
     "why": [
      "source card + onchain proof: $self.parentVault() == KPK_USDC_Yield_RWA"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -14546,7 +14546,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -14591,7 +14591,7 @@
     "why": [
      "source card + onchain proof: $self.mevEscrow() == shared_mev_escrow"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stakewise_v3/card.yaml"
     ],
@@ -14627,7 +14627,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0xAc15ffFdCA77fc86770bEAbA20cbC1bc2D00494c#code"
@@ -14664,7 +14664,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -14704,7 +14704,7 @@
     "why": [
      "source card + onchain proof: $self.vaultInfo(coreUSDC).lpTokenAddress == coreUSDC"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/upshift/card.yaml"
     ],
@@ -14736,7 +14736,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -14776,7 +14776,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xAD6D1a4B1B2F33712A8b18BeDc95c0A1f9832269#code"
@@ -14819,7 +14819,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/rocket_pool/card.yaml",
      "docs: https://docs.rocketpool.net/overview/contracts-integrations"
@@ -14859,7 +14859,7 @@
     "why": [
      "source card + onchain proof: wstETH.stETH() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/lido/card.yaml"
     ],
@@ -14893,7 +14893,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -14967,7 +14967,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -15006,7 +15006,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0xb05262D4aaAA38D0Af4AaB244D446ebDb5afd4A7#code"
@@ -15043,7 +15043,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -15080,7 +15080,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -15119,7 +15119,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0xB195B618EA52b77CB2a58846F452f59f8dFa9390#code"
@@ -15165,7 +15165,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0xb1Fb0BA0676A1fFA83882c7F4805408bA232C1fA#code"
@@ -15204,7 +15204,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0xb253Eff1104802b97aC7E3aC9FdD73AecE295a2c#code"
@@ -15248,7 +15248,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -15288,7 +15288,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xB576491F1E6e5E62f1d8F26062Ee822B40B0E0d4#code"
@@ -15323,7 +15323,7 @@
     "why": [
      "source card + onchain proof: $self.owner() == owner_safe"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -15362,7 +15362,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -15399,7 +15399,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0xB77BA8B4b9d981269466eE95796A9Af57d4E82DB#code"
@@ -15435,7 +15435,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -15475,7 +15475,7 @@
     "why": [
      "source card + onchain proof: $self.machineShare() == DUSD"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/dialectic/card.yaml"
     ],
@@ -15512,7 +15512,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -15586,7 +15586,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -15620,7 +15620,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -15659,7 +15659,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0xBA7eBDEF7723e55c909Ac44226FB87a93625c44e#code"
@@ -15696,7 +15696,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -15729,7 +15729,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -15768,7 +15768,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -15798,7 +15798,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == weth.WETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -15833,7 +15833,7 @@
     "why": [
      "source card + onchain proof: $self.parentVault() == KPK_ETH_Prime"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -15877,7 +15877,7 @@
     "why": [
      "source card + onchain proof: metamorpho_factory_v1_1.MORPHO() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/card.yaml"
     ],
@@ -15915,7 +15915,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -15963,7 +15963,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0xBd5D4c539B3773086632416A4EC8ceF57c945319#code"
@@ -16001,7 +16001,7 @@
     "why": [
      "independent sources: address-book, card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol",
@@ -16029,7 +16029,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -16066,7 +16066,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -16103,7 +16103,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -16142,7 +16142,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0xBe3d4ec488A0a042BB86F9176C24f8CD54018BA7#code"
@@ -16182,7 +16182,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -16221,7 +16221,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -16251,7 +16251,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -16288,7 +16288,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7#code"
@@ -16323,7 +16323,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -16362,7 +16362,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0xBF98480425A29197e5d99D003017f63a1e595D02#code"
@@ -16404,7 +16404,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A#code"
@@ -16444,7 +16444,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/compound_v3/registry.yaml",
      "docs: https://docs.compound.finance/governance/"
@@ -16484,7 +16484,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/weth/card.yaml"
     ],
@@ -16518,7 +16518,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -16559,7 +16559,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -16596,7 +16596,7 @@
     "why": [
      "source card + onchain proof: $self.parentVault() == KPK_ETH_Yield"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -16642,7 +16642,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/ethena/registry.yaml",
      "docs: https://docs.ethena.fi/solution-design/key-addresses"
@@ -16683,7 +16683,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -16719,7 +16719,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/lido/registry.yaml",
      "docs: https://docs.lido.fi/deployed-contracts/"
@@ -16763,7 +16763,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -16793,7 +16793,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -16830,7 +16830,7 @@
     "why": [
      "source card + onchain proof: KPK_ETH_Prime.curator() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -16862,7 +16862,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -16894,7 +16894,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -16935,7 +16935,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -16976,7 +16976,7 @@
     "why": [
      "source card + onchain proof: $self.factory() == factory"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/uniswap_v3/card.yaml"
     ],
@@ -17019,7 +17019,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/compound_v3/card.yaml",
      "docs: https://docs.compound.finance/#networks"
@@ -17062,7 +17062,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -17141,7 +17141,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -17174,7 +17174,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -17206,7 +17206,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -17245,7 +17245,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0xC7B8551C6B286Ce0b44952320e940Bd3Dee58A09#code"
@@ -17323,7 +17323,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -17360,7 +17360,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -17399,7 +17399,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -17435,7 +17435,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0xcbC72d92b2dc8187414F6734718563898740C0BC#code"
@@ -17478,7 +17478,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xcc7d5785AD5755B6164e21495E07aDb0Ff11C2A8#code"
@@ -17514,7 +17514,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -17551,7 +17551,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -17631,7 +17631,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -17674,7 +17674,7 @@
     "why": [
      "independent sources: card, docs, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/rocket_pool/card.yaml",
      "docs: https://docs.rocketpool.net/overview/contracts-integrations",
@@ -17703,7 +17703,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -17740,7 +17740,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -17780,7 +17780,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses"
@@ -17820,7 +17820,7 @@
     "why": [
      "source card + onchain proof: stader_config.getStakePoolManager() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stader/card.yaml"
     ],
@@ -17859,7 +17859,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -17896,7 +17896,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -17971,7 +17971,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xD001aE433f254283FeCE51d4ACcE8c53263aa186#code"
@@ -18009,7 +18009,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -18045,7 +18045,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "docs: https://docs.curve.finance/user/deployments"
@@ -18084,7 +18084,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -18120,7 +18120,7 @@
     "why": [
      "source card + onchain proof: KPK_EURC_Yield.curator() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -18152,7 +18152,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -18191,7 +18191,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/registry.yaml",
      "docs: https://docs.morpho.org/get-started/resources/addresses/"
@@ -18220,7 +18220,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0xD1DdB0a0815fD28932fBb194C84003683AF8a824#code"
@@ -18257,7 +18257,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -18294,7 +18294,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -18334,7 +18334,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "docs: https://docs.curve.finance/user/deployments"
@@ -18373,7 +18373,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -18417,7 +18417,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == stablecoins.USDC"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/card.yaml"
     ],
@@ -18452,7 +18452,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -18527,7 +18527,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -18562,7 +18562,7 @@
     "why": [
      "source card + onchain proof: sUSN.asset() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/noon/card.yaml"
     ],
@@ -18602,7 +18602,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stablecoins/card.yaml"
     ],
@@ -18640,7 +18640,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xDB74dfDD3BB46bE8Ce6C33dC9D82777BCFc3dEd5#code"
@@ -18679,7 +18679,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == iUSD"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/infinifi/card.yaml"
     ],
@@ -18716,7 +18716,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stablecoins/card.yaml"
     ],
@@ -18754,7 +18754,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/pendle/registry.yaml",
      "explorer: https://etherscan.io/address/0xdC169AbE56461A2E0c034Da431Ac2a3ebf596094#code"
@@ -18801,7 +18801,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xDC24316b9AE028F1497c275EB9192a3Ea0f67022#code"
@@ -18834,7 +18834,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -18871,7 +18871,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -18908,7 +18908,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -18948,7 +18948,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xe080027Bd47353b5D1639772b4a75E9Ed3658A0d#code"
@@ -18987,7 +18987,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/GhoEthereum.sol"
@@ -19028,7 +19028,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == USN"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/noon/card.yaml"
     ],
@@ -19068,7 +19068,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -19107,7 +19107,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/tokens/card.yaml"
     ],
@@ -19146,7 +19146,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/ethena/registry.yaml",
      "docs: https://docs.ethena.fi/solution-design/key-addresses"
@@ -19179,7 +19179,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -19216,7 +19216,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -19250,7 +19250,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0xE3eA98BD863bEF37D951973743aAC2e56edd99BC#code"
@@ -19286,7 +19286,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -19323,7 +19323,7 @@
     "why": [
      "source card + onchain proof: KPK_ETH_Yield.curator() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/card.yaml"
     ],
@@ -19355,7 +19355,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -19392,7 +19392,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -19433,7 +19433,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -19473,7 +19473,7 @@
     "why": [
      "source card + onchain proof: flash_unstake.ankreth() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/ankr/card.yaml"
     ],
@@ -19514,7 +19514,7 @@
     "why": [
      "source card + onchain proof: $self.asset() == stablecoins.USDC"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/upshift/card.yaml"
     ],
@@ -19552,7 +19552,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -19589,7 +19589,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -19626,7 +19626,7 @@
     "why": [
      "source card + onchain proof: KPK_wARS_Yield.curator() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -19658,7 +19658,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -19734,7 +19734,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -19767,7 +19767,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -19804,7 +19804,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -19841,7 +19841,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -19881,7 +19881,7 @@
     "why": [
      "source card + onchain proof: $self.ankreth() == ankrETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/ankr/card.yaml"
     ],
@@ -19962,7 +19962,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "explorer: https://etherscan.io/address/0xf0BB7682830941e105Ce0FE2c043d1Bb058d45B6#code"
@@ -20001,7 +20001,7 @@
     "why": [
      "source card + onchain proof: aave_v3.pool.getReservesList() contains $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stakewise_v3/card.yaml"
     ],
@@ -20039,7 +20039,7 @@
     "why": [
      "source card + onchain proof: $self.registry() == vault_registry"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/yo/card.yaml"
     ],
@@ -20077,7 +20077,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xF29FfF074f5cF755b55FbB3eb10A29203ac91EA2#code"
@@ -20119,7 +20119,7 @@
     "why": [
      "independent sources: card, docs, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/convex/registry.yaml",
      "docs: https://docs.convexfinance.com/convexfinance/faq/contract-addresses",
@@ -20194,7 +20194,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xf5f5B97624542D72A9E06f04804Bf81baA15e2B4#code"
@@ -20230,7 +20230,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -20307,7 +20307,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -20347,7 +20347,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -20384,7 +20384,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -20421,7 +20421,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -20501,7 +20501,7 @@
     "why": [
      "source card + onchain proof: KPK_USDC_Prime.curator() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],
@@ -20536,7 +20536,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/stablecoins/registry.yaml",
      "docs: https://docs.curve.finance/user/deployments"
@@ -20577,7 +20577,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -20613,7 +20613,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "docs: https://docs.curve.finance/user/deployments"
@@ -20648,7 +20648,7 @@
     "why": [
      "independent sources: card, docs"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/sky/registry.yaml",
      "docs: https://chainlog.sky.money/"
@@ -20678,7 +20678,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumLido.sol"
@@ -20715,7 +20715,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
@@ -20756,7 +20756,7 @@
     "why": [
      "source card + onchain proof: $self.token0() == weth.WETH"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/origin_arm/card.yaml"
     ],
@@ -20832,7 +20832,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -20867,7 +20867,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/curve/registry.yaml",
      "explorer: https://etherscan.io/address/0xFc3212Bd9Ad9A28Da6B2bd50a2918969C126894F#code"
@@ -20954,7 +20954,7 @@
     "why": [
      "independent sources: card, explorer"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/morpho_vaults/registry.yaml",
      "explorer: https://etherscan.io/address/0xfd32fA2ca22c76dD6E550706Ad913FC6CE91c75D#code"
@@ -20986,7 +20986,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/aave_v3/registry.yaml",
      "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3EthereumEtherFi.sol"
@@ -21026,7 +21026,7 @@
     "why": [
      "source card + onchain proof: token_messenger.localMinter() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/cctp/registry.yaml"
     ],
@@ -21087,7 +21087,7 @@
     "why": [
      "independent sources: address-book, card"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/spark/registry.yaml",
      "address-book: https://github.com/sparkdotfi/spark-address-registry/blob/master/src/Ethereum.sol"
@@ -21124,7 +21124,7 @@
     "why": [
      "source card + onchain proof: KPK_USDC_Yield_RWA.curator() == $self"
     ],
-    "card_reviewed": false,
+    "card_reviewed": true,
     "sources": [
      "card: catalog/kpk/registry.yaml"
     ],

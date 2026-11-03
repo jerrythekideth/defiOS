@@ -1,8 +1,8 @@
 protocol: aave_v4
 name: Aave v4 (Spoke, core hub)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "aave/aave-v4 src/spoke/Spoke.sol (supply/withdraw/borrow/repay(reserveId, amount, onBehalfOf), onlyPositionManager(onBehalfOf))"
   - "selectors matched against an executed Roles v2 batch (Oct 2026) (0x852a56a5, 0x0ad58d2f, 0xd6bda0c0, 0xb1e8f8ef, 0x9e35c533, 0x91c46d09, 0x826002e2)"

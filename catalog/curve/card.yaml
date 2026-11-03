@@ -1,8 +1,8 @@
 protocol: curve
 name: Curve (pools, gauges, CRV, veCRV)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 adding: >
   Curve pools are found through the MetaRegistry (address_provider.get_address(7)).
   A new pool is keyed by its LP symbol() (characters other than letters, digits and _

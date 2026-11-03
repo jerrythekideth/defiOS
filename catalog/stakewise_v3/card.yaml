@@ -1,8 +1,8 @@
 protocol: stakewise_v3
 name: StakeWise v3 (Genesis vault, osETH)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "docs: https://docs.stakewise.io/"
   - "explorer: verified source (EthGenesisVault, OsToken)"

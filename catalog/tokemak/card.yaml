@@ -1,8 +1,8 @@
 protocol: tokemak
 name: Tokemak Autopilot (autoUSD via the AutopilotRouter)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (redeem 0x4be47418, withdrawVaultToken 0x48840162, claimAutopoolRewards 0xa314d5a7, deposit 0x20e8c565, stakeVaultToken 0xb67ad9a2)"
   - "param names inferred from Tokemak v2 AutopilotRouter (PeripheryPayments style); verify at review"

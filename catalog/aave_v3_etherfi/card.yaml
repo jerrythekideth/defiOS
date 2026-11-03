@@ -1,8 +1,8 @@
 protocol: aave_v3_etherfi
 name: Aave v3 EtherFi market (exit only)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "address-book: https://github.com/bgd-labs/aave-address-book"
 adding: |

@@ -1,8 +1,8 @@
 protocol: upshift
 name: Upshift (coreUSDC via the SwapRouter)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "SwapRouter 0xAC77…18B0 verified source (deposit(originCode, depositAmount, vaultAddr, assetAddr, receiverAddr)), read 2026-10-23"
   - "TokenizedAccount impl 0xf2CD14F0… verified source: claim is public and pays the registered receiver"

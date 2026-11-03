@@ -1,8 +1,8 @@
 protocol: convex
 name: Convex (Curve LP boosting, cvxCRV, CVX)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 adding: >
   A Convex pool is a deposit token and a BaseRewardPool from booster.poolInfo(pid).
   Add the deposit token keyed by its symbol() with operator() = booster as proof and
