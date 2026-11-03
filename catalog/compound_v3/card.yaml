@@ -1,8 +1,8 @@
 protocol: compound_v3
 name: Compound v3 (Comet USDC, WETH and USDT markets)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "docs: https://docs.compound.finance/"
   - "address-book: github.com/compound-finance/comet deployments/mainnet/<market>/roots.json"

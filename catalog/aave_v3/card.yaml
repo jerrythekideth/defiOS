@@ -1,8 +1,8 @@
 protocol: aave_v3
 name: Aave v3 (Ethereum core market)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "Aave address book (AaveV3Ethereum.POOL); Pool verified source (IPool)"
   - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (supply 0x617ba037, withdraw 0x69328dec, borrow 0xa415bcad, repay 0x573ade81, setUserEMode 0x28530a47, setUserUseReserveAsCollateral 0x5a3b74b9)"

@@ -1,8 +1,8 @@
 protocol: lido
 name: Lido (stETH, wstETH, withdrawal queue)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "addresses: onchain proofs in catalog/registry.proofs.json (wstETH.stETH(), WithdrawalQueue STETH()/WSTETH(), Aave v3 reserve list)"
 

@@ -1,8 +1,8 @@
 protocol: merkl
 name: Merkl (reward distributor)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "verified source of the Distributor implementation (claim, claimed, claimRecipient, setClaimRecipient)"
   - "addresses: onchain proofs in catalog/registry.proofs.json (DistributionCreator.distributor())"

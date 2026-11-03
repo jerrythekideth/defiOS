@@ -1,8 +1,8 @@
 protocol: uniswap_v3
 name: Uniswap v3 (concentrated liquidity positions)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "docs: https://docs.uniswap.org/contracts/v3/reference/deployments/ethereum-deployments"
   - "explorer: verified source (NonfungiblePositionManager, UniswapV3Factory)"

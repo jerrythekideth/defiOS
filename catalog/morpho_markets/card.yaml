@@ -1,8 +1,8 @@
 protocol: morpho_markets
 name: Morpho Blue markets (direct supply, borrow, collateral)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "verified source of Morpho Blue (MarketParams, supply/withdraw/borrow/repay/supplyCollateral/withdrawCollateral/accrueInterest, idToMarketParams)"
 adding: |

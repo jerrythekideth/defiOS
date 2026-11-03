@@ -667,8 +667,10 @@ def validate_card(catalog: Catalog, card: Card) -> list[str]:
     for k in ("protocol", "chain_id", "status", "reviewed", "contracts", "actions"):
         if k not in raw:
             errs.append(f"{card.protocol}: missing `{k}`")
-    if raw.get("status") != "draft" or raw.get("reviewed") is not False:
-        errs.append(f"{card.protocol}: must be status: draft, reviewed: false until reviewed")
+    if (raw.get("status"), raw.get("reviewed")) not in (("draft", False), ("reviewed", True)):
+        errs.append(f"{card.protocol}: must be status: draft, reviewed: false (or status: reviewed, reviewed: true)")
+    if raw.get("reviewed") and any(str((c or {}).get("address", "")).startswith("TODO") for c in card.contracts.values()):
+        errs.append(f"{card.protocol}: a reviewed card has no TODO address")
     for name, c in card.contracts.items():
         c = c or {}
         if "ref" in c:

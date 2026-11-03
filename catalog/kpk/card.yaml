@@ -1,8 +1,8 @@
 protocol: kpk
 name: kpk (vault curator on Gearbox v3 and Morpho)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "onchain, read 2026-10-24: name() / symbol() / asset() of each vault, owner() / curator() of the Morpho vaults, Safe getThreshold() / getOwners()"
 adding: >

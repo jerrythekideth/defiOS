@@ -141,6 +141,11 @@ def resolve(catalog: Catalog, thing: str, rpc=None, book_vars: dict | None = Non
             tok = _token_onchain(rpc, to_checksum_address(v))
             if tok:
                 out["onchain"] = tok
+    if not out["covered"] and rpc is None:
+        out["why"] = out.get("why") or (
+            "NOT CHECKED: no RPC_URL, so nothing could be proved onchain. This says nothing about whether it is "
+            "covered: set RPC_URL (in the agent repo's .env) and run resolve again")
+        out["unchecked"] = True
     if not out["covered"]:
         out["why"] = out.get("why") or (
             "not covered: no verified catalog record, and no card lookup proves it onchain"
@@ -176,5 +181,5 @@ def summarize(r: dict) -> str:
     for w in r.get("warnings") or []:
         lines.append(f"  warning: {w}")
     if not r["covered"]:
-        lines.append(f"  NOT COVERED: {r['why']}")
+        lines.append(f"  {'NOT CHECKED' if r.get('unchecked') else 'NOT COVERED'}: {r['why']}")
     return "\n".join(lines)

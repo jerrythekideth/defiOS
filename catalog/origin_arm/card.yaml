@@ -1,8 +1,8 @@
 protocol: origin_arm
 name: Origin ARM (Automated Redemption Managers)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "selectors confirmed against public Roles permission batches (github.com/scytherxyz/permissions)"
   - "Origin ARM docs / verified source (to be re-checked at review)"

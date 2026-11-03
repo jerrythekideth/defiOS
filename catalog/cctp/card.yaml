@@ -1,8 +1,8 @@
 protocol: cctp
 name: Circle CCTP v2 (bridge USDC)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "Circle CCTP v2 docs: TokenMessengerV2 depositForBurn(amount, destinationDomain, mintRecipient, burnToken, destinationCaller, maxFee, minFinalityThreshold)"
   - "selector matched against a live Roles v2 permission on mainnet (Oct 2026) (depositForBurn 0x8e0250ee)"

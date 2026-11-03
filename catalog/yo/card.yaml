@@ -1,8 +1,8 @@
 protocol: yo
 name: Yo (yoETH, yoUSD)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "selectors confirmed against public Roles permission batches (github.com/scytherxyz/permissions)"
 

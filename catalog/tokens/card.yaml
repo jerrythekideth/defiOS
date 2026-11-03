@@ -1,8 +1,8 @@
 protocol: tokens
 name: ERC-20 tokens with no card of their own
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "address-book: https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol"
   - "token pages on Etherscan / Blockscout (verified source)"

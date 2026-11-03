@@ -1,8 +1,8 @@
 protocol: fluid
 name: Fluid lending (fTokens fUSDC, fUSDT, fWETH, fwstETH)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "docs: https://docs.fluid.instadapp.io/contracts/contracts.html"
   - "address-book: github.com/Instadapp/fluid-contracts-public deployments"

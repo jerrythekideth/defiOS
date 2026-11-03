@@ -1,8 +1,8 @@
 protocol: stablecoins
 name: Blue-chip USD stablecoins (token contracts only)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "token addresses: issuers' docs and Etherscan/Blockscout token pages"
   - "Aave v3 mainnet reserve list (the same addresses are Aave v3 reserves)"

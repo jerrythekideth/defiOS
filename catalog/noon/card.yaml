@@ -1,8 +1,8 @@
 protocol: noon
 name: Noon (USN, sUSN with a withdrawal handler)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "sUSN implementation 0xeF2eA425… verified source: non-whitelisted callers must withdraw to the WithdrawalHandler; the request is recorded for msg.sender"
   - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (deposit 0x6e553f65, withdraw 0xb460af94, claimWithdrawal 0xf8444436)"

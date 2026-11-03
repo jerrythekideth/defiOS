@@ -1,8 +1,8 @@
 protocol: dialectic
 name: Dialectic (DUSD, smDUSD security module)
 chain_id: 1
-status: draft
-reviewed: false
+status: reviewed
+reviewed: true
 sources:
   - "smDUSD beacon proxy -> SecurityModule 0x539FABBBdf220BF43De23BA18B1a795E662FeAC1 verified source (lock, startCooldown, cancelCooldown, redeem), read 2026-10-23"
   - "selectors matched against live Roles v2 permissions on mainnet (Oct 2026) (0xcf27cfc4, 0xf963edab, 0xaccb5a1d, 0x7cbc2373)"

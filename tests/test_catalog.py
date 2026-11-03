@@ -1,3 +1,4 @@
+import json
 import re
 
 import pytest
@@ -20,7 +21,15 @@ def test_all_cards_present_and_valid(catalog):
     assert EXPECTED <= set(catalog.cards)
     for card in catalog.cards.values():
         assert validate_card(catalog, card) == [], card.protocol
-        assert card.raw["status"] == "draft" and card.raw["reviewed"] is False
+
+
+def test_reviewed_cards_have_only_verified_records(catalog):
+    """`reviewed: true` means a maintainer checked every address: none may be left unverified."""
+    idx = json.loads((ROOT / "catalog" / "index.json").read_text())
+    loose = {(r["protocol"], r["ref"]) for rs in idx["deployments"].values() for r in rs if r["status"] != "verified"}
+    for proto, card in catalog.cards.items():
+        if card.raw["reviewed"]:
+            assert not [ref for p, ref in loose if p == proto], proto
 
 
 def test_addresses_are_checksummed_or_todo(catalog):

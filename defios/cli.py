@@ -67,6 +67,15 @@ def main(ctx, root, config, vault, fmt, logs_file, offline):
     ctx.obj.update(root=root, config=config, vault=vault, format=fmt, logs_file=logs_file, offline=offline)
 
 
+def _rpc_no_config(ctx):
+    """RPC for commands that need no defios.yaml (resolve, recipe): still read the agent repo's .env."""
+    from .config import apply_env_aliases, load_dotenv
+    from .engine import make_rpc
+    load_dotenv(Path(ctx.obj["root"]).resolve() / ".env")
+    apply_env_aliases()
+    return None if ctx.obj["offline"] else make_rpc()
+
+
 def _run(fn):
     try:
         fn()
@@ -227,19 +236,18 @@ def resolve_cmd(ctx, thing, directory):
     defios resolve https://app.morpho.org/ethereum/market/0x…   -> morpho_markets.* --param market_id=0x…
     defios resolve https://app.pendle.finance/trade/markets/0x… -> pendle.any_* --param market_address=0x…
     defios resolve savUSD
-    Proves lookups onchain with RPC_URL (no defios.yaml needed). `covered: false` means: say it is not covered.
+    Proves lookups onchain with RPC_URL (from the environment or --root's .env; no defios.yaml needed).
+    Exit 3 = not covered: say so. Exit 2 = not checked (no RPC_URL): fix that, it says nothing about coverage.
     """
     from .catalog import Catalog
     from .config import default_catalog_dir
-    from .engine import make_rpc
     from .resolve import resolve, summarize
-    o = ctx.obj
     catalog = Catalog.load(Path(directory) if directory else default_catalog_dir())
-    rpc = None if o["offline"] else make_rpc()
+    rpc = _rpc_no_config(ctx)
     res = resolve(catalog, thing, rpc)
     _emit(ctx, res, summarize(res))
     if not res["covered"]:
-        sys.exit(3)
+        sys.exit(2 if res.get("unchecked") else 3)
 
 
 @main.command("recipe")
@@ -255,7 +263,6 @@ def recipe_cmd(ctx, spec):
     """
     from .catalog import Catalog
     from .config import default_catalog_dir
-    from .engine import make_rpc
     from .recipes import RECIPES, RecipeError, expand
     if not spec:
         res = {k: {"param": r["param"], "summary": r["summary"]} for k, r in RECIPES.items()}
@@ -263,7 +270,7 @@ def recipe_cmd(ctx, spec):
         return
     catalog = Catalog.load(default_catalog_dir())
     try:
-        res = expand(catalog, spec, None if ctx.obj["offline"] else make_rpc())
+        res = expand(catalog, spec, _rpc_no_config(ctx))
     except RecipeError as e:
         click.echo(json.dumps({"error": str(e)}))
         click.echo(f"error: {e}", err=True)
