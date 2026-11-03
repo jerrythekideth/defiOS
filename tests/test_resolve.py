@@ -58,3 +58,19 @@ def test_split_ref():
 def test_recipe_errors(catalog, spec, match):
     with pytest.raises(RecipeError, match=match):
         expand(catalog, spec, None)
+
+
+def test_cli_resolve_reads_the_agent_repos_env(tmp_path, monkeypatch):
+    """Tom's bug: RPC_URL only in the agent repo's .env; resolve ran without it and said NOT COVERED."""
+    from click.testing import CliRunner
+
+    import defios.engine
+    from defios.cli import main
+    seen = {}
+    monkeypatch.delenv("RPC_URL", raising=False)
+    monkeypatch.delenv("ETH_RPC_URL", raising=False)
+    monkeypatch.setattr(defios.engine, "make_rpc", lambda: seen.setdefault("rpc", __import__("os").environ.get("RPC_URL")) and None)
+    (tmp_path / ".env").write_text("RPC_URL=http://from-dotenv\n")
+    r = CliRunner().invoke(main, ["--root", str(tmp_path), "--format", "text", "resolve", ID])
+    assert seen["rpc"] == "http://from-dotenv"
+    assert r.exit_code == 2 and "NOT CHECKED" in r.output and "NOT COVERED" not in r.output

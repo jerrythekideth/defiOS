@@ -163,10 +163,14 @@ def tool_propose(calls_file: str = "calls.json", vault: str | None = None) -> di
 
 
 def _catalog_rpc():
+    from pathlib import Path
+
     from .catalog import Catalog
-    from .config import default_catalog_dir
+    from .config import apply_env_aliases, default_catalog_dir, load_dotenv
     from .engine import make_rpc
 
+    load_dotenv(Path(os.environ.get("DEFIOS_ROOT", ".")).resolve() / ".env")
+    apply_env_aliases()
     return Catalog.load(default_catalog_dir()), make_rpc()
 
 
