@@ -2,8 +2,8 @@
  "schema": "defios.registry/1",
  "proofs_checked": {
   "1": {
-   "block": 26330018,
-   "checked": "2026-11-02"
+   "block": 26342157,
+   "checked": "2026-11-04"
   }
  },
  "protocols": {
@@ -827,6 +827,24 @@
     "wrap"
    ]
   },
+  "yieldbasis": {
+   "name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+   "status": "draft",
+   "reviewed": false,
+   "chains": [
+    1
+   ],
+   "actions": [
+    "claim",
+    "deposit",
+    "deposit_and_stake",
+    "emergency_withdraw",
+    "emergency_withdraw_repay",
+    "stake",
+    "unstake",
+    "withdraw"
+   ]
+  },
   "yo": {
    "name": "Yo (yoETH, yoUSD)",
    "status": "reviewed",
@@ -1018,6 +1036,49 @@
      "name": "Aave Ethereum Variable Debt USDe",
      "symbol": "variableDebtEthUSDe"
     }
+   }
+  ],
+  "1:0x01791f726b4103694969820be083196cc7c045ff": [
+   {
+    "chain_id": 1,
+    "address": "0x01791F726B4103694969820be083196cC7c045fF",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "YB",
+    "title": "Yield Basis",
+    "ref": "yieldbasis.YB",
+    "category": "governance",
+    "kind": "erc20",
+    "eoa": false,
+    "aliases": [
+     "yb",
+     "yield basis token"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/card.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "ybWETH_gauge.YB() == $self",
+      "ok": true
+     },
+     {
+      "id": "GaugeController.TOKEN() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Yield Basis",
+     "symbol": "YB"
+    },
+    "note": "gauge emissions token; the only reward token of the yb-WETH gauge"
    }
   ],
   "1:0x018008bfb33d285247a21d44e50697654f754e63": [
@@ -2844,6 +2905,45 @@
     }
    }
   ],
+  "1:0x1be14811a3a06f6af4fa64310a636e1df04c1c21": [
+   {
+    "chain_id": 1,
+    "address": "0x1Be14811A3a06F6aF4fA64310a636e1Df04c1c21",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "GaugeController",
+    "title": null,
+    "ref": "yieldbasis.GaugeController",
+    "category": "config",
+    "kind": "yb_gauge_controller",
+    "eoa": false,
+    "aliases": [
+     "yb gauge controller"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "Factory.gauge_controller() == $self",
+      "ok": true
+     },
+     {
+      "id": "ybWETH_gauge.GC() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "gauge voting and YB emissions; distributor of YB to each gauge"
+   }
+  ],
   "1:0x1c0e06a0b1a4c160c17545ff2a951bfca57c0002": [
    {
     "chain_id": 1,
@@ -3864,6 +3964,61 @@
     }
    }
   ],
+  "1:0x2b9c9f3bdceb5d8e36a4704f08a78fca53343cea": [
+   {
+    "chain_id": 1,
+    "address": "0x2B9c9f3BdcEb5d8E36a4704F08a78Fca53343cEa",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "ybWETH",
+    "title": "Yield Basis liquidity for WETH",
+    "ref": "yieldbasis.ybWETH",
+    "category": "vault",
+    "kind": "yb_lt",
+    "eoa": false,
+    "aliases": [
+     "yb-WETH",
+     "yb weth",
+     "yieldbasis weth",
+     "yield basis weth",
+     "yb-LP WETH"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/card.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses",
+     "explorer: https://eth.blockscout.com/address/0x2B9c9f3BdcEb5d8E36a4704F08a78Fca53343cEa?tab=contract"
+    ],
+    "proofs": [
+     {
+      "id": "$self.admin() == Factory",
+      "ok": true
+     },
+     {
+      "id": "$self.staker() == ybWETH_gauge",
+      "ok": true
+     },
+     {
+      "id": "$self.ASSET_TOKEN() == weth.WETH",
+      "ok": true
+     },
+     {
+      "id": "$self.STABLECOIN() == stablecoins.crvUSD",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Yield Basis liquidity for WETH",
+     "symbol": "yb-WETH"
+    },
+    "note": "market 10. LT share token, not ERC-4626. deposit takes a caller-chosen crvUSD debt (see NOTES.md); withdraw / emergency_withdraw are called here directly"
+   }
+  ],
   "1:0x2c2163f120cf58631368981bc16e90190bc6c644": [
    {
     "chain_id": 1,
@@ -4876,6 +5031,50 @@
      "symbol": "OETH/WETH-gauge"
     },
     "note": "Curve gauge for OETH_WETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
+  "1:0x370a449febb9411c95bf897021377fe0b7d100c0": [
+   {
+    "chain_id": 1,
+    "address": "0x370a449FeBb9411c95bf897021377fe0B7D100c0",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "Factory",
+    "title": null,
+    "ref": "yieldbasis.Factory",
+    "category": "config",
+    "kind": "yb_factory",
+    "eoa": false,
+    "aliases": [
+     "yieldbasis factory",
+     "yb factory"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "ybWETH.admin() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.gauge_controller() == GaugeController",
+      "ok": true
+     },
+     {
+      "id": "$self.STABLECOIN() == stablecoins.crvUSD",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "market registry: markets(i) -> (asset_token, cryptopool, amm, lt, price_oracle, virtual_pool, staker); market_count() = 11 on 2026-11-04"
    }
   ],
   "1:0x377c3bd93f2a2984e1e7be6a5c22c525ed4a4815": [
@@ -6055,6 +6254,42 @@
     },
     "onchain": {},
     "note": "Aave DAO treasury; receives the v3 reserve factor"
+   }
+  ],
+  "1:0x467947ee34af926cf1dcac093870f613c96b1e0c": [
+   {
+    "chain_id": 1,
+    "address": "0x467947EE34aF926cF1DCac093870f613C96B1E0c",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "emergency_admin",
+    "title": null,
+    "ref": "yieldbasis.emergency_admin",
+    "category": "multisig",
+    "kind": "safe",
+    "eoa": false,
+    "aliases": [
+     "curve emergency dao",
+     "yb emergency admin"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "Factory.emergency_admin() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "Curve Emergency DAO Safe: can kill / revive a market, and then emergency_withdraw for holders (to the holder only)"
    }
   ],
   "1:0x4691c475be804fa85f91c2d6d0adf03114de3093": [
@@ -8389,6 +8624,41 @@
     }
    }
   ],
+  "1:0x5f8d24f33cc5a1d5d1bf012261e6a2214c92233c": [
+   {
+    "chain_id": 1,
+    "address": "0x5f8D24F33Cc5a1D5D1bf012261E6A2214C92233c",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "ybWETH_levamm",
+    "title": null,
+    "ref": "yieldbasis.ybWETH_levamm",
+    "category": "market",
+    "kind": "yb_levamm",
+    "eoa": false,
+    "aliases": [
+     "yb weth levamm"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "ybWETH.amm() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "market 10 leveraged AMM: holds the pool LP and the crvUSD debt"
+   }
+  ],
   "1:0x5f9190496e0dfc831c3bd307978de4a245e2f5cd": [
    {
     "chain_id": 1,
@@ -8645,6 +8915,53 @@
      "name": "Aave Ethereum Variable Debt STG",
      "symbol": "variableDebtEthSTG"
     }
+   }
+  ],
+  "1:0x656341ef90b622c6634e0573772ffb7f3669b9f3": [
+   {
+    "chain_id": 1,
+    "address": "0x656341Ef90b622c6634e0573772FfB7f3669b9f3",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "ybWETH_pool",
+    "title": null,
+    "ref": "yieldbasis.ybWETH_pool",
+    "category": "market",
+    "kind": "curve_twocrypto",
+    "eoa": false,
+    "aliases": [
+     "yb weth cryptopool",
+     "yb-WETH pool"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "ybWETH.CRYPTOPOOL() == $self",
+      "ok": true
+     },
+     {
+      "id": "$self.coins(1) == weth.WETH",
+      "ok": true
+     },
+     {
+      "id": "$self.POLICY() == ybWETH_policy",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "Yield Basis WETH",
+     "symbol": "YB-WETH"
+    },
+    "note": "Curve Twocrypto v3 crvUSD (coin 0) / WETH (coin 1) pool of market 10; the LEVAMM holds its LP"
    }
   ],
   "1:0x657e8c867d8b37dcc18fa4caead9c45eb088c642": [
@@ -12578,6 +12895,40 @@
     "note": "BoringSolver; boringRedeemSolve / boringRedeemSelfSolve are not needed (Veda solves the queue)"
    }
   ],
+  "1:0x931d40dd07b25b91932b481b63631ea86d236e09": [
+   {
+    "chain_id": 1,
+    "address": "0x931d40dD07b25B91932b481B63631Ea86d236e09",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "ybWETH_market6",
+    "title": null,
+    "ref": "yieldbasis.ybWETH_market6",
+    "category": "vault",
+    "kind": "yb_lt",
+    "eoa": false,
+    "aliases": [
+     "yb-WETH legacy",
+     "yb weth market 6"
+    ],
+    "status": "retired",
+    "why": [
+     "marked retired in the card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {
+     "name": "Yield Basis liquidity for WETH",
+     "symbol": "yb-WETH"
+    },
+    "note": "deprecated WETH market 6 (Factory.markets(6)); exit with withdraw on this LT"
+   }
+  ],
   "1:0x9355032d747f1e08f8720cd01950e652ee15cdb7": [
    {
     "chain_id": 1,
@@ -14911,6 +15262,42 @@
      "name": "Aave Ethereum Variable Debt rETH",
      "symbol": "variableDebtEthrETH"
     }
+   }
+  ],
+  "1:0xaea95d551154443e73565be724d59d63d72f8a7d": [
+   {
+    "chain_id": 1,
+    "address": "0xAEa95d551154443E73565bE724d59D63d72f8A7d",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "ybWETH_policy",
+    "title": null,
+    "ref": "yieldbasis.ybWETH_policy",
+    "category": "config",
+    "kind": "yb_oraclized_policy",
+    "eoa": false,
+    "aliases": [
+     "YBOraclizedPolicy",
+     "yb weth pool policy"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "ybWETH_pool.POLICY() == $self",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {},
+    "note": "pool fee / price_scale policy with the LT deposit gate: an LT.deposit whose debt is off the LEVAMM ratio by > ratio_tolerance reverts (\"LT deviation\")"
    }
   ],
   "1:0xaeec321a209964aabfff539807ae882917e7b4db": [
@@ -17571,6 +17958,34 @@
     }
    }
   ],
+  "1:0xcd0074f0ec6319b288b76103d2ba89768a4476fe": [
+   {
+    "chain_id": 1,
+    "address": "0xCd0074f0eC6319b288b76103D2ba89768a4476Fe",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "LTSwapZap",
+    "title": null,
+    "ref": "yieldbasis.LTSwapZap",
+    "category": "router",
+    "kind": "yb_swap_zap",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {},
+    "note": "not reviewed; UI route: see ui_routes_to_avoid"
+   }
+  ],
   "1:0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": [
    {
     "chain_id": 1,
@@ -18356,6 +18771,34 @@
     }
    }
   ],
+  "1:0xd5b450fdd5af5341436fc37a46bbec39ca8f92cb": [
+   {
+    "chain_id": 1,
+    "address": "0xd5b450fDD5aF5341436Fc37A46BBEc39CA8F92CB",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "LTMigrator",
+    "title": null,
+    "ref": "yieldbasis.LTMigrator",
+    "category": "router",
+    "kind": "yb_lt_migrator",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {},
+    "note": "legacy market -> current market migration; not reviewed"
+   }
+  ],
   "1:0xd5c3e3b566a42a6110513ac7670c1a86d76e13e6": [
    {
     "chain_id": 1,
@@ -18433,6 +18876,54 @@
      "symbol": "KPK_USDC_Yield"
     },
     "note": "Morpho Vault V2 on USDC"
+   }
+  ],
+  "1:0xd829456fd63ada7de0657714a3a7a26de403e3d8": [
+   {
+    "chain_id": 1,
+    "address": "0xd829456FD63Ada7DE0657714A3A7A26DE403E3D8",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "ybWETH_gauge",
+    "title": "YB Gauge: yb-WETH",
+    "ref": "yieldbasis.ybWETH_gauge",
+    "category": "staking",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "g(yb-WETH)",
+     "yb-WETH gauge",
+     "yb weth gauge"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/card.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [
+     {
+      "id": "$self.asset() == ybWETH",
+      "ok": true
+     },
+     {
+      "id": "$self.FACTORY() == Factory",
+      "ok": true
+     },
+     {
+      "id": "$self.YB() == YB",
+      "ok": true
+     }
+    ],
+    "proxy": {},
+    "onchain": {
+     "name": "YB Gauge: yb-WETH",
+     "symbol": "g(yb-WETH)"
+    },
+    "note": "staked yb-WETH earns YB emissions and gives up part of the pool fees (docs: Staked and unstaked economics)"
    }
   ],
   "1:0xd90da2df915b87fe1621a7f2201fbf4ff2cca031": [
@@ -19306,6 +19797,38 @@
     }
    }
   ],
+  "1:0xe4e656b5215a82009969219b1babb7c0757a3315": [
+   {
+    "chain_id": 1,
+    "address": "0xe4e656B5215a82009969219b1bAbB7c0757A3315",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "ybWETH_market6_gauge",
+    "title": null,
+    "ref": "yieldbasis.ybWETH_market6_gauge",
+    "category": "staking",
+    "kind": "erc4626",
+    "eoa": false,
+    "aliases": [
+     "yb-WETH legacy gauge"
+    ],
+    "status": "retired",
+    "why": [
+     "marked retired in the card"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {
+     "name": "YB Gauge: yb-WETH",
+     "symbol": "g(yb-WETH)"
+    }
+   }
+  ],
   "1:0xe5aec7d0e795456f90cebefba56470f0e5dfc075": [
    {
     "chain_id": 1,
@@ -19451,6 +19974,34 @@
      "name": "Aave Ethereum Lido Variable Debt tETH",
      "symbol": "variableDebtEthLidotETH"
     }
+   }
+  ],
+  "1:0xe862bc39b8d5f12d8c4117d3e2d493dc20051ec6": [
+   {
+    "chain_id": 1,
+    "address": "0xE862bC39B8D5F12D8c4117d3e2D493Dc20051EC6",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "StakeZap",
+    "title": null,
+    "ref": "yieldbasis.StakeZap",
+    "category": "router",
+    "kind": "yb_stake_zap",
+    "eoa": false,
+    "aliases": [],
+    "status": "verified",
+    "why": [
+     "independent sources: card, docs"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/registry.yaml",
+     "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {},
+    "note": "UI route: see ui_routes_to_avoid"
    }
   ],
   "1:0xe95a203b1a91a908f9b9ce46459d101078c2c3cb": [
@@ -20098,6 +20649,38 @@
      "symbol": "crvUSDTWBTCWETH-gauge"
     },
     "note": "Curve gauge for crvUSDTWBTCWETH: deposit the LP to earn CRV (claim with minter.mint(gauge))"
+   }
+  ],
+  "1:0xf3a2bf354c28a1e0c84033f3ba3379e223f56e6a": [
+   {
+    "chain_id": 1,
+    "address": "0xF3a2bf354C28a1e0C84033f3ba3379e223F56E6A",
+    "protocol": "yieldbasis",
+    "protocol_name": "Yield Basis (WETH market 10, gauge, YB rewards)",
+    "name": "deposit_zap",
+    "title": null,
+    "ref": "yieldbasis.deposit_zap",
+    "category": "router",
+    "kind": "yb_lt_deposit_zap",
+    "eoa": false,
+    "aliases": [
+     "LTDepositZap",
+     "yb deposit zap",
+     "yieldbasis deposit zap"
+    ],
+    "status": "verified",
+    "why": [
+     "independent sources: card, explorer"
+    ],
+    "card_reviewed": false,
+    "sources": [
+     "card: catalog/yieldbasis/card.yaml",
+     "explorer: https://eth.blockscout.com/address/0xF3a2bf354C28a1e0C84033f3ba3379e223F56E6A?tab=contract (LTDepositZap, @author Yield Basis)"
+    ],
+    "proofs": [],
+    "proxy": {},
+    "onchain": {},
+    "note": "Yield Basis' LTDepositZap. Stateless and unprivileged: it pulls the asset, computes the crvUSD debt at the LEVAMM book ratio inside the transaction and calls LT.deposit (and gauge.deposit when stake = true) for `receiver`. Not on the docs address page; deployed by 0xa39E4d6bb25A8E55552D6D9ab1f5f8889DDdC80d, the deployer of the Factory, GaugeController and StakeZap. It has no getter that ties it to a market, so no onchain proof.\n"
    }
   ],
   "1:0xf403c135812408bfbe8713b5a23a04b3d48aae31": [
@@ -21282,6 +21865,13 @@
    "to_ref": "convex.cvxOETH_WETH_rewards"
   },
   {
+   "from": "1:0x2b9c9f3bdceb5d8e36a4704f08a78fca53343cea",
+   "relation": "underlying_of",
+   "to": "1:0xd829456fd63ada7de0657714a3a7a26de403e3d8",
+   "from_ref": "yieldbasis.ybWETH",
+   "to_ref": "yieldbasis.ybWETH_gauge"
+  },
+  {
    "from": "1:0x2c683fad51da2cd17793219cc86439c1875c353e",
    "relation": "underlying_of",
    "to": "1:0xad6d1a4b1b2f33712a8b18bedc95c0a1f9832269",
@@ -21322,6 +21912,13 @@
    "to": "1:0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
    "from_ref": "kpk.KPK_wARS_Yield_adapter",
    "to_ref": "morpho_vaults.morpho_blue"
+  },
+  {
+   "from": "1:0x370a449febb9411c95bf897021377fe0b7d100c0",
+   "relation": "admin_of",
+   "to": "1:0x2b9c9f3bdceb5d8e36a4704f08a78fca53343cea",
+   "from_ref": "yieldbasis.Factory",
+   "to_ref": "yieldbasis.ybWETH"
   },
   {
    "from": "1:0x390f3595bca2df7d23783dfd126427cceb997bf4",
@@ -21968,6 +22565,13 @@
    "to_ref": "kpk.KPK_USDC_Yield"
   },
   {
+   "from": "1:0x931d40dd07b25b91932b481b63631ea86d236e09",
+   "relation": "underlying_of",
+   "to": "1:0xe4e656b5215a82009969219b1babb7c0757a3315",
+   "from_ref": "yieldbasis.ybWETH_market6",
+   "to_ref": "yieldbasis.ybWETH_market6_gauge"
+  },
+  {
    "from": "1:0x939e4c11e391a28cd81248163f3a2e595f12ce5e",
    "relation": "underlying_of",
    "to": "1:0xd1ddb0a0815fd28932fbb194c84003683af8a824",
@@ -22390,6 +22994,13 @@
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
    "relation": "underlying_of",
+   "to": "1:0x2b9c9f3bdceb5d8e36a4704f08a78fca53343cea",
+   "from_ref": "weth.WETH",
+   "to_ref": "yieldbasis.ybWETH"
+  },
+  {
+   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+   "relation": "underlying_of",
    "to": "1:0x2e7576042566f8d6990e07a1b61ad1efd86ae70d",
    "from_ref": "weth.WETH",
    "to_ref": "spark.variableDebtWETH"
@@ -22432,6 +23043,13 @@
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
    "relation": "underlying_of",
+   "to": "1:0x656341ef90b622c6634e0573772ffb7f3669b9f3",
+   "from_ref": "weth.WETH",
+   "to_ref": "yieldbasis.ybWETH_pool"
+  },
+  {
+   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+   "relation": "underlying_of",
    "to": "1:0x85b78aca6deae198fbf201c82daf6ca21942acc6",
    "from_ref": "weth.WETH",
    "to_ref": "origin_arm.LidoARM"
@@ -22449,6 +23067,13 @@
    "to": "1:0x91b7d78bf92db564221f6b5aee744d1727d1dd1e",
    "from_ref": "weth.WETH",
    "to_ref": "aave_v3.variableDebtEthLidoWETH"
+  },
+  {
+   "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+   "relation": "underlying_of",
+   "to": "1:0x931d40dd07b25b91932b481b63631ea86d236e09",
+   "from_ref": "weth.WETH",
+   "to_ref": "yieldbasis.ybWETH_market6"
   },
   {
    "from": "1:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -22953,6 +23578,13 @@
    "to": "1:0x4ef53d2caa51c447fdfeeedee8f07fd1962c9ee6",
    "from_ref": "kpk.curator_usdc_prime_safe",
    "to_ref": "kpk.KPK_USDC_Prime"
+  },
+  {
+   "from": "1:0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
+   "relation": "underlying_of",
+   "to": "1:0x656341ef90b622c6634e0573772ffb7f3669b9f3",
+   "from_ref": "stablecoins.crvUSD",
+   "to_ref": "yieldbasis.ybWETH_pool"
   },
   {
    "from": "1:0xf9a9cfd3229e985b91f99bc866d42938044ffa1c",

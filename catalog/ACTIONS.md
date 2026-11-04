@@ -603,6 +603,19 @@ each `--param` name must be given as `--param name=value`.
 | `wrap` | ETH |  |  | ETH -> WETH |
 | `unwrap` | WETH |  |  | WETH -> ETH (ETH lands on the caller, i.e. the Avatar) |
 
+## yieldbasis: Yield Basis (WETH market 10, gauge, YB rewards)
+
+| action | input | tokens | --param | does |
+|---|---|---|---|---|
+| `deposit` | WETH |  | min_shares | WETH -> yb-WETH (market 10) for the Vault, debt computed onchain by the deposit zap |
+| `deposit_and_stake` | WETH |  | min_shares | WETH -> yb-WETH -> staked in the yb-WETH gauge for the Vault (earns YB, gives up part of the fees) |
+| `stake` | ybWETH |  |  | yb-WETH -> yb-WETH gauge for the Vault |
+| `unstake` | ybWETH_gauge |  |  | yb-WETH gauge shares -> yb-WETH back to the Vault |
+| `withdraw` | ybWETH |  | min_assets | yb-WETH -> WETH to the Vault (unstaked shares only) |
+| `emergency_withdraw` | ybWETH |  |  | yb-WETH -> WETH + crvUSD to the Vault, no oracle math (works while the market is killed) |
+| `emergency_withdraw_repay` | ybWETH |  | crvusd_in | yb-WETH -> WETH to the Vault, the Vault pays in the crvUSD the debt share needs |
+| `claim` |  |  |  | YB emissions of the yb-WETH gauge -> the Vault |
+
 ## yo: Yo (yoETH, yoUSD)
 
 | action | input | tokens | --param | does |

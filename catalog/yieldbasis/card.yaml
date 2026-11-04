@@ -1,0 +1,233 @@
+protocol: yieldbasis
+name: Yield Basis (WETH market 10, gauge, YB rewards)
+chain_id: 1
+status: draft
+reviewed: false
+sources:
+  - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses (Factory, GaugeController, YB, StakeZap, market 10: yb-WETH, gauge, pool, LEVAMM, policy)"
+  - "verified source on Blockscout (Vyper 0.4.3): LT, LiquidityGauge, Factory, YBOraclizedPolicy, StakeZap, LTDepositZap"
+  - "onchain, read 2026-11-04 (block 26342121): Factory.markets(10), LT.staker() / admin() / ASSET_TOKEN() / STABLECOIN() / CRYPTOPOOL() / amm(), gauge asset() / FACTORY() / YB() / reward_tokens(0), pool POLICY()"
+adding: >
+  Every Yield Basis market is a row of Factory.markets(i) (i < market_count()):
+  (asset_token, cryptopool, amm, lt, price_oracle, virtual_pool, staker). The LT
+  is the yb-<asset> share token and the entry point; `staker` is its gauge. Add
+  a market as two records keyed by the LT's symbol: the LT (proofs: admin() ==
+  Factory, staker() == its gauge, ASSET_TOKEN() == the asset) and the gauge
+  (asset() == the LT, FACTORY() == Factory), then copy the action set below with
+  the market's suffix. The docs page lists which markets are active; older rows
+  of the same asset are deprecated (market 6 for WETH) and go in registry.yaml
+  with status: retired.
+
+contracts:
+  ybWETH:
+    address: "0x2B9c9f3BdcEb5d8E36a4704F08a78Fca53343cEa"
+    name: "Yield Basis liquidity for WETH"
+    category: vault
+    kind: yb_lt
+    decimals: 18
+    aliases: [yb-WETH, yb weth, yieldbasis weth, yield basis weth, yb-LP WETH]
+    note: "market 10. LT share token, not ERC-4626. deposit takes a caller-chosen crvUSD debt (see NOTES.md); withdraw / emergency_withdraw are called here directly"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+      - "explorer: https://eth.blockscout.com/address/0x2B9c9f3BdcEb5d8E36a4704F08a78Fca53343cEa?tab=contract"
+    edges: { underlying: WETH, admin: Factory }
+    proofs:
+      - { read: "admin() returns (address)", expect: Factory }
+      - { read: "staker() returns (address)", expect: ybWETH_gauge }
+      - { read: "ASSET_TOKEN() returns (address)", expect: weth.WETH }
+      - { read: "STABLECOIN() returns (address)", expect: stablecoins.crvUSD }
+  ybWETH_gauge:
+    address: "0xd829456FD63Ada7DE0657714A3A7A26DE403E3D8"
+    name: "YB Gauge: yb-WETH"
+    category: staking
+    kind: erc4626
+    decimals: 18
+    aliases: ["g(yb-WETH)", yb-WETH gauge, yb weth gauge]
+    note: "staked yb-WETH earns YB emissions and gives up part of the pool fees (docs: Staked and unstaked economics)"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    edges: { underlying: ybWETH }
+    proofs:
+      - { read: "asset() returns (address)", expect: ybWETH }
+      - { read: "FACTORY() returns (address)", expect: Factory }
+      - { read: "YB() returns (address)", expect: YB }
+  deposit_zap:
+    address: "0xF3a2bf354C28a1e0C84033f3ba3379e223F56E6A"
+    category: router
+    kind: yb_lt_deposit_zap
+    aliases: [LTDepositZap, yb deposit zap, yieldbasis deposit zap]
+    note: >
+      Yield Basis' LTDepositZap. Stateless and unprivileged: it pulls the asset,
+      computes the crvUSD debt at the LEVAMM book ratio inside the transaction and
+      calls LT.deposit (and gauge.deposit when stake = true) for `receiver`.
+      Not on the docs address page; deployed by 0xa39E4d6bb25A8E55552D6D9ab1f5f8889DDdC80d,
+      the deployer of the Factory, GaugeController and StakeZap. It has no getter
+      that ties it to a market, so no onchain proof.
+    sources:
+      - "explorer: https://eth.blockscout.com/address/0xF3a2bf354C28a1e0C84033f3ba3379e223F56E6A?tab=contract (LTDepositZap, @author Yield Basis)"
+  YB:
+    address: "0x01791F726B4103694969820be083196cC7c045fF"
+    name: "Yield Basis"
+    category: governance
+    kind: erc20
+    decimals: 18
+    aliases: [yb, yield basis token]
+    note: "gauge emissions token; the only reward token of the yb-WETH gauge"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    proofs:
+      - { from: ybWETH_gauge, read: "YB() returns (address)", expect: $self }
+      - { from: GaugeController, read: "TOKEN() returns (address)", expect: $self }
+  WETH: { ref: weth.WETH }
+  crvUSD: { ref: stablecoins.crvUSD }
+
+ui_routes_to_avoid:
+  - ui: "Yield Basis app, deposit and stake / unstake and withdraw"
+    via: "StakeZap 0xE862bC39B8D5F12D8c4117d3e2D493Dc20051EC6 (deposit_and_stake / withdraw_and_unstake)"
+    why: >
+      deposit_and_stake takes a caller-chosen debt (reverts on the WETH pool's LT
+      gate unless quoted in the same block); withdraw_and_unstake needs a standing
+      allowance on the Vault's gauge shares to the zap. Use deposit_and_stake below
+      (LTDepositZap, stake = true), and unstake + withdraw.
+  - ui: "Yield Basis app, swap into / out of yb-LP"
+    via: "LTSwapZap 0xCd0074f0eC6319b288b76103D2ba89768a4476Fe"
+    why: "not reviewed; swaps, not the deposit path"
+  - ui: "Yield Basis app, migrate from a legacy market"
+    via: "LTMigrator 0xd5b450fDD5aF5341436Fc37A46BBEc39CA8F92CB"
+    why: "not reviewed; exit the legacy market with withdraw on its LT, then deposit"
+
+reads:
+  - { id: ybweth_shares, target: ybWETH, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR], decimals: 18 }
+  - { id: ybweth_staked, target: ybWETH_gauge, sig: "balanceOf(address account) returns (uint256)", args: [$AVATAR], decimals: 18 }
+  - { id: ybweth_price_per_share, target: ybWETH, sig: "pricePerShare() returns (uint256)", decimals: 18 }
+  - id: ybweth_shares_per_weth
+    target: deposit_zap
+    sig: "preview_deposit(address lt, uint256 assets, bool stake) returns (uint256)"
+    args: [ybWETH, "1000000000000000000", false]
+    decimals: 18
+  - id: ybweth_weth_per_share
+    target: ybWETH
+    sig: "preview_withdraw(uint256 tokens) returns (uint256)"
+    args: ["1000000000000000000"]
+    decimals: 18
+  - { id: ybweth_killed, target: ybWETH, sig: "is_killed() returns (bool)" }
+  - id: yb_claimable
+    target: ybWETH_gauge
+    sig: "preview_claim(address reward, address user) returns (uint256)"
+    args: [YB, $AVATAR]
+    decimals: 18
+
+actions:
+  deposit:
+    summary: "WETH -> yb-WETH (market 10) for the Vault, debt computed onchain by the deposit zap"
+    input: WETH
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: deposit_zap, amount: $amount }
+      - target: deposit_zap
+        sig: "deposit(address lt, uint256 assets, uint256 min_shares, address receiver)"
+        args: { lt: ybWETH, assets: $amount, min_shares: $min_shares, receiver: $AVATAR }
+      - target: deposit_zap
+        alt: true
+        sig: "deposit(address lt, uint256 assets, uint256 min_shares)"
+        args: { lt: ybWETH, assets: $amount, min_shares: $min_shares }
+        note: "receiver defaults to msg.sender (the Vault)"
+    note: >
+      min_shares (raw, 18 decimals) = preview_deposit(ybWETH, amount, false) on the zap
+      (read ybweth_shares_per_weth) minus your slippage: it is the only sandwich
+      protection. The zap pulls exactly `assets` in the same transaction.
+  deposit_and_stake:
+    summary: "WETH -> yb-WETH -> staked in the yb-WETH gauge for the Vault (earns YB, gives up part of the fees)"
+    input: WETH
+    calls:
+      - target: WETH
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: deposit_zap, amount: $amount }
+      - target: deposit_zap
+        sig: "deposit(address lt, uint256 assets, uint256 min_shares, address receiver, bool stake)"
+        args: { lt: ybWETH, assets: $amount, min_shares: $min_shares, receiver: $AVATAR, stake: true }
+    note: "min_shares is in gauge shares here: preview_deposit(ybWETH, amount, true) on the zap minus slippage"
+  stake:
+    summary: "yb-WETH -> yb-WETH gauge for the Vault"
+    input: ybWETH
+    calls:
+      - target: ybWETH
+        sig: "approve(address _spender, uint256 _value)"
+        args: { _spender: ybWETH_gauge, _value: $amount }
+      - target: ybWETH_gauge
+        sig: "deposit(uint256 assets, address receiver)"
+        args: { assets: $amount, receiver: $AVATAR }
+  unstake:
+    summary: "yb-WETH gauge shares -> yb-WETH back to the Vault"
+    input: ybWETH_gauge
+    calls:
+      - target: ybWETH_gauge
+        sig: "redeem(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+    note: "claims nothing: run claim first or after"
+  withdraw:
+    summary: "yb-WETH -> WETH to the Vault (unstaked shares only)"
+    input: ybWETH
+    calls:
+      - target: ybWETH
+        sig: "withdraw(uint256 shares, uint256 min_assets, address receiver)"
+        args: { shares: $amount, min_assets: $min_assets, receiver: $AVATAR }
+      - target: ybWETH
+        alt: true
+        sig: "withdraw(uint256 shares, uint256 min_assets)"
+        args: { shares: $amount, min_assets: $min_assets }
+        note: "receiver defaults to msg.sender (the Vault)"
+    note: >
+      min_assets (raw WETH, 18 decimals) = preview_withdraw(shares) on ybWETH minus
+      slippage. Reverts while the market is killed ("We're dead. Use
+      emergency_withdraw"): read ybweth_killed. Staked shares: unstake first.
+  emergency_withdraw:
+    summary: "yb-WETH -> WETH + crvUSD to the Vault, no oracle math (works while the market is killed)"
+    input: ybWETH
+    calls:
+      - target: ybWETH
+        sig: "emergency_withdraw(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+      - target: ybWETH
+        alt: true
+        sig: "emergency_withdraw(uint256 shares, address receiver)"
+        args: { shares: $amount, receiver: $AVATAR }
+    note: >
+      Takes the share of the pool's WETH and crvUSD and repays the share of the
+      debt. Read preview_emergency_withdraw(shares) first: when its crvUSD figure is
+      positive the Vault receives crvUSD; when negative the LT pulls that much
+      crvUSD from the Vault and this action reverts: use emergency_withdraw_repay.
+      No min-out (the contract relies on curve convexity).
+  emergency_withdraw_repay:
+    summary: "yb-WETH -> WETH to the Vault, the Vault pays in the crvUSD the debt share needs"
+    input: ybWETH
+    calls:
+      - target: crvUSD
+        sig: "approve(address spender, uint256 amount)"
+        args: { spender: ybWETH, amount: $crvusd_in }
+      - target: ybWETH
+        sig: "emergency_withdraw(uint256 shares, address receiver, address owner)"
+        args: { shares: $amount, receiver: $AVATAR, owner: $AVATAR }
+    note: "crvusd_in (raw, 18 decimals) = minus the crvUSD figure of preview_emergency_withdraw(shares), plus a small margin"
+  claim:
+    summary: "YB emissions of the yb-WETH gauge -> the Vault"
+    calls:
+      - target: ybWETH_gauge
+        sig: "claim(address reward, address user)"
+        args: { reward: YB, user: $AVATAR }
+        note: "pays `user`; anyone may call it for anyone, so the role pins user to the Vault"
+
+dead_permissions:
+  - { target: ybWETH, sig: "set_rate(uint256 rate)", why: "admin only (Factory or its admin)" }
+  - { target: ybWETH, sig: "set_amm_fee(uint256 fee)", why: "admin only" }
+  - { target: ybWETH, sig: "set_staker(address staker)", why: "admin only, and the staker is already set" }
+  - { target: ybWETH, sig: "set_killed(bool is_killed)", why: "admin / emergency admin only" }
+  - { target: ybWETH, sig: "allocate_stablecoins(uint256 limit)", why: "admin / allocator only: moves crvUSD credit into the market" }
+  - { target: ybWETH_gauge, sig: "add_reward(address token, address distributor)", why: "gauge owner only" }
+  - { target: ybWETH_gauge, sig: "deposit_reward(address token, uint256 amount, uint256 finish_time)", why: "reward distributor only" }
+
+not_needed:
+  - "LT.deposit(assets, debt, min_shares, receiver) (0xfad3cc4b) directly: the debt must be within 0.01% of the LEVAMM book ratio when the transaction lands, which a Safe signed later will not hit (see NOTES.md). The zap computes it in-transaction."
+  - "approve of yb-WETH or gauge shares to StakeZap: unstake + withdraw do the same without a standing allowance"
+  - "distribute_borrower_fees / withdraw_admin_fees / checkpoint_staker_rebase: permissionless maintenance, not a depositor action"

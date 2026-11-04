@@ -1,8 +1,8 @@
 {
  "_meta": {
   "1": {
-   "block": 26330018,
-   "checked": "2026-11-02"
+   "block": 26342157,
+   "checked": "2026-11-04"
   }
  },
  "1:0x0000000f2eb9f69274678c76222b35eec7588a65": {
@@ -58,6 +58,23 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt USDe",
   "symbol": "variableDebtEthUSDe"
+ },
+ "1:0x01791f726b4103694969820be083196cc7c045ff": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "ybWETH_gauge.YB() == $self",
+    "ok": true,
+    "got": "0x01791F726B4103694969820be083196cC7c045fF"
+   },
+   {
+    "id": "GaugeController.TOKEN() == $self",
+    "ok": true,
+    "got": "0x01791F726B4103694969820be083196cC7c045fF"
+   }
+  ],
+  "name": "Yield Basis",
+  "symbol": "YB"
  },
  "1:0x018008bfb33d285247a21d44e50697654f754e63": {
   "code": true,
@@ -684,6 +701,21 @@
   "name": "Aave Ethereum STG",
   "symbol": "aEthSTG"
  },
+ "1:0x1be14811a3a06f6af4fa64310a636e1df04c1c21": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "Factory.gauge_controller() == $self",
+    "ok": true,
+    "got": "0x1Be14811A3a06F6aF4fA64310a636e1Df04c1c21"
+   },
+   {
+    "id": "ybWETH_gauge.GC() == $self",
+    "ok": true,
+    "got": "0x1Be14811A3a06F6aF4fA64310a636e1Df04c1c21"
+   }
+  ]
+ },
  "1:0x1c0e06a0b1a4c160c17545ff2a951bfca57c0002": {
   "code": true,
   "proofs": [
@@ -1045,6 +1077,33 @@
   "name": "Aave Ethereum Lido Variable Debt sUSDe",
   "symbol": "variableDebtEthLidosUSDe"
  },
+ "1:0x2b9c9f3bdceb5d8e36a4704f08a78fca53343cea": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.admin() == Factory",
+    "ok": true,
+    "got": "0x370a449FeBb9411c95bf897021377fe0B7D100c0"
+   },
+   {
+    "id": "$self.staker() == ybWETH_gauge",
+    "ok": true,
+    "got": "0xd829456FD63Ada7DE0657714A3A7A26DE403E3D8"
+   },
+   {
+    "id": "$self.ASSET_TOKEN() == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   },
+   {
+    "id": "$self.STABLECOIN() == stablecoins.crvUSD",
+    "ok": true,
+    "got": "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E"
+   }
+  ],
+  "name": "Yield Basis liquidity for WETH",
+  "symbol": "yb-WETH"
+ },
  "1:0x2c2163f120cf58631368981bc16e90190bc6c644": {
   "code": true,
   "proofs": [
@@ -1398,6 +1457,26 @@
   ],
   "name": "Curve.fi OETH/WETH Gauge Deposit",
   "symbol": "OETH/WETH-gauge"
+ },
+ "1:0x370a449febb9411c95bf897021377fe0b7d100c0": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "ybWETH.admin() == $self",
+    "ok": true,
+    "got": "0x370a449FeBb9411c95bf897021377fe0B7D100c0"
+   },
+   {
+    "id": "$self.gauge_controller() == GaugeController",
+    "ok": true,
+    "got": "0x1Be14811A3a06F6aF4fA64310a636e1Df04c1c21"
+   },
+   {
+    "id": "$self.STABLECOIN() == stablecoins.crvUSD",
+    "ok": true,
+    "got": "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E"
+   }
+  ]
  },
  "1:0x377c3bd93f2a2984e1e7be6a5c22c525ed4a4815": {
   "code": true,
@@ -1817,6 +1896,16 @@
   ],
   "implementation": "0x83b7Ce402A0E756E901C4A9d1cAfa27cA9572afC",
   "admin": "0xD3cF979e676265e4f6379749DECe4708B9A22476"
+ },
+ "1:0x467947ee34af926cf1dcac093870f613c96b1e0c": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "Factory.emergency_admin() == $self",
+    "ok": true,
+    "got": "0x467947EE34aF926cF1DCac093870f613C96B1E0c"
+   }
+  ]
  },
  "1:0x4691c475be804fa85f91c2d6d0adf03114de3093": {
   "code": true,
@@ -2643,6 +2732,16 @@
   "name": "Aave Ethereum PT_sUSDE_25SEP2025",
   "symbol": "aEthPT_sUSDE_25SEP2025"
  },
+ "1:0x5f8d24f33cc5a1d5d1bf012261e6a2214c92233c": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "ybWETH.amm() == $self",
+    "ok": true,
+    "got": "0x5f8D24F33Cc5a1D5D1bf012261E6A2214C92233c"
+   }
+  ]
+ },
  "1:0x5f9190496e0dfc831c3bd307978de4a245e2f5cd": {
   "code": true,
   "proofs": [
@@ -2725,6 +2824,28 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt STG",
   "symbol": "variableDebtEthSTG"
+ },
+ "1:0x656341ef90b622c6634e0573772ffb7f3669b9f3": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "ybWETH.CRYPTOPOOL() == $self",
+    "ok": true,
+    "got": "0x656341Ef90b622c6634e0573772FfB7f3669b9f3"
+   },
+   {
+    "id": "$self.coins(1) == weth.WETH",
+    "ok": true,
+    "got": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+   },
+   {
+    "id": "$self.POLICY() == ybWETH_policy",
+    "ok": true,
+    "got": "0xAEa95d551154443E73565bE724d59D63d72f8A7d"
+   }
+  ],
+  "name": "Yield Basis WETH",
+  "symbol": "YB-WETH"
  },
  "1:0x657e8c867d8b37dcc18fa4caead9c45eb088c642": {
   "code": true,
@@ -4101,6 +4222,12 @@
   "code": true,
   "proofs": []
  },
+ "1:0x931d40dd07b25b91932b481b63631ea86d236e09": {
+  "code": true,
+  "proofs": [],
+  "name": "Yield Basis liquidity for WETH",
+  "symbol": "yb-WETH"
+ },
  "1:0x9355032d747f1e08f8720cd01950e652ee15cdb7": {
   "code": true,
   "proofs": [
@@ -4917,6 +5044,16 @@
   "implementation": "0xb27C52c7f84819e3157993489741cB60786aE330",
   "name": "Aave Ethereum Variable Debt rETH",
   "symbol": "variableDebtEthrETH"
+ },
+ "1:0xaea95d551154443e73565be724d59d63d72f8a7d": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "ybWETH_pool.POLICY() == $self",
+    "ok": true,
+    "got": "0xAEa95d551154443E73565bE724d59D63d72f8A7d"
+   }
+  ]
  },
  "1:0xaeec321a209964aabfff539807ae882917e7b4db": {
   "code": true,
@@ -5871,6 +6008,10 @@
   "name": "Aave Ethereum FBTC",
   "symbol": "aEthFBTC"
  },
+ "1:0xcd0074f0ec6319b288b76103d2ba89768a4476fe": {
+  "code": true,
+  "proofs": []
+ },
  "1:0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": {
   "code": true,
   "proofs": [
@@ -6140,6 +6281,10 @@
   "name": "Curve DAO Token",
   "symbol": "CRV"
  },
+ "1:0xd5b450fdd5af5341436fc37a46bbec39ca8f92cb": {
+  "code": true,
+  "proofs": []
+ },
  "1:0xd5c3e3b566a42a6110513ac7670c1a86d76e13e6": {
   "code": true,
   "proofs": [
@@ -6169,6 +6314,28 @@
   ],
   "name": "KPK USDC Yield",
   "symbol": "KPK_USDC_Yield"
+ },
+ "1:0xd829456fd63ada7de0657714a3a7a26de403e3d8": {
+  "code": true,
+  "proofs": [
+   {
+    "id": "$self.asset() == ybWETH",
+    "ok": true,
+    "got": "0x2B9c9f3BdcEb5d8E36a4704F08a78Fca53343cEa"
+   },
+   {
+    "id": "$self.FACTORY() == Factory",
+    "ok": true,
+    "got": "0x370a449FeBb9411c95bf897021377fe0B7D100c0"
+   },
+   {
+    "id": "$self.YB() == YB",
+    "ok": true,
+    "got": "0x01791F726B4103694969820be083196cC7c045fF"
+   }
+  ],
+  "name": "YB Gauge: yb-WETH",
+  "symbol": "g(yb-WETH)"
  },
  "1:0xd90da2df915b87fe1621a7f2201fbf4ff2cca031": {
   "code": true,
@@ -6463,6 +6630,12 @@
   "name": "Aave Ethereum Lido Variable Debt wstETH",
   "symbol": "variableDebtEthLidowstETH"
  },
+ "1:0xe4e656b5215a82009969219b1babb7c0757a3315": {
+  "code": true,
+  "proofs": [],
+  "name": "YB Gauge: yb-WETH",
+  "symbol": "g(yb-WETH)"
+ },
  "1:0xe5aec7d0e795456f90cebefba56470f0e5dfc075": {
   "code": true,
   "proofs": [
@@ -6516,6 +6689,10 @@
   "implementation": "0x79f5C4562EC3e85C3103Ce63Ab94E92EFfDd6197",
   "name": "Aave Ethereum Lido Variable Debt tETH",
   "symbol": "variableDebtEthLidotETH"
+ },
+ "1:0xe862bc39b8d5f12d8c4117d3e2d493dc20051ec6": {
+  "code": true,
+  "proofs": []
  },
  "1:0xe95a203b1a91a908f9b9ce46459d101078c2c3cb": {
   "code": true,
@@ -6737,6 +6914,10 @@
   ],
   "name": "Curve.fi crvUSDTWBTCWETH Gauge Deposit",
   "symbol": "crvUSDTWBTCWETH-gauge"
+ },
+ "1:0xf3a2bf354c28a1e0c84033f3ba3379e223f56e6a": {
+  "code": true,
+  "proofs": []
  },
  "1:0xf403c135812408bfbe8713b5a23a04b3d48aae31": {
   "code": true,
