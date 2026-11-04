@@ -4,7 +4,7 @@ Every ERC-20 in the catalog: tokens, receipt tokens and vault shares. Use the `s
 `--token` (or `<card>.<symbol>` when two cards share one). Read amounts with `decimals`.
 How to work with them: `skills/defios-tokens/SKILL.md`.
 
-## Verified (355): an agent may act on these
+## Verified (358): an agent may act on these
 
 | symbol | name | address | decimals | card | category | kind | underlying |
 |---|---|---|---|---|---|---|---|
@@ -358,15 +358,20 @@ How to work with them: `skills/defios-tokens/SKILL.md`.
 | weeth_ng_gauge | Curve.fi weeth-ng Gauge Deposit | `0x053df3e4D0CeD9a3Bf0494F97E83CE1f13BdC0E2` | 18 | curve | staking | curve_gauge | weeth_ng |
 | WETH |  | `0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2` | 18 | weth | token | erc20 |  |
 | wstETH |  | `0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0` | 18 | lido | token | erc20 | stETH |
+| YB | Yield Basis | `0x01791F726B4103694969820be083196cC7c045fF` | 18 | yieldbasis | governance | erc20 |  |
+| ybWETH | Yield Basis liquidity for WETH | `0x2B9c9f3BdcEb5d8E36a4704F08a78Fca53343cEa` | 18 | yieldbasis | vault | yb_lt | WETH |
+| ybWETH_gauge | YB Gauge: yb-WETH | `0xd829456FD63Ada7DE0657714A3A7A26DE403E3D8` | 18 | yieldbasis | staking | erc4626 | ybWETH |
 | yoETH |  | `0x3A43AEC53490CB9Fa922847385D82fe25d0E9De7` | 18 | yo | vault | erc4626_async_redeem | weth.WETH |
 | yoUSD |  | `0x0000000f2eB9f69274678c76222B35eEc7588a65` | 6 | yo | vault | erc4626_async_redeem | stablecoins.USDC |
 | YT_stETH_30DEC2027 | YT stETH 30DEC2027 | `0x04B7Fa1e727d7290D6E24fA9b426d0c940283a95` | 18 | pendle | receipt | pendle_yt | SY_stETH |
 | YT_sUSDE_26NOV2026 | YT Ethena sUSDE 26NOV2026 | `0x89E6e5f7c3A60e7D6347F054051A29a272F4cE44` | 18 | pendle | receipt | pendle_yt | SY_sUSDE |
 | YT_sUSDS_26NOV2026 | YT Savings USDS 26NOV2026 | `0xC7B8551C6B286Ce0b44952320e940Bd3Dee58A09` | 18 | pendle | receipt | pendle_yt | SY_sUSDS |
 
-## Not verified (2): shown for reading, never acted on
+## Not verified (4): shown for reading, never acted on
 
 | symbol | name | address | decimals | card | category | kind | underlying | status |
 |---|---|---|---|---|---|---|---|---|
 | DETH |  | `0x871aB8E36CaE9AF35c6A3488B049965233DeB7ed` | 18 | makina | receipt | erc20 |  | unverified |
 | JANE |  | `0x333333330522F64EE8d0b3039c460b41670e3404` | 18 | threejane | reward | erc20 |  | unverified |
+| ybWETH_market6 |  | `0x931d40dD07b25B91932b481B63631Ea86d236e09` | 18 | yieldbasis | vault | yb_lt | weth.WETH | retired |
+| ybWETH_market6_gauge |  | `0xe4e656B5215a82009969219b1bAbB7c0757A3315` | 18 | yieldbasis | staking | erc4626 | ybWETH_market6 | retired |

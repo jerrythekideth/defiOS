@@ -1,0 +1,109 @@
+contracts:
+  Factory:
+    address: "0x370a449FeBb9411c95bf897021377fe0B7D100c0"
+    category: config
+    kind: yb_factory
+    aliases: [yieldbasis factory, yb factory]
+    note: "market registry: markets(i) -> (asset_token, cryptopool, amm, lt, price_oracle, virtual_pool, staker); market_count() = 11 on 2026-11-04"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    proofs:
+      - { from: ybWETH, read: "admin() returns (address)", expect: $self }
+      - { read: "gauge_controller() returns (address)", expect: GaugeController }
+      - { read: "STABLECOIN() returns (address)", expect: stablecoins.crvUSD }
+  GaugeController:
+    address: "0x1Be14811A3a06F6aF4fA64310a636e1Df04c1c21"
+    category: config
+    kind: yb_gauge_controller
+    aliases: [yb gauge controller]
+    note: "gauge voting and YB emissions; distributor of YB to each gauge"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    proofs:
+      - { from: Factory, read: "gauge_controller() returns (address)", expect: $self }
+      - { from: ybWETH_gauge, read: "GC() returns (address)", expect: $self }
+  emergency_admin:
+    address: "0x467947EE34aF926cF1DCac093870f613C96B1E0c"
+    category: multisig
+    kind: safe
+    aliases: [curve emergency dao, yb emergency admin]
+    note: "Curve Emergency DAO Safe: can kill / revive a market, and then emergency_withdraw for holders (to the holder only)"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    proofs:
+      - { from: Factory, read: "emergency_admin() returns (address)", expect: $self }
+  ybWETH_pool:
+    address: "0x656341Ef90b622c6634e0573772FfB7f3669b9f3"
+    category: market
+    kind: curve_twocrypto
+    aliases: [yb weth cryptopool, "yb-WETH pool"]
+    note: "Curve Twocrypto v3 crvUSD (coin 0) / WETH (coin 1) pool of market 10; the LEVAMM holds its LP"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    edges: { underlying: [stablecoins.crvUSD, weth.WETH] }
+    proofs:
+      - { from: ybWETH, read: "CRYPTOPOOL() returns (address)", expect: $self }
+      - { read: "coins(uint256 i) returns (address)", args: [1], expect: weth.WETH }
+      - { read: "POLICY() returns (address)", expect: ybWETH_policy }
+  ybWETH_levamm:
+    address: "0x5f8D24F33Cc5a1D5D1bf012261E6A2214C92233c"
+    category: market
+    kind: yb_levamm
+    aliases: [yb weth levamm]
+    note: "market 10 leveraged AMM: holds the pool LP and the crvUSD debt"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    proofs:
+      - { from: ybWETH, read: "amm() returns (address)", expect: $self }
+  ybWETH_policy:
+    address: "0xAEa95d551154443E73565bE724d59D63d72f8A7d"
+    category: config
+    kind: yb_oraclized_policy
+    aliases: [YBOraclizedPolicy, yb weth pool policy]
+    note: "pool fee / price_scale policy with the LT deposit gate: an LT.deposit whose debt is off the LEVAMM ratio by > ratio_tolerance reverts (\"LT deviation\")"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    proofs:
+      - { from: ybWETH_pool, read: "POLICY() returns (address)", expect: $self }
+  StakeZap:
+    address: "0xE862bC39B8D5F12D8c4117d3e2D493Dc20051EC6"
+    category: router
+    kind: yb_stake_zap
+    note: "UI route: see ui_routes_to_avoid"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+  LTSwapZap:
+    address: "0xCd0074f0eC6319b288b76103D2ba89768a4476Fe"
+    category: router
+    kind: yb_swap_zap
+    note: "not reviewed; UI route: see ui_routes_to_avoid"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+  LTMigrator:
+    address: "0xd5b450fDD5aF5341436Fc37A46BBEc39CA8F92CB"
+    category: router
+    kind: yb_lt_migrator
+    note: "legacy market -> current market migration; not reviewed"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+  ybWETH_market6:
+    address: "0x931d40dD07b25B91932b481B63631Ea86d236e09"
+    category: vault
+    kind: yb_lt
+    decimals: 18
+    aliases: [yb-WETH legacy, yb weth market 6]
+    status: retired
+    note: "deprecated WETH market 6 (Factory.markets(6)); exit with withdraw on this LT"
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    edges: { underlying: weth.WETH }
+  ybWETH_market6_gauge:
+    address: "0xe4e656B5215a82009969219b1bAbB7c0757A3315"
+    category: staking
+    kind: erc4626
+    decimals: 18
+    aliases: [yb-WETH legacy gauge]
+    status: retired
+    sources:
+      - "docs: https://docs.yieldbasis.com/user/reference/contract-addresses"
+    edges: { underlying: ybWETH_market6 }
